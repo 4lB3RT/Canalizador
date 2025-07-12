@@ -1,10 +1,8 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Src\Shared\Domain\ValueObjects;
-
-use Src\Shared\Domain\ValueObjects\StringValue;
 
 final readonly class Category
 {

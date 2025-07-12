@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Src\Shared\Domain\ValueObjects;
 
@@ -23,4 +23,3 @@ final readonly class IntegerId
         return $this->value === $other->value;
     }
 }
-

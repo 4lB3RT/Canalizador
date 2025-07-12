@@ -1,10 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Src\Shared\Domain\ValueObjects;
 
-readonly class StringValue
+abstract readonly class StringValue
 {
     public function __construct(private string $value)
     {
@@ -18,4 +18,3 @@ readonly class StringValue
         return $this->value;
     }
 }
-

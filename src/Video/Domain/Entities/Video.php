@@ -1,14 +1,14 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Src\Video\Domain\Entities;
 
 use Src\Metric\Domain\Entities\MetricCollection;
-use Src\Video\Domain\ValueObjects\VideoId;
-use Src\Video\Domain\ValueObjects\Title;
-use Src\Shared\Domain\ValueObjects\DateTime;
 use Src\Shared\Domain\ValueObjects\Category;
+use Src\Shared\Domain\ValueObjects\DateTime;
+use Src\Video\Domain\ValueObjects\Title;
+use Src\Video\Domain\ValueObjects\VideoId;
 
 final class Video
 {
@@ -18,7 +18,8 @@ final class Video
         private readonly DateTime $publishedAt,
         private readonly MetricCollection $metrics,
         private readonly Category $category
-    ) {}
+    ) {
+    }
 
     public function id(): VideoId
     {

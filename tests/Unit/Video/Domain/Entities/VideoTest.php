@@ -1,27 +1,27 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Tests\Unit\Video\Domain\Entities;
 
 use PHPUnit\Framework\TestCase;
-use Src\Video\Domain\Entities\Video;
-use Src\Video\Domain\ValueObjects\VideoId;
-use Src\Video\Domain\ValueObjects\Title;
-use Src\Shared\Domain\ValueObjects\DateTime;
 use Src\Metric\Domain\Entities\MetricCollection;
 use Src\Shared\Domain\ValueObjects\Category;
+use Src\Shared\Domain\ValueObjects\DateTime;
 use Src\Shared\Domain\ValueObjects\StringValue;
+use Src\Video\Domain\Entities\Video;
+use Src\Video\Domain\ValueObjects\Title;
+use Src\Video\Domain\ValueObjects\VideoId;
 
 final class VideoTest extends TestCase
 {
     public function testItCreatesVideoWithAllProperties(): void
     {
-        $videoId = new VideoId('abc123');
-        $title = new Title('Test Video');
+        $videoId     = new VideoId('abc123');
+        $title       = new Title('Test Video');
         $publishedAt = new DateTime(new \DateTimeImmutable('2024-01-01T12:00:00Z'));
-        $metrics = new MetricCollection([]);
-        $category = new Category(new StringValue('Education'));
+        $metrics     = new MetricCollection([]);
+        $category    = new Category(new StringValue('Education'));
 
         $video = new Video($videoId, $title, $publishedAt, $metrics, $category);
 
@@ -35,33 +35,33 @@ final class VideoTest extends TestCase
     public function testItThrowsExceptionForEmptyCategoryName(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $videoId = new VideoId('abc123');
-        $title = new Title('Test Video');
+        $videoId     = new VideoId('abc123');
+        $title       = new Title('Test Video');
         $publishedAt = new DateTime(new \DateTimeImmutable('2024-01-01T12:00:00Z'));
-        $metrics = new MetricCollection([]);
-        $category = new Category(new StringValue(''));
+        $metrics     = new MetricCollection([]);
+        $category    = new Category(new StringValue(''));
         new Video($videoId, $title, $publishedAt, $metrics, $category);
     }
 
     public function testItThrowsExceptionForEmptyTitle(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $videoId = new VideoId('abc123');
-        $title = new Title('');
+        $videoId     = new VideoId('abc123');
+        $title       = new Title('');
         $publishedAt = new DateTime(new \DateTimeImmutable('2024-01-01T12:00:00Z'));
-        $metrics = new MetricCollection([]);
-        $category = new Category(new StringValue('Education'));
+        $metrics     = new MetricCollection([]);
+        $category    = new Category(new StringValue('Education'));
         new Video($videoId, $title, $publishedAt, $metrics, $category);
     }
 
     public function testItThrowsExceptionForEmptyVideoId(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $videoId = new VideoId('');
-        $title = new Title('Test Video');
+        $videoId     = new VideoId('');
+        $title       = new Title('Test Video');
         $publishedAt = new DateTime(new \DateTimeImmutable('2024-01-01T12:00:00Z'));
-        $metrics = new MetricCollection([]);
-        $category = new Category(new StringValue('Education'));
+        $metrics     = new MetricCollection([]);
+        $category    = new Category(new StringValue('Education'));
 
         new Video(
             id: $videoId,
@@ -74,23 +74,23 @@ final class VideoTest extends TestCase
 
     public function testItReturnsCategoryNameValue(): void
     {
-        $videoId = new VideoId('abc123');
-        $title = new Title('Test Video');
+        $videoId     = new VideoId('abc123');
+        $title       = new Title('Test Video');
         $publishedAt = new DateTime(new \DateTimeImmutable('2024-01-01T12:00:00Z'));
-        $metrics = new MetricCollection([]);
-        $category = new Category(new StringValue('Education'));
-        $video = new Video($videoId, $title, $publishedAt, $metrics, $category);
+        $metrics     = new MetricCollection([]);
+        $category    = new Category(new StringValue('Education'));
+        $video       = new Video($videoId, $title, $publishedAt, $metrics, $category);
         $this->assertSame('Education', $video->category()->name()->value());
     }
 
     public function testItReturnsPublishedAtValue(): void
     {
-        $videoId = new VideoId('abc123');
-        $title = new Title('Test Video');
+        $videoId     = new VideoId('abc123');
+        $title       = new Title('Test Video');
         $publishedAt = new DateTime(new \DateTimeImmutable('2024-01-01T12:00:00Z'));
-        $metrics = new MetricCollection([]);
-        $category = new Category(new StringValue('Education'));
-        $video = new Video(
+        $metrics     = new MetricCollection([]);
+        $category    = new Category(new StringValue('Education'));
+        $video       = new Video(
             $videoId,
             $title,
             $publishedAt,
@@ -106,12 +106,12 @@ final class VideoTest extends TestCase
 
     public function testItReturnsIdentifiers(): void
     {
-        $videoId = new VideoId('abc123');
-        $title = new Title('Test Video');
+        $videoId     = new VideoId('abc123');
+        $title       = new Title('Test Video');
         $publishedAt = new DateTime(new \DateTimeImmutable('2024-01-01T12:00:00Z'));
-        $metrics = new MetricCollection([]);
-        $category = new Category(new StringValue('Education'));
-        $video = new Video(
+        $metrics     = new MetricCollection([]);
+        $category    = new Category(new StringValue('Education'));
+        $video       = new Video(
             $videoId,
             $title,
             $publishedAt,

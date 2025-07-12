@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Src\Metric\Domain\ValueObjects;
 
@@ -18,4 +18,3 @@ final readonly class MetricName
         return $this->value;
     }
 }
-

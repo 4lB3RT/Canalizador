@@ -1,10 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Src\Shared\Domain\ValueObjects;
 
-readonly class IntegerValue
+abstract readonly class IntegerValue
 {
     public function __construct(private int $value)
     {

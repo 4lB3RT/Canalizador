@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Tests\Unit\Video\Domain\ValueObjects;
 
@@ -21,4 +21,3 @@ final class VideoIdTest extends TestCase
         new VideoId('');
     }
 }
-

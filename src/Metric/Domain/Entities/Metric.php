@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Src\Metric\Domain\Entities;
 
@@ -14,7 +14,8 @@ final readonly class Metric
         private MetricName $name,
         private MetricType $type,
         private MetricValue $value
-    ) {}
+    ) {
+    }
 
     public function name(): MetricName
     {
@@ -31,4 +32,3 @@ final readonly class Metric
         return $this->value;
     }
 }
-

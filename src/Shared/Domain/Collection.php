@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Src\Shared\Domain;
 
@@ -60,6 +60,7 @@ abstract class Collection implements Countable, IteratorAggregate
         foreach ($this->items() as $item) {
             $itemsIds[] = (int) $item->id()->value();
         }
+
         return $itemsIds;
     }
 
@@ -70,6 +71,7 @@ abstract class Collection implements Countable, IteratorAggregate
                 return $item;
             }
         }
+
         return null;
     }
 
