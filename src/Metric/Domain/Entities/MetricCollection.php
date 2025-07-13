@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace Src\Metric\Domain\Entities;
+namespace Canalizador\Metric\Domain\Entities;
 
-use Src\Shared\Domain\Collection;
+use Canalizador\Shared\Domain\Collection;
 
 /**
  * @extends Collection<Metric>

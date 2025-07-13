@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace Src\Recommendation\Domain\ValueObjects;
+namespace Canalizador\Recommendation\Domain\ValueObjects;
 
-use Src\Shared\Domain\ValueObjects\FloatValue;
+use Canalizador\Shared\Domain\ValueObjects\FloatValue;
 
 final readonly class Score extends FloatValue
 {

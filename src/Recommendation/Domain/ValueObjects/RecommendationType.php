@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Src\Recommendation\Domain\ValueObjects;
+namespace Canalizador\Recommendation\Domain\ValueObjects;
 
 enum RecommendationType: string
 {

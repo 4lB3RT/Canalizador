@@ -2,12 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace Src\Shared\Domain;
+namespace Canalizador\Shared\Domain;
 
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
-use Src\Shared\Domain\ValueObjects\IntegerId;
+use Canalizador\Shared\Domain\ValueObjects\IntegerId;
 use Webmozart\Assert\Assert;
 
 abstract class Collection implements Countable, IteratorAggregate

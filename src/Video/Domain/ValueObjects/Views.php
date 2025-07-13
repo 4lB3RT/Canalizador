@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace Src\Video\Domain\ValueObjects;
+namespace Canalizador\Video\Domain\ValueObjects;
 
-use Src\Shared\Domain\ValueObjects\IntegerValue;
+use Canalizador\Shared\Domain\ValueObjects\IntegerValue;
 
 final readonly class Views extends IntegerValue
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types = 1);
 
-namespace Src\Recommendation\Domain\Entities;
+namespace Canalizador\Recommendation\Domain\Entities;
 
-use Src\Recommendation\Domain\ValueObjects\Message;
-use Src\Recommendation\Domain\ValueObjects\RecommendationId;
-use Src\Recommendation\Domain\ValueObjects\RecommendationType;
-use Src\Recommendation\Domain\ValueObjects\Score;
-use Src\Video\Domain\ValueObjects\VideoId;
+use Canalizador\Recommendation\Domain\ValueObjects\Message;
+use Canalizador\Recommendation\Domain\ValueObjects\RecommendationId;
+use Canalizador\Recommendation\Domain\ValueObjects\RecommendationType;
+use Canalizador\Recommendation\Domain\ValueObjects\Score;
+use Canalizador\Video\Domain\ValueObjects\VideoId;
 
 final readonly class Recommendation
 {

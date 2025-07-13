@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Src\Metric\Domain\ValueObjects;
+namespace Canalizador\Metric\Domain\ValueObjects;
 
 final readonly class MetricName
 {

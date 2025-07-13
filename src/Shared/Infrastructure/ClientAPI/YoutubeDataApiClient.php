@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Src\Shared\Infrastructure\ClientAPI;
+namespace Canalizador\Shared\Infrastructure\ClientAPI;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -11,7 +11,7 @@ class YoutubeDataApiClient
 {
     private Client $client;
     private string $apiKey;
-    private string $baseUrl = 'https://www.googleapis.com/youtube/v3';
+    private string $baseUrl = 'https://www.googleapis.com/youtube/v3/';
 
     public function __construct(string $apiKey)
     {
@@ -22,16 +22,10 @@ class YoutubeDataApiClient
         ]);
     }
 
-    /**
-     * Fetch video details by YouTube video ID.
-     *
-     * @param  string     $videoId
-     * @return array|null
-     */
     public function getVideoById(string $videoId): ?array
     {
         try {
-            $response = $this->client->get('/videos', [
+            $response = $this->client->get('videos', [
                 'query' => [
                     'id'   => $videoId,
                     'part' => 'snippet,contentDetails,statistics',
@@ -41,9 +35,8 @@ class YoutubeDataApiClient
             $data = json_decode($response->getBody()->getContents(), true);
 
             return $data['items'][0] ?? null;
-        } catch (GuzzleException $e) {
-            // Log error or handle as needed
-            return null;
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 }

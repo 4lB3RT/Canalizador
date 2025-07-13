@@ -2,11 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace Src\Video\Application\UseCases;
+namespace Canalizador\Video\Application\UseCases;
 
-use Src\Video\Domain\Entities\Video;
-use Src\Video\Domain\Repositories\VideoRepository;
-use Src\Video\Domain\ValueObjects\VideoId;
+use Canalizador\Recommendation\Domain\Entities\Recommendation;
+use Canalizador\Video\Domain\Entities\Video;
+use Canalizador\Video\Domain\Repositories\VideoRepository;
+use Canalizador\Video\Domain\ValueObjects\VideoId;
 
 final class GetYoutubeVideo
 {
@@ -16,6 +17,14 @@ final class GetYoutubeVideo
 
     public function get(VideoId $videoId): ?Video
     {
-        return $this->videoRepository->findById($videoId);
+        $metrics = $this->videoRepository->getMetricsById($videoId);
+
+        if (!$metrics) {
+            return null;
+        }
+
+        $video = $this->videoRepository->findById($videoId);
+
+        return $video;
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Src\Shared\Domain\ValueObjects;
+namespace Canalizador\Shared\Domain\ValueObjects;
 
 abstract readonly class IntegerValue
 {

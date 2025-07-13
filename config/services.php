@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Third Party Services
@@ -35,4 +34,13 @@ return [
         ],
     ],
 
+    'youtube' => [
+        'api_key' => env('YOUTUBE_API_KEY'),
+    ],
+
+    'youtube_analytics' => [
+        'client_id' => env('YOUTUBE_ANALYTICS_CLIENT_ID'),
+        'client_secret' => env('YOUTUBE_ANALYTICS_CLIENT_SECRET'),
+        'redirect_uri' => env('YOUTUBE_ANALYTICS_REDIRECT_URI'),
+    ],
 ];

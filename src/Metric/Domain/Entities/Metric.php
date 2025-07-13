@@ -2,11 +2,11 @@
 
 declare(strict_types = 1);
 
-namespace Src\Metric\Domain\Entities;
+namespace Canalizador\Metric\Domain\Entities;
 
-use Src\Metric\Domain\ValueObjects\MetricName;
-use Src\Metric\Domain\ValueObjects\MetricType;
-use Src\Metric\Domain\ValueObjects\MetricValue;
+use Canalizador\Metric\Domain\ValueObjects\MetricName;
+use Canalizador\Metric\Domain\ValueObjects\MetricType;
+use Canalizador\Metric\Domain\ValueObjects\MetricValue;
 
 final readonly class Metric
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types = 1);
 
-namespace Src\Video\Domain\Entities;
+namespace Canalizador\Video\Domain\Entities;
 
-use Src\Metric\Domain\Entities\MetricCollection;
-use Src\Shared\Domain\ValueObjects\Category;
-use Src\Shared\Domain\ValueObjects\DateTime;
-use Src\Video\Domain\ValueObjects\Title;
-use Src\Video\Domain\ValueObjects\VideoId;
+use Canalizador\Category\Domain\Entities\Category;
+use Canalizador\Metric\Domain\Entities\MetricCollection;
+use Canalizador\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Video\Domain\ValueObjects\Title;
+use Canalizador\Video\Domain\ValueObjects\VideoId;
 
 final class Video
 {
