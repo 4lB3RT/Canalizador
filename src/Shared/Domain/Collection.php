@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace Canalizador\Shared\Domain;
 
 use ArrayIterator;
+use Canalizador\Shared\Domain\ValueObjects\IntegerId;
 use Countable;
 use IteratorAggregate;
-use Canalizador\Shared\Domain\ValueObjects\IntegerId;
 use Webmozart\Assert\Assert;
 
 abstract class Collection implements Countable, IteratorAggregate
@@ -78,5 +78,17 @@ abstract class Collection implements Countable, IteratorAggregate
     public function first(): ?object
     {
         return $this->items()[0] ?? null;
+    }
+
+    public function last(): ?object
+    {
+        $items = $this->items();
+
+        return end($items) ?: null;
+    }
+
+    public function map(callable $callback): array
+    {
+        return array_map($callback, $this->items());
     }
 }

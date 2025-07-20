@@ -16,7 +16,7 @@ final class Video
         private readonly VideoId $id,
         private readonly Title $title,
         private readonly DateTime $publishedAt,
-        private readonly MetricCollection $metrics,
+        private MetricCollection $metrics,
         private readonly Category $category
     ) {
     }
@@ -44,5 +44,10 @@ final class Video
     public function category(): Category
     {
         return $this->category;
+    }
+
+    public function updateMetrics(MetricCollection $metrics): void
+    {
+        $this->metrics = $metrics;
     }
 }

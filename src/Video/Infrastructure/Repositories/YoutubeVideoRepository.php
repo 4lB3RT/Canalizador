@@ -26,8 +26,7 @@ final class YoutubeVideoRepository implements VideoRepository
     public function __construct(
         private YoutubeDataApiClient $youtubeClient,
         private YoutubeAnalyticsApiClient $youtubeAnalyticsClient,
-    )
-    {
+    ) {
     }
 
     public function findById(VideoId $videoId): ?Video
@@ -50,15 +49,15 @@ final class YoutubeVideoRepository implements VideoRepository
     {
         $params = [
             'channelId' => 'UCXModX2oqGBqVjf4M6cFmrw',
-            'videoId' => $videoId->value(),
+            'videoId'   => $videoId->value(),
             'startDate' => date('Y-m-d', strtotime('-30 days')),
-            'endDate' => date('Y-m-d'),
-            'metrics' => 'views,likes,comments',
-            'filters' => 'video==' . $videoId->value(),
+            'endDate'   => date('Y-m-d'),
+            'metrics'   => 'comments',
+            'filters'   => 'video==' . $videoId->value(),
         ];
 
         try {
-            $report = $this->youtubeAnalyticsClient->getVideoMetrics($params);
+            $report  = $this->youtubeAnalyticsClient->getVideoMetrics($params);
             $metrics = [];
             if (isset($report['rows'][0]) && isset($report['columnHeaders'])) {
                 foreach ($report['columnHeaders'] as $i => $header) {
@@ -69,9 +68,9 @@ final class YoutubeVideoRepository implements VideoRepository
                     );
                 }
             }
+
             return new MetricCollection($metrics);
         } catch (Throwable $e) {
-            dd($e);
             return null;
         }
     }

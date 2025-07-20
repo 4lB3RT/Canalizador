@@ -8,7 +8,7 @@ final readonly class MetricType
 {
     public function __construct(private string $value)
     {
-        $allowed = ['int', 'float', 'string'];
+        $allowed = ['int', 'INTEGER', 'float', 'string'];
         if (!in_array($value, $allowed, true)) {
             throw new \InvalidArgumentException('Invalid metric type');
         }

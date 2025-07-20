@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Canalizador\Shared\Infrastructure\ClientAPI;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 
 class YoutubeDataApiClient
 {
