@@ -52,7 +52,7 @@ final class YoutubeVideoRepository implements VideoRepository
             'videoId'   => $videoId->value(),
             'startDate' => date('Y-m-d', strtotime('-30 days')),
             'endDate'   => date('Y-m-d'),
-            'metrics'   => 'comments',
+            'metrics'   => 'views,estimatedMinutesWatched,averageViewDuration,averageViewPercentage,subscribersGained,subscribersLost,likes,dislikes,shares,comments,annotationClickThroughRate,annotationCloseRate,cardClickRate,cardTeaserClickRate',
             'filters'   => 'video==' . $videoId->value(),
         ];
 

@@ -43,4 +43,8 @@ return [
         'client_secret' => env('YOUTUBE_ANALYTICS_CLIENT_SECRET'),
         'redirect_uri' => env('YOUTUBE_ANALYTICS_REDIRECT_URI'),
     ],
+
+    'openai' => [
+        'key' => env('OPENAI_API_KEY'),
+    ],
 ];

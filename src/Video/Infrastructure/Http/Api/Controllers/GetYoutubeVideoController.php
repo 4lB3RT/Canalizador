@@ -15,7 +15,7 @@ class GetYoutubeVideoController extends Controller
     {
     }
 
-    public function __invoke(string $id): JsonResponse
+    public function __invoke(string $videoId): JsonResponse
     {
         $video = $this->getYoutubeVideo->get(new VideoId($id));
 

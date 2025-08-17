@@ -29,10 +29,18 @@ final class YoutubeAnalyticsApiClient
             if (!empty($params['videoId'])) {
                 $options['filters'] = 'video==' . $params['videoId'];
             }
-            $channelId = $params['channelId'] ?? 'MINE';
-            $report    = $this->analytics->reports->query(
+
+            // MCP/Content Owner support
+            if (!empty($params['contentOwnerId'])) {
+                $ids = 'contentOwner==' . $params['contentOwnerId'];
+            } else {
+                $channelId = $params['channelId'] ?? 'MINE';
+                $ids = 'channel==' . $channelId;
+            }
+
+            $report = $this->analytics->reports->query(
                 [
-                    'ids'       => 'channel==' . $channelId,
+                    'ids'       => $ids,
                     'startDate' => $params['startDate'],
                     'endDate'   => $params['endDate'],
                     'metrics'   => $params['metrics'],
