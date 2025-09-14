@@ -1,0 +1,17 @@
+Tecnologías de inicio: 
+#laravel 
+#php 
+#openai  
+
+Idea del proyecto:
+La idea principal era crear una herramienta que me fuese modificando título, miniatura, descripción y etiquetas de los videos sugeridas por IA en un periodo de 1 semana y ver si esto realmente tiene algún impacto en el video.
+
+Reto técnico:
+Usar MCPs, agentes y modelos de IA para saber cómo funcionan.
+
+Contexto:
+El motivo de hacer este proyecto es aprender como funcionan los MCPs, agentes y modelos de IA.
+
+
+En principio, fácil, solo hay que conectarse a una API de YouTube y usar el SDK de OpenAI para generar títulos, descripciones y etiquetas... y... Lo de las miniaturas, pues ya veremos cómo lo hacemos (porque en ese momento no tenía mucha idea de cómo usar los modelos, agentes y MCPS).  La idea con el reto técnico estaba un poco descompensada es matar moscas a cañonazos. Y no lo veía del todo claro.
+
