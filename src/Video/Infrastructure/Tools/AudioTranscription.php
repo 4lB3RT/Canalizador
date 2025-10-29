@@ -2,100 +2,57 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Video\Application\Service;
+namespace Canalizador\Video\Infrastructure\Tools;
 
-use Canalizador\Video\Domain\ValueObjects\VideoId;
-use OpenAI\Client as OpenAIClient;
+use Log;
+use Prism\Prism\Enums\Provider;
+use Prism\Prism\Prism;
+use Prism\Prism\Tool;
+use Prism\Prism\ValueObjects\Media\Audio;
+use Throwable;
 
-class VideoTranscriptionService
+final class AudioTranscription extends Tool
 {
-    private const WHISPER_MODEL  = 'whisper-1';
-    private const AUDIO_FORMAT   = 'mp3';
-    private const AUDIO_LANGUAGE = 'es';
-    private const AUDIO_PATH     = '/tmp/';
-
-    private const JSON_PATH    = '/tmp/';
-    private const CACHE_PREFIX = 'yt_audio_';
-
-    protected OpenAIClient $client;
+    private const string JSON_PATH = '/tmp/transcriptions/';
 
     public function __construct()
     {
-        $this->client = \OpenAI::client(config('services.openai.key'));
+        parent::__construct();
+
+        $this->as('AudioTranscription')
+            ->for('Transcribe an audio file and return a structured JSON with segments and words with timestamps.')
+            ->withStringParameter('audioPath', 'The local file path to the audio file to transcribe.')
+            ->using($this);
     }
 
-    public function getTranscription(VideoId $videoId): array
-    {
-        $audioPath  = $this->downloadAudioPreviewFromYoutube($videoId, 3);
-        $transcript = $this->transcribeWithWhisper($audioPath);
-
-        return $transcript;
-    }
-
-    public function downloadAudioPreviewFromYoutube(VideoId $videoId, int $minutes): string
-    {
-        $cacheKey   = md5($videoId->value() . "_{$minutes}min");
-        $outputPath = self::AUDIO_PATH . self::CACHE_PREFIX . $cacheKey . '_preview.' . self::AUDIO_FORMAT;
-
-        if (file_exists($outputPath) && filesize($outputPath) > 0) {
-            return $outputPath;
-        }
-
-        $duration    = max(1, $minutes) * 60;
-        $mm          = (int) floor($duration / 60);
-        $ss          = (int) ($duration % 60);
-        $durationStr = sprintf('%02d:%02d', $mm, $ss);
-
-        $url = 'https://www.youtube.com/watch?v=' . rawurlencode($videoId->value());
-
-        $cmd = sprintf(
-            'yt-dlp --extract-audio --audio-format %s --download-sections %s -o %s %s',
-            escapeshellarg(self::AUDIO_FORMAT),
-            escapeshellarg("*00:00-{$durationStr}"),
-            escapeshellarg($outputPath),
-            escapeshellarg($url)
-        );
-
-        try {
-            $output     = [];
-            $resultCode = 0;
-            exec($cmd, $output, $resultCode);
-        } catch (\Throwable $e) {
-            \Log::error('Error downloading audio preview: ' . $e->getMessage(), [
-                'videoId' => $videoId->value(),
-                'trace'   => $e->getTraceAsString(),
-            ]);
-            throw new \RuntimeException('Failed to download audio preview for video ID: ' . $videoId->value());
-        }
-
-        if ($resultCode !== 0 || !is_file($outputPath) || filesize($outputPath) === 0) {
-            throw new \RuntimeException('Audio preview download failed or file is invalid for video ID: ' . $videoId->value());
-        }
-
-        return $outputPath;
-    }
-
-    public function transcribeWithWhisper(string $audioPath): array
+    public function __invoke(string $audioPath): string
     {
         $cacheFile = self::JSON_PATH . md5($audioPath) . '_transcription.json';
 
-        if (is_file($cacheFile)) {
-            $cached = json_decode((string) file_get_contents($cacheFile), true);
+        if (is_file($cacheFile)) {;
+            $cached = (string) file_get_contents($cacheFile);
 
-            return is_array($cached) ? $cached : [];
+            return $cached;
+        }
+
+        if (!is_dir(self::JSON_PATH)) {
+            mkdir(self::JSON_PATH, 0777, true);
         }
 
         try {
-            $resp = $this->client->audio()->transcribe([
-                'model'                   => self::WHISPER_MODEL,
-                'file'                    => fopen($audioPath, 'rb'),
-                'response_format'         => 'verbose_json',
-                'language'                => self::AUDIO_LANGUAGE,
-                'prompt'                  => 'Transcribe el audio al español con máxima precisión.',
-                'timestamp_granularities' => ['segment', 'word'],
-            ]);
+            $audio = Prism::audio()
+                ->using(Provider::OpenAI, self::MODEL)
+                ->withInput(Audio::fromLocalPath($audioPath))
+                ->withProviderOptions([
+                    'language'                => self::AUDIO_LANGUAGE,
+                    'timestamp_granularities' => ['segment', 'word'],
+                    'response_format'         => 'verbose_json',
+                ])
+                ->withClientOptions(['timeout' => 600])
+                ->asText();
 
-            $data     = json_decode(json_encode($resp), true);
+            $data     = json_decode(json_encode($audio->additionalContent), true);
+            dd($data);
             $segments = $data['segments'] ?? [];
             $words    = $this->extractWordsFromSegments($segments);
 
@@ -125,16 +82,19 @@ class VideoTranscriptionService
                 'duration'               => $this->guessDuration($segments, (float) ($data['duration'] ?? 0.0)),
             ];
 
-            file_put_contents($cacheFile, json_encode($normalized, JSON_UNESCAPED_UNICODE));
+            $normalized = json_encode($normalized, JSON_UNESCAPED_UNICODE);
+
+            file_put_contents($cacheFile, $normalized);
 
             return $normalized;
-        } catch (\Throwable $e) {
-            \Log::error('Error during transcription: ' . $e->getMessage(), [
+        } catch (Throwable $e) {
+            dd($e);
+            Log::error('Error during transcription: ' . $e->getMessage(), [
                 'audioPath' => $audioPath,
                 'trace'     => $e->getTraceAsString(),
             ]);
 
-            return [];
+            return '{"error": "Transcription failed: ' . addslashes($e->getMessage()) . '"}';
         }
     }
 

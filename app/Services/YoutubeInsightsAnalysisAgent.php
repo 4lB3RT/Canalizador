@@ -44,7 +44,6 @@ final class YoutubeInsightsAnalysisAgent
 
             return $response->choices[0]->message->content ?? null;
         } catch (\Exception $e) {
-            dd($e);
             \Log::error('Error in ask method: ' . $e->getMessage());
 
             return null;

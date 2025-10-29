@@ -13,7 +13,7 @@
         "google/apiclient": "^2.18",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "openai-php/laravel": "*",
+        "predis/predis": "^3.2",
         "prism-php/prism": "^0.86.0"
     },
     "require-dev": {
@@ -23,9 +23,8 @@
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^11.5.3",
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "phpstan/phpstan": "^1.12"
+        "phpstan/phpstan": "^1.12",
+        "phpunit/phpunit": "^11.5.3"
     },
     "autoload": {
         "psr-4": {

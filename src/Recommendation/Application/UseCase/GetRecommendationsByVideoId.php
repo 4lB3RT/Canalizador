@@ -6,7 +6,7 @@ namespace Canalizador\Recommendation\Application\UseCase;
 
 use App\Services\YoutubeInsightsAnalysisAgent;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
-use Canalizador\Video\Infrastructure\Repositories\YoutubeVideoRepository;
+use Canalizador\Video\Infrastructure\Repositories\Youtube\YoutubeVideoRepository;
 
 class GetRecommendationsByVideoId
 {
