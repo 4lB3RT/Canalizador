@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Video\Infrastructure;
+namespace Canalizador\Video\Infrastructure\Commands;
 
 use Canalizador\Video\Infrastructure\Agents\AudioTranscriptor;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Redis;
 use function Laravel\Prompts\textarea;
 
 class CanalizadorAgentCommand extends Command
@@ -23,7 +22,7 @@ class CanalizadorAgentCommand extends Command
         $message = Redis::get('message');
         */
 
-        $response = $audioTranscriptor->execute(textarea('Promp:'))->asStream();
+        $response = $audioTranscriptor->execute('Hola me puedes transcribir este video? 2V2M-la_4RI')->asStream();
 
         foreach ($response as $chunk) {
             echo $chunk->text;

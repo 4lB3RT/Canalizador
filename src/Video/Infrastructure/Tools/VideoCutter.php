@@ -6,27 +6,29 @@ namespace Canalizador\Video\Infrastructure\Tools;
 
 use Prism\Prism\Tool;
 
-final class AudioCutter extends Tool
+final class VideoCutter extends Tool
 {
-    private const string AUDIO_PATH = '/tmp/audio/';
-    private const string CUT_PREFIX = 'yt_audio_cut_';
+    private const string VIDEO_PATH = '/tmp/shorts/';
+    private const string CUT_PREFIX = 'yt_video_cut_';
 
     public function __construct()
     {
-        $this->as('AudioCutter')
-            ->for('Cut a segment from an audio file given start and end times, returning the local file path of the cut segment.')
-            ->withStringParameter('audioPath', 'The local file path of the audio.')
+        parent::__construct();
+
+        $this->as('VideoCutter')
+            ->for('Cut a segment from a video file (with audio) given start and end times, returning the local file path of the cut video segment.')
+            ->withStringParameter('videoPath', 'The local file path of the video file.')
             ->withStringParameter('startTime', 'The start time in seconds or HH:MM:SS format.')
             ->withStringParameter('endTime', 'The end time in seconds or HH:MM:SS format.')
             ->using($this);
     }
 
-    public function __invoke(string $audioPath, string $startTime, string $endTime): string
+    public function __invoke(string $videoPath, string $startTime, string $endTime): string
     {
-        $outputPath = self::AUDIO_PATH . self::CUT_PREFIX . md5($audioPath . $startTime . $endTime) . '.mp3';
+        $outputPath = self::VIDEO_PATH . self::CUT_PREFIX . md5($videoPath . $startTime . $endTime) . '.mp4';
 
-        if (!is_dir(self::AUDIO_PATH)) {
-            mkdir(self::AUDIO_PATH, 0777, true);
+        if (!is_dir(self::VIDEO_PATH)) {
+            mkdir(self::VIDEO_PATH, 0777, true);
         }
 
         $duration = $this->parseTime($endTime) - $this->parseTime($startTime);
@@ -35,9 +37,9 @@ final class AudioCutter extends Tool
         }
 
         $cmd = sprintf(
-            'ffmpeg -i %s -ss %s -t %d -acodec copy %s -y',
-            escapeshellarg($audioPath),
+            'ffmpeg -ss %s -i %s -t %s -c copy %s -y',
             escapeshellarg($startTime),
+            escapeshellarg($videoPath),
             $duration,
             escapeshellarg($outputPath)
         );

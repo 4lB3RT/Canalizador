@@ -2,9 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Transcription\Domain\ValueObjects;
-
-use Canalizador\Shared\Domain\ValueObjects\StringValue;
+namespace Canalizador\Shared\Domain\ValueObjects;
 
 Enum Language: string
 {

@@ -2,14 +2,15 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Metric\Domain\Entities;
+namespace Canalizador\Transcription\Domain\Collections;
 
 use Canalizador\Shared\Domain\Collection;
+use Canalizador\Transcription\Domain\ValueObjects\Word;
 
-final class MetricCollection extends Collection
+final class WordCollection extends Collection
 {
     protected function type(): string
     {
-        return Metric::class;
+        return Word::class;
     }
 }

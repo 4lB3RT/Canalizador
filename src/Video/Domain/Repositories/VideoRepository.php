@@ -10,6 +10,8 @@ use Canalizador\Video\Domain\ValueObjects\VideoId;
 
 interface VideoRepository
 {
+    public function save(Video $video): void;
+
     public function findById(VideoId $videoId): ?Video;
 
     public function getMetricsById(VideoId $videoId): ?MetricCollection;

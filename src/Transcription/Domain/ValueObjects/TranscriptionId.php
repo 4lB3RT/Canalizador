@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Video\Domain\ValueObjects;
+namespace Canalizador\Transcription\Domain\ValueObjects;
 
 use Canalizador\Shared\Domain\ValueObjects\StringValue;
 
-final readonly class VideoId extends StringValue
+final readonly class TranscriptionId extends StringValue
 {
 }

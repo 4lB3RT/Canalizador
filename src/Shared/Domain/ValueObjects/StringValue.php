@@ -13,6 +13,11 @@ abstract readonly class StringValue
         }
     }
 
+    public static function fromString(string $value): self
+    {
+        return new static($value);
+    }
+
     public function value(): string
     {
         return $this->value;

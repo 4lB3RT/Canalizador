@@ -12,4 +12,9 @@ final class MetricCollection extends Collection
     {
         return Metric::class;
     }
+
+    public static function fromArray(array $metrics): self
+    {
+        return new self($metrics);
+    }
 }

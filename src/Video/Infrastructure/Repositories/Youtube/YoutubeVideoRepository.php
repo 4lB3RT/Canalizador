@@ -2,10 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Video\Infrastructure\Repositories;
+namespace Canalizador\Video\Infrastructure\Repositories\Youtube;
 
-use Canalizador\Category\Domain\Entities\Category;
-use Canalizador\Category\Domain\ValueObjects\CategoryName;
+use Canalizador\Category\Domain\ValueObjects\Category;
 use Canalizador\Metric\Domain\Entities\Metric;
 use Canalizador\Metric\Domain\Entities\MetricCollection;
 use Canalizador\Metric\Domain\ValueObjects\MetricName;
@@ -16,6 +15,7 @@ use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeAnalyticsApiClient;
 use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
+use Canalizador\Video\Domain\ValueObjects\Category;
 use Canalizador\Video\Domain\ValueObjects\Title;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
 use DateTimeImmutable;
@@ -42,7 +42,7 @@ final class YoutubeVideoRepository implements VideoRepository
 
         $metrics = new MetricCollection([]);
 
-        return new Video($videoId, $title, $publishedAt, $metrics, new Category(new CategoryName('technology')));
+        return new Video($videoId, $title, $publishedAt, $metrics, new Category(new Category('technology')));
     }
 
     public function getMetricsById(VideoId $videoId): ?MetricCollection

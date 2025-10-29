@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Category\Domain\ValueObjects;
+namespace Canalizador\Video\Domain\ValueObjects;
 
 use Canalizador\Shared\Domain\ValueObjects\StringValue;
 
-final readonly class CategoryName extends StringValue
+final readonly class Category extends StringValue
 {
 }

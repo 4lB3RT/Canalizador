@@ -21,17 +21,29 @@
 </div>
 <script>
     const chatBox = document.getElementById('chat-box');
+    document.getElementById('chat-form').onsubmit = async function(e) {
+        e.preventDefault();
+        const input = document.getElementById('user-input');
+        const message = input.value;
+        chatBox.innerHTML += `<div class="mb-2 text-end"><strong>You:</strong> ${message}</div>`;
+        input.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        await fetch("{{ url('/livechat/send') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({ message })
+        });
+    };
+
+    // Listen for agent responses via SSE
     const evtSource = new EventSource("{{ url('/livechat/stream') }}");
     evtSource.onmessage = function(event) {
         const data = JSON.parse(event.data);
         chatBox.innerHTML += `<div class="mb-2"><strong>Agent:</strong> ${data.message}</div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-    };
-    document.getElementById('chat-form').onsubmit = function(e) {
-        e.preventDefault();
-        const input = document.getElementById('user-input');
-        chatBox.innerHTML += `<div class="mb-2 text-end"><strong>You:</strong> ${input.value}</div>`;
-        input.value = '';
         chatBox.scrollTop = chatBox.scrollHeight;
     };
 </script>

@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Canalizador\Shared\Domain\ValueObjects;
 
-class LocalPath
+final readonly class LocalPath extends StringValue
 {
-
 }

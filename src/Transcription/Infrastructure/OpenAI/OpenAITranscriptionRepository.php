@@ -6,20 +6,16 @@ namespace Canalizador\Transcription\Infrastructure\OpenAI;
 
 use Canalizador\Shared\Domain\ValueObjects\Language;
 use Canalizador\Transcription\Domain\Entities\Transcription;
+use Canalizador\Transcription\Domain\Repositories\TranscriptionRepository;
 use Canalizador\Transcription\Domain\ValueObjects\TranscriptionId;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Prism;
 use Prism\Prism\ValueObjects\Media\Audio;
 
-final class TranscriptionRepository implements \Canalizador\Transcription\Domain\Repositories\TranscriptionRepository
+final class OpenAITranscriptionRepository implements TranscriptionRepository
 {
     private const string MODEL  = 'whisper-1';
-    private const string AUDIO_LANGUAGE = 'es';
-    public function getTranscription(VideoId $videoId): Transcription
-    {
-
-    }
 
     public function findById(TranscriptionId $videoId): ?Transcription
     {

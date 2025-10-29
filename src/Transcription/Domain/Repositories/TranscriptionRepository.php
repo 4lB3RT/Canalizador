@@ -2,15 +2,15 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Video\Domain\Repositories;
+namespace Canalizador\Transcription\Domain\Repositories;
 
 use Canalizador\Metric\Domain\Entities\MetricCollection;
+use Canalizador\Transcription\Domain\Entities\Transcription;
+use Canalizador\Transcription\Domain\ValueObjects\TranscriptionId;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
 
-interface VideoRepository
+interface TranscriptionRepository
 {
-    public function findById(VideoId $videoId): ?Video;
-
-    public function getMetricsById(VideoId $videoId): ?MetricCollection;
+    public function findById(TranscriptionId $videoId): ?Transcription;
 }
