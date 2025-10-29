@@ -4,31 +4,28 @@ declare(strict_types = 1);
 
 namespace Canalizador\Transcription\Domain\Entities;
 
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\Language;
-use Canalizador\Shared\Domain\ValueObjects\StringValue;
-use Canalizador\Transcription\Domain\Collections\SegmentationCollection;
 use Canalizador\Transcription\Domain\Collections\WordCollection;
-use Canalizador\Transcription\Domain\ValueObjects\TranscriptionId;
+use Canalizador\Transcription\Domain\ValueObjects\Text;
+use Canalizador\Transcription\Domain\ValueObjects\Word;
+use Canalizador\Video\Domain\ValueObjects\VideoId;
 
-final readonly class Transcription
+final class Transcription
 {
     public function __construct(
-        private TranscriptionId        $id,
-        private StringValue            $text,
-        private Language               $language,
-        private SegmentationCollection $segmentations,
-        private WordCollection         $words,
-        private DateTime               $createdAt,
+        private readonly VideoId                $videoId,
+        private readonly Text                   $text,
+        private readonly Language               $language,
+        private WordCollection                  $words,
     ) {
     }
 
-    public function id(): TranscriptionId
+    public function videoId(): VideoId
     {
-        return $this->id;
+        return $this->videoId;
     }
 
-    public function text(): StringValue
+    public function text(): Text
     {
         return $this->text;
     }
@@ -38,37 +35,26 @@ final readonly class Transcription
         return $this->language;
     }
 
-    public function segmentations(): SegmentationCollection
-    {
-        return $this->segmentations;
-    }
-
     public function words(): WordCollection
     {
         return $this->words;
     }
 
-    public function createdAt(): DateTime
+    public function updateWords(WordCollection $words): void
     {
-        return $this->createdAt;
+        $this->words = $words;
     }
 
     public function toArray(): array
     {
         return [
-            'id' => $this->id->value(),
-            'text' => $this->text->value(),
-            'language' => $this->language->value(),
-            'segmentations' => array_map(
-                fn($segmentation) => $segmentation->toArray(),
-                $this->segmentations->toArray()
+            'videoId'  => $this->videoId->value(),
+            'text'     => $this->text->value(),
+            'language' => $this->language->value,
+            'words'    => array_map(
+                fn (Word $word) => $word->toArray(),
+                $this->words->items()
             ),
-            'words' => array_map(
-                fn($word) => $word->toArray(),
-                $this->words->toArray()
-            ),
-            'createdAt' => $this->createdAt->value(),
         ];
     }
-
 }

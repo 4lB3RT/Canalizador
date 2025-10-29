@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Canalizador\Video\Infrastructure\Repositories\Youtube;
 
-use Canalizador\Category\Domain\ValueObjects\Category;
 use Canalizador\Metric\Domain\Entities\Metric;
 use Canalizador\Metric\Domain\Entities\MetricCollection;
 use Canalizador\Metric\Domain\ValueObjects\MetricName;
@@ -21,14 +20,18 @@ use Canalizador\Video\Domain\ValueObjects\VideoId;
 use DateTimeImmutable;
 use Throwable;
 
-final class YoutubeVideoRepository implements VideoRepository
+final readonly class YoutubeVideoRepository implements VideoRepository
 {
     public function __construct(
-        private YoutubeDataApiClient $youtubeClient,
+        private YoutubeDataApiClient      $youtubeClient,
         private YoutubeAnalyticsApiClient $youtubeAnalyticsClient,
     ) {
     }
 
+    /**
+     * @throws \DateMalformedStringException
+     * @throws Throwable
+     */
     public function findById(VideoId $videoId): ?Video
     {
         $data = $this->youtubeClient->getVideoById($videoId->value());
@@ -42,7 +45,7 @@ final class YoutubeVideoRepository implements VideoRepository
 
         $metrics = new MetricCollection([]);
 
-        return new Video($videoId, $title, $publishedAt, $metrics, new Category(new Category('technology')));
+        return new Video($videoId, $title, $publishedAt, $metrics, Category::fromString('technology'));
     }
 
     public function getMetricsById(VideoId $videoId): ?MetricCollection
@@ -73,5 +76,10 @@ final class YoutubeVideoRepository implements VideoRepository
         } catch (Throwable $e) {
             return null;
         }
+    }
+
+    public function save(Video $video): void
+    {
+        throw new \Exception('Not implemented');
     }
 }

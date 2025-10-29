@@ -13,7 +13,7 @@ abstract readonly class StringValue
         }
     }
 
-    public static function fromString(string $value): self
+    public static function fromString(string $value): static
     {
         return new static($value);
     }

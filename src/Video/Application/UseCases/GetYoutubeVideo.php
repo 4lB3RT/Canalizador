@@ -8,7 +8,7 @@ use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
 
-final class GetYoutubeVideo
+final readonly class GetYoutubeVideo
 {
     public function __construct(private VideoRepository $videoRepository)
     {
