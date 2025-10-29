@@ -17,9 +17,8 @@ final class AudioExtractor extends Tool
     private const string CACHE_AUDIO_PREFIX = 'yt_audio_preview';
 
     public function __construct(
-        private VideoRepository $videoRepository,
-    )
-    {
+        private readonly VideoRepository $videoRepository,
+    ) {
         parent::__construct();
 
         $this->as('AudioExtractor')
@@ -31,7 +30,7 @@ final class AudioExtractor extends Tool
     public function __invoke(string $videoId): void
     {
         $videoId = VideoId::fromString($videoId);
-        $video = $this->videoRepository->findById(videoId: $videoId);
+        $video   = $this->videoRepository->findById(videoId: $videoId);
 
         if ($video && $video->audioLocalPath() !== null) {
             return;

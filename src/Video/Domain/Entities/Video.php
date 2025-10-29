@@ -7,7 +7,6 @@ namespace Canalizador\Video\Domain\Entities;
 use Canalizador\Metric\Domain\Entities\MetricCollection;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Domain\ValueObjects\StringValue;
 use Canalizador\Shared\Domain\ValueObjects\Url;
 use Canalizador\Transcription\Domain\Entities\Transcription;
 use Canalizador\Video\Domain\ValueObjects\Category;
@@ -25,7 +24,7 @@ final class Video
         private readonly ?Url           $url = null,
         private readonly ?LocalPath     $videoLocalPath = null,
         private ?LocalPath     $audioLocalPath = null,
-        private readonly ?Transcription $transcription = null,
+        private ?Transcription $transcription = null,
     ) {
     }
 
@@ -64,6 +63,11 @@ final class Video
         return $this->transcription;
     }
 
+    public function updateTranscription(Transcription $transcription): void
+    {
+        $this->transcription = $transcription;
+    }
+
     public function url(): ?Url
     {
         return $this->url;
@@ -87,19 +91,19 @@ final class Video
     public function toArray(): array
     {
         return [
-            'id' => $this->id->value(),
-            'title' => $this->title->value(),
+            'id'           => $this->id->value(),
+            'title'        => $this->title->value(),
             'published_at' => $this->publishedAt->value(),
-            'category' => $this->category->value(),
-            'metrics' => $this->metrics->map(function ($metric) {
+            'category'     => $this->category->value(),
+            'metrics'      => $this->metrics->map(function ($metric) {
                 return [
-                    'name' => $metric->name()->value(),
-                    'type' => $metric->type()->value(),
+                    'name'  => $metric->name()->value(),
+                    'type'  => $metric->type()->value(),
                     'value' => $metric->value()->value(),
                 ];
             }),
-            'transcription' => $this->transcription?->toArray(),
-            'url' => $this->url?->value(),
+            'transcription'    => $this->transcription?->toArray(),
+            'url'              => $this->url?->value(),
             'video_local_path' => $this->videoLocalPath?->value(),
             'audio_local_path' => $this->audioLocalPath?->value(),
         ];

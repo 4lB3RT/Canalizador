@@ -7,7 +7,6 @@ namespace Canalizador\Video\Infrastructure\Tools;
 use Canalizador\Metric\Domain\Entities\MetricCollection;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Domain\ValueObjects\Url;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
 use Canalizador\Video\Domain\ValueObjects\Category;
@@ -23,9 +22,8 @@ final class VideoDownloader extends Tool
     private const string CACHE_VIDEO_PREFIX = 'yt_video_preview';
 
     public function __construct(
-        private VideoRepository $videoRepository,
-    )
-    {
+        private readonly VideoRepository $videoRepository,
+    ) {
         parent::__construct();
 
         $this->as('VideoDownloader')
@@ -38,7 +36,7 @@ final class VideoDownloader extends Tool
     public function __invoke(string $videoId, int $minutes = 3): void
     {
         $videoId = VideoId::fromString($videoId);
-        $video = $this->videoRepository->findById(videoId: $videoId);
+        $video   = $this->videoRepository->findById(videoId: $videoId);
 
         if ($video && $video->videoLocalPath() !== null) {
             return;

@@ -2,15 +2,14 @@
 
 namespace Canalizador\Transcription\Domain\ValueObjects;
 
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\StringValue;
 
 final readonly class Word
 {
     public function __construct(
-        public StringValue $text,
-        public DateTime $start,
-        public DateTime $end,
+        public Text $text,
+        public StartTime $start,
+        public EndTime $end,
     ) {
     }
 
@@ -19,12 +18,12 @@ final readonly class Word
         return $this->text;
     }
 
-    public function start(): DateTime
+    public function start(): StartTime
     {
         return $this->start;
     }
 
-    public function end(): DateTime
+    public function end(): EndTime
     {
         return $this->end;
     }
@@ -32,9 +31,9 @@ final readonly class Word
     public function toArray(): array
     {
         return [
-            'text' => $this->text->value(),
+            'text'  => $this->text->value(),
             'start' => $this->start->value(),
-            'end' => $this->end->value(),
+            'end'   => $this->end->value(),
         ];
     }
 }

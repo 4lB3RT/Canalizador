@@ -9,7 +9,7 @@ use Google_Client;
 
 final class YoutubeAnalyticsApiClient
 {
-    public function __construct(private GoogleTokenService $tokenService, private Google_Client $client)
+    public function __construct(private readonly GoogleTokenService $tokenService, private Google_Client $client)
     {
     }
 
@@ -35,7 +35,7 @@ final class YoutubeAnalyticsApiClient
                 $ids = 'contentOwner==' . $params['contentOwnerId'];
             } else {
                 $channelId = $params['channelId'] ?? 'MINE';
-                $ids = 'channel==' . $channelId;
+                $ids       = 'channel==' . $channelId;
             }
 
             $report = $this->analytics->reports->query(

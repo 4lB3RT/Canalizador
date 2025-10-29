@@ -6,9 +6,8 @@ namespace Canalizador\Recommendation\Domain\Entities;
 
 use Canalizador\Recommendation\Domain\ValueObjects\Message;
 use Canalizador\Recommendation\Domain\ValueObjects\RecommendationId;
-use Canalizador\Recommendation\Domain\ValueObjects\Type;
-use Canalizador\Recommendation\Domain\ValueObjects\Value;
 use Canalizador\Recommendation\Domain\ValueObjects\Score;
+use Canalizador\Recommendation\Domain\ValueObjects\Type;
 use Canalizador\Recommendation\Domain\ValueObjects\ValueCollection;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
 

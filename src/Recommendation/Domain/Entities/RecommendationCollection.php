@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Canalizador\Recommendation\Domain\Entities;
 
-use Canalizador\Metric\Domain\Entities\Metric;
 use Canalizador\Shared\Domain\Collection;
 
 final class RecommendationCollection extends Collection

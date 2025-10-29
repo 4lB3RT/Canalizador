@@ -8,9 +8,11 @@ abstract readonly class FloatValue
 {
     public function __construct(private float $value)
     {
-        if ($value < 0.0 || $value > 1.0) {
-            throw new \InvalidArgumentException('Score must be between 0.0 and 1.0');
-        }
+    }
+
+    public static function fromFloat(float $value): self
+    {
+        return new static($value);
     }
 
     public function value(): float

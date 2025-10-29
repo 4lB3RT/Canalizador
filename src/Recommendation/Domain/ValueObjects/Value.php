@@ -1,4 +1,5 @@
 <?php
+
 namespace Canalizador\Recommendation\Domain\ValueObjects;
 
 use Canalizador\Shared\Domain\ValueObjects\StringValue;

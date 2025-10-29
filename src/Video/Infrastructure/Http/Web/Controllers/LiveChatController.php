@@ -19,6 +19,7 @@ class LiveChatController extends Controller
     {
         $message = $request->input('message');
         session(['last_message' => $message]);
+
         return response()->json(['status' => 'ok']);
     }
 
@@ -26,6 +27,7 @@ class LiveChatController extends Controller
     {
         $message = session('last_message', '');
         session()->forget('last_message');
+
         return response()->stream(function () use ($audioTranscriptor, $message) {
             if ($message !== '') {
                 echo 'data: ' . json_encode(['message' => $audioTranscriptor->execute($message)->asStream()->text]) . "\n\n";
