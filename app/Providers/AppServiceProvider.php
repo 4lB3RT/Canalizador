@@ -2,12 +2,18 @@
 
 namespace App\Providers;
 
+<<<<<<< HEAD
 use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\Transcription\Infrastructure\Repositories\Elevenlabs\ElevenlabsTranscriptionRepository;
 use Canalizador\Video\Application\UseCases\DownloadVideo;
 use Canalizador\Video\Application\UseCases\SaveAudio;
 use Canalizador\Video\Application\UseCases\SaveTranscription;
 use Canalizador\Video\Application\UseCases\GetYoutubeVideo;
+=======
+use Canalizador\Script\Application\UseCases\GenerateScript;
+use Canalizador\Script\Infrastructure\Repositories\Eloquent\EloquentScriptRepository;
+use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptGenerator;
+>>>>>>> 4812d55 (feat: add GenerateScript HTTP controller)
 use Canalizador\Video\Domain\Repositories\VideoRepository;
 use Canalizador\Video\Infrastructure\Repositories\Redis\RedisVideoRepository;
 use Canalizador\Video\Infrastructure\Repositories\Youtube\YoutubeVideoRepository;
@@ -64,6 +70,14 @@ class AppServiceProvider extends ServiceProvider
                 externalVideoRepository: $app->make(YoutubeVideoRepository::class)
             );
         });
+
+        $this->app->bind(GenerateScript::class, function ($app) {
+            return new GenerateScript(
+                scriptRepository: $app->make(EloquentScriptRepository::class),
+                scriptGenerator: $app->make(OpenAIScriptGenerator::class)
+            );
+        });
+
     }
 
     /**
