@@ -4,16 +4,16 @@ declare(strict_types = 1);
 
 namespace Canalizador\Video\Infrastructure\Tools;
 
-use Canalizador\Transcription\Domain\Repositories\TranscriptionRepository;
-use Canalizador\Video\Domain\Repositories\VideoRepository;
+use Canalizador\Video\Application\UseCases\SaveTranscription;
+use Canalizador\Video\Domain\Exceptions\VideoLocalPathNotFound;
+use Canalizador\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
 use Prism\Prism\Tool;
 
 final class AudioTranscription extends Tool
 {
     public function __construct(
-        private readonly VideoRepository         $videoRepository,
-        private readonly TranscriptionRepository $transcriptionRepository,
+        private readonly SaveTranscription $saveTranscription
     ) {
         parent::__construct();
 
@@ -23,20 +23,16 @@ final class AudioTranscription extends Tool
             ->using($this);
     }
 
-    public function __invoke(string $videoId): void
+    /**
+     * @throws VideoNotFound
+     * @throws VideoLocalPathNotFound
+     */
+    public function __invoke(string $videoId): string
     {
         $videoId = VideoId::fromString($videoId);
 
-        $video = $this->videoRepository->findById($videoId);
+        $transcription = $this->saveTranscription->execute($videoId);
 
-        if (!is_null($video->transcription())) {
-            return;
-        }
-
-        $transcription = $this->transcriptionRepository->findByVideoId($videoId);
-
-        $video->updateTranscription($transcription);
-
-        $this->videoRepository->save($video);
+        return json_encode($transcription->toArray(), JSON_PRETTY_PRINT);
     }
 }

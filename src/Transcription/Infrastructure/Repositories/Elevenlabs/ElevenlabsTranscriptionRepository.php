@@ -12,8 +12,8 @@ use Canalizador\Transcription\Domain\ValueObjects\EndTime;
 use Canalizador\Transcription\Domain\ValueObjects\StartTime;
 use Canalizador\Transcription\Domain\ValueObjects\Text;
 use Canalizador\Transcription\Domain\ValueObjects\Word;
-use Canalizador\Video\Domain\Repositories\VideoRepository;
-use Canalizador\Video\Domain\ValueObjects\VideoId;
+use Canalizador\Video\Domain\Entities\Video;
+use Canalizador\Video\Domain\Exceptions\VideoLocalPathNotFound;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Prism;
 use Prism\Prism\ValueObjects\Media\Audio;
@@ -22,14 +22,12 @@ final readonly class ElevenlabsTranscriptionRepository implements TranscriptionR
 {
     private const string MODEL = 'scribe_v1';
 
-    public function __construct(
-        private VideoRepository $videoRepository,
-    ) {
-    }
-
-    public function findByVideoId(VideoId $videoId): ?Transcription
+    /* @throws VideoLocalPathNotFound */
+    public function findByVideo(Video $video): ?Transcription
     {
-        $video = $this->videoRepository->findById($videoId);
+        if ($video->videoLocalPath() === null) {
+            throw VideoLocalPathNotFound::default();
+        }
 
         $transcriptionResponse = Prism::audio()
             ->using(Provider::ElevenLabs, self::MODEL)
@@ -40,6 +38,7 @@ final readonly class ElevenlabsTranscriptionRepository implements TranscriptionR
                 'num_speakers' => 1,
             ])
             ->asText();
+
 
         $transcription = new Transcription(
             videoId: $video->id(),

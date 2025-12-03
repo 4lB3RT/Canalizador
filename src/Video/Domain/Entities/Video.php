@@ -22,7 +22,7 @@ final class Video
         private MetricCollection        $metrics,
         private readonly Category       $category,
         private readonly ?Url           $url = null,
-        private readonly ?LocalPath     $videoLocalPath = null,
+        private ?LocalPath     $videoLocalPath = null,
         private ?LocalPath     $audioLocalPath = null,
         private ?Transcription $transcription = null,
     ) {
@@ -78,6 +78,11 @@ final class Video
         return $this->videoLocalPath;
     }
 
+    public function updateVideoLocalPath(LocalPath $videoLocalPath): void
+    {
+        $this->videoLocalPath = $videoLocalPath;
+    }
+
     public function audioLocalPath(): ?LocalPath
     {
         return $this->audioLocalPath;
@@ -93,8 +98,8 @@ final class Video
         return [
             'id'           => $this->id->value(),
             'title'        => $this->title->value(),
-            'published_at' => $this->publishedAt->value(),
-            'category'     => $this->category->value(),
+            'published_at' => $this->publishedAt->value()->format('Y-m-d H:i:s'),
+            'category'     => $this->category->value,
             'metrics'      => $this->metrics->map(function ($metric) {
                 return [
                     'name'  => $metric->name()->value(),

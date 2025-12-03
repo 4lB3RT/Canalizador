@@ -17,10 +17,8 @@ final class TranscriptionDataTransformer
 {
     public static function transformArray(array $data): Transcription
     {
-        $words = WordCollection::empty();
-
         if ($data['words'] !== null) {
-            $words->add(
+            $words =
                 array_map(
                     fn (array $wordData) => new Word(
                         Text::fromString($wordData['text']),
@@ -28,9 +26,10 @@ final class TranscriptionDataTransformer
                         EndTime::fromFloat($wordData['end']),
                     ),
                     $data['words']
-                )
             );
         }
+
+        $words = new WordCollection($words ?? []);
 
         return new Transcription(
             VideoId::fromString($data['videoId']),

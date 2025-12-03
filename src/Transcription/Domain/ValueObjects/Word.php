@@ -7,9 +7,9 @@ use Canalizador\Shared\Domain\ValueObjects\StringValue;
 final readonly class Word
 {
     public function __construct(
-        public Text $text,
-        public StartTime $start,
-        public EndTime $end,
+        private Text $text,
+        private StartTime $start,
+        private EndTime $end,
     ) {
     }
 
