@@ -54,16 +54,6 @@ abstract class Collection implements Countable, IteratorAggregate
         return !empty($this->items);
     }
 
-    public function ids(): array
-    {
-        $itemsIds = [];
-        foreach ($this->items() as $item) {
-            $itemsIds[] = (int) $item->id()->value();
-        }
-
-        return $itemsIds;
-    }
-
     public function findOrNull(IntegerId $id): ?object
     {
         foreach ($this->items as $item) {

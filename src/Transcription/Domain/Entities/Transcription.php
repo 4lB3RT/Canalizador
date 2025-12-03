@@ -51,10 +51,7 @@ final class Transcription
             'videoId'  => $this->videoId->value(),
             'text'     => $this->text->value(),
             'language' => $this->language->value,
-            'words'    => array_map(
-                fn (Word $word) => $word->toArray(),
-                $this->words->items()
-            ),
+            'words'    => $this->words->map(fn (Word $word) => $word->toArray()),
         ];
     }
 }

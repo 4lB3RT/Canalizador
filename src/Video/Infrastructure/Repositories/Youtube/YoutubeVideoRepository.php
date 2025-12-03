@@ -13,10 +13,11 @@ use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeAnalyticsApiClient;
 use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\Video\Domain\Entities\Video;
+use Canalizador\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
 use Canalizador\Video\Domain\ValueObjects\Category;
-use Canalizador\Video\Domain\ValueObjects\Title;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
+use Canalizador\Video\Infrastructure\DataTransformers\VideoDataTransformer;
 use DateTimeImmutable;
 use Throwable;
 
@@ -24,12 +25,13 @@ final readonly class YoutubeVideoRepository implements VideoRepository
 {
     public function __construct(
         private YoutubeDataApiClient      $youtubeClient,
-        private YoutubeAnalyticsApiClient $youtubeAnalyticsClient,
+        private ?YoutubeAnalyticsApiClient $youtubeAnalyticsClient = null,
     ) {
     }
 
     /**
      * @throws \DateMalformedStringException
+     * @throws VideoNotFound
      * @throws Throwable
      */
     public function findById(VideoId $videoId): ?Video
@@ -37,15 +39,22 @@ final readonly class YoutubeVideoRepository implements VideoRepository
         $data = $this->youtubeClient->getVideoById($videoId->value());
 
         if (!$data) {
-            return null;
+            throw VideoNotFound::default();
         }
-        $snippet     = $data['snippet'] ?? [];
-        $title       = new Title($snippet['title'] ?? '');
-        $publishedAt = new DateTime(new DateTimeImmutable($snippet['publishedAt']) ?? '');
 
-        $metrics = new MetricCollection([]);
+        $publishedAt = new DateTime(new DateTimeImmutable($data['snippet']['publishedAt']) ?? '');
 
-        return new Video($videoId, $title, $publishedAt, $metrics, Category::fromString('technology'));
+        return VideoDataTransformer::fromArray([
+            'id'               => $videoId->value(),
+            'title'            => $data['snippet']['title'],
+            'published_at'     => $publishedAt->value()->format('Y-m-d H:i:s'),
+            'category'         => Category::VIDEO->value,
+            'metrics'          => [],
+            'url'              => 'https://www.youtube.com/watch?v=' . $videoId->value(),
+            'video_local_path' => null,
+            'audio_local_path' => null,
+            'transcription'    => null,
+        ]);
     }
 
     public function getMetricsById(VideoId $videoId): ?MetricCollection

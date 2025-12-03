@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Canalizador\Video\Domain\ValueObjects;
 
-use Canalizador\Shared\Domain\ValueObjects\StringValue;
-
-final readonly class Category extends StringValue
+enum Category: string
 {
+    case VIDEO = 'video';
+    case SHORT = 'short';
 }
