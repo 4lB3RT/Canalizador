@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Video\Application\UseCases;
+namespace Canalizador\Video\Application\UseCases\RetrieveVideoContent;
 
 use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
 

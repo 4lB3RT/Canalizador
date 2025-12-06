@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Video\Domain\Infrastructure\Http\Api\Controllers;
+namespace Canalizador\Video\Infrastructure\Http\Api\Controllers;
 
 use Canalizador\Video\Application\UseCases\RetrieveVideoContent\RetrieveVideoContent;
 use Canalizador\Video\Application\UseCases\RetrieveVideoContent\RetrieveVideoContentRequest;

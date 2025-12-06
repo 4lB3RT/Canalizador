@@ -10,9 +10,11 @@ use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\Transcription\Infrastructure\Repositories\Elevenlabs\ElevenlabsTranscriptionRepository;
 use Canalizador\Video\Application\UseCases\GenerateVideo\GenerateVideo;
 use Canalizador\Video\Application\UseCases\RetrieveVideoContent\RetrieveVideoContent;
+use Canalizador\Video\Domain\Factories\VideoFactory;
 use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
+use Canalizador\Video\Domain\Services\VideoPromptExtractor;
 use Canalizador\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
 use Canalizador\Video\Infrastructure\Repositories\FFmpeg\FFmpegVideoComposer;
 use Canalizador\Video\Infrastructure\Repositories\Luma\LumaVideoGenerator;
@@ -81,11 +83,17 @@ class AppServiceProvider extends ServiceProvider
             };
         });
 
+        $this->app->bind(VideoPromptExtractor::class, VideoPromptExtractor::class);
+
+        $this->app->bind(VideoFactory::class, VideoFactory::class);
+
         $this->app->bind(GenerateVideo::class, function ($app) {
             return new GenerateVideo(
                 generateScript: $app->make(GenerateScript::class),
-                videoRepository: $app->make(VideoRepository::class),
+                videoPromptExtractor: $app->make(VideoPromptExtractor::class),
                 videoGenerator: $app->make(VideoGenerator::class),
+                videoFactory: $app->make(VideoFactory::class),
+                videoRepository: $app->make(VideoRepository::class),
             );
         });
 

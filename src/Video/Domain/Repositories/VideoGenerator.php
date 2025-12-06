@@ -6,5 +6,5 @@ namespace Canalizador\Video\Domain\Repositories;
 
 interface VideoGenerator
 {
-    public function generate(string $prompt, string $audioPath): string;
+    public function generate(string $prompt): string;
 }

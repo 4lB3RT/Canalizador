@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Video\Domain\Infrastructure\Repositories\Luma;
+namespace Canalizador\Video\Infrastructure\Repositories\Luma;
 
 use Canalizador\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
@@ -27,7 +27,7 @@ final class LumaVideoGenerator implements VideoGenerator
      * @throws VideoGenerationFailed
      * @throws ConnectionException
      */
-    public function generate(string $prompt, string $audioPath): string
+    public function generate(string $prompt): string
     {
         $response = Http::withHeaders([
             'Authorization' => "Bearer {$this->apiKey}",

@@ -5,10 +5,10 @@ declare(strict_types = 1);
 namespace Canalizador\Video\Application\UseCases\GenerateVideo;
 
 use Canalizador\Script\Domain\Services\GenerateScript;
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\Video\Domain\Entities\Video;
+use Canalizador\Video\Domain\Factories\VideoFactory;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
+use Canalizador\Video\Domain\Services\VideoPromptExtractor;
 use Canalizador\Video\Domain\ValueObjects\GenerationId;
 use Canalizador\Video\Domain\ValueObjects\Title;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
@@ -17,8 +17,10 @@ final readonly class GenerateVideo
 {
     public function __construct(
         private GenerateScript $generateScript,
-        private VideoRepository $videoRepository,
+        private VideoPromptExtractor $videoPromptExtractor,
         private VideoGenerator $videoGenerator,
+        private VideoFactory $videoFactory,
+        private VideoRepository $videoRepository,
     ) {
     }
 
@@ -29,34 +31,19 @@ final readonly class GenerateVideo
             prompt: $request->prompt
         );
 
-        $videoPrompt = $this->extractVideoPrompt($script->content()->value());
+        $videoPrompt = $this->videoPromptExtractor->extract($script);
 
-        $generationId = $this->videoGenerator->generate(
-            $videoPrompt,
-            ''
-        );
+        $generationId = $this->videoGenerator->generate($videoPrompt);
 
-        $video = new Video(
+        $video = $this->videoFactory->create(
             id: VideoId::fromString($request->videoId),
             script: $script,
             title: Title::fromString($request->title ?? 'Generated Video'),
-            createdAt: new DateTime(new \DateTimeImmutable()),
             generationId: GenerationId::fromString($generationId),
         );
 
         $this->videoRepository->save($video);
 
         return new GenerateVideoResponse($video);
-    }
-
-    private function extractVideoPrompt(string $scriptContent): string
-    {
-        $jsonData = json_decode($scriptContent, true);
-
-        if (json_last_error() === JSON_ERROR_NONE && isset($jsonData['video_prompt'])) {
-            return $jsonData['video_prompt'];
-        }
-
-        return $scriptContent;
     }
 }

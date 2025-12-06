@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Video\Domain\Infrastructure\Repositories\Sora;
+namespace Canalizador\Video\Infrastructure\Repositories\Sora;
 
 use Canalizador\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
@@ -29,7 +29,7 @@ final class SoraVideoRepository implements VideoGenerator, VideoContentRetriever
      * @throws VideoGenerationFailed
      * @throws ConnectionException
      */
-    public function generate(string $prompt, string $audioPath): string
+    public function generate(string $prompt): string
     {
         $requestBody = [
             'model' => self::MODEL,
@@ -82,7 +82,7 @@ final class SoraVideoRepository implements VideoGenerator, VideoContentRetriever
         }
 
         $videoContent = $response->body();
-        
+
         if (empty($videoContent)) {
             throw VideoGenerationFailed::apiError('Empty video content received');
         }
