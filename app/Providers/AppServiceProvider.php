@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use Canalizador\Script\Domain\Factories\ScriptFactory;
 use Canalizador\Script\Domain\Repositories\ScriptRepository;
 use Canalizador\Script\Domain\Services\GenerateScript;
 use Canalizador\Script\Infrastructure\Repositories\Eloquent\EloquentScriptRepository;
 use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptGenerator;
+use Canalizador\Shared\Domain\Services\Clock;
+use Canalizador\Shared\Infrastructure\Services\SystemClock;
 use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\Transcription\Infrastructure\Repositories\Elevenlabs\ElevenlabsTranscriptionRepository;
 use Canalizador\Video\Application\UseCases\GenerateVideo\GenerateVideo;
@@ -15,6 +18,7 @@ use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
 use Canalizador\Video\Domain\Services\VideoPromptExtractor;
+use Canalizador\Video\Infrastructure\Services\JsonVideoPromptExtractor;
 use Canalizador\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
 use Canalizador\Video\Infrastructure\Repositories\FFmpeg\FFmpegVideoComposer;
 use Canalizador\Video\Infrastructure\Repositories\Luma\LumaVideoGenerator;
@@ -55,10 +59,15 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
+        $this->app->bind(Clock::class, SystemClock::class);
+
+        $this->app->bind(ScriptFactory::class, ScriptFactory::class);
+
         $this->app->bind(GenerateScript::class, function ($app) {
             return new GenerateScript(
                 scriptRepository: $app->make(EloquentScriptRepository::class),
-                scriptGenerator: $app->make(OpenAIScriptGenerator::class)
+                scriptGenerator: $app->make(OpenAIScriptGenerator::class),
+                scriptFactory: $app->make(ScriptFactory::class)
             );
         });
 
@@ -83,9 +92,13 @@ class AppServiceProvider extends ServiceProvider
             };
         });
 
-        $this->app->bind(VideoPromptExtractor::class, VideoPromptExtractor::class);
+        $this->app->bind(VideoPromptExtractor::class, JsonVideoPromptExtractor::class);
 
-        $this->app->bind(VideoFactory::class, VideoFactory::class);
+        $this->app->bind(VideoFactory::class, function ($app) {
+            return new VideoFactory(
+                clock: $app->make(Clock::class)
+            );
+        });
 
         $this->app->bind(GenerateVideo::class, function ($app) {
             return new GenerateVideo(

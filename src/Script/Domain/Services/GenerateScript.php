@@ -5,16 +5,16 @@ declare(strict_types = 1);
 namespace Canalizador\Script\Domain\Services;
 
 use Canalizador\Script\Domain\Entities\Script;
+use Canalizador\Script\Domain\Factories\ScriptFactory;
 use Canalizador\Script\Domain\Repositories\ScriptGenerator;
 use Canalizador\Script\Domain\Repositories\ScriptRepository;
-use Canalizador\Script\Domain\ValueObjects\ScriptContent;
-use Canalizador\Script\Domain\ValueObjects\ScriptId;
 
 final readonly class GenerateScript
 {
     public function __construct(
         private ScriptRepository $scriptRepository,
-        private ScriptGenerator $scriptGenerator
+        private ScriptGenerator $scriptGenerator,
+        private ScriptFactory $scriptFactory
     ) {
     }
 
@@ -22,11 +22,9 @@ final readonly class GenerateScript
     {
         $scriptContent = $this->scriptGenerator->generate($prompt);
 
-        $id = ScriptId::fromString($scriptId);
-
-        $script = new Script(
-            id: $id,
-            content: new ScriptContent($scriptContent)
+        $script = $this->scriptFactory->createFromStrings(
+            id: $scriptId,
+            content: $scriptContent
         );
 
         $this->scriptRepository->save($script);

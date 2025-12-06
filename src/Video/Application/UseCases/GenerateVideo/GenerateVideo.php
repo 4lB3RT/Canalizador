@@ -9,9 +9,6 @@ use Canalizador\Video\Domain\Factories\VideoFactory;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
 use Canalizador\Video\Domain\Services\VideoPromptExtractor;
-use Canalizador\Video\Domain\ValueObjects\GenerationId;
-use Canalizador\Video\Domain\ValueObjects\Title;
-use Canalizador\Video\Domain\ValueObjects\VideoId;
 
 final readonly class GenerateVideo
 {
@@ -35,11 +32,11 @@ final readonly class GenerateVideo
 
         $generationId = $this->videoGenerator->generate($videoPrompt);
 
-        $video = $this->videoFactory->create(
-            id: VideoId::fromString($request->videoId),
+        $video = $this->videoFactory->createFromStrings(
+            videoId: $request->videoId,
             script: $script,
-            title: Title::fromString($request->title ?? 'Generated Video'),
-            generationId: GenerationId::fromString($generationId),
+            title: $request->title ?? 'Generated Video',
+            generationId: $generationId,
         );
 
         $this->videoRepository->save($video);

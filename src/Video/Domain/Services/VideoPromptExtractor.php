@@ -6,17 +6,7 @@ namespace Canalizador\Video\Domain\Services;
 
 use Canalizador\Script\Domain\Entities\Script;
 
-final readonly class VideoPromptExtractor
+interface VideoPromptExtractor
 {
-    public function extract(Script $script): string
-    {
-        $scriptContent = $script->content()->value();
-        $jsonData = json_decode($scriptContent, true);
-
-        if (json_last_error() === JSON_ERROR_NONE && isset($jsonData['video_prompt'])) {
-            return $jsonData['video_prompt'];
-        }
-
-        return $scriptContent;
-    }
+    public function extract(Script $script): string;
 }
