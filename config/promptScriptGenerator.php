@@ -37,7 +37,7 @@ You must respond ONLY with a valid JSON object. DO NOT include any text before o
   "development": "Development text (70-80% of script, approximately 15-22 words). Main content point with specific actions and visual elements.",
   "conclusion": "Conclusion text (10-15% of script, approximately 2-4 words). Memorable closing or call to action with an impactful visual image.",
   "full_script": "Complete script combining all three sections in a fluid and natural way, ready to be narrated. MUST have exactly 22-27 words to last 9 seconds.",
-  "video_prompt": "Complete and detailed visual description for Sora-2 that RESPECTS AND INCLUDES ALL ELEMENTS FROM THE FULL_SCRIPT. This must be a comprehensive visual prompt that translates the entire script into visual terms. CRITICAL: Include ALL characters, objects, actions, settings, and details mentioned in the full_script. Do NOT summarize or omit any elements. The video_prompt should be a complete visual translation of the full_script, including: all mentioned people/characters (with their names if specified), all actions described, the complete setting, visual style, lighting, colors, camera movement, expressions, gestures, and any other visual details from the script. Minimum 150 words, be extremely descriptive and comprehensive. Every element from full_script must appear in video_prompt."
+  "video_prompt": "Complete and detailed visual description for Sora-2 that RESPECTS AND INCLUDES ALL ELEMENTS FROM THE FULL_SCRIPT AND THE USER'S ORIGINAL PROMPT. This must be a comprehensive visual prompt that translates the entire script into visual terms. CRITICAL: Include ALL characters, objects, actions, settings, and details mentioned in BOTH the full_script AND the user's original prompt. Do NOT summarize or omit any elements. The video_prompt should be a complete visual translation that incorporates: all mentioned people/characters (with their exact names if specified in the user prompt or script), all actions described, the complete setting, visual style, lighting, colors, camera movement, expressions, gestures, and any other visual details from both the script and the user's original request. IMPORTANT: If the user's prompt contains specific visual requirements, character descriptions, or context that is not fully captured in the full_script, you MUST include those elements in the video_prompt. The video_prompt must respect and incorporate the user's original intent and requirements. Minimum 150 words, be extremely descriptive and comprehensive. Every element from full_script AND the user's prompt must appear in video_prompt."
 }
 
 CRITICAL RULES:
@@ -48,12 +48,14 @@ CRITICAL RULES:
 - Use natural and conversational English in the script
 - RESPECT ALL CHARACTERS AND ELEMENTS FROM USER PROMPT: If the user mentions specific characters, people, or personalities, they MUST appear in "full_script" with their exact names/titles as mentioned by the user
 - The "full_script" field MUST include all characters, objects, and concepts mentioned in the user\'s prompt
-- The "video_prompt" field MUST include ALL elements from "full_script" - do NOT omit characters, actions, or details
+- The "video_prompt" field MUST include ALL elements from BOTH "full_script" AND the user\'s original prompt - do NOT omit characters, actions, or details from either source
+- CRITICAL: The "video_prompt" MUST incorporate and respect the user\'s original prompt requirements, including any specific visual descriptions, character details, or context that may not be fully captured in the "full_script"
 - If the script mentions a specific person (e.g., "Daddy Yankee"), BOTH "full_script" AND "video_prompt" MUST include that person by their exact name
 - If the user prompt mentions multiple characters, ALL must appear in both "full_script" and "video_prompt"
+- If the user prompt contains visual requirements, style preferences, or specific context, these MUST be reflected in the "video_prompt"
 - If the script mentions specific actions, objects, or settings, the video_prompt MUST describe them visually
-- The "video_prompt" is NOT a summary - it is a complete visual translation of the entire script
-- Include in "video_prompt": cinematic style, colors, lighting, composition, movement, expressions, gestures, ALL characters (with their exact names), ALL actions
+- The "video_prompt" is NOT a summary - it is a complete visual translation that combines the entire script AND the user\'s original prompt requirements
+- Include in "video_prompt": cinematic style, colors, lighting, composition, movement, expressions, gestures, ALL characters (with their exact names), ALL actions, and ALL elements from the user\'s original prompt
 - The "full_script" field must be the complete and fluid script, ready to be narrated, and must respect all user requirements
 - Sections must have the indicated proportion (introduction 10-15%, development 70-80%, conclusion 10-15%)
 - THE COMPLETE SCRIPT MUST HAVE BETWEEN 22 AND 27 WORDS TO LAST EXACTLY 9 SECONDS
