@@ -20,7 +20,6 @@ final readonly class Video
         private DateTime $createdAt,
         private ?GenerationId $generationId = null,
         private ?LocalPath $videoLocalPath = null,
-        private ?LocalPath $audioLocalPath = null,
         private ?DateTime $completedAt = null,
     ) {
     }
@@ -43,11 +42,6 @@ final readonly class Video
     public function videoLocalPath(): ?LocalPath
     {
         return $this->videoLocalPath;
-    }
-
-    public function audioLocalPath(): ?LocalPath
-    {
-        return $this->audioLocalPath;
     }
 
     public function createdAt(): DateTime
@@ -74,21 +68,6 @@ final readonly class Video
             createdAt: $this->createdAt,
             generationId: $this->generationId,
             videoLocalPath: $videoLocalPath,
-            audioLocalPath: $this->audioLocalPath,
-            completedAt: $this->completedAt,
-        );
-    }
-
-    public function withAudioLocalPath(LocalPath $audioLocalPath): self
-    {
-        return new self(
-            id: $this->id,
-            script: $this->script,
-            title: $this->title,
-            createdAt: $this->createdAt,
-            generationId: $this->generationId,
-            videoLocalPath: $this->videoLocalPath,
-            audioLocalPath: $audioLocalPath,
             completedAt: $this->completedAt,
         );
     }
@@ -102,7 +81,6 @@ final readonly class Video
             createdAt: $this->createdAt,
             generationId: $this->generationId,
             videoLocalPath: $this->videoLocalPath,
-            audioLocalPath: $this->audioLocalPath,
             completedAt: $completedAt,
         );
     }
@@ -116,7 +94,6 @@ final readonly class Video
             'title' => $this->title->value(),
             'generation_id' => $this->generationId?->value(),
             'video_local_path' => $this->videoLocalPath?->value(),
-            'audio_local_path' => $this->audioLocalPath?->value(),
             'created_at' => $this->createdAt->value()->format('Y-m-d H:i:s'),
             'completed_at' => $this->completedAt?->value()->format('Y-m-d H:i:s'),
         ];

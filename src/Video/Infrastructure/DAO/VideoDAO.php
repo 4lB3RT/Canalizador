@@ -22,7 +22,6 @@ class VideoDAO extends Model
         'title',
         'generation_id',
         'video_local_path',
-        'audio_local_path',
         'created_at',
         'completed_at',
     ];
