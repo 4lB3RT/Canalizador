@@ -77,6 +77,8 @@ class EnsureGoogleToken
         $client->setRedirectUri(config('services.youtube_analytics.redirect_uri'));
         $client->setScopes([
             'https://www.googleapis.com/auth/yt-analytics.readonly',
+            'https://www.googleapis.com/auth/youtube.upload',
+            'https://www.googleapis.com/auth/youtube',
             'https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/userinfo.profile',
         ]);
