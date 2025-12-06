@@ -1,6 +1,6 @@
 <?php
 
-use Canalizador\Video\Infrastructure\Commands\CanalizadorAgentCommand;
+use Canalizador\VideoLegacy\Infrastructure\Commands\CanalizadorAgentCommand;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 

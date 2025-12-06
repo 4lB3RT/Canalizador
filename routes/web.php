@@ -2,14 +2,14 @@
 
 use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\Transcription\Infrastructure\Repositories\Elevenlabs\ElevenlabsTranscriptionRepository;
-use Canalizador\Video\Application\UseCases\DownloadVideo;
-use Canalizador\Video\Application\UseCases\SaveAudio;
-use Canalizador\Video\Application\UseCases\SaveTranscription;
-use Canalizador\Video\Infrastructure\Repositories\Redis\RedisVideoRepository;
-use Canalizador\Video\Infrastructure\Repositories\Youtube\YoutubeVideoRepository;
-use Canalizador\Video\Infrastructure\Tools\AudioExtractor;
-use Canalizador\Video\Infrastructure\Tools\AudioTranscription;
-use Canalizador\Video\Infrastructure\Tools\VideoDownloader;
+use Canalizador\VideoLegacy\Application\UseCases\DownloadVideo;
+use Canalizador\VideoLegacy\Application\UseCases\SaveAudio;
+use Canalizador\VideoLegacy\Application\UseCases\SaveTranscription;
+use Canalizador\VideoLegacy\Infrastructure\Repositories\Redis\RedisVideoRepository;
+use Canalizador\VideoLegacy\Infrastructure\Repositories\Youtube\YoutubeVideoRepository;
+use Canalizador\VideoLegacy\Infrastructure\Tools\AudioExtractor;
+use Canalizador\VideoLegacy\Infrastructure\Tools\AudioTranscription;
+use Canalizador\VideoLegacy\Infrastructure\Tools\VideoDownloader;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/tools/debug', function () {

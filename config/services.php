@@ -47,4 +47,8 @@ return [
     'openai' => [
         'key' => env('OPENAI_API_KEY'),
     ],
+
+    'luma' => [
+        'api_key' => env('LUMA_API_KEY'),
+    ],
 ];
