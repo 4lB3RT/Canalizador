@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace Canalizador\Video\Domain\Infrastructure\Http\Api\Controllers;
 
 use Canalizador\Script\Domain\Exceptions\ScriptNotFound;
-use Canalizador\Video\Application\UseCases\GenerateVideoFromScript;
-use Canalizador\Video\Application\UseCases\GenerateVideoFromScriptRequest;
+use Canalizador\Video\Application\UseCases\GenerateVideoFromScript\GenerateVideoFromScript;
+use Canalizador\Video\Application\UseCases\GenerateVideoFromScript\GenerateVideoFromScriptRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

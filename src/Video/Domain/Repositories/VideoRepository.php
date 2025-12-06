@@ -15,7 +15,7 @@ interface VideoRepository
 
     public function findById(VideoId $id): ?Video;
 
-    public function findByScriptId(ScriptId $scriptId): VideoCollection;
+    public function getByScriptId(ScriptId $scriptId): VideoCollection;
 
     public function delete(VideoId $id): void;
 }

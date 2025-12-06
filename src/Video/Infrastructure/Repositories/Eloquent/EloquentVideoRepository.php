@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Video\Domain\Infrastructure\Repositories\Eloquent;
+namespace Canalizador\Video\Infrastructure\Repositories\Eloquent;
 
 use Canalizador\Script\Domain\Repositories\ScriptRepository;
 use Canalizador\Script\Domain\ValueObjects\ScriptId;
@@ -10,10 +10,10 @@ use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Entities\VideoCollection;
-use Canalizador\Video\Domain\Infrastructure\DAO\VideoDAO;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
 use Canalizador\Video\Domain\ValueObjects\Title;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
+use Canalizador\Video\Infrastructure\DAO\VideoDAO;
 
 final class EloquentVideoRepository implements VideoRepository
 {
@@ -48,7 +48,7 @@ final class EloquentVideoRepository implements VideoRepository
         return $this->toEntity($model);
     }
 
-    public function findByScriptId(ScriptId $scriptId): VideoCollection
+    public function getByScriptId(ScriptId $scriptId): VideoCollection
     {
         $models = VideoDAO::where('script_id', $scriptId->value())->get();
 

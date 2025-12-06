@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\Video\Domain\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\Video\Application\UseCases\RetrieveVideoContent;
-use Canalizador\Video\Application\UseCases\RetrieveVideoContentRequest;
+use Canalizador\Video\Application\UseCases\RetrieveVideoContent\RetrieveVideoContent;
+use Canalizador\Video\Application\UseCases\RetrieveVideoContent\RetrieveVideoContentRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
