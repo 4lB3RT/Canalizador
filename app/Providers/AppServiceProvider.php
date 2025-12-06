@@ -8,16 +8,16 @@ use Canalizador\Script\Infrastructure\Repositories\Eloquent\EloquentScriptReposi
 use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptGenerator;
 use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\Transcription\Infrastructure\Repositories\Elevenlabs\ElevenlabsTranscriptionRepository;
-use Canalizador\Video\Application\UseCases\GenerateVideoFromScript\GenerateVideoFromScript;
+use Canalizador\Video\Application\UseCases\GenerateVideo\GenerateVideo;
 use Canalizador\Video\Application\UseCases\RetrieveVideoContent\RetrieveVideoContent;
-use Canalizador\Video\Domain\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
-use Canalizador\Video\Domain\Infrastructure\Repositories\Luma\LumaVideoGenerator;
-use Canalizador\Video\Domain\Infrastructure\Repositories\Sora\SoraVideoRepository;
 use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
+use Canalizador\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
 use Canalizador\Video\Infrastructure\Repositories\FFmpeg\FFmpegVideoComposer;
+use Canalizador\Video\Infrastructure\Repositories\Luma\LumaVideoGenerator;
 use Canalizador\Video\Infrastructure\Repositories\OpenAI\OpenAITextToSpeechGenerator;
+use Canalizador\Video\Infrastructure\Repositories\Sora\SoraVideoRepository;
 use Canalizador\VideoLegacy\Application\UseCases\GetYoutubeVideo;
 use Canalizador\VideoLegacy\Domain\Repositories\VideoRepository as VideoLegacyRepository;
 use Canalizador\VideoLegacy\Infrastructure\Repositories\Redis\RedisVideoRepository;
@@ -81,9 +81,10 @@ class AppServiceProvider extends ServiceProvider
             };
         });
 
-        $this->app->bind(GenerateVideoFromScript::class, function ($app) {
-            return new GenerateVideoFromScript(
-                scriptRepository: $app->make(EloquentScriptRepository::class),
+        $this->app->bind(GenerateVideo::class, function ($app) {
+            return new GenerateVideo(
+                generateScript: $app->make(GenerateScript::class),
+                videoRepository: $app->make(VideoRepository::class),
                 videoGenerator: $app->make(VideoGenerator::class),
             );
         });
