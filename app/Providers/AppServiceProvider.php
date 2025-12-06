@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Canalizador\Script\Domain\Repositories\ScriptRepository;
 use Canalizador\Script\Domain\Services\GenerateScript;
 use Canalizador\Script\Infrastructure\Repositories\Eloquent\EloquentScriptRepository;
 use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptGenerator;
@@ -59,7 +60,13 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind(VideoRepository::class, EloquentVideoRepository::class);
+        $this->app->bind(ScriptRepository::class, EloquentScriptRepository::class);
+
+        $this->app->bind(VideoRepository::class, function ($app) {
+            return new EloquentVideoRepository(
+                scriptRepository: $app->make(ScriptRepository::class)
+            );
+        });
 
         $this->app->bind(VideoGenerator::class, function ($app) {
             $provider = env('VIDEO_GENERATOR_PROVIDER', 'luma');

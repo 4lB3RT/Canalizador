@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Canalizador\Video\Domain\Entities;
 
-use Canalizador\Script\Domain\ValueObjects\ScriptId;
+use Canalizador\Script\Domain\Entities\Script;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\Video\Domain\ValueObjects\Title;
@@ -14,7 +14,7 @@ final readonly class Video
 {
     public function __construct(
         private VideoId $id,
-        private ScriptId $scriptId,
+        private Script $script,
         private Title $title,
         private DateTime $createdAt,
         private ?LocalPath $videoLocalPath = null,
@@ -28,9 +28,9 @@ final readonly class Video
         return $this->id;
     }
 
-    public function scriptId(): ScriptId
+    public function script(): Script
     {
-        return $this->scriptId;
+        return $this->script;
     }
 
     public function title(): Title
@@ -62,7 +62,7 @@ final readonly class Video
     {
         return new self(
             id: $this->id,
-            scriptId: $this->scriptId,
+            script: $this->script,
             title: $this->title,
             createdAt: $this->createdAt,
             videoLocalPath: $videoLocalPath,
@@ -75,7 +75,7 @@ final readonly class Video
     {
         return new self(
             id: $this->id,
-            scriptId: $this->scriptId,
+            script: $this->script,
             title: $this->title,
             createdAt: $this->createdAt,
             videoLocalPath: $this->videoLocalPath,
@@ -88,7 +88,7 @@ final readonly class Video
     {
         return new self(
             id: $this->id,
-            scriptId: $this->scriptId,
+            script: $this->script,
             title: $this->title,
             createdAt: $this->createdAt,
             videoLocalPath: $this->videoLocalPath,
@@ -101,7 +101,8 @@ final readonly class Video
     {
         return [
             'id' => $this->id->value(),
-            'script_id' => $this->scriptId->value(),
+            'script_id' => $this->script->id()->value(),
+            'script' => $this->script->toArray(),
             'title' => $this->title->value(),
             'video_local_path' => $this->videoLocalPath?->value(),
             'audio_local_path' => $this->audioLocalPath?->value(),

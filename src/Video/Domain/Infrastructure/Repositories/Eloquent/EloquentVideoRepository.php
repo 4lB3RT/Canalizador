@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Canalizador\Video\Domain\Infrastructure\Repositories\Eloquent;
 
+use Canalizador\Script\Domain\Repositories\ScriptRepository;
 use Canalizador\Script\Domain\ValueObjects\ScriptId;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
@@ -16,12 +17,17 @@ use Canalizador\Video\Domain\ValueObjects\VideoId;
 
 final class EloquentVideoRepository implements VideoRepository
 {
+    public function __construct(
+        private ScriptRepository $scriptRepository
+    ) {
+    }
+
     public function save(Video $video): void
     {
         VideoDAO::updateOrCreate(
             ['generated_video_id' => $video->id()->value()],
             [
-                'script_id' => $video->scriptId()->value(),
+                'script_id' => $video->script()->id()->value(),
                 'title' => $video->title()->value(),
                 'video_local_path' => $video->videoLocalPath()?->value(),
                 'audio_local_path' => $video->audioLocalPath()?->value(),
@@ -61,9 +67,16 @@ final class EloquentVideoRepository implements VideoRepository
 
     private function toEntity(VideoDAO $model): Video
     {
+        $scriptId = ScriptId::fromString($model->script_id);
+        $script = $this->scriptRepository->findById($scriptId);
+
+        if (!$script) {
+            throw new \RuntimeException("Script not found for script_id: {$model->script_id}");
+        }
+
         return new Video(
             id: VideoId::fromString($model->generated_video_id),
-            scriptId: ScriptId::fromString($model->script_id),
+            script: $script,
             title: Title::fromString($model->title),
             createdAt: new DateTime($model->created_at),
             videoLocalPath: $model->video_local_path ? LocalPath::fromString($model->video_local_path) : null,
