@@ -26,7 +26,7 @@ final class EloquentVideoRepository implements VideoRepository
     public function save(Video $video): void
     {
         VideoDAO::updateOrCreate(
-            ['generated_video_id' => $video->id()->value()],
+            ['id' => $video->id()->value()],
             [
                 'script_id' => $video->script()->id()->value(),
                 'title' => $video->title()->value(),
@@ -77,7 +77,7 @@ final class EloquentVideoRepository implements VideoRepository
         }
 
         return new Video(
-            id: VideoId::fromString($model->generated_video_id),
+            id: VideoId::fromString($model->id),
             script: $script,
             title: Title::fromString($model->title),
             createdAt: new DateTime($model->created_at),

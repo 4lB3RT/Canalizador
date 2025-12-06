@@ -8,16 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class VideoDAO extends Model
 {
-    protected $table = 'generated_videos';
+    protected $table = 'videos';
 
-    protected $primaryKey = 'generated_video_id';
+    protected $primaryKey = 'id';
 
     public $incrementing = false;
 
     protected $keyType = 'string';
 
     protected $fillable = [
-        'generated_video_id',
+        'id',
         'script_id',
         'title',
         'generation_id',
