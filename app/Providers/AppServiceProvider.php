@@ -2,25 +2,22 @@
 
 namespace App\Providers;
 
-use Canalizador\Script\Application\UseCases\GenerateScript;
+use Canalizador\Script\Domain\Services\GenerateScript;
 use Canalizador\Script\Infrastructure\Repositories\Eloquent\EloquentScriptRepository;
 use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptGenerator;
 use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\Transcription\Infrastructure\Repositories\Elevenlabs\ElevenlabsTranscriptionRepository;
-use Canalizador\Video\Application\UseCases\GenerateVideoFromScript;
-use Canalizador\Video\Application\UseCases\RetrieveVideoContent;
+use Canalizador\Video\Application\UseCases\GenerateVideoFromScript\GenerateVideoFromScript;
+use Canalizador\Video\Application\UseCases\RetrieveVideoContent\RetrieveVideoContent;
 use Canalizador\Video\Domain\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
 use Canalizador\Video\Domain\Infrastructure\Repositories\Luma\LumaVideoGenerator;
 use Canalizador\Video\Domain\Infrastructure\Repositories\Sora\SoraVideoRepository;
-use Canalizador\Video\Domain\Repositories\TextToSpeechGenerator;
 use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
-use Canalizador\Video\Domain\Repositories\VideoComposer;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
 use Canalizador\Video\Infrastructure\Repositories\FFmpeg\FFmpegVideoComposer;
 use Canalizador\Video\Infrastructure\Repositories\OpenAI\OpenAITextToSpeechGenerator;
 use Canalizador\VideoLegacy\Application\UseCases\GetYoutubeVideo;
-use Canalizador\VideoLegacy\Application\UseCases\SaveTranscription;
 use Canalizador\VideoLegacy\Domain\Repositories\VideoRepository as VideoLegacyRepository;
 use Canalizador\VideoLegacy\Infrastructure\Repositories\Redis\RedisVideoRepository;
 use Canalizador\VideoLegacy\Infrastructure\Repositories\Youtube\YoutubeVideoRepository;

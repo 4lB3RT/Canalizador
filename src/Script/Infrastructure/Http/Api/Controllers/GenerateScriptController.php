@@ -4,8 +4,7 @@ declare(strict_types = 1);
 
 namespace Canalizador\Script\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\Script\Application\UseCases\GenerateScript;
-use Canalizador\Script\Application\UseCases\GenerateScriptRequest;
+use Canalizador\Script\Domain\Services\GenerateScript;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -24,13 +23,11 @@ final class GenerateScriptController extends Controller
             'prompt' => 'nullable|string',
         ]);
 
-        $generateScriptRequest = new GenerateScriptRequest(
-            uuid: $validated['uuid'],
+        $script = $this->generateScript->generate(
+            scriptId: $validated['uuid'],
             prompt: $validated['prompt'] ?? null
         );
 
-        $response = $this->generateScript->execute($generateScriptRequest);
-
-        return response()->json($response->toArray());
+        return response()->json($script->toArray());
     }
 }
