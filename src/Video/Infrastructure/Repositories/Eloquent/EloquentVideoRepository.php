@@ -11,6 +11,7 @@ use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Entities\VideoCollection;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
+use Canalizador\Video\Domain\ValueObjects\GenerationId;
 use Canalizador\Video\Domain\ValueObjects\Title;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
 use Canalizador\Video\Infrastructure\DAO\VideoDAO;
@@ -29,6 +30,7 @@ final class EloquentVideoRepository implements VideoRepository
             [
                 'script_id' => $video->script()->id()->value(),
                 'title' => $video->title()->value(),
+                'generation_id' => $video->generationId()?->value(),
                 'video_local_path' => $video->videoLocalPath()?->value(),
                 'audio_local_path' => $video->audioLocalPath()?->value(),
                 'created_at' => $video->createdAt()->value(),
@@ -79,6 +81,7 @@ final class EloquentVideoRepository implements VideoRepository
             script: $script,
             title: Title::fromString($model->title),
             createdAt: new DateTime($model->created_at),
+            generationId: $model->generation_id ? GenerationId::fromString($model->generation_id) : null,
             videoLocalPath: $model->video_local_path ? LocalPath::fromString($model->video_local_path) : null,
             audioLocalPath: $model->audio_local_path ? LocalPath::fromString($model->audio_local_path) : null,
             completedAt: $model->completed_at ? new DateTime($model->completed_at) : null,

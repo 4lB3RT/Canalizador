@@ -7,6 +7,7 @@ namespace Canalizador\Video\Domain\Entities;
 use Canalizador\Script\Domain\Entities\Script;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Video\Domain\ValueObjects\GenerationId;
 use Canalizador\Video\Domain\ValueObjects\Title;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
 
@@ -17,6 +18,7 @@ final readonly class Video
         private Script $script,
         private Title $title,
         private DateTime $createdAt,
+        private ?GenerationId $generationId = null,
         private ?LocalPath $videoLocalPath = null,
         private ?LocalPath $audioLocalPath = null,
         private ?DateTime $completedAt = null,
@@ -58,6 +60,11 @@ final readonly class Video
         return $this->completedAt;
     }
 
+    public function generationId(): ?GenerationId
+    {
+        return $this->generationId;
+    }
+
     public function withVideoLocalPath(LocalPath $videoLocalPath): self
     {
         return new self(
@@ -65,6 +72,7 @@ final readonly class Video
             script: $this->script,
             title: $this->title,
             createdAt: $this->createdAt,
+            generationId: $this->generationId,
             videoLocalPath: $videoLocalPath,
             audioLocalPath: $this->audioLocalPath,
             completedAt: $this->completedAt,
@@ -78,6 +86,7 @@ final readonly class Video
             script: $this->script,
             title: $this->title,
             createdAt: $this->createdAt,
+            generationId: $this->generationId,
             videoLocalPath: $this->videoLocalPath,
             audioLocalPath: $audioLocalPath,
             completedAt: $this->completedAt,
@@ -91,6 +100,7 @@ final readonly class Video
             script: $this->script,
             title: $this->title,
             createdAt: $this->createdAt,
+            generationId: $this->generationId,
             videoLocalPath: $this->videoLocalPath,
             audioLocalPath: $this->audioLocalPath,
             completedAt: $completedAt,
@@ -104,6 +114,7 @@ final readonly class Video
             'script_id' => $this->script->id()->value(),
             'script' => $this->script->toArray(),
             'title' => $this->title->value(),
+            'generation_id' => $this->generationId?->value(),
             'video_local_path' => $this->videoLocalPath?->value(),
             'audio_local_path' => $this->audioLocalPath?->value(),
             'created_at' => $this->createdAt->value()->format('Y-m-d H:i:s'),

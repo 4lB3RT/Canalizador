@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Video\Domain\Infrastructure\DAO;
+namespace Canalizador\Video\Infrastructure\DAO;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,6 +20,7 @@ class VideoDAO extends Model
         'generated_video_id',
         'script_id',
         'title',
+        'generation_id',
         'video_local_path',
         'audio_local_path',
         'created_at',
