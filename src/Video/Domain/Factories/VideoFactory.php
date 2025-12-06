@@ -38,14 +38,14 @@ final readonly class VideoFactory
     public function createFromStrings(
         string $videoId,
         Script $script,
-        string $title,
+        ?string $title,
         string $generationId,
         ?DateTime $createdAt = null
     ): Video {
         return $this->create(
             id: VideoId::fromString($videoId),
             script: $script,
-            title: Title::fromString($title),
+            title: Title::fromString($title ?? 'Generated Video'),
             generationId: GenerationId::fromString($generationId),
             createdAt: $createdAt,
         );

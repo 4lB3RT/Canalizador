@@ -8,6 +8,11 @@ use Canalizador\Script\Domain\Services\GenerateScript;
 use Canalizador\Script\Infrastructure\Repositories\Eloquent\EloquentScriptRepository;
 use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptGenerator;
 use Canalizador\Shared\Domain\Services\Clock;
+use Canalizador\Shared\Domain\Services\HttpClient;
+use Canalizador\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Shared\Infrastructure\Services\HttpErrorExtractor;
+use Canalizador\Shared\Infrastructure\Services\HttpResponseValidator as HttpResponseValidatorImpl;
+use Canalizador\Shared\Infrastructure\Services\LaravelHttpClient;
 use Canalizador\Shared\Infrastructure\Services\SystemClock;
 use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\Transcription\Infrastructure\Repositories\Elevenlabs\ElevenlabsTranscriptionRepository;
@@ -18,6 +23,7 @@ use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
 use Canalizador\Video\Domain\Services\VideoPromptExtractor;
+use Canalizador\Video\Infrastructure\Http\Api\Mappers\GenerateVideoRequestMapper;
 use Canalizador\Video\Infrastructure\Services\JsonVideoPromptExtractor;
 use Canalizador\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
 use Canalizador\Video\Infrastructure\Repositories\FFmpeg\FFmpegVideoComposer;
@@ -61,6 +67,16 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(Clock::class, SystemClock::class);
 
+        $this->app->bind(HttpClient::class, LaravelHttpClient::class);
+
+        $this->app->bind(HttpResponseValidator::class, function ($app) {
+            return new HttpResponseValidatorImpl(
+                errorExtractor: new HttpErrorExtractor()
+            );
+        });
+
+        $this->app->bind(GenerateVideoRequestMapper::class, GenerateVideoRequestMapper::class);
+
         $this->app->bind(ScriptFactory::class, ScriptFactory::class);
 
         $this->app->bind(GenerateScript::class, function ($app) {
@@ -84,10 +100,14 @@ class AppServiceProvider extends ServiceProvider
 
             return match ($provider) {
                 'sora' => new SoraVideoRepository(
-                    apiKey: config('services.openai.key') ?? ''
+                    apiKey: config('services.openai.key') ?? '',
+                    httpClient: $app->make(HttpClient::class),
+                    responseValidator: $app->make(HttpResponseValidator::class)
                 ),
                 default => new LumaVideoGenerator(
-                    apiKey: config('services.luma.api_key') ?? ''
+                    apiKey: config('services.luma.api_key') ?? '',
+                    httpClient: $app->make(HttpClient::class),
+                    responseValidator: $app->make(HttpResponseValidator::class)
                 ),
             };
         });
@@ -115,10 +135,14 @@ class AppServiceProvider extends ServiceProvider
 
             return match ($provider) {
                 'sora' => new SoraVideoRepository(
-                    apiKey: config('services.openai.key') ?? ''
+                    apiKey: config('services.openai.key') ?? '',
+                    httpClient: $app->make(HttpClient::class),
+                    responseValidator: $app->make(HttpResponseValidator::class)
                 ),
                 default => new SoraVideoRepository(
-                    apiKey: config('services.openai.key') ?? ''
+                    apiKey: config('services.openai.key') ?? '',
+                    httpClient: $app->make(HttpClient::class),
+                    responseValidator: $app->make(HttpResponseValidator::class)
                 ),
             };
         });

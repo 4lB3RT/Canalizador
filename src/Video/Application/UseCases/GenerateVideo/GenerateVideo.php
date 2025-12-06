@@ -35,7 +35,7 @@ final readonly class GenerateVideo
         $video = $this->videoFactory->createFromStrings(
             videoId: $request->videoId,
             script: $script,
-            title: $request->title ?? 'Generated Video',
+            title: $request->title,
             generationId: $generationId,
         );
 
