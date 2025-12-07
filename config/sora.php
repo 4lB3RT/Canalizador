@@ -32,9 +32,15 @@ return [
     |--------------------------------------------------------------------------
     |
     | Duration of the generated video in seconds.
-    | Lower duration = lower cost.
-    | Default: 9 seconds (aligned with script generation)
-    | For testing: Consider reducing to 5-7 seconds for even lower cost
+    | Lower duration = lower cost (cost is proportional to duration).
+    | 
+    | Recommended values:
+    | - 5 seconds: Maximum savings for initial testing (44% cheaper than 9s)
+    | - 7 seconds: Balanced testing (22% cheaper than 9s)
+    | - 9 seconds: Production (aligned with script generation) - DEFAULT
+    |
+    | Cost formula: Cost = Price per second × Duration
+    | Example: $0.08/second × 5s = $0.40 per video
     |
     */
 
