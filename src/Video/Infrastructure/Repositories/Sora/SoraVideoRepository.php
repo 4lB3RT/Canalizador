@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\File;
 final readonly class SoraVideoRepository implements VideoGenerator, VideoContentRetriever
 {
     private const string API_BASE_URL = 'https://api.openai.com/v1';
-    private const string MODEL = 'sora-2';
 
     public function __construct(
         private string $apiKey,
@@ -38,11 +37,18 @@ final readonly class SoraVideoRepository implements VideoGenerator, VideoContent
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ];
+
+        $model = config('sora.model', 'sora-2');
+        $duration = config('sora.duration', 9);
+        $resolution = config('sora.resolution', '854x480');
+
+        $this->validateResolution($resolution);
+
         $data = [
-            'model' => self::MODEL,
+            'model' => $model,
             'prompt' => $prompt,
-            'seconds' => '12',
-            'size' => '1280x720',
+            'seconds' => (string) $duration,
+            'size' => $resolution,
         ];
 
         try {
@@ -106,5 +112,23 @@ final readonly class SoraVideoRepository implements VideoGenerator, VideoContent
             str_contains($contentType, 'video/quicktime') => 'mov',
             default => 'mp4',
         };
+    }
+
+    /**
+     * @throws VideoGenerationFailed
+     */
+    private function validateResolution(string $resolution): void
+    {
+        $availableResolutions = config('sora.available_resolutions', [
+            '1280x720',
+            '854x480',
+            '640x360',
+        ]);
+
+        if (!in_array($resolution, $availableResolutions, true)) {
+            throw VideoGenerationFailed::apiError(
+                "Invalid resolution: {$resolution}. Available resolutions: " . implode(', ', $availableResolutions)
+            );
+        }
     }
 }
