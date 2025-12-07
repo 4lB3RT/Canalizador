@@ -11,6 +11,19 @@ return [
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | Model Selection
+    |--------------------------------------------------------------------------
+    |
+    | Available models:
+    | - 'sora-2': Standard model, lower cost (RECOMMENDED for testing)
+    | - 'sora-2-pro': Pro model, higher quality but higher cost
+    |
+    | For testing with minimum cost, use 'sora-2'
+    |
+    */
+
     'model' => env('SORA_MODEL', 'sora-2'),
 
     /*
@@ -21,6 +34,7 @@ return [
     | Duration of the generated video in seconds.
     | Lower duration = lower cost.
     | Default: 9 seconds (aligned with script generation)
+    | For testing: Consider reducing to 5-7 seconds for even lower cost
     |
     */
 
@@ -34,11 +48,12 @@ return [
     | Resolution of the generated video.
     | Options: '1280x720' (720p), '854x480' (480p), '640x360' (360p)
     | Lower resolution = lower cost.
-    | Default: 480p (good balance between quality and cost)
+    | Default: 360p (MINIMUM COST for testing)
+    | For production: Use 480p or 720p
     |
     */
 
-    'resolution' => env('SORA_RESOLUTION', '854x480'),
+    'resolution' => env('SORA_RESOLUTION', '640x360'),
 
     /*
     |--------------------------------------------------------------------------
