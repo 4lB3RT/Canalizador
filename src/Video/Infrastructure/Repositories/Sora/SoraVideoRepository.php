@@ -40,7 +40,7 @@ final readonly class SoraVideoRepository implements VideoGenerator, VideoContent
 
         $model = config('sora.model', 'sora-2');
         $duration = config('sora.duration', 9);
-        $resolution = config('sora.resolution', '854x480');
+        $resolution = config('sora.resolution', '1280x720');
 
         $this->validateResolution($resolution);
 
@@ -121,13 +121,14 @@ final readonly class SoraVideoRepository implements VideoGenerator, VideoContent
     {
         $availableResolutions = config('sora.available_resolutions', [
             '1280x720',
-            '854x480',
-            '640x360',
+            '720x1280',
+            '1792x1024',
+            '1024x1792',
         ]);
 
         if (!in_array($resolution, $availableResolutions, true)) {
             throw VideoGenerationFailed::apiError(
-                "Invalid resolution: {$resolution}. Available resolutions: " . implode(', ', $availableResolutions)
+                "Invalid resolution: {$resolution}. Supported values are: " . implode(', ', $availableResolutions)
             );
         }
     }

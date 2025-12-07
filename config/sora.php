@@ -52,27 +52,33 @@ return [
     |--------------------------------------------------------------------------
     |
     | Resolution of the generated video.
-    | Options: '1280x720' (720p), '854x480' (480p), '640x360' (360p)
-    | Lower resolution = lower cost.
-    | Default: 360p (MINIMUM COST for testing)
-    | For production: Use 480p or 720p
+    | Supported resolutions by Sora API:
+    | - '1280x720' (720p horizontal/landscape) - RECOMMENDED for testing
+    | - '720x1280' (720p vertical/portrait)
+    | - '1792x1024' (higher quality horizontal)
+    | - '1024x1792' (higher quality vertical)
+    |
+    | Note: Lower resolution (1280x720) = lower cost for testing
+    | Default: 1280x720 (minimum cost option available)
     |
     */
 
-    'resolution' => env('SORA_RESOLUTION', '640x360'),
+    'resolution' => env('SORA_RESOLUTION', '1280x720'),
 
     /*
     |--------------------------------------------------------------------------
     | Available Resolutions
     |--------------------------------------------------------------------------
     |
-    | List of supported resolutions for validation.
+    | List of supported resolutions by Sora API for validation.
+    | These are the ONLY resolutions accepted by the API.
     |
     */
 
     'available_resolutions' => [
-        '1280x720', // 720p - Higher quality, higher cost
-        '854x480',  // 480p - Balanced quality/cost (recommended)
-        '640x360',  // 360p - Lower quality, lower cost
+        '1280x720',  // 720p horizontal - Minimum cost option
+        '720x1280',  // 720p vertical/portrait
+        '1792x1024', // Higher quality horizontal
+        '1024x1792', // Higher quality vertical
     ],
 ];
