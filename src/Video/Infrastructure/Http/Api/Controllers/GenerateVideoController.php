@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Canalizador\Video\Infrastructure\Http\Api\Controllers;
 
@@ -18,6 +18,9 @@ final class GenerateVideoController extends Controller
     ) {
     }
 
+    /**
+     * @throws \RuntimeException
+     */
     public function __invoke(Request $request): JsonResponse
     {
         $generateVideoRequest = $this->requestMapper->map($request);

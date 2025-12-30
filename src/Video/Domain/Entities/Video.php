@@ -1,26 +1,28 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Canalizador\Video\Domain\Entities;
 
 use Canalizador\Script\Domain\Entities\Script;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Video\Domain\ValueObjects\Description;
 use Canalizador\Video\Domain\ValueObjects\GenerationId;
 use Canalizador\Video\Domain\ValueObjects\Title;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
 
-final readonly class Video
+final class Video
 {
     public function __construct(
-        private VideoId $id,
-        private Script $script,
-        private Title $title,
-        private DateTime $createdAt,
-        private ?GenerationId $generationId = null,
+        private readonly VideoId $id,
+        private readonly Script $script,
+        private readonly Title $title,
+        private readonly Description $description,
+        private readonly DateTime $createdAt,
+        private readonly ?GenerationId $generationId = null,
         private ?LocalPath $videoLocalPath = null,
-        private ?DateTime $completedAt = null,
+        private readonly ?DateTime $completedAt = null,
     ) {
     }
 
@@ -39,9 +41,20 @@ final readonly class Video
         return $this->title;
     }
 
+    public function description(): Description
+    {
+        return $this->description;
+    }
+
     public function videoLocalPath(): ?LocalPath
     {
         return $this->videoLocalPath;
+    }
+
+    public function updateVideoLocalPath(LocalPath $videoLocalPath): void
+    {
+        $this->videoLocalPath = $videoLocalPath;
+
     }
 
     public function createdAt(): DateTime
@@ -59,32 +72,6 @@ final readonly class Video
         return $this->generationId;
     }
 
-    public function withVideoLocalPath(LocalPath $videoLocalPath): self
-    {
-        return new self(
-            id: $this->id,
-            script: $this->script,
-            title: $this->title,
-            createdAt: $this->createdAt,
-            generationId: $this->generationId,
-            videoLocalPath: $videoLocalPath,
-            completedAt: $this->completedAt,
-        );
-    }
-
-    public function markAsCompleted(DateTime $completedAt): self
-    {
-        return new self(
-            id: $this->id,
-            script: $this->script,
-            title: $this->title,
-            createdAt: $this->createdAt,
-            generationId: $this->generationId,
-            videoLocalPath: $this->videoLocalPath,
-            completedAt: $completedAt,
-        );
-    }
-
     public function toArray(): array
     {
         return [
@@ -92,6 +79,7 @@ final readonly class Video
             'script_id' => $this->script->id()->value(),
             'script' => $this->script->toArray(),
             'title' => $this->title->value(),
+            'description' => $this->description->value(),
             'generation_id' => $this->generationId?->value(),
             'video_local_path' => $this->videoLocalPath?->value(),
             'created_at' => $this->createdAt->value()->format('Y-m-d H:i:s'),

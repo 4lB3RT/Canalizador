@@ -7,6 +7,7 @@ namespace Canalizador\Video\Infrastructure\Repositories\Sora;
 use Canalizador\Shared\Domain\Services\HttpClient;
 use Canalizador\Shared\Domain\Services\HttpResponse;
 use Canalizador\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
@@ -38,7 +39,7 @@ final readonly class SoraVideoRepository implements VideoGenerator, VideoContent
             'Content-Type' => 'application/json',
         ];
 
-        $model = config('sora.model', 'sora-2');
+        $model = config('sora.model', 'sora-2-pro');
         $duration = config('sora.duration', 9);
         $resolution = config('sora.resolution', '1280x720');
 
@@ -66,9 +67,9 @@ final readonly class SoraVideoRepository implements VideoGenerator, VideoContent
     /**
      * @throws VideoGenerationFailed
      */
-    public function retrieve(string $videoId): string
+    public function retrieve(Video $video): void
     {
-        $url = self::API_BASE_URL . "/videos/{$videoId}/content";
+        $url = self::API_BASE_URL . "/videos/{$video->generationId()->value()}/content";
         $headers = [
             'Authorization' => "Bearer {$this->apiKey}",
         ];
@@ -89,12 +90,10 @@ final readonly class SoraVideoRepository implements VideoGenerator, VideoContent
             }
 
             $extension = $this->getVideoExtension($response->header('Content-Type'));
-            $filename = "{$videoId}.{$extension}";
+            $filename = "{$video->id()->value()}.{$extension}";
             $filePath = $tmpDir . '/' . $filename;
 
             File::put($filePath, $videoContent);
-
-            return $filePath;
         } catch (\RuntimeException $e) {
             throw VideoGenerationFailed::apiError($e->getMessage());
         }

@@ -2,11 +2,23 @@
 
 declare(strict_types = 1);
 
-use Canalizador\Script\Infrastructure\Http\Api\Controllers\GenerateScriptController;
+use App\Http\Middleware\EnsureGoogleToken;
+use Canalizador\Channel\Infrastructure\Http\Api\Controllers\SyncChannelController;
+use Canalizador\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelWithAIController;
 use Canalizador\Video\Infrastructure\Http\Api\Controllers\GenerateVideoController;
+use Canalizador\Video\Infrastructure\Http\Api\Controllers\PublishVideoController;
 use Canalizador\Video\Infrastructure\Http\Api\Controllers\RetrieveVideoContentController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/scripts/generate', GenerateScriptController::class);
-Route::post('/videos/generate', GenerateVideoController::class);
-Route::get('/videos/{videoId}/content', RetrieveVideoContentController::class);
+Route::middleware(['api.token'])->group(function () {
+    Route::post('/videos/generate', GenerateVideoController::class)
+        ->middleware(EnsureGoogleToken::class);
+    Route::get('/videos/{videoId}/content', RetrieveVideoContentController::class)
+        ->middleware(EnsureGoogleToken::class);
+    Route::post('/videos/publish', PublishVideoController::class)
+        ->middleware(EnsureGoogleToken::class);
+    Route::put('/channels/{channelId}/update-with-ai', UpdateChannelWithAIController::class)
+        ->middleware(EnsureGoogleToken::class);
+    Route::put('/channels/{channelId}/sync', SyncChannelController::class)
+        ->middleware(EnsureGoogleToken::class);
+});

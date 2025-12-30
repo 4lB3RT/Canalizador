@@ -1,47 +1,33 @@
 <?php
 
-use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
-use Canalizador\Transcription\Infrastructure\Repositories\Elevenlabs\ElevenlabsTranscriptionRepository;
-use Canalizador\VideoLegacy\Application\UseCases\DownloadVideo;
-use Canalizador\VideoLegacy\Application\UseCases\SaveAudio;
-use Canalizador\VideoLegacy\Application\UseCases\SaveTranscription;
-use Canalizador\VideoLegacy\Infrastructure\Repositories\Redis\RedisVideoRepository;
-use Canalizador\VideoLegacy\Infrastructure\Repositories\Youtube\YoutubeVideoRepository;
-use Canalizador\VideoLegacy\Infrastructure\Tools\AudioExtractor;
-use Canalizador\VideoLegacy\Infrastructure\Tools\AudioTranscription;
-use Canalizador\VideoLegacy\Infrastructure\Tools\VideoDownloader;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/tools/debug', function () {
-    $videoRepository = new RedisVideoRepository(
-        \Illuminate\Support\Facades\Redis::connection()
-    );
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
 
-    $externalVideoRepository = new YoutubeVideoRepository(
-        new YoutubeDataApiClient(env('YOUTUBE_API_KEY')),
-    );
+Route::get('/auth/google/login', [LoginController::class, 'handleGoogleLogin'])->name('auth.google.login');
+Route::get('/auth/google/register', [RegisterController::class, 'handleGoogleRegister'])->name('auth.google.register');
 
-    $videoDownlader = new VideoDownloader(
-        new DownloadVideo(
-            videoRepository: $videoRepository,
-            externalVideoRepository: $externalVideoRepository
-        )
-    );
+Route::get('/auth/google/callback', function (Request $request) {
+    $oauthType = session('oauth_type', 'register');
 
-    $audioExtractor = new AudioExtractor(
-        saveAudio: new SaveAudio(
-            videoRepository: $videoRepository,
-        )
-    );
+    if ($oauthType === 'login') {
+        $controller = app(LoginController::class);
+        return $controller->handleGoogleCallback($request);
+    } else {
+        $controller = app(RegisterController::class);
+        return $controller->handleGoogleCallback($request);
+    }
+})->name('auth.google.callback');
 
-    $audioTranscription = new AudioTranscription(
-        new SaveTranscription(
-            videoRepository: $videoRepository,
-            transcriptionRepository: new ElevenlabsTranscriptionRepository()
-        )
-    );
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
+});
 
-    $videoDownlader('2V2M-la_4RI');
-    $audioExtractor('2V2M-la_4RI');
-    $audioTranscription('2V2M-la_4RI');
-})->name('tools.debug');

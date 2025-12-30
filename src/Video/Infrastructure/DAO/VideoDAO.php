@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Canalizador\Video\Infrastructure\DAO;
 
@@ -20,6 +20,7 @@ class VideoDAO extends Model
         'id',
         'script_id',
         'title',
+        'description',
         'generation_id',
         'video_local_path',
         'created_at',

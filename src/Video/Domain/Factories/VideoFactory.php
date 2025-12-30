@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Canalizador\Video\Domain\Factories;
 
@@ -8,6 +8,7 @@ use Canalizador\Script\Domain\Entities\Script;
 use Canalizador\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Video\Domain\Entities\Video;
+use Canalizador\Video\Domain\ValueObjects\Description;
 use Canalizador\Video\Domain\ValueObjects\GenerationId;
 use Canalizador\Video\Domain\ValueObjects\Title;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
@@ -23,6 +24,7 @@ final readonly class VideoFactory
         VideoId $id,
         Script $script,
         Title $title,
+        Description $description,
         GenerationId $generationId,
         ?DateTime $createdAt = null
     ): Video {
@@ -30,6 +32,7 @@ final readonly class VideoFactory
             id: $id,
             script: $script,
             title: $title,
+            description: $description,
             createdAt: $createdAt ?? $this->clock->now(),
             generationId: $generationId,
         );
@@ -39,6 +42,7 @@ final readonly class VideoFactory
         string $videoId,
         Script $script,
         ?string $title,
+        ?string $description,
         string $generationId,
         ?DateTime $createdAt = null
     ): Video {
@@ -46,6 +50,7 @@ final readonly class VideoFactory
             id: VideoId::fromString($videoId),
             script: $script,
             title: Title::fromString($title ?? 'Generated Video'),
+            description: Description::fromString($description ?? str_repeat('Generated video description. ', 10)),
             generationId: GenerationId::fromString($generationId),
             createdAt: $createdAt,
         );

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Canalizador\Video\Infrastructure\Http\Api\Mappers;
 
@@ -15,14 +15,12 @@ final readonly class GenerateVideoRequestMapper
             'video_id' => 'required|string|uuid',
             'script_id' => 'required|string|uuid',
             'prompt' => 'nullable|string',
-            'title' => 'nullable|string',
         ]);
 
         return new GenerateVideoRequest(
             videoId: $validated['video_id'],
             scriptId: $validated['script_id'],
             prompt: $validated['prompt'] ?? null,
-            title: $validated['title'] ?? null,
         );
     }
 }

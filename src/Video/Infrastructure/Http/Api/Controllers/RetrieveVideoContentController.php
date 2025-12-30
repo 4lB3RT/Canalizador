@@ -17,6 +17,9 @@ final class RetrieveVideoContentController extends Controller
     ) {
     }
 
+    /**
+     * @throws \RuntimeException
+     */
     public function __invoke(Request $request, string $videoId): JsonResponse
     {
         $retrieveRequest = new RetrieveVideoContentRequest(

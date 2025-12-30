@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
+            'api.token' => \App\Http\Middleware\ValidateApiToken::class,
             'google.token' => \App\Http\Middleware\EnsureGoogleToken::class,
         ]);
     })

@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace Canalizador\Video\Application\UseCases\RetrieveVideoContent;
 
+use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+
 final readonly class RetrieveVideoContentResponse
 {
     public function __construct(
-        public string $videoPath,
+        public LocalPath $videoPath,
     ) {
     }
 
     public function toArray(): array
     {
         return [
-            'video_path' => $this->videoPath,
+            'video_path' => $this->videoPath->value(),
         ];
     }
 }

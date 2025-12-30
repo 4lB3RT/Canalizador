@@ -1,19 +1,23 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Canalizador\Video\Domain\Repositories;
 
 use Canalizador\Script\Domain\ValueObjects\ScriptId;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Entities\VideoCollection;
+use Canalizador\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
 
 interface VideoRepository
 {
     public function save(Video $video): void;
 
-    public function findById(VideoId $id): ?Video;
+    /**
+     * @throws VideoNotFound
+     */
+    public function findById(VideoId $id): Video;
 
     public function getByScriptId(ScriptId $scriptId): VideoCollection;
 

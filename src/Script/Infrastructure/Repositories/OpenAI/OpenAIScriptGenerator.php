@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Canalizador\Script\Infrastructure\Repositories\OpenAI;
 
@@ -14,11 +14,9 @@ final class OpenAIScriptGenerator implements ScriptGenerator
 
     public function generate(?string $prompt = null): string
     {
-        $defaultPrompt = $prompt ?? 'Generate a creative and engaging script for a video. The script must be clear, structured, and easy to follow.';
-
         $systemPrompt = config('promptScriptGenerator.system_prompt');
 
-        $userPrompt = $defaultPrompt . "\n\nRespond ONLY with the requested JSON, without any additional text.";
+        $userPrompt = ($prompt ?? 'Generate a creative and engaging script for a video. The script must be clear, structured, and easy to follow.') . "\n\nRespond ONLY with the requested JSON, without any additional text.";
 
         $response = Prism::text()
             ->using(Provider::OpenAI, self::MODEL)

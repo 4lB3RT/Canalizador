@@ -41,7 +41,8 @@ return [
     'youtube_analytics' => [
         'client_id' => env('YOUTUBE_ANALYTICS_CLIENT_ID'),
         'client_secret' => env('YOUTUBE_ANALYTICS_CLIENT_SECRET'),
-        'redirect_uri' => env('YOUTUBE_ANALYTICS_REDIRECT_URI'),
+        'redirect_uri' => env('YOUTUBE_ANALYTICS_REDIRECT_URI', 'http://localhost:8010/auth/google/callback'),
+        'frontend_redirect_uri' => env('FRONTEND_REDIRECT_URI', 'http://localhost:8010/auth/google/callback'),
     ],
 
     'openai' => [
