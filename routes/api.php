@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 
 use App\Http\Middleware\EnsureGoogleToken;
+use Canalizador\Avatar\Infrastructure\Http\Api\Controllers\CreateAvatarController;
 use Canalizador\Channel\Infrastructure\Http\Api\Controllers\SyncChannelController;
 use Canalizador\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelWithAIController;
 use Canalizador\Video\Infrastructure\Http\Api\Controllers\GenerateVideoController;
@@ -11,6 +12,7 @@ use Canalizador\Video\Infrastructure\Http\Api\Controllers\RetrieveVideoContentCo
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['api.token'])->group(function () {
+    Route::post('/avatars', CreateAvatarController::class);
     Route::post('/videos/generate', GenerateVideoController::class)
         ->middleware(EnsureGoogleToken::class);
     Route::get('/videos/{videoId}/content', RetrieveVideoContentController::class)

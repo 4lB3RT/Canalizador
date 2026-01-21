@@ -70,6 +70,15 @@ use Canalizador\Channel\Application\UseCases\UpdateChannelWithAI\UpdateChannelWi
 use Canalizador\Channel\Infrastructure\Repositories\Eloquent\EloquentChannelRepository;
 use Canalizador\Channel\Infrastructure\Repositories\OpenAI\OpenAIChannelRepository;
 use Canalizador\Channel\Infrastructure\Repositories\Youtube\YoutubeChannelRepository;
+use Canalizador\Avatar\Application\UseCases\CreateAvatar\CreateAvatar;
+use Canalizador\Avatar\Domain\Factories\AvatarFactory;
+use Canalizador\Avatar\Domain\Repositories\AvatarRepository;
+use Canalizador\Avatar\Infrastructure\Http\Api\Mappers\CreateAvatarRequestMapper;
+use Canalizador\Avatar\Infrastructure\Repositories\Eloquent\EloquentAvatarRepository;
+use Canalizador\Avatar\Infrastructure\Repositories\OpenAI\OpenAiAvatarRepository;
+use Canalizador\Image\Domain\Factories\ImageFactory;
+use Canalizador\Image\Domain\Repositories\ImageRepository;
+use Canalizador\Image\Infrastructure\Repositories\Eloquent\EloquentImageRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -120,7 +129,8 @@ class AppServiceProvider extends ServiceProvider
                 scriptRepository: $app->make(EloquentScriptRepository::class),
                 scriptGenerator: $app->make(ScriptGenerator::class),
                 scriptIdeaGenerator: $app->make(ScriptIdeaGenerator::class),
-                scriptFactory: $app->make(ScriptFactory::class)
+                scriptFactory: $app->make(ScriptFactory::class),
+                channelRepository: $app->make(YoutubeChannelRepository::class)
             );
         });
 
@@ -137,6 +147,14 @@ class AppServiceProvider extends ServiceProvider
                     apiKey: config('services.openai.key') ?? '',
                     httpClient: $app->make(HttpClient::class),
                     responseValidator: $app->make(HttpResponseValidator::class)
+            );
+        });
+
+        $this->app->bind(SoraVideoRepository::class, function ($app) {
+            return new SoraVideoRepository(
+                apiKey: config('services.openai.key') ?? '',
+                httpClient: $app->make(HttpClient::class),
+                responseValidator: $app->make(HttpResponseValidator::class)
             );
         });
 
@@ -159,6 +177,8 @@ class AppServiceProvider extends ServiceProvider
                 videoFactory: $app->make(VideoFactory::class),
                 videoRepository: $app->make(VideoRepository::class),
                 videoMetadataGenerator: $app->make(VideoMetadataGenerator::class),
+                channelRepository: $app->make(YoutubeChannelRepository::class),
+                avatarRepository: $app->make(AvatarRepository::class),
             );
         });
 
@@ -259,6 +279,48 @@ class AppServiceProvider extends ServiceProvider
             return new SyncChannel(
                 channelRepository: $app->make(ChannelRepository::class),
                 youtubeChannelRepository: $app->make(YoutubeChannelRepository::class)
+            );
+        });
+
+        $this->app->bind(AvatarRepository::class, function ($app) {
+            return new EloquentAvatarRepository(
+                clock: $app->make(Clock::class),
+                imageRepository: $app->make(ImageRepository::class)
+            );
+        });
+
+        $this->app->bind(AvatarFactory::class, function ($app) {
+            return new AvatarFactory(
+                clock: $app->make(Clock::class)
+            );
+        });
+
+        $this->app->bind(OpenAiAvatarRepository::class, function ($app) {
+            return new OpenAiAvatarRepository(
+                apiKey: config('services.openai.key') ?? '',
+                imageFactory: $app->make(ImageFactory::class),
+                imageRepository: $app->make(ImageRepository::class),
+                httpClient: $app->make(HttpClient::class)
+            );
+        });
+
+        $this->app->bind(CreateAvatarRequestMapper::class, CreateAvatarRequestMapper::class);
+
+        $this->app->bind(CreateAvatar::class, function ($app) {
+            return new CreateAvatar(
+                avatarFactory: $app->make(AvatarFactory::class),
+                avatarRepository: $app->make(AvatarRepository::class),
+                openAiAvatarRepository: $app->make(OpenAiAvatarRepository::class)
+            );
+        });
+
+        $this->app->bind(ImageRepository::class, function ($app) {
+            return new EloquentImageRepository();
+        });
+
+        $this->app->bind(ImageFactory::class, function ($app) {
+            return new ImageFactory(
+                clock: $app->make(Clock::class)
             );
         });
 

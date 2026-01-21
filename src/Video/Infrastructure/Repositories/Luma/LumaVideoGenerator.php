@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Canalizador\Video\Infrastructure\Repositories\Luma;
 
+use Canalizador\Channel\Domain\Entities\Channel;
 use Canalizador\Shared\Domain\Services\HttpClient;
 use Canalizador\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Video\Application\UseCases\GenerateVideo\ValueObjects\VideoPrompt;
 use Canalizador\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
 
@@ -27,7 +29,7 @@ final readonly class LumaVideoGenerator implements VideoGenerator
     /**
      * @throws VideoGenerationFailed
      */
-    public function generate(string $prompt): string
+    public function generate(VideoPrompt $videoPrompt, Channel $channel): string
     {
         $url = self::API_BASE_URL . '/generations/video';
         $headers = [
@@ -36,7 +38,7 @@ final readonly class LumaVideoGenerator implements VideoGenerator
             'Content-Type' => 'application/json',
         ];
         $data = [
-            'prompt' => $prompt,
+            'prompt' => $videoPrompt->toPromptString(),
             'model' => self::MODEL,
             'duration' => '5s',
             'aspect_ratio' => '16:9',

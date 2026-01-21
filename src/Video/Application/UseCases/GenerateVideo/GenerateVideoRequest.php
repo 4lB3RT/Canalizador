@@ -9,6 +9,9 @@ final readonly class GenerateVideoRequest
     public function __construct(
         public string $videoId,
         public string $scriptId,
+        public string $channelId,
+        public string $category,
+        public ?string $avatarId = null,
         public ?string $prompt = null,
     ) {
     }

@@ -164,3 +164,4 @@ Before responding, ensure:
 Now generate a creative and original curiosity video script idea for a 9-second video. Follow the generation process, include all mandatory details adapted to context, ensure content policy compliance, and create a detailed user prompt that can be directly used for script generation. Focus on a specific curiosity or interesting fact, and describe the presenter with specific details.
 PROMPT,
 ];
+

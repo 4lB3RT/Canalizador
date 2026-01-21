@@ -17,7 +17,7 @@ final class OpenAIVideoMetadataGenerator implements VideoMetadataGenerator
 
     public function generate(string $scriptContent): VideoMetadata
     {
-        $systemPrompt = config('promptVideoMetadataGenerator.system_prompt');
+        $systemPrompt = config('prompts.video.metadata_generator.system_prompt');
 
         $userPrompt = "Based on the following video script, generate both an SEO-optimized title and description:\n\n" . $scriptContent . "\n\nRespond ONLY with the requested JSON, without any additional text.";
 

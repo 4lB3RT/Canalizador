@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Canalizador\Video\Infrastructure\Repositories\Sora;
 
+use Canalizador\Channel\Domain\Entities\Channel;
 use Canalizador\Shared\Domain\Services\HttpClient;
 use Canalizador\Shared\Domain\Services\HttpResponse;
 use Canalizador\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Video\Application\UseCases\GenerateVideo\ValueObjects\VideoPrompt;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
@@ -30,7 +32,7 @@ final readonly class SoraVideoRepository implements VideoGenerator, VideoContent
     /**
      * @throws VideoGenerationFailed
      */
-    public function generate(string $prompt): string
+    public function generate(VideoPrompt $videoPrompt, Channel $channel): string
     {
         $url = self::API_BASE_URL . '/videos';
         $headers = [
@@ -47,7 +49,7 @@ final readonly class SoraVideoRepository implements VideoGenerator, VideoContent
 
         $data = [
             'model' => $model,
-            'prompt' => $prompt,
+            'prompt' => $videoPrompt->toPromptString(),
             'seconds' => (string) $duration,
             'size' => $resolution,
         ];

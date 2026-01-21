@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Canalizador\Script\Domain\Services;
 
+use Canalizador\Channel\Domain\Entities\Channel;
+use Canalizador\Channel\Domain\Repositories\ChannelRepository;
+use Canalizador\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\Script\Domain\Entities\Script;
 use Canalizador\Script\Domain\Factories\ScriptFactory;
 use Canalizador\Script\Domain\Repositories\ScriptGenerator;
 use Canalizador\Script\Domain\Repositories\ScriptIdeaGenerator;
 use Canalizador\Script\Domain\Repositories\ScriptRepository;
+use Canalizador\Video\Domain\ValueObjects\VideoCategory;
 
 final readonly class GenerateScript
 {
@@ -16,15 +20,24 @@ final readonly class GenerateScript
         private ScriptRepository $scriptRepository,
         private ScriptGenerator $scriptGenerator,
         private ScriptIdeaGenerator $scriptIdeaGenerator,
-        private ScriptFactory $scriptFactory
+        private ScriptFactory $scriptFactory,
+        private ChannelRepository $channelRepository
     ) {
     }
 
-    public function generate(string $scriptId, ?string $prompt = null): Script
+    public function generate(string $scriptId, string $channelId, VideoCategory $category, ?string $prompt = null): Script
     {
-        $finalPrompt = $prompt ?? $this->scriptIdeaGenerator->generateIdea();
+        $channel = $this->channelRepository->findById(ChannelId::fromString($channelId));
 
-        $scriptContent = $this->scriptGenerator->generate($finalPrompt);
+        $finalPrompt = $prompt ?? match ($category) {
+            VideoCategory::GAMING => $this->scriptIdeaGenerator->generateGaming($channel),
+            VideoCategory::ASTROLOGY => $this->scriptIdeaGenerator->generateAstrology($channel),
+        };
+
+        $scriptContent = match ($category) {
+            VideoCategory::GAMING => $this->scriptGenerator->generateGaming($finalPrompt, $channel),
+            VideoCategory::ASTROLOGY => $this->scriptGenerator->generateAstrology($finalPrompt, $channel),
+        };
 
         $script = $this->scriptFactory->createFromStrings(
             id: $scriptId,

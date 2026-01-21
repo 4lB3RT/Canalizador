@@ -21,6 +21,7 @@ class VideoDAO extends Model
         'script_id',
         'title',
         'description',
+        'category',
         'generation_id',
         'video_local_path',
         'created_at',

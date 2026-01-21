@@ -10,6 +10,7 @@ use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\Video\Domain\ValueObjects\Description;
 use Canalizador\Video\Domain\ValueObjects\GenerationId;
 use Canalizador\Video\Domain\ValueObjects\Title;
+use Canalizador\Video\Domain\ValueObjects\VideoCategory;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
 
 final class Video
@@ -19,6 +20,7 @@ final class Video
         private readonly Script $script,
         private readonly Title $title,
         private readonly Description $description,
+        private readonly VideoCategory $category,
         private readonly DateTime $createdAt,
         private readonly ?GenerationId $generationId = null,
         private ?LocalPath $videoLocalPath = null,
@@ -44,6 +46,11 @@ final class Video
     public function description(): Description
     {
         return $this->description;
+    }
+
+    public function category(): VideoCategory
+    {
+        return $this->category;
     }
 
     public function videoLocalPath(): ?LocalPath
@@ -80,6 +87,7 @@ final class Video
             'script' => $this->script->toArray(),
             'title' => $this->title->value(),
             'description' => $this->description->value(),
+            'category' => $this->category->value,
             'generation_id' => $this->generationId?->value(),
             'video_local_path' => $this->videoLocalPath?->value(),
             'created_at' => $this->createdAt->value()->format('Y-m-d H:i:s'),

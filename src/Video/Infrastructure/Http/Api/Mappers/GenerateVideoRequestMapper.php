@@ -14,12 +14,18 @@ final readonly class GenerateVideoRequestMapper
         $validated = $request->validate([
             'video_id' => 'required|string|uuid',
             'script_id' => 'required|string|uuid',
+            'channel_id' => 'required|string',
+            'category' => 'required|string|in:gaming,astrology',
+            'avatar_id' => 'nullable|string|uuid',
             'prompt' => 'nullable|string',
         ]);
 
         return new GenerateVideoRequest(
             videoId: $validated['video_id'],
             scriptId: $validated['script_id'],
+            channelId: $validated['channel_id'],
+            category: $validated['category'],
+            avatarId: $validated['avatar_id'] ?? null,
             prompt: $validated['prompt'] ?? null,
         );
     }

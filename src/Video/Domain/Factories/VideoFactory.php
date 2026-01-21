@@ -11,6 +11,7 @@ use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\ValueObjects\Description;
 use Canalizador\Video\Domain\ValueObjects\GenerationId;
 use Canalizador\Video\Domain\ValueObjects\Title;
+use Canalizador\Video\Domain\ValueObjects\VideoCategory;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
 
 final readonly class VideoFactory
@@ -25,6 +26,7 @@ final readonly class VideoFactory
         Script $script,
         Title $title,
         Description $description,
+        VideoCategory $category,
         GenerationId $generationId,
         ?DateTime $createdAt = null
     ): Video {
@@ -33,6 +35,7 @@ final readonly class VideoFactory
             script: $script,
             title: $title,
             description: $description,
+            category: $category,
             createdAt: $createdAt ?? $this->clock->now(),
             generationId: $generationId,
         );
@@ -43,6 +46,7 @@ final readonly class VideoFactory
         Script $script,
         ?string $title,
         ?string $description,
+        string $category,
         string $generationId,
         ?DateTime $createdAt = null
     ): Video {
@@ -51,6 +55,7 @@ final readonly class VideoFactory
             script: $script,
             title: Title::fromString($title ?? 'Generated Video'),
             description: Description::fromString($description ?? str_repeat('Generated video description. ', 10)),
+            category: VideoCategory::from($category),
             generationId: GenerationId::fromString($generationId),
             createdAt: $createdAt,
         );

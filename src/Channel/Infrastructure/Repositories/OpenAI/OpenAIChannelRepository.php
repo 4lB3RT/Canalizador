@@ -20,7 +20,7 @@ final class OpenAIChannelRepository implements ChannelMetadataRepository
 
     public function generateData(Channel $channel): ChannelMetadata
     {
-        $systemPrompt = config('promptChannelMetadataGenerator.system_prompt');
+        $systemPrompt = config('prompts.channel.metadata_generator.system_prompt');
 
         $response = Prism::text()
             ->using(Provider::OpenAI, self::MODEL)
