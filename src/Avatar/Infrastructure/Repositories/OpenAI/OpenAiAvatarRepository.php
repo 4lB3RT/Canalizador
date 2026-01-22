@@ -88,8 +88,6 @@ final readonly class OpenAiAvatarRepository
             ])
             ->asText();
 
-        dd($response->text);
-
         $description = trim($response->text);
 
         if (empty($description)) {
@@ -128,9 +126,9 @@ final readonly class OpenAiAvatarRepository
         $generatedImages = [];
 
         $angleVariations = [
-            'front view, facing the camera directly',
-            'side view, three-quarter angle showing the gaming setup',
-            'back view, showing the person from behind with the gaming setup visible'
+            'front view, facing the camera directly, centered composition',
+            '30 degree angle from the left side, showing the person and gaming setup',
+            '30 degree angle from the right side, showing the person and gaming setup'
         ];
 
         for ($i = 0; $i < self::NUM_IMAGES; $i++) {
