@@ -15,6 +15,14 @@ interface HttpClient
 
     /**
      * @param array<string, string> $headers
+     * @param array<string, mixed> $data
+     * @param array<string, string> $files Array of field name => file path
+     * @return HttpResponse
+     */
+    public function postMultipart(string $url, array $headers, array $data, array $files, int $timeout = 30): HttpResponse;
+
+    /**
+     * @param array<string, string> $headers
      * @return HttpResponse
      */
     public function get(string $url, array $headers, int $timeout = 30): HttpResponse;

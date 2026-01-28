@@ -1,6 +1,15 @@
 # Set master image
 FROM php:8.4-fpm-alpine
 
+# Install GD dependencies and extension
+RUN apk add --no-cache \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libwebp-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install gd
+
 RUN docker-php-ext-install mysqli && \
     docker-php-ext-install pdo && \
     docker-php-ext-install pdo_mysql
