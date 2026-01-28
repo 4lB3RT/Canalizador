@@ -47,11 +47,11 @@ The images must show the avatar in a professional gaming setup with the followin
 - **CONSISTENT APPEARANCE**: The person must match the avatar description exactly across all images
 
 === IMAGE VARIATIONS ===
-Generate 3 different images with slight variations:
-- Different camera angles (front view, side view, three-quarter view)
-- Different poses (facing camera, looking at monitor, relaxed position)
-- Slight variations in setup arrangement
-- Different lighting emphasis while maintaining photorealism
+Generate 3 different images with the following specific camera angles:
+- Image 1: Front view, facing the camera directly, centered composition
+- Image 2: 30 degree angle from the left side, showing the person and gaming setup
+- Image 3: 30 degree angle from the right side, showing the person and gaming setup
+Different poses and slight variations in setup arrangement are allowed while maintaining the specified angles
 
 === OUTPUT FORMAT ===
 Generate photorealistic images that:
