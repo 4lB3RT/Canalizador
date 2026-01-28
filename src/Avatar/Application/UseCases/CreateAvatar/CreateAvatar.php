@@ -44,8 +44,6 @@ final readonly class CreateAvatar
         $description = $metadataResult->description();
         $images = $metadataResult->images();
 
-        dd($description, $images);
-
         $permanentDir = storage_path('app/avatars');
         if (!File::exists($permanentDir)) {
             File::makeDirectory($permanentDir, 0755, true);

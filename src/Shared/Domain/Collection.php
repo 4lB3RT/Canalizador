@@ -5,16 +5,23 @@ declare(strict_types=1);
 namespace Canalizador\Shared\Domain;
 
 use ArrayIterator;
+use Canalizador\Shared\Domain\Exceptions\InvalidCollectionType;
 use Canalizador\Shared\Domain\ValueObjects\IntegerId;
 use Countable;
 use IteratorAggregate;
-use Webmozart\Assert\Assert;
 
 abstract class Collection implements Countable, IteratorAggregate
 {
+    /* @throws InvalidCollectionType */
     public function __construct(protected array $items)
     {
-        Assert::allIsInstanceOf($items, $this->type());
+        $type = $this->type();
+
+        foreach ($items as $item) {
+            if (!$item instanceof $type) {
+                throw InvalidCollectionType::create();
+            }
+        }
     }
 
     abstract protected function type(): string;

@@ -13,6 +13,7 @@ use Canalizador\Image\Domain\Entities\ImageCollection;
 use Canalizador\Image\Domain\Factories\ImageFactory;
 use Canalizador\Image\Domain\Repositories\ImageRepository;
 use Canalizador\Image\Domain\ValueObjects\ImageId;
+use Canalizador\Shared\Domain\Exceptions\InvalidCollectionType;
 use Canalizador\Shared\Domain\Services\HttpClient;
 use Canalizador\Shared\Domain\ValueObjects\IntegerId;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
@@ -68,15 +69,15 @@ final readonly class OpenAiAvatarRepository
             throw new \RuntimeException('Avatar description prompt is not configured');
         }
 
-        
+
         $systemPrompt = str_replace(
             ['{avatar_name}', '{biography}', '{presentation_style}'],
             [$avatarName->value(), $biography->value(), $presentationStyle->value],
             $systemPrompt
         );
-        
+
         $userPrompt = 'Analyze this image and provide a detailed description of the person shown. Focus on physical appearance, clothing, and any distinctive features that would be important for generating consistent video content.';
-        
+
         $image = Image::fromLocalPath($imagePath);
 
         $response = Prism::text()
@@ -97,6 +98,7 @@ final readonly class OpenAiAvatarRepository
         return $description;
     }
 
+    /* @throws InvalidCollectionType */
     private function generateImages(
         LocalPath $avatarImagePath,
         AvatarDescription $description,
@@ -117,9 +119,6 @@ final readonly class OpenAiAvatarRepository
         );
 
         $imagesDir = storage_path('app/images');
-        if (!File::exists($imagesDir)) {
-            File::makeDirectory($imagesDir, 0755, true);
-        }
 
         $referenceImage = Image::fromLocalPath($avatarImagePath->value());
 
@@ -140,22 +139,14 @@ final readonly class OpenAiAvatarRepository
                     ->withPrompt($prompt, [$referenceImage])
                     ->withProviderOptions([
                         'size' => '1024x1024',
-                        'quality' => 'hd',
-                        'input_fidelity' => 'high',
+                        'quality' => 'medium'
                     ])
                     ->generate();
-
-                $imageUrl = $response->firstImage()->url;
-
-                if (empty($imageUrl)) {
-                    \Log::warning("Failed to get image URL from OpenAI response for image {$i}");
-                    continue;
-                }
 
                 $imageId = ImageId::fromString(Str::uuid()->toString());
                 $imagePath = $imagesDir . '/' . $imageId->value() . '.png';
 
-                $this->downloadImage($imageUrl, $imagePath);
+                $this->saveGeneratedImage($response->firstImage(), $imagePath);
 
                 $image = $this->imageFactory->create(
                     id: $imageId,
@@ -174,20 +165,42 @@ final readonly class OpenAiAvatarRepository
         return new ImageCollection($generatedImages);
     }
 
+    private function saveGeneratedImage(object $image, string $savePath): void
+    {
+        if (!empty($image->base64)) {
+            $this->saveBase64Image($image->base64, $savePath);
+            return;
+        }
+
+        if (!empty($image->url)) {
+            $this->downloadImage($image->url, $savePath);
+            return;
+        }
+
+        throw new \RuntimeException('No image data received from OpenAI (neither base64 nor URL)');
+    }
+
+    private function saveBase64Image(string $base64, string $savePath): void
+    {
+        $imageData = base64_decode($base64, true);
+
+        if ($imageData === false) {
+            throw new \RuntimeException('Failed to decode base64 image data');
+        }
+
+        File::put($savePath, $imageData);
+    }
+
     private function downloadImage(string $url, string $savePath): void
     {
-        try {
-            $response = $this->httpClient->get($url, [], 60);
-            $imageData = $response->body();
+        $response = $this->httpClient->get($url, [], 60);
+        $imageData = $response->body();
 
-            if (empty($imageData)) {
-                throw new \RuntimeException('Empty image data received from URL');
-            }
-
-            File::put($savePath, $imageData);
-        } catch (\Exception $e) {
-            throw new \RuntimeException("Failed to download image from {$url}: " . $e->getMessage());
+        if (empty($imageData)) {
+            throw new \RuntimeException('Empty image data received from URL');
         }
+
+        File::put($savePath, $imageData);
     }
 }
 
