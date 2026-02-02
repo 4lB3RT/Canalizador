@@ -34,40 +34,29 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
     public function generate(VideoPrompt $videoPrompt, Channel $channel): string
     {
         $model = config('veo.model', 'veo-3.1-generate-preview');
-        $url = self::API_BASE_URL . "/models/{$model}:generateContent";
+        $url = self::API_BASE_URL . "/models/{$model}:predictLongRunning";
 
         $headers = [
             'x-goog-api-key' => $this->apiKey,
             'Content-Type' => 'application/json',
         ];
 
-        $duration = config('veo.duration', 8);
-        $aspectRatio = config('veo.aspect_ratio', '16:9');
-
-        $parts = [
-            ['text' => $videoPrompt->toPromptString()],
+        $instance = [
+            'prompt' => $videoPrompt->toPromptString(),
         ];
 
-        $avatarImageData = $this->getAvatarImageBase64($videoPrompt);
-        if ($avatarImageData !== null) {
-            $parts[] = [
-                'inlineData' => [
-                    'mimeType' => $avatarImageData['mimeType'],
-                    'data' => $avatarImageData['data'],
-                ],
-            ];
+        // Añadir imagen de referencia si existe
+        $referenceImage = $this->buildReferenceImage($videoPrompt);
+        if ($referenceImage !== null) {
+            $instance['referenceImages'] = [$referenceImage];
         }
 
         $data = [
-            'contents' => [
-                [
-                    'parts' => $parts,
-                ],
-            ],
-            'generationConfig' => [
-                'responseModalities' => ['VIDEO'],
-                'videoDurationSeconds' => $duration,
-                'videoAspectRatio' => $aspectRatio,
+            'instances' => [$instance],
+            'parameters' => [
+                'aspectRatio' => config('veo.aspect_ratio', '16:9'),
+                'resolution' => config('veo.resolution', '720p'),
+                'durationSeconds' => config('veo.duration', 8),
             ],
         ];
 
@@ -92,17 +81,17 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
      */
     public function retrieve(Video $video): void
     {
-        $operationId = $video->generationId()->value();
+        $operationName = $video->generationId()->value();
 
         try {
-            $videoUrl = $this->pollForCompletion($operationId);
+            $videoUrl = $this->pollForCompletion($operationName);
             $videoContent = $this->downloadVideo($videoUrl);
 
             if (empty($videoContent)) {
                 throw VideoGenerationFailed::apiError('Empty video content received from Veo');
             }
 
-            $tmpDir = storage_path('tmp');
+            $tmpDir = storage_path('app/videos');
             if (!File::exists($tmpDir)) {
                 File::makeDirectory($tmpDir, 0755, true);
             }
@@ -111,6 +100,8 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
             $filePath = $tmpDir . '/' . $filename;
 
             File::put($filePath, $videoContent);
+
+            $video->setLocalPath($filePath);
         } catch (\RuntimeException $e) {
             throw VideoGenerationFailed::apiError($e->getMessage());
         }
@@ -119,17 +110,19 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
     /**
      * @throws VideoGenerationFailed
      */
-    private function pollForCompletion(string $operationId): string
+    private function pollForCompletion(string $operationName): string
     {
-        $url = self::API_BASE_URL . "/{$operationId}";
+        $url = self::API_BASE_URL . '/' . $operationName;
         $headers = [
             'x-goog-api-key' => $this->apiKey,
         ];
 
-        $pollingInterval = config('veo.polling.interval', 5);
-        $maxAttempts = config('veo.polling.max_attempts', 120);
+        $pollingInterval = config('veo.polling.interval', 10);
+        $maxAttempts = config('veo.polling.max_attempts', 60);
 
         for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
+            sleep($pollingInterval);
+
             $response = $this->httpClient->get($url, $headers, 30);
             $this->responseValidator->validateSuccess($response, 'Veo operation status');
 
@@ -144,8 +137,6 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
 
                 return $this->extractVideoUrl($responseData);
             }
-
-            sleep($pollingInterval);
         }
 
         throw VideoGenerationFailed::apiError('Veo video generation timed out after polling');
@@ -156,22 +147,18 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
      */
     private function extractVideoUrl(array $responseData): string
     {
-        $candidates = $responseData['response']['candidates'] ?? [];
+        // Estructura: response.generateVideoResponse.generatedSamples[0].video.uri
+        $uri = $responseData['response']['generateVideoResponse']['generatedSamples'][0]['video']['uri'] ?? null;
 
-        foreach ($candidates as $candidate) {
-            $parts = $candidate['content']['parts'] ?? [];
-            foreach ($parts as $part) {
-                if (isset($part['fileData']['fileUri'])) {
-                    return $part['fileData']['fileUri'];
-                }
-                if (isset($part['videoMetadata']['videoUri'])) {
-                    return $part['videoMetadata']['videoUri'];
-                }
-            }
+        if ($uri !== null) {
+            return $uri;
         }
 
-        if (isset($responseData['response']['video']['uri'])) {
-            return $responseData['response']['video']['uri'];
+        // Fallback: otras posibles estructuras
+        $uri = $responseData['response']['generatedSamples'][0]['video']['uri'] ?? null;
+
+        if ($uri !== null) {
+            return $uri;
         }
 
         throw VideoGenerationFailed::apiError('No video URL found in Veo response');
@@ -193,9 +180,9 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
     }
 
     /**
-     * @return array{mimeType: string, data: string}|null
+     * @return array{referenceType: string, referenceId: int, referenceImage: array{bytesBase64Encoded: string, mimeType: string}}|null
      */
-    private function getAvatarImageBase64(VideoPrompt $videoPrompt): ?array
+    private function buildReferenceImage(VideoPrompt $videoPrompt): ?array
     {
         if ($videoPrompt->host() === null) {
             return null;
@@ -217,8 +204,12 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
         $mimeType = $this->getMimeType($imagePath);
 
         return [
-            'mimeType' => $mimeType,
-            'data' => base64_encode($imageContent),
+            'referenceType' => 'REFERENCE_TYPE_STYLE',
+            'referenceId' => 1,
+            'referenceImage' => [
+                'bytesBase64Encoded' => base64_encode($imageContent),
+                'mimeType' => $mimeType,
+            ],
         ];
     }
 
