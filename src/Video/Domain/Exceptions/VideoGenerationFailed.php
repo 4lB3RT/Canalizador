@@ -29,7 +29,7 @@ final class VideoGenerationFailed extends Exception
     {
         return new self(
             sprintf(
-                'Video generation API endpoint not found (%s). The Sora API may not be publicly available yet.',
+                'Video generation API endpoint not found (%s).',
                 $endpoint
             )
         );

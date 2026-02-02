@@ -49,7 +49,7 @@ return [
         'key' => env('OPENAI_API_KEY'),
     ],
 
-    'luma' => [
-        'api_key' => env('LUMA_API_KEY'),
+    'google' => [
+        'veo_api_key' => env('GOOGLE_VEO_API_KEY'),
     ],
 ];
