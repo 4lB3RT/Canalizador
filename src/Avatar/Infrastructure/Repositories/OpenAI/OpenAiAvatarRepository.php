@@ -22,6 +22,9 @@ use Illuminate\Support\Str;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Prism;
 use Prism\Prism\ValueObjects\Media\Image;
+use Spatie\Image\Enums\AlignPosition;
+use Spatie\Image\Enums\Fit;
+use Spatie\Image\Image as SpatieImage;
 
 final readonly class OpenAiAvatarRepository
 {
@@ -138,7 +141,7 @@ final readonly class OpenAiAvatarRepository
                     ->using(Provider::OpenAI, self::IMAGE_MODEL)
                     ->withPrompt($prompt, [$referenceImage])
                     ->withProviderOptions([
-                        'size' => '1024x1024',
+                        'size' => '1536x1024',
                         'quality' => 'medium'
                     ])
                     ->generate();
@@ -147,6 +150,7 @@ final readonly class OpenAiAvatarRepository
                 $imagePath = $imagesDir . '/' . $imageId->value() . '.png';
 
                 $this->saveGeneratedImage($response->firstImage(), $imagePath);
+                $this->resizeImageToVideoResolution($imagePath);
 
                 $image = $this->imageFactory->create(
                     id: $imageId,
@@ -201,6 +205,17 @@ final readonly class OpenAiAvatarRepository
         }
 
         File::put($savePath, $imageData);
+    }
+
+    private function resizeImageToVideoResolution(string $imagePath): void
+    {
+        $resolution = config('sora.resolution', '1280x720');
+        [$width, $height] = array_map('intval', explode('x', $resolution));
+
+        SpatieImage::load($imagePath)
+            ->fit(Fit::Contain, $width, $height)
+            ->resizeCanvas($width, $height, AlignPosition::Center, false, '#000000')
+            ->save($imagePath);
     }
 }
 

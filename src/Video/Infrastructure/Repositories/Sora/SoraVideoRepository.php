@@ -54,8 +54,12 @@ final readonly class SoraVideoRepository implements VideoGenerator, VideoContent
             'size' => $resolution,
         ];
 
+        $avatarImagePath = $this->getAvatarImagePath($videoPrompt);
+
         try {
-            $response = $this->httpClient->post($url, $headers, $data, 30);
+            $response = $avatarImagePath !== null
+                ? $this->httpClient->postMultipart($url, $headers, $data, ['input_reference' => $avatarImagePath], 30)
+                : $this->httpClient->post($url, $headers, $data, 30);
             $this->responseValidator->validateSuccess($response, 'Sora video generation');
             $this->responseValidator->validateJsonKey($response, 'id', 'Sora video generation');
 
@@ -132,5 +136,22 @@ final readonly class SoraVideoRepository implements VideoGenerator, VideoContent
                 "Invalid resolution: {$resolution}. Supported values are: " . implode(', ', $availableResolutions)
             );
         }
+    }
+
+    private function getAvatarImagePath(VideoPrompt $videoPrompt): ?string
+    {
+        if ($videoPrompt->host() === null) {
+            return null;
+        }
+
+        $avatarImage = $videoPrompt->host()->images()->first();
+
+        if ($avatarImage === null) {
+            return null;
+        }
+
+        $imagePath = $avatarImage->path()->value();
+
+        return File::exists($imagePath) ? $imagePath : null;
     }
 }
