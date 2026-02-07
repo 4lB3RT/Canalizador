@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace VendingMachine\Shared\Domain\Errors\Essentials;
+namespace Canalizador\Shared\Domain\Errors\Essentials;
 
 use Exception;
 

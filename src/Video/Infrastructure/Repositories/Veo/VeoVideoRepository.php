@@ -7,16 +7,22 @@ namespace Canalizador\Video\Infrastructure\Repositories\Veo;
 use Canalizador\Channel\Domain\Entities\Channel;
 use Canalizador\Shared\Domain\Services\HttpClient;
 use Canalizador\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Shared\Domain\ValueObjects\ImageMimeType;
+use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\Video\Application\UseCases\GenerateVideo\ValueObjects\VideoPrompt;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
+use Canalizador\Video\Domain\ValueObjects\AspectRatio;
+use Canalizador\Video\Domain\ValueObjects\Resolution;
+use Canalizador\Video\Domain\ValueObjects\VideoDuration;
 use Illuminate\Support\Facades\File;
 
 final readonly class VeoVideoRepository implements VideoGenerator, VideoContentRetriever
 {
     private const string API_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
+    private const int MAX_REFERENCE_IMAGES = 3;
 
     public function __construct(
         private string $apiKey,
@@ -41,22 +47,33 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
             'Content-Type' => 'application/json',
         ];
 
+        $referenceImages = $this->buildReferenceImages($videoPrompt);
+        $hasReferenceImages = !empty($referenceImages);
+
+        $aspectRatio = $hasReferenceImages
+            ? AspectRatio::forReferenceImages()
+            : AspectRatio::fromString(config('veo.aspect_ratio', '16:9'));
+
+        $duration = $hasReferenceImages
+            ? VideoDuration::forReferenceImages()
+            : VideoDuration::fromSeconds(config('veo.duration', 8));
+
+        $resolution = Resolution::fromString(config('veo.resolution', '720p'));
+
         $instance = [
             'prompt' => $videoPrompt->toPromptString(),
         ];
 
-        // Añadir imagen de referencia si existe
-        $referenceImage = $this->buildReferenceImage($videoPrompt);
-        if ($referenceImage !== null) {
-            $instance['referenceImages'] = [$referenceImage];
+        if ($hasReferenceImages) {
+            $instance['referenceImages'] = $referenceImages;
         }
 
         $data = [
             'instances' => [$instance],
             'parameters' => [
-                'aspectRatio' => config('veo.aspect_ratio', '16:9'),
-                'resolution' => config('veo.resolution', '720p'),
-                'durationSeconds' => config('veo.duration', 8),
+                'aspectRatio' => $aspectRatio->value,
+                'resolution' => $resolution->value,
+                'durationSeconds' => $duration->value,
             ],
         ];
 
@@ -101,7 +118,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
 
             File::put($filePath, $videoContent);
 
-            $video->setLocalPath($filePath);
+            $video->updateVideoLocalPath(new LocalPath($filePath));
         } catch (\RuntimeException $e) {
             throw VideoGenerationFailed::apiError($e->getMessage());
         }
@@ -147,14 +164,12 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
      */
     private function extractVideoUrl(array $responseData): string
     {
-        // Estructura: response.generateVideoResponse.generatedSamples[0].video.uri
         $uri = $responseData['response']['generateVideoResponse']['generatedSamples'][0]['video']['uri'] ?? null;
 
         if ($uri !== null) {
             return $uri;
         }
 
-        // Fallback: otras posibles estructuras
         $uri = $responseData['response']['generatedSamples'][0]['video']['uri'] ?? null;
 
         if ($uri !== null) {
@@ -164,9 +179,6 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
         throw VideoGenerationFailed::apiError('No video URL found in Veo response');
     }
 
-    /**
-     * @throws VideoGenerationFailed
-     */
     private function downloadVideo(string $videoUrl): string
     {
         $headers = [
@@ -179,50 +191,28 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
         return $response->body();
     }
 
-    /**
-     * @return array{referenceType: string, referenceId: int, referenceImage: array{bytesBase64Encoded: string, mimeType: string}}|null
-     */
-    private function buildReferenceImage(VideoPrompt $videoPrompt): ?array
+    private function buildReferenceImages(VideoPrompt $videoPrompt): array
     {
         if ($videoPrompt->host() === null) {
-            return null;
+            return [];
         }
 
-        $avatarImage = $videoPrompt->host()->images()->first();
+        $images = array_slice($videoPrompt->host()->images()->items(), 0, self::MAX_REFERENCE_IMAGES);
 
-        if ($avatarImage === null) {
-            return null;
-        }
+        return array_filter(array_map(function ($avatarImage) {
+            $imagePath = $avatarImage->path()->value();
 
-        $imagePath = $avatarImage->path()->value();
+            if (!File::exists($imagePath)) {
+                return null;
+            }
 
-        if (!File::exists($imagePath)) {
-            return null;
-        }
-
-        $imageContent = File::get($imagePath);
-        $mimeType = $this->getMimeType($imagePath);
-
-        return [
-            'referenceType' => 'REFERENCE_TYPE_STYLE',
-            'referenceId' => 1,
-            'referenceImage' => [
-                'bytesBase64Encoded' => base64_encode($imageContent),
-                'mimeType' => $mimeType,
-            ],
-        ];
-    }
-
-    private function getMimeType(string $filePath): string
-    {
-        $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-
-        return match ($extension) {
-            'jpg', 'jpeg' => 'image/jpeg',
-            'png' => 'image/png',
-            'gif' => 'image/gif',
-            'webp' => 'image/webp',
-            default => 'image/png',
-        };
+            return [
+                'image' => [
+                    'bytesBase64Encoded' => base64_encode(File::get($imagePath)),
+                    'mimeType' => ImageMimeType::fromFilePath($imagePath)->value,
+                ],
+                'referenceType' => 'asset',
+            ];
+        }, $images));
     }
 }
