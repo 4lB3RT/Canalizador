@@ -6,6 +6,7 @@ namespace Canalizador\Video\Application\UseCases\GenerateVideo;
 
 use Canalizador\Avatar\Domain\Repositories\AvatarRepository;
 use Canalizador\Avatar\Domain\ValueObjects\AvatarId;
+use Canalizador\Channel\Domain\Exceptions\ChannelNotFound;
 use Canalizador\Channel\Domain\Repositories\ChannelRepository;
 use Canalizador\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\Script\Domain\Repositories\ScriptRepository;
@@ -37,6 +38,7 @@ final readonly class GenerateVideo
 
     /**
      * @throws \RuntimeException
+     * @throws ChannelNotFound
      */
     public function execute(GenerateVideoRequest $request): GenerateVideoResponse
     {
@@ -55,9 +57,9 @@ final readonly class GenerateVideo
                 prompt: $request->prompt
             );
         }
-        
+
         $metadata = $this->videoMetadataGenerator->generate($script->content()->value());
-        
+
         $videoPrompt = $request->avatarId !== null
             ? $this->videoPromptExtractor->extractWithAvatar(
                 $script,
