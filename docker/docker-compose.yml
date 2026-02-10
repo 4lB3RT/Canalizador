@@ -29,6 +29,7 @@ services:
     depends_on:
       - mysql_canalizador
       - redis_canalizador
+      - rabbitmq_canalizador
     dns:
         - 8.8.8.8
         - 8.8.4.4
@@ -60,6 +61,22 @@ services:
       networks:
           canalizador:
               ipv4_address: 10.7.0.10
+  rabbitmq_canalizador:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq_$PROJECT_NAME
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-guest}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-guest}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      canalizador:
+        ipv4_address: 10.7.0.11
+volumes:
+  rabbitmq_data:
 networks:
   canalizador:
     driver: bridge
