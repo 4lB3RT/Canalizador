@@ -42,12 +42,27 @@ use Canalizador\Shared\Infrastructure\Services\HttpErrorExtractor;
 use Canalizador\Shared\Infrastructure\Services\HttpResponseValidator as HttpResponseValidatorImpl;
 use Canalizador\Shared\Infrastructure\Services\LaravelHttpClient;
 use Canalizador\Shared\Infrastructure\Services\SystemClock;
+use Canalizador\Video\Application\Handlers\OnAllClipsCompletedHandler;
+use Canalizador\Video\Application\Handlers\OnClipCompletedHandler;
+use Canalizador\Video\Application\Handlers\OnClipCreatedHandler;
+use Canalizador\Video\Application\Handlers\OnVideoCreatedHandler;
+use Canalizador\Video\Application\UseCases\ComposeShort\ComposeShort;
+use Canalizador\Video\Application\UseCases\CreateClip\CreateClip;
+use Canalizador\Video\Application\UseCases\DownloadClip\DownloadClip;
 use Canalizador\Video\Application\UseCases\GenerateVideo\GenerateVideo;
 use Canalizador\Video\Application\UseCases\PublishVideo\PublishVideo;
 use Canalizador\Video\Application\UseCases\RetrieveVideoContent\RetrieveVideoContent;
+use Canalizador\Video\Domain\Events\AllClipsCompleted;
+use Canalizador\Video\Domain\Events\ClipCompleted;
+use Canalizador\Video\Domain\Events\ClipCreated;
+use Canalizador\Video\Domain\Events\VideoCreated;
+use Canalizador\Video\Domain\Factories\ClipFactory;
 use Canalizador\Video\Domain\Factories\VideoFactory;
 use Canalizador\Video\Domain\Factories\VideoPublisherFactory;
+use Canalizador\Video\Domain\Repositories\ClipDownloader;
+use Canalizador\Video\Domain\Repositories\ClipRepository;
 use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
+use Canalizador\Video\Domain\Repositories\VideoExtender;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
 use Canalizador\Video\Domain\Repositories\VideoMetadataGenerator;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
@@ -58,8 +73,11 @@ use Canalizador\Video\Domain\Services\YouTubeServiceFactory;
 use Canalizador\Video\Infrastructure\Factories\VideoPublisherFactory as VideoPublisherFactoryImpl;
 use Canalizador\Video\Infrastructure\Http\Api\Mappers\GenerateVideoRequestMapper;
 use Canalizador\Video\Infrastructure\Http\Api\Mappers\PublishVideoRequestMapper;
+use Canalizador\Video\Infrastructure\Repositories\Eloquent\EloquentClipRepository;
 use Canalizador\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
 use Canalizador\Video\Infrastructure\Repositories\OpenAI\OpenAIVideoMetadataGenerator;
+use Canalizador\Video\Infrastructure\Repositories\Veo\VeoClipDownloader;
+use Canalizador\Video\Infrastructure\Repositories\Veo\VeoVideoExtender;
 use Canalizador\Video\Infrastructure\Repositories\Veo\VeoVideoRepository;
 use Canalizador\Video\Infrastructure\Repositories\YouTube\YoutubeVideoPublisher;
 use Canalizador\Video\Infrastructure\Services\JsonVideoPromptExtractor;
@@ -200,6 +218,8 @@ class AppServiceProvider extends ServiceProvider
                 videoMetadataGenerator: $app->make(VideoMetadataGenerator::class),
                 channelRepository: $app->make(YoutubeChannelRepository::class),
                 avatarRepository: $app->make(AvatarRepository::class),
+                eventBus: $app->make(EventBus::class),
+                clock: $app->make(Clock::class),
             );
         });
 
@@ -250,6 +270,76 @@ class AppServiceProvider extends ServiceProvider
                 externalVideoRepository: $app->make(YoutubeVideoRepository::class)
             );
         });
+
+        $this->registerClipServices();
+    }
+
+    private function registerClipServices(): void
+    {
+        $this->app->bind(ClipRepository::class, EloquentClipRepository::class);
+
+        $this->app->bind(ClipFactory::class, function ($app) {
+            return new ClipFactory(
+                clock: $app->make(Clock::class)
+            );
+        });
+
+        $this->app->bind(VideoExtender::class, function ($app) {
+            return new VeoVideoExtender(
+                apiKey: config('services.google.veo_api_key') ?? '',
+                httpClient: $app->make(HttpClient::class),
+                responseValidator: $app->make(HttpResponseValidator::class)
+            );
+        });
+
+        $this->app->bind(ClipDownloader::class, function ($app) {
+            return new VeoClipDownloader(
+                apiKey: config('services.google.veo_api_key') ?? '',
+                httpClient: $app->make(HttpClient::class),
+                responseValidator: $app->make(HttpResponseValidator::class)
+            );
+        });
+
+        $this->app->bind(CreateClip::class, function ($app) {
+            return new CreateClip(
+                videoRepository: $app->make(VideoRepository::class),
+                clipRepository: $app->make(ClipRepository::class),
+                clipFactory: $app->make(ClipFactory::class),
+                videoExtender: $app->make(VideoExtender::class),
+                eventBus: $app->make(EventBus::class),
+                clock: $app->make(Clock::class),
+            );
+        });
+
+        $this->app->bind(DownloadClip::class, function ($app) {
+            return new DownloadClip(
+                clipRepository: $app->make(ClipRepository::class),
+                clipDownloader: $app->make(ClipDownloader::class),
+                eventBus: $app->make(EventBus::class),
+                clock: $app->make(Clock::class),
+            );
+        });
+
+        $this->app->bind(ComposeShort::class, function ($app) {
+            return new ComposeShort(
+                clipRepository: $app->make(ClipRepository::class),
+                videoRepository: $app->make(VideoRepository::class),
+                clock: $app->make(Clock::class),
+            );
+        });
+
+        $this->registerClipEventHandlers();
+    }
+
+    private function registerClipEventHandlers(): void
+    {
+        /** @var EventHandlerRegistry $registry */
+        $registry = $this->app->make(EventHandlerRegistry::class);
+
+        $registry->register(VideoCreated::class, OnVideoCreatedHandler::class);
+        $registry->register(ClipCreated::class, OnClipCreatedHandler::class);
+        $registry->register(ClipCompleted::class, OnClipCompletedHandler::class);
+        $registry->register(AllClipsCompleted::class, OnAllClipsCompletedHandler::class);
     }
 
     private function registerChannelServices(): void

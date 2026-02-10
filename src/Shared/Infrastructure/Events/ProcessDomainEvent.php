@@ -24,7 +24,7 @@ final class ProcessDomainEvent implements ShouldQueue
     public function __construct(
         public readonly DomainEvent $event
     ) {
-        $this->onQueue('domain-events');
+        $this->onQueue($event->eventName());
     }
 
     public function handle(EventHandlerRegistry $registry): void

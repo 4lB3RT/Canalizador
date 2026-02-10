@@ -12,6 +12,9 @@ use Canalizador\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\Script\Domain\Repositories\ScriptRepository;
 use Canalizador\Script\Domain\Services\GenerateScript;
 use Canalizador\Script\Domain\ValueObjects\ScriptId;
+use Canalizador\Shared\Domain\Events\EventBus;
+use Canalizador\Shared\Domain\Services\Clock;
+use Canalizador\Video\Domain\Events\VideoCreated;
 use Canalizador\Video\Domain\Factories\VideoFactory;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
 use Canalizador\Video\Domain\Repositories\VideoMetadataGenerator;
@@ -33,6 +36,8 @@ final readonly class GenerateVideo
         private VideoMetadataGenerator $videoMetadataGenerator,
         private ChannelRepository $channelRepository,
         private AvatarRepository $avatarRepository,
+        private EventBus $eventBus,
+        private Clock $clock,
     ) {
     }
 
@@ -80,6 +85,10 @@ final readonly class GenerateVideo
         );
 
         $this->videoRepository->save($video);
+
+        $this->eventBus->publish(
+            new VideoCreated($video->id()->value(), $this->clock->now())
+        );
 
         return new GenerateVideoResponse($video);
     }
