@@ -12,7 +12,8 @@ RUN apk add --no-cache \
 
 RUN docker-php-ext-install mysqli && \
     docker-php-ext-install pdo && \
-    docker-php-ext-install pdo_mysql
+    docker-php-ext-install pdo_mysql && \
+    docker-php-ext-install sockets
 
 RUN apk add --no-cache $PHPIZE_DEPS php-pear linux-headers \
     && pecl install xdebug \

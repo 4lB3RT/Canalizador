@@ -28,10 +28,13 @@ use Canalizador\Script\Domain\Services\GenerateScript;
 use Canalizador\Script\Infrastructure\Repositories\Eloquent\EloquentScriptRepository;
 use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptGenerator;
 use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptIdeaGenerator;
+use Canalizador\Shared\Domain\Events\EventBus;
 use Canalizador\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Domain\Services\HttpClient;
 use Canalizador\Shared\Domain\Services\HttpResponseValidator;
 use Canalizador\Shared\Domain\Services\YouTubeAnalyticsServiceFactory;
+use Canalizador\Shared\Infrastructure\Events\EventHandlerRegistry;
+use Canalizador\Shared\Infrastructure\Events\LaravelQueueEventBus;
 use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeAnalyticsApiClient;
 use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\Shared\Infrastructure\Services\GoogleYouTubeAnalyticsServiceFactory;
@@ -121,6 +124,11 @@ class AppServiceProvider extends ServiceProvider
                 googleClientService: $app->make(GoogleClientService::class),
                 youtubeServiceFactory: $app->make(YouTubeServiceFactory::class)
             );
+        });
+
+        $this->app->bind(EventBus::class, LaravelQueueEventBus::class);
+        $this->app->singleton(EventHandlerRegistry::class, function ($app) {
+            return new EventHandlerRegistry($app);
         });
     }
 
