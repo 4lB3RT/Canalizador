@@ -21,10 +21,11 @@ Each module follows the same three-layer structure:
 Current modules:
 - `Avatar` - AI-generated avatar management
 - `Channel` - YouTube channel sync and AI-powered metadata optimization
+- `Clip` - Video clip generation, download, and composition (event-driven)
 - `Image` - Image storage and management
 - `Script` - Video script generation and management
-- `Shared` - Cross-cutting concerns (Clock, HttpClient, Value Objects)
-- `Video` - Video generation, content retrieval, publishing to YouTube
+- `Shared` - Cross-cutting concerns (Clock, HttpClient, Value Objects, Domain Events)
+- `Video` - Video creation, content retrieval, publishing to YouTube
 - `VideoLegacy` - Legacy video processing features
 
 ### Laravel App Layer (app/)
@@ -64,7 +65,7 @@ All API routes require `api.token` middleware. Most video/channel operations als
 
 Key endpoints:
 - `POST /api/avatars` - Create AI avatar
-- `POST /api/videos/generate` - Generate video from script
+- `POST /api/videos/create` - Create video (triggers async clip generation via events)
 - `GET /api/videos/{videoId}/content` - Retrieve generated video content
 - `POST /api/videos/publish` - Publish video to YouTube
 - `PUT /api/channels/{channelId}/sync` - Sync channel from YouTube
