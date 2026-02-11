@@ -25,6 +25,15 @@ final class SetupRabbitMQCommand extends Command
         }
 
         $queue = $connector->connect($config);
+        $exchangeType = $config['options']['queue']['exchange_type'] ?? 'topic';
+
+        if (!$queue->isExchangeExists($exchange)) {
+            $queue->declareExchange($exchange, $exchangeType);
+            $this->info("Exchange declared: {$exchange} ({$exchangeType})");
+        } else {
+            $this->line("Exchange exists: {$exchange}");
+        }
+
         $queueNames = $this->resolveQueueNames($registry);
 
         if (empty($queueNames)) {
