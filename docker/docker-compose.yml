@@ -75,6 +75,24 @@ services:
     networks:
       canalizador:
         ipv4_address: 10.7.0.11
+  worker_canalizador:
+    build: ./php
+    container_name: worker_$PROJECT_NAME
+    volumes:
+      - ../:/code
+      - /tmp:/tmp
+    depends_on:
+      - mysql_canalizador
+      - rabbitmq_canalizador
+    restart: unless-stopped
+    working_dir: /code
+    command: sh -c "php artisan rabbitmq:setup && php artisan queue:work rabbitmq --queue=video.created,clip.created,clip.completed,video.all_clips_completed --tries=3 --timeout=300 --sleep=3"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    networks:
+      canalizador:
+        ipv4_address: 10.7.0.12
 volumes:
   rabbitmq_data:
 networks:
