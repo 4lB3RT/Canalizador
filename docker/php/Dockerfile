@@ -10,13 +10,11 @@ RUN apk add --no-cache \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install gd
 
-RUN docker-php-ext-install mysqli && \
-    docker-php-ext-install pdo && \
-    docker-php-ext-install pdo_mysql && \
-    docker-php-ext-install sockets
+RUN apk add --no-cache linux-headers $PHPIZE_DEPS php-pear
 
-RUN apk add --no-cache $PHPIZE_DEPS php-pear linux-headers \
-    && pecl install xdebug \
+RUN docker-php-ext-install mysqli pdo pdo_mysql sockets
+
+RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
 RUN curl https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
