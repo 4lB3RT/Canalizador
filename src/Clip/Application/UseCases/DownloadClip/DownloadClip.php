@@ -30,13 +30,20 @@ final readonly class DownloadClip
             storage_path("app/clips/{$clip->id()->value()}.mp4")
         );
 
-        $result = $this->clipDownloader->download($clip->generationId(), $outputPath);
+        try {
+            $result = $this->clipDownloader->download($clip->generationId(), $outputPath);
 
-        $clip->markAsCompleted($result['localPath'], $result['videoUri'], $this->clock->now());
-        $this->clipRepository->save($clip);
+            $clip->markAsCompleted($result['localPath'], $result['videoUri'], $this->clock->now());
+            $this->clipRepository->save($clip);
 
-        $this->eventBus->publish(
-            new ClipCompleted($clip->id()->value(), $clip->videoId()->value(), $this->clock->now())
-        );
+            $this->eventBus->publish(
+                new ClipCompleted($clip->id()->value(), $clip->videoId()->value(), $this->clock->now())
+            );
+        } catch (\Throwable $e) {
+            $clip->markAsFailed();
+            $this->clipRepository->save($clip);
+
+            throw $e;
+        }
     }
 }

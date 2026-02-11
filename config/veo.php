@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'resolution' => env('VEO_RESOLUTION', '1080p'),
+    'resolution' => env('VEO_RESOLUTION', '720p'),
 
     /*
     |--------------------------------------------------------------------------

@@ -49,10 +49,6 @@ final readonly class CreateClip
         $video = $this->videoRepository->findById($videoId);
         $clips = $this->clipRepository->findByVideoId($videoId);
 
-        if ($this->hasGeneratingClip($clips)) {
-            return;
-        }
-
         $completedCount = $this->countCompleted($clips);
 
         if ($completedCount >= Clip::TOTAL_CLIPS) {
@@ -64,15 +60,36 @@ final readonly class CreateClip
 
         $nextSequence = $completedCount + 1;
 
-        $generationId = $this->resolveGenerationId($video, $clips, $nextSequence);
+        $existingClip = $clips->findGeneratingBySequence($nextSequence);
+
+        if ($existingClip !== null) {
+            if ($existingClip->generationId()->isPending()) {
+                $generationId = $this->resolveGenerationId($video, $clips, $nextSequence);
+                $existingClip->updateGenerationId(GenerationId::fromString($generationId));
+                $this->clipRepository->save($existingClip);
+            }
+
+            $this->eventBus->publish(
+                new ClipCreated($existingClip->id()->value(), $videoId->value(), $this->clock->now())
+            );
+            return;
+        }
+
+        if ($this->hasGeneratingClip($clips)) {
+            return;
+        }
 
         $clip = $this->clipFactory->create(
             id: ClipId::fromString($this->generateClipId()),
             videoId: $videoId,
             sequence: Sequence::fromInt($nextSequence),
-            generationId: GenerationId::fromString($generationId),
+            generationId: GenerationId::pending(),
         );
 
+        $this->clipRepository->save($clip);
+
+        $generationId = $this->resolveGenerationId($video, $clips, $nextSequence);
+        $clip->updateGenerationId(GenerationId::fromString($generationId));
         $this->clipRepository->save($clip);
 
         $this->eventBus->publish(
