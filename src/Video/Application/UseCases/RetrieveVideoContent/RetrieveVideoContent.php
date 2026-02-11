@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\Video\Application\UseCases\RetrieveVideoContent;
 
+use Canalizador\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\Video\Domain\Exceptions\VideoNotFound;
@@ -17,6 +18,7 @@ final readonly class RetrieveVideoContent
     public function __construct(
         private VideoContentRetriever $videoContentRetriever,
         private VideoRepository $videoRepository,
+        private Clock $clock,
     ) {
     }
 
@@ -33,7 +35,7 @@ final readonly class RetrieveVideoContent
         $this->videoContentRetriever->retrieve($video);
         $localPath = new LocalPath(storage_path('tmp' . DIRECTORY_SEPARATOR . $video->id()->value()) . '.mp4');
 
-        $video->updateVideoLocalPath($localPath);
+        $video->markAsCompleted($localPath, $this->clock->now());
         $this->videoRepository->save($video);
 
         return new RetrieveVideoContentResponse($video->videoLocalPath());

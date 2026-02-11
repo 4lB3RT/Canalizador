@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\Video\Domain\Factories;
 
+use Canalizador\Avatar\Domain\ValueObjects\AvatarId;
+use Canalizador\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\Script\Domain\Entities\Script;
 use Canalizador\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
@@ -24,40 +26,22 @@ final readonly class VideoFactory
     public function create(
         VideoId $id,
         Script $script,
+        ChannelId $channelId,
         Title $title,
         Description $description,
         VideoCategory $category,
-        GenerationId $generationId,
-        ?DateTime $createdAt = null
+        ?AvatarId $avatarId = null,
+        ?DateTime $createdAt = null,
     ): Video {
         return new Video(
             id: $id,
             script: $script,
+            channelId: $channelId,
             title: $title,
             description: $description,
             category: $category,
             createdAt: $createdAt ?? $this->clock->now(),
-            generationId: $generationId,
-        );
-    }
-
-    public function createFromStrings(
-        string $videoId,
-        Script $script,
-        ?string $title,
-        ?string $description,
-        string $category,
-        string $generationId,
-        ?DateTime $createdAt = null
-    ): Video {
-        return $this->create(
-            id: VideoId::fromString($videoId),
-            script: $script,
-            title: Title::fromString($title ?? 'Generated Video'),
-            description: Description::fromString($description ?? str_repeat('Generated video description. ', 10)),
-            category: VideoCategory::from($category),
-            generationId: GenerationId::fromString($generationId),
-            createdAt: $createdAt,
+            avatarId: $avatarId,
         );
     }
 }

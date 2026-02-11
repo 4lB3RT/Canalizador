@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace Canalizador\Video\Infrastructure\Repositories\Veo;
 
-use Canalizador\Channel\Domain\Entities\Channel;
 use Canalizador\Shared\Domain\Services\HttpClient;
 use Canalizador\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\ImageMimeType;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Video\Application\UseCases\GenerateVideo\ValueObjects\VideoPrompt;
+use Canalizador\Shared\Domain\ValueObjects\Url;
+use Canalizador\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
+use Canalizador\Video\Domain\Repositories\VideoExtender;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
 use Canalizador\Video\Domain\ValueObjects\AspectRatio;
 use Canalizador\Video\Domain\ValueObjects\Resolution;
 use Canalizador\Video\Domain\ValueObjects\VideoDuration;
 use Illuminate\Support\Facades\File;
 
-final readonly class VeoVideoRepository implements VideoGenerator, VideoContentRetriever
+final readonly class VeoVideoRepository implements VideoGenerator, VideoContentRetriever, VideoExtender
 {
     private const string API_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
     private const int MAX_REFERENCE_IMAGES = 3;
@@ -37,7 +39,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
     /**
      * @throws VideoGenerationFailed
      */
-    public function generate(VideoPrompt $videoPrompt, Channel $channel): string
+    public function generate(VideoPrompt $videoPrompt): string
     {
         $model = config('veo.model', 'veo-3.1-generate-preview');
         $url = self::API_BASE_URL . "/models/{$model}:predictLongRunning";
@@ -58,7 +60,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
             ? VideoDuration::forReferenceImages()
             : VideoDuration::fromSeconds(config('veo.duration', 8));
 
-        $resolution = Resolution::fromString(config('veo.resolution', '720p'));
+        $resolution = Resolution::fromString('720p');
 
         $instance = [
             'prompt' => $videoPrompt->toPromptString(),
@@ -118,7 +120,51 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
 
             File::put($filePath, $videoContent);
 
-            $video->updateVideoLocalPath(new LocalPath($filePath));
+            $video->markAsCompleted(new LocalPath($filePath), new DateTime(new \DateTimeImmutable()));
+        } catch (\RuntimeException $e) {
+            throw VideoGenerationFailed::apiError($e->getMessage());
+        }
+    }
+
+    /**
+     * @throws VideoGenerationFailed
+     */
+    public function extend(Url $lastVideoUri): string
+    {
+        $model = config('veo.model', 'veo-3.1-generate-preview');
+        $url = self::API_BASE_URL . "/models/{$model}:predictLongRunning";
+
+        $headers = [
+            'x-goog-api-key' => $this->apiKey,
+            'Content-Type' => 'application/json',
+        ];
+
+        $data = [
+            'instances' => [
+                [
+                    'prompt' => 'Continue the video naturally maintaining visual continuity.',
+                    'video' => [
+                        'uri' => $lastVideoUri->value(),
+                    ],
+                ],
+            ],
+            'parameters' => [
+                'aspectRatio' => config('veo.aspect_ratio', '9:16'),
+                'resolution' => '720p',
+            ],
+        ];
+
+        try {
+            $response = $this->httpClient->post($url, $headers, $data, 60);
+            $this->responseValidator->validateSuccess($response, 'Veo video extension');
+
+            $responseData = $response->json();
+
+            if (!isset($responseData['name'])) {
+                throw VideoGenerationFailed::apiError('No operation ID received from Veo extension API');
+            }
+
+            return $responseData['name'];
         } catch (\RuntimeException $e) {
             throw VideoGenerationFailed::apiError($e->getMessage());
         }

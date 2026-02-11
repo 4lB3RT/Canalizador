@@ -6,7 +6,7 @@ namespace Canalizador\Video\Domain\Services;
 
 use Canalizador\Avatar\Domain\Entities\Avatar;
 use Canalizador\Script\Domain\Entities\Script;
-use Canalizador\Video\Application\UseCases\GenerateVideo\ValueObjects\VideoPrompt;
+use Canalizador\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
 use Canalizador\Video\Domain\ValueObjects\VideoCategory;
 
 interface VideoPromptExtractor

@@ -26,6 +26,12 @@ final class EventHandlerRegistry
         $this->handlers[$eventClass][] = $handlerClass;
     }
 
+    /** @return list<class-string<DomainEvent>> */
+    public function registeredEventClasses(): array
+    {
+        return array_keys($this->handlers);
+    }
+
     /** @return list<DomainEventHandler> */
     public function handlersFor(DomainEvent $event): array
     {

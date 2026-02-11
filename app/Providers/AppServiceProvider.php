@@ -29,6 +29,7 @@ use Canalizador\Script\Infrastructure\Repositories\Eloquent\EloquentScriptReposi
 use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptGenerator;
 use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptIdeaGenerator;
 use Canalizador\Shared\Domain\Events\EventBus;
+use Canalizador\Shared\Infrastructure\Console\SetupRabbitMQCommand;
 use Canalizador\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Domain\Services\HttpClient;
 use Canalizador\Shared\Domain\Services\HttpResponseValidator;
@@ -42,25 +43,27 @@ use Canalizador\Shared\Infrastructure\Services\HttpErrorExtractor;
 use Canalizador\Shared\Infrastructure\Services\HttpResponseValidator as HttpResponseValidatorImpl;
 use Canalizador\Shared\Infrastructure\Services\LaravelHttpClient;
 use Canalizador\Shared\Infrastructure\Services\SystemClock;
-use Canalizador\Video\Application\Handlers\OnAllClipsCompletedHandler;
-use Canalizador\Video\Application\Handlers\OnClipCompletedHandler;
-use Canalizador\Video\Application\Handlers\OnClipCreatedHandler;
-use Canalizador\Video\Application\Handlers\OnVideoCreatedHandler;
-use Canalizador\Video\Application\UseCases\ComposeShort\ComposeShort;
-use Canalizador\Video\Application\UseCases\CreateClip\CreateClip;
-use Canalizador\Video\Application\UseCases\DownloadClip\DownloadClip;
-use Canalizador\Video\Application\UseCases\GenerateVideo\GenerateVideo;
+use Canalizador\Clip\Application\Handlers\OnAllClipsCompletedHandler;
+use Canalizador\Clip\Application\Handlers\OnClipCompletedHandler;
+use Canalizador\Clip\Application\Handlers\OnClipCreatedHandler;
+use Canalizador\Clip\Application\Handlers\OnVideoCreatedHandler;
+use Canalizador\Clip\Application\UseCases\ComposeShort\ComposeShort;
+use Canalizador\Clip\Application\UseCases\CreateClip\CreateClip;
+use Canalizador\Clip\Application\UseCases\DownloadClip\DownloadClip;
+use Canalizador\Clip\Domain\Events\AllClipsCompleted;
+use Canalizador\Clip\Domain\Events\ClipCompleted;
+use Canalizador\Clip\Domain\Events\ClipCreated;
+use Canalizador\Clip\Domain\Factories\ClipFactory;
+use Canalizador\Clip\Domain\Repositories\ClipDownloader;
+use Canalizador\Clip\Domain\Repositories\ClipRepository;
+use Canalizador\Clip\Infrastructure\Repositories\Eloquent\EloquentClipRepository;
+use Canalizador\Clip\Infrastructure\Repositories\Veo\VeoClipDownloader;
+use Canalizador\Video\Application\UseCases\CreateVideo\CreateVideo;
 use Canalizador\Video\Application\UseCases\PublishVideo\PublishVideo;
 use Canalizador\Video\Application\UseCases\RetrieveVideoContent\RetrieveVideoContent;
-use Canalizador\Video\Domain\Events\AllClipsCompleted;
-use Canalizador\Video\Domain\Events\ClipCompleted;
-use Canalizador\Video\Domain\Events\ClipCreated;
 use Canalizador\Video\Domain\Events\VideoCreated;
-use Canalizador\Video\Domain\Factories\ClipFactory;
 use Canalizador\Video\Domain\Factories\VideoFactory;
 use Canalizador\Video\Domain\Factories\VideoPublisherFactory;
-use Canalizador\Video\Domain\Repositories\ClipDownloader;
-use Canalizador\Video\Domain\Repositories\ClipRepository;
 use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
 use Canalizador\Video\Domain\Repositories\VideoExtender;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
@@ -71,13 +74,10 @@ use Canalizador\Video\Domain\Services\VideoFileValidator;
 use Canalizador\Video\Domain\Services\VideoPromptExtractor;
 use Canalizador\Video\Domain\Services\YouTubeServiceFactory;
 use Canalizador\Video\Infrastructure\Factories\VideoPublisherFactory as VideoPublisherFactoryImpl;
-use Canalizador\Video\Infrastructure\Http\Api\Mappers\GenerateVideoRequestMapper;
+use Canalizador\Video\Infrastructure\Http\Api\Mappers\CreateVideoRequestMapper;
 use Canalizador\Video\Infrastructure\Http\Api\Mappers\PublishVideoRequestMapper;
-use Canalizador\Video\Infrastructure\Repositories\Eloquent\EloquentClipRepository;
 use Canalizador\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
 use Canalizador\Video\Infrastructure\Repositories\OpenAI\OpenAIVideoMetadataGenerator;
-use Canalizador\Video\Infrastructure\Repositories\Veo\VeoClipDownloader;
-use Canalizador\Video\Infrastructure\Repositories\Veo\VeoVideoExtender;
 use Canalizador\Video\Infrastructure\Repositories\Veo\VeoVideoRepository;
 use Canalizador\Video\Infrastructure\Repositories\YouTube\YoutubeVideoPublisher;
 use Canalizador\Video\Infrastructure\Services\JsonVideoPromptExtractor;
@@ -101,6 +101,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerSharedServices();
         $this->registerScriptServices();
         $this->registerVideoServices();
+        $this->registerClipServices();
         $this->registerChannelServices();
         $this->registerAvatarServices();
         $this->registerImageServices();
@@ -108,6 +109,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->commands([
+            SetupRabbitMQCommand::class,
+        ]);
     }
 
     private function registerSharedServices(): void
@@ -170,7 +174,7 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerVideoServices(): void
     {
-        $this->app->bind(GenerateVideoRequestMapper::class, GenerateVideoRequestMapper::class);
+        $this->app->bind(CreateVideoRequestMapper::class, CreateVideoRequestMapper::class);
         $this->app->bind(PublishVideoRequestMapper::class, PublishVideoRequestMapper::class);
         $this->app->bind(VideoPromptExtractor::class, JsonVideoPromptExtractor::class);
         $this->app->bind(VideoMetadataGenerator::class, OpenAIVideoMetadataGenerator::class);
@@ -185,7 +189,7 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind(VideoGenerator::class, function ($app) {
+        $this->app->singleton(VeoVideoRepository::class, function ($app) {
             return new VeoVideoRepository(
                 apiKey: config('services.google.veo_api_key') ?? '',
                 httpClient: $app->make(HttpClient::class),
@@ -193,13 +197,9 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind(VideoContentRetriever::class, function ($app) {
-            return new VeoVideoRepository(
-                apiKey: config('services.google.veo_api_key') ?? '',
-                httpClient: $app->make(HttpClient::class),
-                responseValidator: $app->make(HttpResponseValidator::class)
-            );
-        });
+        $this->app->bind(VideoGenerator::class, VeoVideoRepository::class);
+        $this->app->bind(VideoContentRetriever::class, VeoVideoRepository::class);
+        $this->app->bind(VideoExtender::class, VeoVideoRepository::class);
 
         $this->app->bind(VideoFactory::class, function ($app) {
             return new VideoFactory(
@@ -207,17 +207,13 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind(GenerateVideo::class, function ($app) {
-            return new GenerateVideo(
+        $this->app->bind(CreateVideo::class, function ($app) {
+            return new CreateVideo(
                 scriptRepository: $app->make(ScriptRepository::class),
                 generateScript: $app->make(GenerateScript::class),
-                videoPromptExtractor: $app->make(VideoPromptExtractor::class),
-                videoGenerator: $app->make(VideoGenerator::class),
                 videoFactory: $app->make(VideoFactory::class),
                 videoRepository: $app->make(VideoRepository::class),
                 videoMetadataGenerator: $app->make(VideoMetadataGenerator::class),
-                channelRepository: $app->make(YoutubeChannelRepository::class),
-                avatarRepository: $app->make(AvatarRepository::class),
                 eventBus: $app->make(EventBus::class),
                 clock: $app->make(Clock::class),
             );
@@ -227,6 +223,7 @@ class AppServiceProvider extends ServiceProvider
             return new RetrieveVideoContent(
                 videoContentRetriever: $app->make(VideoContentRetriever::class),
                 videoRepository: $app->make(VideoRepository::class),
+                clock: $app->make(Clock::class),
             );
         });
 
@@ -271,7 +268,6 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        $this->registerClipServices();
     }
 
     private function registerClipServices(): void
@@ -281,14 +277,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ClipFactory::class, function ($app) {
             return new ClipFactory(
                 clock: $app->make(Clock::class)
-            );
-        });
-
-        $this->app->bind(VideoExtender::class, function ($app) {
-            return new VeoVideoExtender(
-                apiKey: config('services.google.veo_api_key') ?? '',
-                httpClient: $app->make(HttpClient::class),
-                responseValidator: $app->make(HttpResponseValidator::class)
             );
         });
 
@@ -305,7 +293,10 @@ class AppServiceProvider extends ServiceProvider
                 videoRepository: $app->make(VideoRepository::class),
                 clipRepository: $app->make(ClipRepository::class),
                 clipFactory: $app->make(ClipFactory::class),
+                videoGenerator: $app->make(VideoGenerator::class),
                 videoExtender: $app->make(VideoExtender::class),
+                videoPromptExtractor: $app->make(VideoPromptExtractor::class),
+                avatarRepository: $app->make(AvatarRepository::class),
                 eventBus: $app->make(EventBus::class),
                 clock: $app->make(Clock::class),
             );
