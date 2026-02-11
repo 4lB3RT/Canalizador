@@ -9,6 +9,8 @@ services:
     volumes:
       - ../:/code
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php_canalizador
     networks:
       canalizador:
         ipv4_address: 10.7.0.5
@@ -48,6 +50,11 @@ services:
           - MYSQL_PASSWORD=${MYSQL_PASSWORD}
           - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
           - MYSQL_TCP_PORT:${MYSQL_PORT}
+      healthcheck:
+          test: ["CMD-SHELL", "mariadb-admin ping -h localhost -u root --password=$$MYSQL_ROOT_PASSWORD"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
       networks:
           canalizador:
               ipv4_address: 10.7.0.6
@@ -72,6 +79,11 @@ services:
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-guest}
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       canalizador:
         ipv4_address: 10.7.0.11
@@ -82,11 +94,13 @@ services:
       - ../:/code
       - /tmp:/tmp
     depends_on:
-      - mysql_canalizador
-      - rabbitmq_canalizador
+      mysql_canalizador:
+        condition: service_healthy
+      rabbitmq_canalizador:
+        condition: service_healthy
     restart: unless-stopped
     working_dir: /code
-    command: sh -c "sleep 10 && php artisan queue:work rabbitmq --queue=video.created,clip.created,clip.completed,video.all_clips_completed --tries=3 --timeout=300 --sleep=3"
+    command: sh -c "php artisan migrate --force && php artisan rabbitmq:setup && php artisan queue:work rabbitmq --queue=video.created,clip.created,clip.completed,video.all_clips_completed --tries=3 --timeout=300 --sleep=3"
     dns:
       - 8.8.8.8
       - 8.8.4.4
