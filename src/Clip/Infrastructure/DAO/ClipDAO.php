@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Video\Infrastructure\DAO;
+namespace Canalizador\Clip\Infrastructure\DAO;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VideoDAO extends Model
+class ClipDAO extends Model
 {
-    protected $table = 'videos';
+    protected $table = 'clips';
 
     protected $primaryKey = 'id';
 
@@ -18,19 +18,18 @@ class VideoDAO extends Model
 
     protected $fillable = [
         'id',
-        'script_id',
-        'channel_id',
-        'avatar_id',
-        'title',
-        'description',
-        'category',
+        'video_id',
+        'sequence',
         'generation_id',
-        'video_local_path',
+        'status',
+        'local_path',
+        'video_uri',
         'created_at',
         'completed_at',
     ];
 
     protected $casts = [
+        'sequence' => 'integer',
         'created_at' => 'datetime',
         'completed_at' => 'datetime',
     ];

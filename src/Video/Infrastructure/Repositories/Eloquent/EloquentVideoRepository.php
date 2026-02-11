@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\Video\Infrastructure\Repositories\Eloquent;
 
+use Canalizador\Avatar\Domain\ValueObjects\AvatarId;
+use Canalizador\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\Script\Domain\Repositories\ScriptRepository;
 use Canalizador\Script\Domain\ValueObjects\ScriptId;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
@@ -32,6 +34,8 @@ final class EloquentVideoRepository implements VideoRepository
             ['id' => $video->id()->value()],
             [
                 'script_id' => $video->script()->id()->value(),
+                'channel_id' => $video->channelId()->value(),
+                'avatar_id' => $video->avatarId()?->value(),
                 'title' => $video->title()->value(),
                 'description' => $video->description()->value(),
                 'category' => $video->category()->value,
@@ -86,10 +90,12 @@ final class EloquentVideoRepository implements VideoRepository
         return new Video(
             id: VideoId::fromString($model->id),
             script: $script,
+            channelId: ChannelId::fromString($model->channel_id),
             title: Title::fromString($model->title),
             description: Description::fromString($model->description),
             category: VideoCategory::from($model->category),
             createdAt: new DateTime($model->created_at->toDateTimeImmutable()),
+            avatarId: $model->avatar_id ? AvatarId::fromString($model->avatar_id) : null,
             generationId: $model->generation_id ? GenerationId::fromString($model->generation_id) : null,
             videoLocalPath: $model->video_local_path ? LocalPath::fromString($model->video_local_path) : null,
             completedAt: $model->completed_at ? new DateTime($model->completed_at) : null,

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\Video\Domain\Entities;
 
+use Canalizador\Avatar\Domain\ValueObjects\AvatarId;
+use Canalizador\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\Script\Domain\Entities\Script;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
@@ -18,13 +20,15 @@ final class Video
     public function __construct(
         private readonly VideoId $id,
         private readonly Script $script,
+        private readonly ChannelId $channelId,
         private readonly Title $title,
         private readonly Description $description,
         private readonly VideoCategory $category,
         private readonly DateTime $createdAt,
+        private readonly ?AvatarId $avatarId = null,
         private readonly ?GenerationId $generationId = null,
         private ?LocalPath $videoLocalPath = null,
-        private readonly ?DateTime $completedAt = null,
+        private ?DateTime $completedAt = null,
     ) {
     }
 
@@ -36,6 +40,16 @@ final class Video
     public function script(): Script
     {
         return $this->script;
+    }
+
+    public function channelId(): ChannelId
+    {
+        return $this->channelId;
+    }
+
+    public function avatarId(): ?AvatarId
+    {
+        return $this->avatarId;
     }
 
     public function title(): Title
@@ -58,10 +72,10 @@ final class Video
         return $this->videoLocalPath;
     }
 
-    public function updateVideoLocalPath(LocalPath $videoLocalPath): void
+    public function markAsCompleted(LocalPath $videoLocalPath, DateTime $completedAt): void
     {
         $this->videoLocalPath = $videoLocalPath;
-
+        $this->completedAt = $completedAt;
     }
 
     public function createdAt(): DateTime
@@ -84,6 +98,8 @@ final class Video
         return [
             'id' => $this->id->value(),
             'script_id' => $this->script->id()->value(),
+            'channel_id' => $this->channelId->value(),
+            'avatar_id' => $this->avatarId?->value(),
             'script' => $this->script->toArray(),
             'title' => $this->title->value(),
             'description' => $this->description->value(),
