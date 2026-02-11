@@ -60,7 +60,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
             ? VideoDuration::forReferenceImages()
             : VideoDuration::fromSeconds(config('veo.duration', 8));
 
-        $resolution = Resolution::fromString('720p');
+        $resolution = Resolution::fromString(config('veo.resolution', '720p'));
 
         $instance = [
             'prompt' => $videoPrompt->toPromptString(),
@@ -150,7 +150,8 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
             ],
             'parameters' => [
                 'aspectRatio' => config('veo.aspect_ratio', '9:16'),
-                'resolution' => '720p',
+                'resolution' => config('veo.resolution', '720p'),
+                'durationSeconds' => config('veo.duration', 8),
             ],
         ];
 

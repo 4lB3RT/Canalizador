@@ -21,7 +21,7 @@ final class Clip
         private readonly ClipId $id,
         private readonly VideoId $videoId,
         private readonly Sequence $sequence,
-        private readonly GenerationId $generationId,
+        private GenerationId $generationId,
         private ClipStatus $status,
         private readonly DateTime $createdAt,
         private ?LocalPath $localPath = null,
@@ -81,6 +81,11 @@ final class Clip
         $this->localPath = $localPath;
         $this->videoUri = $videoUri;
         $this->completedAt = $completedAt;
+    }
+
+    public function updateGenerationId(GenerationId $generationId): void
+    {
+        $this->generationId = $generationId;
     }
 
     public function markAsFailed(): void

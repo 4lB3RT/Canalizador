@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'resolution' => env('VEO_RESOLUTION', '1080p'),
+    'resolution' => env('VEO_RESOLUTION', '720p'),
 
     /*
     |--------------------------------------------------------------------------
@@ -78,6 +78,20 @@ return [
     | Settings for polling the API to check video generation status.
     |
     */
+
+    /*
+    |--------------------------------------------------------------------------
+    | Total Clips Per Video
+    |--------------------------------------------------------------------------
+    |
+    | Number of clips generated per video (1 generate + N-1 extend).
+    | Lower values reduce Veo API costs proportionally.
+    |
+    | Default: 5
+    |
+    */
+
+    'total_clips' => (int) env('VEO_TOTAL_CLIPS', 5),
 
     'polling' => [
         'interval' => (int) env('VEO_POLLING_INTERVAL', 5), // seconds between polls
