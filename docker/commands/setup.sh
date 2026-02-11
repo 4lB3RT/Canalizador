@@ -13,9 +13,9 @@ echo "Setting up Canalizador (fresh)..."
 echo ""
 
 # 1. Stop & clean
-info "Stopping existing containers..."
-docker compose -f "$DOCKER_DIR/docker-compose.yml" down --volumes --remove-orphans 2>/dev/null || true
-green "Containers stopped"
+info "Stopping containers and removing volumes..."
+docker compose -f "$DOCKER_DIR/docker-compose.yml" down --volumes --remove-orphans --rmi local 2>/dev/null || true
+green "Containers, volumes and images removed"
 
 # 2. Build (no cache)
 info "Building Docker images (no cache)..."
