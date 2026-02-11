@@ -30,7 +30,7 @@ done
 green "MySQL ready"
 
 info "Waiting for RabbitMQ..."
-until docker exec php_canalizador php -r "new \PhpAmqpLib\Connection\AMQPStreamConnection('rabbitmq_canalizador', 5672, 'guest', 'guest');" 2>/dev/null; do
+until docker exec rabbitmq_canalizador rabbitmq-diagnostics -q ping 2>/dev/null; do
     sleep 2
 done
 green "RabbitMQ ready"
