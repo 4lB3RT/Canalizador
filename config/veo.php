@@ -79,6 +79,20 @@ return [
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | Total Clips Per Video
+    |--------------------------------------------------------------------------
+    |
+    | Number of clips generated per video (1 generate + N-1 extend).
+    | Lower values reduce Veo API costs proportionally.
+    |
+    | Default: 5
+    |
+    */
+
+    'total_clips' => (int) env('VEO_TOTAL_CLIPS', 5),
+
     'polling' => [
         'interval' => (int) env('VEO_POLLING_INTERVAL', 5), // seconds between polls
         'max_attempts' => (int) env('VEO_POLLING_MAX_ATTEMPTS', 120), // maximum polling attempts

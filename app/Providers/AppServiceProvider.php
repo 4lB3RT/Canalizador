@@ -299,6 +299,7 @@ class AppServiceProvider extends ServiceProvider
                 avatarRepository: $app->make(AvatarRepository::class),
                 eventBus: $app->make(EventBus::class),
                 clock: $app->make(Clock::class),
+                totalClips: (int) config('veo.total_clips', 5),
             );
         });
 

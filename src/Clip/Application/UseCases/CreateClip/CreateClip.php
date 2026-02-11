@@ -37,6 +37,7 @@ final readonly class CreateClip
         private AvatarRepository $avatarRepository,
         private EventBus $eventBus,
         private Clock $clock,
+        private int $totalClips = Clip::TOTAL_CLIPS,
     ) {
     }
 
@@ -51,7 +52,7 @@ final readonly class CreateClip
 
         $completedCount = $this->countCompleted($clips);
 
-        if ($completedCount >= Clip::TOTAL_CLIPS) {
+        if ($completedCount >= $this->totalClips) {
             $this->eventBus->publish(
                 new AllClipsCompleted($videoId->value(), $this->clock->now())
             );
