@@ -46,13 +46,16 @@ use Canalizador\Shared\Infrastructure\Services\SystemClock;
 use Canalizador\Clip\Application\Handlers\OnAllClipsCompletedHandler;
 use Canalizador\Clip\Application\Handlers\OnClipCompletedHandler;
 use Canalizador\Clip\Application\Handlers\OnClipCreatedHandler;
+use Canalizador\Clip\Application\Handlers\OnClipGeneratedHandler;
 use Canalizador\Clip\Application\Handlers\OnVideoCreatedHandler;
 use Canalizador\Clip\Application\UseCases\ComposeShort\ComposeShort;
 use Canalizador\Clip\Application\UseCases\CreateClip\CreateClip;
 use Canalizador\Clip\Application\UseCases\DownloadClip\DownloadClip;
+use Canalizador\Clip\Application\UseCases\GenerateClip\GenerateClip;
 use Canalizador\Clip\Domain\Events\AllClipsCompleted;
 use Canalizador\Clip\Domain\Events\ClipCompleted;
 use Canalizador\Clip\Domain\Events\ClipCreated;
+use Canalizador\Clip\Domain\Events\ClipGenerated;
 use Canalizador\Clip\Domain\Factories\ClipFactory;
 use Canalizador\Clip\Domain\Repositories\ClipDownloader;
 use Canalizador\Clip\Domain\Repositories\ClipRepository;
@@ -293,6 +296,15 @@ class AppServiceProvider extends ServiceProvider
                 videoRepository: $app->make(VideoRepository::class),
                 clipRepository: $app->make(ClipRepository::class),
                 clipFactory: $app->make(ClipFactory::class),
+                eventBus: $app->make(EventBus::class),
+                clock: $app->make(Clock::class),
+            );
+        });
+
+        $this->app->bind(GenerateClip::class, function ($app) {
+            return new GenerateClip(
+                clipRepository: $app->make(ClipRepository::class),
+                videoRepository: $app->make(VideoRepository::class),
                 videoGenerator: $app->make(VideoGenerator::class),
                 videoExtender: $app->make(VideoExtender::class),
                 videoPromptExtractor: $app->make(VideoPromptExtractor::class),
@@ -329,6 +341,7 @@ class AppServiceProvider extends ServiceProvider
 
         $registry->register(VideoCreated::class, OnVideoCreatedHandler::class);
         $registry->register(ClipCreated::class, OnClipCreatedHandler::class);
+        $registry->register(ClipGenerated::class, OnClipGeneratedHandler::class);
         $registry->register(ClipCompleted::class, OnClipCompletedHandler::class);
         $registry->register(AllClipsCompleted::class, OnAllClipsCompletedHandler::class);
     }
