@@ -41,6 +41,10 @@ done
 green "RabbitMQ ready"
 
 # 5. Migrations
+info "Wiping database..."
+"$COMMANDS_DIR/artisan.sh" db:wipe --force
+green "Database wiped"
+
 info "Running migrations..."
 "$COMMANDS_DIR/artisan.sh" migrate --force
 green "Migrations completed"
