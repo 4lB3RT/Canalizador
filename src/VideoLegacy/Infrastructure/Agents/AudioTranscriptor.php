@@ -8,7 +8,7 @@ use Canalizador\VideoLegacy\Infrastructure\Tools\AudioExtractor;
 use Canalizador\VideoLegacy\Infrastructure\Tools\AudioTranscription;
 use Canalizador\VideoLegacy\Infrastructure\Tools\VideoDownloader;
 use Prism\Prism\Enums\Provider;
-use Prism\Prism\Prism;
+use Prism\Prism\Facades\Prism;
 use Prism\Prism\Text\PendingRequest as PendingTextRequest;
 
 final readonly class AudioTranscriptor
@@ -23,7 +23,7 @@ final readonly class AudioTranscriptor
     public function execute(string $message): PendingTextRequest
     {
         return Prism::text()
-            ->using(Provider::OpenAI, 'gpt-4o')
+            ->using(Provider::OpenAI, config('openai.model'))
             ->withSystemPrompt(
                 'You are a helpful chat assistant. Given a message with a YouTube video, follow these steps:
 

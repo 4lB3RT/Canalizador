@@ -12,18 +12,16 @@ use Canalizador\Channel\Domain\ValueObjects\Country;
 use Canalizador\Channel\Domain\ValueObjects\Description;
 use Canalizador\Channel\Domain\ValueObjects\Title;
 use Prism\Prism\Enums\Provider;
-use Prism\Prism\Prism;
+use Prism\Prism\Facades\Prism;
 
 final class OpenAIChannelRepository implements ChannelMetadataRepository
 {
-    private const string MODEL = 'gpt-4o-mini';
-
     public function generateData(Channel $channel): ChannelMetadata
     {
         $systemPrompt = config('prompts.channel.metadata_generator.system_prompt');
 
         $response = Prism::text()
-            ->using(Provider::OpenAI, self::MODEL)
+            ->using(Provider::OpenAI, config('openai.model_light'))
             ->withSystemPrompt($systemPrompt)
             ->withProviderOptions([
                 'response_format' => ['type' => 'json_object'],

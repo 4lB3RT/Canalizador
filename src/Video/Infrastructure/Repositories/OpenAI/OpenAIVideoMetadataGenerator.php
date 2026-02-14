@@ -9,12 +9,10 @@ use Canalizador\Video\Domain\ValueObjects\Description;
 use Canalizador\Video\Domain\ValueObjects\Title;
 use Canalizador\Video\Domain\ValueObjects\VideoMetadata;
 use Prism\Prism\Enums\Provider;
-use Prism\Prism\Prism;
+use Prism\Prism\Facades\Prism;
 
 final class OpenAIVideoMetadataGenerator implements VideoMetadataGenerator
 {
-    private const string MODEL = 'gpt-4o-mini';
-
     public function generate(string $scriptContent): VideoMetadata
     {
         $systemPrompt = config('prompts.video.metadata_generator.system_prompt');
@@ -22,7 +20,7 @@ final class OpenAIVideoMetadataGenerator implements VideoMetadataGenerator
         $userPrompt = "Based on the following video script, generate both an SEO-optimized title and description:\n\n" . $scriptContent . "\n\nRespond ONLY with the requested JSON, without any additional text.";
 
         $response = Prism::text()
-            ->using(Provider::OpenAI, self::MODEL)
+            ->using(Provider::OpenAI, config('openai.model_light'))
             ->withSystemPrompt($systemPrompt)
             ->withPrompt($userPrompt)
             ->withProviderOptions([

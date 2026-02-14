@@ -6,7 +6,7 @@ namespace Canalizador\VideoLegacy\Infrastructure\Agents;
 
 use Canalizador\VideoLegacy\Infrastructure\Tools\VideoCutter;
 use Prism\Prism\Enums\Provider;
-use Prism\Prism\Prism;
+use Prism\Prism\Facades\Prism;
 use Prism\Prism\Text\Response;
 
 final readonly class Editor
@@ -21,7 +21,7 @@ final readonly class Editor
         string $videoPath,
     ): Response {
         return Prism::text()
-            ->using(Provider::OpenAI, 'gpt-4o')
+            ->using(Provider::OpenAI, config('openai.model'))
             ->withSystemPrompt(
                 'You are "VideoEditor", an autonomous AI agent specialized in analyzing video transcriptions and extracting relevant audio segments.
 
