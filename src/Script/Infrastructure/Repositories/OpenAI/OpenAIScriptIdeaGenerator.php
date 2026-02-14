@@ -7,12 +7,10 @@ namespace Canalizador\Script\Infrastructure\Repositories\OpenAI;
 use Canalizador\Channel\Domain\Entities\Channel;
 use Canalizador\Script\Domain\Repositories\ScriptIdeaGenerator;
 use Prism\Prism\Enums\Provider;
-use Prism\Prism\Prism;
+use Prism\Prism\Facades\Prism;
 
 final class OpenAIScriptIdeaGenerator implements ScriptIdeaGenerator
 {
-    private const string MODEL = 'gpt-4o';
-
     public function generateIdea(Channel $channel): string
     {
         return $this->generateAstrology($channel);
@@ -30,9 +28,9 @@ final class OpenAIScriptIdeaGenerator implements ScriptIdeaGenerator
         );
 
         $response = Prism::text()
-            ->using(Provider::OpenAI, self::MODEL)
+            ->using(Provider::OpenAI, config('openai.model'))
             ->withSystemPrompt($systemPrompt)
-            ->withPrompt('Generate a creative and original gaming video script idea for a 9-second video.')
+            ->withPrompt('Genera una idea creativa y original para un guion de vídeo corto de gaming.')
             ->asText();
 
         return trim($response->text);
@@ -50,9 +48,9 @@ final class OpenAIScriptIdeaGenerator implements ScriptIdeaGenerator
         );
 
         $response = Prism::text()
-            ->using(Provider::OpenAI, self::MODEL)
+            ->using(Provider::OpenAI, config('openai.model'))
             ->withSystemPrompt($systemPrompt)
-            ->withPrompt('Generate a creative and original astrology video script idea for a 9-second video.')
+            ->withPrompt('Genera una idea creativa y original para un guion de vídeo corto de astrología.')
             ->asText();
 
         return trim($response->text);
