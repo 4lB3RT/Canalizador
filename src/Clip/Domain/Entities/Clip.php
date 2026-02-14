@@ -24,6 +24,7 @@ final class Clip
         private GenerationId $generationId,
         private ClipStatus $status,
         private readonly DateTime $createdAt,
+        private ?string $script = null,
         private ?LocalPath $localPath = null,
         private ?Url $videoUri = null,
         private ?DateTime $completedAt = null,
@@ -70,6 +71,11 @@ final class Clip
         return $this->createdAt;
     }
 
+    public function script(): ?string
+    {
+        return $this->script;
+    }
+
     public function completedAt(): ?DateTime
     {
         return $this->completedAt;
@@ -105,6 +111,7 @@ final class Clip
             'video_id' => $this->videoId->value(),
             'sequence' => $this->sequence->value(),
             'generation_id' => $this->generationId->value(),
+            'script' => $this->script,
             'status' => $this->status->value,
             'local_path' => $this->localPath?->value(),
             'video_uri' => $this->videoUri?->value(),

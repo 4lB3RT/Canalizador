@@ -21,6 +21,7 @@ class ClipDAO extends Model
         'video_id',
         'sequence',
         'generation_id',
+        'script',
         'status',
         'local_path',
         'video_uri',

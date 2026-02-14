@@ -25,8 +25,14 @@ final readonly class GenerateScript
     ) {
     }
 
-    public function generate(string $scriptId, string $channelId, VideoCategory $category, ?string $prompt = null): Script
-    {
+    public function generate(
+        string $scriptId,
+        string $channelId,
+        VideoCategory $category,
+        ?string $prompt = null,
+        int $totalClips = 5,
+        int $clipDuration = 8,
+    ): Script {
         $channel = $this->channelRepository->findById(ChannelId::fromString($channelId));
 
         $finalPrompt = $prompt ?? match ($category) {
@@ -35,8 +41,8 @@ final readonly class GenerateScript
         };
 
         $scriptContent = match ($category) {
-            VideoCategory::GAMING => $this->scriptGenerator->generateGaming($finalPrompt, $channel),
-            VideoCategory::ASTROLOGY => $this->scriptGenerator->generateAstrology($finalPrompt, $channel),
+            VideoCategory::GAMING => $this->scriptGenerator->generateGaming($finalPrompt, $channel, $totalClips, $clipDuration),
+            VideoCategory::ASTROLOGY => $this->scriptGenerator->generateAstrology($finalPrompt, $channel, $totalClips, $clipDuration),
         };
 
         $script = $this->scriptFactory->createFromStrings(

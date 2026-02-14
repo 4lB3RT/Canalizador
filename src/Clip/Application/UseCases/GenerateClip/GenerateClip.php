@@ -6,12 +6,15 @@ namespace Canalizador\Clip\Application\UseCases\GenerateClip;
 
 use Canalizador\Avatar\Domain\Repositories\AvatarRepository;
 use Canalizador\Clip\Domain\Events\ClipGenerated;
+use Canalizador\Clip\Domain\Exceptions\ClipNotFound;
 use Canalizador\Clip\Domain\Repositories\ClipRepository;
 use Canalizador\Clip\Domain\ValueObjects\ClipId;
 use Canalizador\Shared\Domain\Events\EventBus;
 use Canalizador\Shared\Domain\Services\Clock;
+use Canalizador\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Exceptions\VideoGenerationFailed;
+use Canalizador\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\Video\Domain\Repositories\VideoExtender;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
@@ -33,7 +36,10 @@ final readonly class GenerateClip
     }
 
     /**
+     * @param GenerateClipRequest $request
      * @throws VideoGenerationFailed
+     * @throws ClipNotFound
+     * @throws VideoNotFound
      */
     public function execute(GenerateClipRequest $request): void
     {
@@ -42,7 +48,7 @@ final readonly class GenerateClip
         $clips = $this->clipRepository->findByVideoId($clip->videoId());
 
         if ($clip->sequence()->value() === 1) {
-            $generationId = $this->generateFirstClip($video);
+            $generationId = $this->generateFirstClip($video, $clip->script());
         } else {
             $lastCompleted = $clips->lastCompleted();
 
@@ -52,7 +58,10 @@ final readonly class GenerateClip
                 );
             }
 
-            $generationId = $this->videoExtender->extend($lastCompleted->videoUri());
+            $clipPrompt = $clip->script()
+                ?? 'Continue the video naturally maintaining visual continuity.';
+
+            $generationId = $this->videoExtender->extend($lastCompleted->videoUri(), $clipPrompt);
         }
 
         $clip->updateGenerationId(GenerationId::fromString($generationId));
@@ -63,7 +72,7 @@ final readonly class GenerateClip
         );
     }
 
-    private function generateFirstClip(Video $video): string
+    private function generateFirstClip(Video $video, ?string $clipScript): string
     {
         $videoPrompt = $video->avatarId() !== null
             ? $this->videoPromptExtractor->extractWithAvatar(
@@ -72,6 +81,14 @@ final readonly class GenerateClip
                 $video->category()
             )
             : $this->videoPromptExtractor->extract($video->script(), $video->category());
+
+        if ($clipScript !== null) {
+            $videoPrompt = new VideoPrompt(
+                prompt: $clipScript,
+                technicalVideo: $videoPrompt->technicalVideo(),
+                host: $videoPrompt->host(),
+            );
+        }
 
         return $this->videoGenerator->generate($videoPrompt);
     }

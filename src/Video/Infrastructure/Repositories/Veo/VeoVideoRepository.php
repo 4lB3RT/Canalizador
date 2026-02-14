@@ -129,7 +129,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
     /**
      * @throws VideoGenerationFailed
      */
-    public function extend(Url $lastVideoUri): string
+    public function extend(Url $lastVideoUri, string $clipPrompt): string
     {
         $model = config('veo.model', 'veo-3.1-generate-preview');
         $url = self::API_BASE_URL . "/models/{$model}:predictLongRunning";
@@ -142,7 +142,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
         $data = [
             'instances' => [
                 [
-                    'prompt' => 'Continue the video naturally maintaining visual continuity.',
+                    'prompt' => $clipPrompt,
                     'video' => [
                         'uri' => $lastVideoUri->value(),
                     ],

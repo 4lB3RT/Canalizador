@@ -15,6 +15,7 @@ use Canalizador\Clip\Domain\ValueObjects\ClipId;
 use Canalizador\Clip\Domain\ValueObjects\Sequence;
 use Canalizador\Shared\Domain\Events\EventBus;
 use Canalizador\Shared\Domain\Services\Clock;
+use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
 use Canalizador\Video\Domain\ValueObjects\GenerationId;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
@@ -34,7 +35,7 @@ final readonly class CreateClip
     public function execute(CreateClipRequest $request): void
     {
         $videoId = VideoId::fromString($request->videoId);
-        $this->videoRepository->findById($videoId);
+        $video = $this->videoRepository->findById($videoId);
         $clips = $this->clipRepository->findByVideoId($videoId);
 
         $completedCount = $this->countCompleted($clips);
@@ -61,11 +62,14 @@ final readonly class CreateClip
             return;
         }
 
+        $clipScript = $this->extractClipScript($video, $nextSequence);
+
         $clip = $this->clipFactory->create(
             id: ClipId::fromString($this->generateClipId()),
             videoId: $videoId,
             sequence: Sequence::fromInt($nextSequence),
             generationId: GenerationId::pending(),
+            script: $clipScript,
         );
 
         $this->clipRepository->save($clip);
@@ -92,6 +96,18 @@ final readonly class CreateClip
             $clips->items(),
             fn (Clip $clip) => $clip->isCompleted()
         ));
+    }
+
+    private function extractClipScript(Video $video, int $sequence): ?string
+    {
+        $scriptContent = $video->script()->content()->value();
+        $scriptData = json_decode($scriptContent, true);
+
+        if (!is_array($scriptData) || !isset($scriptData['clip_prompts'])) {
+            return null;
+        }
+
+        return $scriptData['clip_prompts'][$sequence - 1] ?? null;
     }
 
     private function generateClipId(): string
