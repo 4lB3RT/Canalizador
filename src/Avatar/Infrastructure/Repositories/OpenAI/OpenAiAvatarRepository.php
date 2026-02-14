@@ -20,7 +20,7 @@ use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Prism\Prism\Enums\Provider;
-use Prism\Prism\Prism;
+use Prism\Prism\Facades\Prism;
 use Prism\Prism\ValueObjects\Media\Image;
 use Spatie\Image\Enums\AlignPosition;
 use Spatie\Image\Enums\Fit;

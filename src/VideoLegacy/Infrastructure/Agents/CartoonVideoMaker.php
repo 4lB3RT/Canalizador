@@ -8,7 +8,7 @@ use Canalizador\VideoLegacy\Infrastructure\Tools\AudioExtractor;
 use Canalizador\VideoLegacy\Infrastructure\Tools\AudioTranscription;
 use Canalizador\VideoLegacy\Infrastructure\Tools\CartoonVideoGenerator;
 use Prism\Prism\Enums\Provider;
-use Prism\Prism\Prism;
+use Prism\Prism\Facades\Prism;
 use Prism\Prism\Text\PendingRequest as PendingTextRequest;
 
 final readonly class CartoonVideoMaker
