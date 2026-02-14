@@ -7,25 +7,27 @@ namespace Canalizador\Script\Infrastructure\Repositories\OpenAI;
 use Canalizador\Channel\Domain\Entities\Channel;
 use Canalizador\Script\Domain\Repositories\ScriptGenerator;
 use Prism\Prism\Enums\Provider;
-use Prism\Prism\Prism;
+use Prism\Prism\Facades\Prism;
 
 final class OpenAIScriptGenerator implements ScriptGenerator
 {
-    private const string MODEL = 'gpt-4o';
-
     public function generate(?string $prompt = null, Channel $channel): string
     {
         return $this->generateAstrology($prompt, $channel);
     }
 
-    public function generateGaming(?string $prompt = null, ?Channel $channel = null): string
+    public function generateGaming(?string $prompt = null, ?Channel $channel = null, int $totalClips = 5, int $clipDuration = 8): string
     {
         $systemPrompt = config('prompts.script.generator_gaming.system_prompt');
 
         $channelInfo = $this->extractChannelInfo($channel);
+        $totalDuration = $clipDuration + ($totalClips - 1) * ($clipDuration - 1);
+        $totalWordsMin = (int) ceil($totalDuration * 2.5);
+        $totalWordsMax = (int) floor($totalDuration * 3.0);
+
         $systemPrompt = str_replace(
-            ['{channel_thumbnail_url}', '{channel_name}', '{channel_description}'],
-            [$channelInfo['thumbnail_url'], $channelInfo['name'], $channelInfo['description']],
+            ['{channel_thumbnail_url}', '{channel_name}', '{channel_description}', '{total_clips}', '{clip_duration}', '{total_duration}', '{total_words_min}', '{total_words_max}'],
+            [$channelInfo['thumbnail_url'], $channelInfo['name'], $channelInfo['description'], (string) $totalClips, (string) $clipDuration, (string) $totalDuration, (string) $totalWordsMin, (string) $totalWordsMax],
             $systemPrompt
         );
 
@@ -34,14 +36,18 @@ final class OpenAIScriptGenerator implements ScriptGenerator
         return $this->executeGeneration($systemPrompt, $userPrompt);
     }
 
-    public function generateAstrology(?string $prompt = null, ?Channel $channel = null): string
+    public function generateAstrology(?string $prompt = null, ?Channel $channel = null, int $totalClips = 5, int $clipDuration = 8): string
     {
         $systemPrompt = config('prompts.script.generator_astrology.system_prompt');
 
         $channelInfo = $this->extractChannelInfo($channel);
+        $totalDuration = $clipDuration + ($totalClips - 1) * ($clipDuration - 1);
+        $totalWordsMin = (int) ceil($totalDuration * 2.5);
+        $totalWordsMax = (int) floor($totalDuration * 3.0);
+
         $systemPrompt = str_replace(
-            ['{channel_name}', '{channel_description}'],
-            [$channelInfo['name'], $channelInfo['description']],
+            ['{channel_name}', '{channel_description}', '{total_clips}', '{clip_duration}', '{total_duration}', '{total_words_min}', '{total_words_max}'],
+            [$channelInfo['name'], $channelInfo['description'], (string) $totalClips, (string) $clipDuration, (string) $totalDuration, (string) $totalWordsMin, (string) $totalWordsMax],
             $systemPrompt
         );
 
@@ -53,7 +59,7 @@ final class OpenAIScriptGenerator implements ScriptGenerator
     private function executeGeneration(string $systemPrompt, string $userPrompt): string
     {
         $response = Prism::text()
-            ->using(Provider::OpenAI, self::MODEL)
+            ->using(Provider::OpenAI, config('openai.model'))
             ->withSystemPrompt($systemPrompt)
             ->withPrompt($userPrompt)
             ->withProviderOptions([
@@ -85,20 +91,20 @@ final class OpenAIScriptGenerator implements ScriptGenerator
 
     private function buildUserPrompt(?string $prompt, ?Channel $channel, bool $includeThumbnail = true): string
     {
-        $basePrompt = $prompt ?? 'Generate a creative and engaging script for a video. The script must be clear, structured, and easy to follow.';
+        $basePrompt = $prompt ?? 'Genera un guion creativo y atractivo para un vídeo. El guion debe ser claro, estructurado y fácil de seguir.';
 
         $channelInfo = $this->extractChannelInfo($channel);
         $promptWithChannelInfo = $basePrompt;
 
-        $promptWithChannelInfo .= "\n\n=== CHANNEL INFORMATION ===";
+        $promptWithChannelInfo .= "\n\n=== INFORMACIÓN DEL CANAL ===";
         if ($includeThumbnail) {
-            $promptWithChannelInfo .= "\nChannel Thumbnail URL: " . $channelInfo['thumbnail_url'];
+            $promptWithChannelInfo .= "\nURL del Thumbnail del Canal: " . $channelInfo['thumbnail_url'];
         }
-        $promptWithChannelInfo .= "\nChannel Name: " . $channelInfo['name'];
-        $promptWithChannelInfo .= "\nChannel Description: " . $channelInfo['description'];
-        $promptWithChannelInfo .= "\nChannel Language: " . $channelInfo['language'];
+        $promptWithChannelInfo .= "\nNombre del Canal: " . $channelInfo['name'];
+        $promptWithChannelInfo .= "\nDescripción del Canal: " . $channelInfo['description'];
+        $promptWithChannelInfo .= "\nIdioma del Canal: " . $channelInfo['language'];
 
-        return $promptWithChannelInfo . "\n\nRespond ONLY with the requested JSON, without any additional text.";
+        return $promptWithChannelInfo . "\n\nResponde SOLO con el JSON solicitado, sin ningún texto adicional.";
     }
 
     private function extractChannelInfo(?Channel $channel): array
@@ -108,7 +114,7 @@ final class OpenAIScriptGenerator implements ScriptGenerator
                 'thumbnail_url' => '',
                 'name' => '',
                 'description' => '',
-                'language' => 'en',
+                'language' => 'es',
             ];
         }
 
