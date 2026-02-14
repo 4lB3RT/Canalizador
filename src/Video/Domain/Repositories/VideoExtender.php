@@ -13,5 +13,5 @@ interface VideoExtender
      *
      * @return string The operation name (generation ID) for polling
      */
-    public function extend(Url $lastVideoUri): string;
+    public function extend(Url $lastVideoUri, string $clipPrompt): string;
 }

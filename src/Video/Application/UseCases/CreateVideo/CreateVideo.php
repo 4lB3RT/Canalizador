@@ -45,7 +45,9 @@ final readonly class CreateVideo
                 scriptId: $request->scriptId,
                 channelId: $request->channelId,
                 category: $category,
-                prompt: $request->prompt
+                prompt: $request->prompt,
+                totalClips: (int) config('veo.total_clips', 5),
+                clipDuration: (int) config('veo.duration', 8),
             );
         }
 

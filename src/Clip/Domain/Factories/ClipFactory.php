@@ -27,6 +27,7 @@ final readonly class ClipFactory
         VideoId $videoId,
         Sequence $sequence,
         GenerationId $generationId,
+        ?string $script = null,
         ?DateTime $createdAt = null,
     ): Clip {
         return new Clip(
@@ -36,6 +37,7 @@ final readonly class ClipFactory
             generationId: $generationId,
             status: ClipStatus::GENERATING,
             createdAt: $createdAt ?? $this->clock->now(),
+            script: $script,
         );
     }
 
@@ -45,6 +47,7 @@ final readonly class ClipFactory
         int $sequence,
         string $generationId,
         string $status,
+        ?string $script = null,
         ?string $localPath = null,
         ?string $videoUri = null,
         ?DateTime $createdAt = null,
@@ -57,6 +60,7 @@ final readonly class ClipFactory
             generationId: GenerationId::fromString($generationId),
             status: ClipStatus::from($status),
             createdAt: $createdAt ?? $this->clock->now(),
+            script: $script,
             localPath: $localPath !== null ? LocalPath::fromString($localPath) : null,
             videoUri: $videoUri !== null ? Url::fromString($videoUri) : null,
             completedAt: $completedAt,
