@@ -20,6 +20,7 @@ use Canalizador\Channel\Infrastructure\Repositories\Youtube\YoutubeChannelReposi
 use Canalizador\Image\Domain\Factories\ImageFactory;
 use Canalizador\Image\Domain\Repositories\ImageRepository;
 use Canalizador\Image\Infrastructure\Repositories\Eloquent\EloquentImageRepository;
+use Canalizador\News\Application\UseCases\DownloadNews\DownloadNews;
 use Canalizador\News\Domain\Repositories\NewsProvider;
 use Canalizador\News\Domain\Repositories\NewsRepository;
 use Canalizador\News\Infrastructure\Repositories\Eloquent\EloquentNewsRepository;
@@ -437,6 +438,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(NewsProvider::class, function ($app) {
             return new TresDJuegosClient(
                 httpClient: $app->make(HttpClient::class)
+            );
+        });
+
+        $this->app->bind(DownloadNews::class, function ($app) {
+            return new DownloadNews(
+                newsProvider: $app->make(NewsProvider::class),
+                newsRepository: $app->make(NewsRepository::class),
             );
         });
     }
