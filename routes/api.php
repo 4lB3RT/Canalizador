@@ -6,6 +6,7 @@ use App\Http\Middleware\EnsureGoogleToken;
 use Canalizador\Avatar\Infrastructure\Http\Api\Controllers\CreateAvatarController;
 use Canalizador\Channel\Infrastructure\Http\Api\Controllers\SyncChannelController;
 use Canalizador\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelWithAIController;
+use Canalizador\News\Infrastructure\Http\Api\Controllers\DownloadNewsController;
 use Canalizador\Video\Infrastructure\Http\Api\Controllers\CreateVideoController;
 use Canalizador\Video\Infrastructure\Http\Api\Controllers\PublishVideoController;
 use Canalizador\Video\Infrastructure\Http\Api\Controllers\RetrieveVideoContentController;
@@ -22,4 +23,5 @@ Route::middleware(['api.token'])->group(function () {
         ->middleware(EnsureGoogleToken::class);
     Route::put('/channels/{channelId}/sync', SyncChannelController::class)
         ->middleware(EnsureGoogleToken::class);
+    Route::post('/news/download', DownloadNewsController::class);
 });
