@@ -12,7 +12,6 @@ final readonly class CreateVideoRequest
         public string $channelId,
         public string $category,
         public ?string $avatarId = null,
-        public ?string $prompt = null,
     ) {
     }
 }

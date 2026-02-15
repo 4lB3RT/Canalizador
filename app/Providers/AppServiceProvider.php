@@ -27,12 +27,10 @@ use Canalizador\News\Infrastructure\Repositories\Eloquent\EloquentNewsRepository
 use Canalizador\News\Infrastructure\Repositories\TresDJuegos\TresDJuegosClient;
 use Canalizador\Script\Domain\Factories\ScriptFactory;
 use Canalizador\Script\Domain\Repositories\ScriptGenerator;
-use Canalizador\Script\Domain\Repositories\ScriptIdeaGenerator;
 use Canalizador\Script\Domain\Repositories\ScriptRepository;
 use Canalizador\Script\Domain\Services\GenerateScript;
 use Canalizador\Script\Infrastructure\Repositories\Eloquent\EloquentScriptRepository;
 use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptGenerator;
-use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptIdeaGenerator;
 use Canalizador\Shared\Domain\Events\EventBus;
 use Canalizador\Shared\Infrastructure\Console\SetupRabbitMQCommand;
 use Canalizador\Shared\Domain\Services\Clock;
@@ -167,14 +165,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ScriptFactory::class, ScriptFactory::class);
         $this->app->bind(ScriptRepository::class, EloquentScriptRepository::class);
-        $this->app->bind(ScriptIdeaGenerator::class, OpenAIScriptIdeaGenerator::class);
         $this->app->bind(ScriptGenerator::class, OpenAIScriptGenerator::class);
 
         $this->app->bind(GenerateScript::class, function ($app) {
             return new GenerateScript(
                 scriptRepository: $app->make(EloquentScriptRepository::class),
                 scriptGenerator: $app->make(ScriptGenerator::class),
-                scriptIdeaGenerator: $app->make(ScriptIdeaGenerator::class),
                 scriptFactory: $app->make(ScriptFactory::class),
                 channelRepository: $app->make(YoutubeChannelRepository::class)
             );
@@ -225,6 +221,7 @@ class AppServiceProvider extends ServiceProvider
                 videoMetadataGenerator: $app->make(VideoMetadataGenerator::class),
                 eventBus: $app->make(EventBus::class),
                 clock: $app->make(Clock::class),
+                newsRepository: $app->make(NewsRepository::class),
             );
         });
 

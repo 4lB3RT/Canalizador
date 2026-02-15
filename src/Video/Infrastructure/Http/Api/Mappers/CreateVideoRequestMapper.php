@@ -15,9 +15,8 @@ final readonly class CreateVideoRequestMapper
             'video_id' => 'required|string|uuid',
             'script_id' => 'required|string|uuid',
             'channel_id' => 'required|string',
-            'category' => 'required|string|in:gaming,astrology',
+            'category' => 'required|string|in:gaming',
             'avatar_id' => 'nullable|string|uuid',
-            'prompt' => 'nullable|string',
         ]);
 
         return new CreateVideoRequest(
@@ -26,7 +25,6 @@ final readonly class CreateVideoRequestMapper
             channelId: $validated['channel_id'],
             category: $validated['category'],
             avatarId: $validated['avatar_id'] ?? null,
-            prompt: $validated['prompt'] ?? null,
         );
     }
 }

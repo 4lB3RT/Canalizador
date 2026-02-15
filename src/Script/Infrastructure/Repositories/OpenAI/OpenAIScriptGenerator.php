@@ -11,16 +11,10 @@ use Prism\Prism\Facades\Prism;
 
 final class OpenAIScriptGenerator implements ScriptGenerator
 {
-    public function generate(?string $prompt = null, Channel $channel): string
-    {
-        return $this->generateGaming($prompt, $channel);
-    }
-
-    public function generateGaming(?string $prompt = null, ?Channel $channel = null, int $totalClips = 5, int $clipDuration = 8): string
+    public function generateGaming(string $prompt, ?Channel $channel = null, int $totalClips = 5, int $clipDuration = 8): string
     {
         $systemPrompt = config('prompts.script.generator_gaming.system_prompt');
 
-        $channelInfo = $this->extractChannelInfo($channel);
         $totalDuration = $clipDuration + ($totalClips - 1) * ($clipDuration - 1);
         $totalWordsMin = (int) ceil($totalDuration * 2.5);
         $totalWordsMax = (int) floor($totalDuration * 3.0);
@@ -36,17 +30,12 @@ final class OpenAIScriptGenerator implements ScriptGenerator
         return $this->executeGeneration($systemPrompt, $userPrompt);
     }
 
-    public function generateAstrology(?string $prompt = null, ?Channel $channel = null, int $totalClips = 5, int $clipDuration = 8): string
-    {
-        return $this->generateGaming($prompt, $channel, $totalClips, $clipDuration);
-    }
-
-    private function executeGeneration(string $systemPrompt, string $userPrompt): string
+    private function executeGeneration(string $systemPrompt, string $prompt): string
     {
         $response = Prism::text()
             ->using(Provider::OpenAI, config('openai.model'))
             ->withSystemPrompt($systemPrompt)
-            ->withPrompt($userPrompt)
+            ->withPrompt($prompt)
             ->withProviderOptions([
                 'response_format' => ['type' => 'json_object'],
             ])
@@ -76,12 +65,10 @@ final class OpenAIScriptGenerator implements ScriptGenerator
         return $text;
     }
 
-    private function buildUserPrompt(?string $prompt, ?Channel $channel, bool $includeThumbnail = true): string
+    private function buildUserPrompt(string $prompt, ?Channel $channel, bool $includeThumbnail = true): string
     {
-        $basePrompt = $prompt ?? 'Genera un guion creativo y atractivo para un vídeo. El guion debe ser claro, estructurado y fácil de seguir.';
-
         $channelInfo = $this->extractChannelInfo($channel);
-        $promptWithChannelInfo = $basePrompt;
+        $promptWithChannelInfo = $prompt;
 
         $promptWithChannelInfo .= "\n\n=== INFORMACIÓN DEL CANAL ===";
         if ($includeThumbnail) {
