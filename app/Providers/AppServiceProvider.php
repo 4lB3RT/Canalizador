@@ -20,6 +20,10 @@ use Canalizador\Channel\Infrastructure\Repositories\Youtube\YoutubeChannelReposi
 use Canalizador\Image\Domain\Factories\ImageFactory;
 use Canalizador\Image\Domain\Repositories\ImageRepository;
 use Canalizador\Image\Infrastructure\Repositories\Eloquent\EloquentImageRepository;
+use Canalizador\News\Domain\Repositories\NewsProvider;
+use Canalizador\News\Domain\Repositories\NewsRepository;
+use Canalizador\News\Infrastructure\Repositories\Eloquent\EloquentNewsRepository;
+use Canalizador\News\Infrastructure\Repositories\TresDJuegos\TresDJuegosClient;
 use Canalizador\Script\Domain\Factories\ScriptFactory;
 use Canalizador\Script\Domain\Repositories\ScriptGenerator;
 use Canalizador\Script\Domain\Repositories\ScriptIdeaGenerator;
@@ -108,6 +112,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerChannelServices();
         $this->registerAvatarServices();
         $this->registerImageServices();
+        $this->registerNewsServices();
     }
 
     public function boot(): void
@@ -421,6 +426,17 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ImageFactory::class, function ($app) {
             return new ImageFactory(
                 clock: $app->make(Clock::class)
+            );
+        });
+    }
+
+    private function registerNewsServices(): void
+    {
+        $this->app->bind(NewsRepository::class, EloquentNewsRepository::class);
+
+        $this->app->bind(NewsProvider::class, function ($app) {
+            return new TresDJuegosClient(
+                httpClient: $app->make(HttpClient::class)
             );
         });
     }
