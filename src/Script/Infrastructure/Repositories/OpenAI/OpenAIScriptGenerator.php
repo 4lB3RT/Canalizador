@@ -13,7 +13,7 @@ final class OpenAIScriptGenerator implements ScriptGenerator
 {
     public function generate(?string $prompt = null, Channel $channel): string
     {
-        return $this->generateAstrology($prompt, $channel);
+        return $this->generateGaming($prompt, $channel);
     }
 
     public function generateGaming(?string $prompt = null, ?Channel $channel = null, int $totalClips = 5, int $clipDuration = 8): string
@@ -26,8 +26,8 @@ final class OpenAIScriptGenerator implements ScriptGenerator
         $totalWordsMax = (int) floor($totalDuration * 3.0);
 
         $systemPrompt = str_replace(
-            ['{channel_thumbnail_url}', '{channel_name}', '{channel_description}', '{total_clips}', '{clip_duration}', '{total_duration}', '{total_words_min}', '{total_words_max}'],
-            [$channelInfo['thumbnail_url'], $channelInfo['name'], $channelInfo['description'], (string) $totalClips, (string) $clipDuration, (string) $totalDuration, (string) $totalWordsMin, (string) $totalWordsMax],
+            ['{total_clips}', '{clip_duration}', '{total_duration}', '{total_words_min}', '{total_words_max}'],
+            [(string) $totalClips, (string) $clipDuration, (string) $totalDuration, (string) $totalWordsMin, (string) $totalWordsMax],
             $systemPrompt
         );
 
@@ -38,22 +38,7 @@ final class OpenAIScriptGenerator implements ScriptGenerator
 
     public function generateAstrology(?string $prompt = null, ?Channel $channel = null, int $totalClips = 5, int $clipDuration = 8): string
     {
-        $systemPrompt = config('prompts.script.generator_astrology.system_prompt');
-
-        $channelInfo = $this->extractChannelInfo($channel);
-        $totalDuration = $clipDuration + ($totalClips - 1) * ($clipDuration - 1);
-        $totalWordsMin = (int) ceil($totalDuration * 2.5);
-        $totalWordsMax = (int) floor($totalDuration * 3.0);
-
-        $systemPrompt = str_replace(
-            ['{channel_name}', '{channel_description}', '{total_clips}', '{clip_duration}', '{total_duration}', '{total_words_min}', '{total_words_max}'],
-            [$channelInfo['name'], $channelInfo['description'], (string) $totalClips, (string) $clipDuration, (string) $totalDuration, (string) $totalWordsMin, (string) $totalWordsMax],
-            $systemPrompt
-        );
-
-        $userPrompt = $this->buildUserPrompt($prompt, $channel, includeThumbnail: false);
-
-        return $this->executeGeneration($systemPrompt, $userPrompt);
+        return $this->generateGaming($prompt, $channel, $totalClips, $clipDuration);
     }
 
     private function executeGeneration(string $systemPrompt, string $userPrompt): string
@@ -83,6 +68,8 @@ final class OpenAIScriptGenerator implements ScriptGenerator
         $jsonResponse = json_decode($cleanedText, true);
 
         if (json_last_error() === JSON_ERROR_NONE && isset($jsonResponse['full_script'])) {
+            unset($jsonResponse['thinking']);
+
             return json_encode($jsonResponse, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         }
 
