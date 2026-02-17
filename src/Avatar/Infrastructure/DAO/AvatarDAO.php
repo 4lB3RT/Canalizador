@@ -24,6 +24,7 @@ class AvatarDAO extends Model
         'biography',
         'presentation_style',
         'description',
+        'platform_id',
         'created_at',
         'updated_at',
     ];

@@ -32,7 +32,8 @@ final readonly class AvatarFactory
         PresentationStyle $presentationStyle,
         AvatarDescription $description,
         ?DateTime $createdAt = null,
-        ?ImageCollection $images = null
+        ?ImageCollection $images = null,
+        ?string $platformId = null,
     ): Avatar {
         return new Avatar(
             id: $id,
@@ -44,6 +45,7 @@ final readonly class AvatarFactory
             presentationStyle: $presentationStyle,
             description: $description,
             images: $images ?? ImageCollection::empty(),
+            platformId: $platformId,
             clock: $this->clock,
         );
     }

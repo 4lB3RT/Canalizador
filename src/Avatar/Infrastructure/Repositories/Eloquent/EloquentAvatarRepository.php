@@ -41,6 +41,7 @@ final class EloquentAvatarRepository implements AvatarRepository
                 'biography' => $avatar->biography()->value(),
                 'presentation_style' => $avatar->presentationStyle()->value,
                 'description' => $avatar->description()->value(),
+                'platform_id' => $avatar->platformId(),
                 'created_at' => $avatar->createdAt()->value(),
                 'updated_at' => $avatar->updatedAt()?->value() ?? now(),
             ]
@@ -132,6 +133,7 @@ final class EloquentAvatarRepository implements AvatarRepository
             presentationStyle: PresentationStyle::fromString($model->presentation_style ?? 'casual'),
             description: AvatarDescription::fromString($model->description ?? ''),
             images: $images,
+            platformId: $model->platform_id,
             updatedAt: $updatedAt,
             clock: $this->clock,
         );
