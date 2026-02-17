@@ -8,5 +8,7 @@ use Canalizador\News\Domain\Entities\News;
 
 interface NewsRepository
 {
+    public function findLatest(): ?News;
+
     public function save(News $news): void;
 }

@@ -43,6 +43,12 @@ Estructura narrativa de los clips:
 - Clips intermedios: La narrativa progresa — nuevas acciones, el contenido de pantalla evoluciona.
 - Clip final: Conclusión — gesto de cierre, la escena termina de forma natural.
 
+=== MODO NOTICIA ===
+Cuando el prompt del usuario contiene una noticia (formato "Noticia: ... Descripcion: ..."):
+- Genera el guion SOBRE esa noticia, contándola de forma natural y enganchante.
+- Aporta contexto, opinión o análisis que enriquezca la noticia.
+- Mantén el mismo formato JSON, estilo conversacional y reglas de clip_prompts.
+
 === RESTRICCIONES ===
 
 - Castellano europeo (NO latinoamericano)
@@ -78,6 +84,22 @@ Prompt del usuario: "Un vídeo sobre el juego más jugado en 2024"
   "clip_prompts": [
     "CONTEXT: This video is a gaming fun fact about the most played game in 2024. This clip must show the presenter reacting with amazement to the 150 million monthly player count, while monitors display battle royale gameplay and live player statistics. ACTIONS: The presenter looks at the camera with wide eyes and an incredulous smile, holding up hands to emphasize the massive scale. Animated gestures counting imaginary millions. SCREEN/ENVIRONMENT: A cozy gaming room with curved monitors showing battle royale gameplay and live player count statistics scrolling. Warm cinematic lighting with gaming RGB accents. CAMERA: Medium close-up, slow push-in. Rule of thirds composition. Shallow depth of field with soft bokeh on the background setup. SUBTITLES: \"¿Te imaginas un juego que consiga juntar a ciento cincuenta millones de personas cada mes? Pues eso es exactamente lo que pasó en 2024 con un battle royale gratuito que rompió todos los récords.\" CONTINUITY: Opening shot — establishes the gaming environment and sets up the surprising revelation.",
     "CONTEXT: This video is a gaming fun fact about the most played game in 2024. This clip must show the presenter explaining the cultural impact beyond gaming, while monitors display montages of live in-game events and community highlights. ACTIONS: The presenter spreads arms wide to convey the cultural impact, then brings hands together pointing at the camera for the direct closing. Expression shifts from amazement to knowing acknowledgment. SCREEN/ENVIRONMENT: Monitors transition to show montage of in-game live events, collaboration announcements, and community highlights. Same room, RGB lighting pulses subtly with energy. CAMERA: Slight reframe, maintaining medium close-up. Gentle continued push-in. Consistent depth of field and color grading. SUBTITLES: \"Lo más loco es que no fue solo por el juego en sí, sino por cómo creó una comunidad enorme con eventos en directo y colaboraciones que nadie se esperaba. Acabó convirtiéndose en un fenómeno cultural que fue mucho más allá del gaming.\" CONTINUITY: Continues from clip 1 — same environment and energy. Concluding gesture signals the end. Final clip — scene ends naturally."
+  ]
+}
+"""
+
+Ejemplo 3 — Noticia gaming ({total_clips} clips):
+"""
+Prompt del usuario: "Noticia: PlayStation 6 se presentará en septiembre con retrocompatibilidad total
+
+Descripcion: Sony ha confirmado que la nueva generación de PlayStation llegará en septiembre de 2026 con retrocompatibilidad completa para todos los juegos de PS4 y PS5 desde el día de lanzamiento."
+
+{
+  "thinking": "Es una noticia de PlayStation 6 con retrocompatibilidad. Ángulo: lo más potente no es el hardware nuevo, sino que por fin no pierdes tu biblioteca. Gancho con la frustración clásica de perder juegos al cambiar de generación, desarrollo con el dato de retrocompatibilidad total, cierre con lo que esto significa para el jugador. Tono de emoción genuina pero con análisis.",
+  "full_script": "Sony acaba de soltar una bomba que llevábamos años pidiendo. La PlayStation 6 se presenta en septiembre y viene con retrocompatibilidad total para todos los juegos de PS4 y PS5 desde el primer día. Esto significa que tu biblioteca entera de juegos viaja contigo a la nueva generación sin perder nada. Ya no hay excusa de esperar a que salgan remasters o de quedarte con la consola vieja por miedo a perder tus partidas. Es un movimiento brutal que cambia las reglas del juego, nunca mejor dicho.",
+  "clip_prompts": [
+    "CONTEXT: This video covers breaking news about PlayStation 6 launching with full backward compatibility. This clip must show the presenter reacting excitedly to the announcement, while monitors display a PlayStation 6 reveal graphic and PS4/PS5 game library icons. ACTIONS: The presenter leans in with wide eyes and an excited expression, making a 'mind blown' gesture. Energetic hand movements emphasizing the magnitude of the news. SCREEN/ENVIRONMENT: Gaming setup with monitors showing a sleek PlayStation 6 console render and scrolling game library. Dramatic blue and white lighting matching PlayStation branding. CAMERA: Medium close-up, dynamic push-in toward the presenter. Rule of thirds composition. Shallow depth of field with bokeh on the gaming setup. SUBTITLES: \"Sony acaba de soltar una bomba que llevábamos años pidiendo. La PlayStation 6 se presenta en septiembre y viene con retrocompatibilidad total para todos los juegos de PS4 y PS5 desde el primer día.\" CONTINUITY: Opening shot — establishes the gaming news context and the presenter's excited tone.",
+    "CONTEXT: This video covers breaking news about PlayStation 6 launching with full backward compatibility. This clip must show the presenter analyzing what full backward compatibility means for gamers, while the monitor displays a transition from PS4/PS5 games seamlessly loading on a PS6 interface. ACTIONS: The presenter counts reasons on fingers, then spreads arms wide to convey the impact. Nods emphatically at the closing statement. SCREEN/ENVIRONMENT: Monitor behind shows a smooth animation of game covers transitioning from PS4/PS5 to PS6 interface. Same gaming setup with lighting shifting to warmer tones for the conclusion. CAMERA: Slight reframe maintaining medium close-up. Gentle lateral movement. Consistent depth of field and color grading. SUBTITLES: \"Esto significa que tu biblioteca entera de juegos viaja contigo a la nueva generación sin perder nada. Ya no hay excusa de esperar a que salgan remasters o de quedarte con la consola vieja por miedo a perder tus partidas. Es un movimiento brutal que cambia las reglas del juego, nunca mejor dicho.\" CONTINUITY: Continues from clip 1 — same setting. The presenter shifts from surprise to confident analysis. Final clip — scene ends naturally."
   ]
 }
 """

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Canalizador\Video\Application\UseCases\CreateVideo;
 
 use Canalizador\Avatar\Domain\ValueObjects\AvatarId;
-use Canalizador\Channel\Domain\Exceptions\ChannelNotFound;
 use Canalizador\Channel\Domain\ValueObjects\ChannelId;
+use Canalizador\News\Domain\Repositories\NewsRepository;
 use Canalizador\Script\Domain\Repositories\ScriptRepository;
 use Canalizador\Script\Domain\Services\GenerateScript;
 use Canalizador\Script\Domain\ValueObjects\ScriptId;
@@ -29,6 +29,7 @@ final readonly class CreateVideo
         private VideoMetadataGenerator $videoMetadataGenerator,
         private EventBus $eventBus,
         private Clock $clock,
+        private NewsRepository $newsRepository,
     ) {
     }
 
@@ -44,8 +45,7 @@ final readonly class CreateVideo
             $script = $this->generateScript->generate(
                 scriptId: $request->scriptId,
                 channelId: $request->channelId,
-                category: $category,
-                prompt: $request->prompt,
+                prompt: $this->buildPromptFromLatestNews(),
                 totalClips: (int) config('veo.total_clips', 5),
                 clipDuration: (int) config('veo.duration', 8),
             );
@@ -70,5 +70,20 @@ final readonly class CreateVideo
         );
 
         return new CreateVideoResponse($video);
+    }
+
+    private function buildPromptFromLatestNews(): string
+    {
+        $news = $this->newsRepository->findLatest();
+
+        if ($news === null) {
+            throw new \RuntimeException('No news available. Run POST /api/news/download first.');
+        }
+
+        return sprintf(
+            "Noticia: %s\n\nDescripcion: %s",
+            $news->title()->value(),
+            $news->description()->value()
+        );
     }
 }

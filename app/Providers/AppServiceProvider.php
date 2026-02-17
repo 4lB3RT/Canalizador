@@ -25,14 +25,20 @@ use Canalizador\News\Domain\Repositories\NewsProvider;
 use Canalizador\News\Domain\Repositories\NewsRepository;
 use Canalizador\News\Infrastructure\Repositories\Eloquent\EloquentNewsRepository;
 use Canalizador\News\Infrastructure\Repositories\TresDJuegos\TresDJuegosClient;
+use Canalizador\Voice\Application\UseCases\CloneVoice\CloneVoice;
+use Canalizador\Voice\Application\UseCases\GenerateVoice\GenerateVoice;
+use Canalizador\Voice\Domain\Repositories\VoiceCloner;
+use Canalizador\Voice\Domain\Repositories\VoiceGenerator;
+use Canalizador\Voice\Domain\Repositories\VoiceRepository;
+use Canalizador\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsVoiceCloner;
+use Canalizador\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsVoiceGenerator;
+use Canalizador\Voice\Infrastructure\Repositories\Eloquent\EloquentVoiceRepository;
 use Canalizador\Script\Domain\Factories\ScriptFactory;
 use Canalizador\Script\Domain\Repositories\ScriptGenerator;
-use Canalizador\Script\Domain\Repositories\ScriptIdeaGenerator;
 use Canalizador\Script\Domain\Repositories\ScriptRepository;
 use Canalizador\Script\Domain\Services\GenerateScript;
 use Canalizador\Script\Infrastructure\Repositories\Eloquent\EloquentScriptRepository;
 use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptGenerator;
-use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptIdeaGenerator;
 use Canalizador\Shared\Domain\Events\EventBus;
 use Canalizador\Shared\Infrastructure\Console\SetupRabbitMQCommand;
 use Canalizador\Shared\Domain\Services\Clock;
@@ -114,6 +120,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerAvatarServices();
         $this->registerImageServices();
         $this->registerNewsServices();
+        $this->registerVoiceServices();
     }
 
     public function boot(): void
@@ -167,14 +174,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ScriptFactory::class, ScriptFactory::class);
         $this->app->bind(ScriptRepository::class, EloquentScriptRepository::class);
-        $this->app->bind(ScriptIdeaGenerator::class, OpenAIScriptIdeaGenerator::class);
         $this->app->bind(ScriptGenerator::class, OpenAIScriptGenerator::class);
 
         $this->app->bind(GenerateScript::class, function ($app) {
             return new GenerateScript(
                 scriptRepository: $app->make(EloquentScriptRepository::class),
                 scriptGenerator: $app->make(ScriptGenerator::class),
-                scriptIdeaGenerator: $app->make(ScriptIdeaGenerator::class),
                 scriptFactory: $app->make(ScriptFactory::class),
                 channelRepository: $app->make(YoutubeChannelRepository::class)
             );
@@ -225,6 +230,7 @@ class AppServiceProvider extends ServiceProvider
                 videoMetadataGenerator: $app->make(VideoMetadataGenerator::class),
                 eventBus: $app->make(EventBus::class),
                 clock: $app->make(Clock::class),
+                newsRepository: $app->make(NewsRepository::class),
             );
         });
 
@@ -427,6 +433,49 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ImageFactory::class, function ($app) {
             return new ImageFactory(
                 clock: $app->make(Clock::class)
+            );
+        });
+    }
+
+    private function registerVoiceServices(): void
+    {
+        $this->app->bind(VoiceRepository::class, EloquentVoiceRepository::class);
+
+        $this->app->bind(VoiceGenerator::class, function ($app) {
+            return new ElevenLabsVoiceGenerator(
+                apiKey: config('services.elevenlabs.api_key') ?? '',
+                httpClient: $app->make(HttpClient::class),
+                responseValidator: $app->make(HttpResponseValidator::class),
+                modelId: config('elevenlabs.model_id'),
+                outputFormat: config('elevenlabs.output_format'),
+                removeBackgroundNoise: config('elevenlabs.remove_background_noise'),
+                timeout: config('elevenlabs.timeout'),
+            );
+        });
+
+        $this->app->bind(VoiceCloner::class, function ($app) {
+            return new ElevenLabsVoiceCloner(
+                apiKey: config('services.elevenlabs.api_key') ?? '',
+                httpClient: $app->make(HttpClient::class),
+                responseValidator: $app->make(HttpResponseValidator::class),
+                timeout: config('elevenlabs.timeout'),
+            );
+        });
+
+        $this->app->bind(GenerateVoice::class, function ($app) {
+            return new GenerateVoice(
+                voiceGenerator: $app->make(VoiceGenerator::class),
+                voiceRepository: $app->make(VoiceRepository::class),
+                avatarRepository: $app->make(AvatarRepository::class),
+                clock: $app->make(Clock::class),
+            );
+        });
+
+        $this->app->bind(CloneVoice::class, function ($app) {
+            return new CloneVoice(
+                voiceCloner: $app->make(VoiceCloner::class),
+                voiceRepository: $app->make(VoiceRepository::class),
+                clock: $app->make(Clock::class),
             );
         });
     }

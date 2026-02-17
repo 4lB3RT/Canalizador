@@ -52,4 +52,8 @@ return [
     'google' => [
         'veo_api_key' => env('GOOGLE_VEO_API_KEY'),
     ],
+
+    'elevenlabs' => [
+        'api_key' => env('ELEVENLABS_API_KEY'),
+    ],
 ];

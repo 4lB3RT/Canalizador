@@ -27,6 +27,7 @@ final class Avatar
         private PresentationStyle $presentationStyle,
         private AvatarDescription $description,
         private ImageCollection $images = new ImageCollection([]),
+        private ?string $platformId = null,
         private ?DateTime $updatedAt = null,
         private readonly ?Clock $clock = null,
     ) {
@@ -100,6 +101,17 @@ final class Avatar
         $this->updateTimestamp();
     }
 
+    public function platformId(): ?string
+    {
+        return $this->platformId;
+    }
+
+    public function updatePlatformId(string $platformId): void
+    {
+        $this->platformId = $platformId;
+        $this->updateTimestamp();
+    }
+
     public function updateImages(ImageCollection $images): void
     {
         $this->images = $images;
@@ -124,6 +136,7 @@ final class Avatar
             'presentation_style' => $this->presentationStyle->value,
             'description' => $this->description->value(),
             'images' => array_map(fn ($image) => $image->toArray(), $this->images->items()),
+            'platform_id' => $this->platformId,
             'created_at' => $this->createdAt->value()->format('Y-m-d H:i:s'),
             'updated_at' => $this->updatedAt?->value()->format('Y-m-d H:i:s'),
         ];
