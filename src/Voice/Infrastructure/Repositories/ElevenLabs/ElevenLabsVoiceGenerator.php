@@ -22,6 +22,8 @@ final class ElevenLabsVoiceGenerator implements VoiceGenerator
         private readonly string $outputFormat,
         private readonly bool $removeBackgroundNoise,
         private readonly int $timeout,
+        private readonly float $stability,
+        private readonly float $similarityBoost,
     ) {
     }
 
@@ -45,6 +47,10 @@ final class ElevenLabsVoiceGenerator implements VoiceGenerator
                 data: [
                     'model_id' => $this->modelId,
                     'remove_background_noise' => $this->removeBackgroundNoise ? 'true' : 'false',
+                    'voice_settings' => json_encode([
+                        'stability' => $this->stability,
+                        'similarity_boost' => $this->similarityBoost,
+                    ]),
                 ],
                 files: ['audio' => $sourceAudioPath],
                 timeout: $this->timeout,

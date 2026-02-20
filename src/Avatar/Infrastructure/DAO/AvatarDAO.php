@@ -19,12 +19,12 @@ class AvatarDAO extends Model
     protected $fillable = [
         'id',
         'user_id',
+        'voice_id',
         'name',
         'profile_image_path',
         'biography',
         'presentation_style',
         'description',
-        'platform_id',
         'created_at',
         'updated_at',
     ];

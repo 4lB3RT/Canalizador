@@ -15,6 +15,7 @@ use Canalizador\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\IntegerId;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Voice\Domain\ValueObjects\VoiceId;
 
 final readonly class AvatarFactory
 {
@@ -33,11 +34,12 @@ final readonly class AvatarFactory
         AvatarDescription $description,
         ?DateTime $createdAt = null,
         ?ImageCollection $images = null,
-        ?string $platformId = null,
+        ?VoiceId $voiceId = null,
     ): Avatar {
         return new Avatar(
             id: $id,
             userId: $userId,
+            voiceId: $voiceId,
             name: $name,
             profileImagePath: $profileImagePath,
             createdAt: $createdAt ?? $this->clock->now(),
@@ -45,7 +47,6 @@ final readonly class AvatarFactory
             presentationStyle: $presentationStyle,
             description: $description,
             images: $images ?? ImageCollection::empty(),
-            platformId: $platformId,
             clock: $this->clock,
         );
     }

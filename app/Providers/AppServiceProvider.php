@@ -27,9 +27,11 @@ use Canalizador\News\Infrastructure\Repositories\Eloquent\EloquentNewsRepository
 use Canalizador\News\Infrastructure\Repositories\TresDJuegos\TresDJuegosClient;
 use Canalizador\Voice\Application\UseCases\CloneVoice\CloneVoice;
 use Canalizador\Voice\Application\UseCases\GenerateVoice\GenerateVoice;
+use Canalizador\Voice\Domain\Repositories\AudioIsolator;
 use Canalizador\Voice\Domain\Repositories\VoiceCloner;
 use Canalizador\Voice\Domain\Repositories\VoiceGenerator;
 use Canalizador\Voice\Domain\Repositories\VoiceRepository;
+use Canalizador\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsAudioIsolator;
 use Canalizador\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsVoiceCloner;
 use Canalizador\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsVoiceGenerator;
 use Canalizador\Voice\Infrastructure\Repositories\Eloquent\EloquentVoiceRepository;
@@ -72,6 +74,9 @@ use Canalizador\Clip\Domain\Repositories\ClipDownloader;
 use Canalizador\Clip\Domain\Repositories\ClipRepository;
 use Canalizador\Clip\Infrastructure\Repositories\Eloquent\EloquentClipRepository;
 use Canalizador\Clip\Infrastructure\Repositories\Veo\VeoClipDownloader;
+use Canalizador\Clip\Domain\Services\VideoComposer;
+use Canalizador\Clip\Infrastructure\Services\FfmpegVideoComposer;
+use Canalizador\Video\Application\UseCases\ApplyVoice\ApplyVoice;
 use Canalizador\Video\Application\UseCases\CreateVideo\CreateVideo;
 use Canalizador\Video\Application\UseCases\PublishVideo\PublishVideo;
 use Canalizador\Video\Application\UseCases\RetrieveVideoContent\RetrieveVideoContent;
@@ -283,10 +288,21 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
+        $this->app->bind(ApplyVoice::class, function ($app) {
+            return new ApplyVoice(
+                videoRepository: $app->make(VideoRepository::class),
+                avatarRepository: $app->make(AvatarRepository::class),
+                voiceRepository: $app->make(VoiceRepository::class),
+                voiceGenerator: $app->make(VoiceGenerator::class),
+                videoComposer: $app->make(VideoComposer::class),
+                audioIsolator: $app->make(AudioIsolator::class),
+            );
+        });
     }
 
     private function registerClipServices(): void
     {
+        $this->app->bind(VideoComposer::class, FfmpegVideoComposer::class);
         $this->app->bind(ClipRepository::class, EloquentClipRepository::class);
 
         $this->app->bind(ClipFactory::class, function ($app) {
@@ -449,6 +465,17 @@ class AppServiceProvider extends ServiceProvider
                 modelId: config('elevenlabs.model_id'),
                 outputFormat: config('elevenlabs.output_format'),
                 removeBackgroundNoise: config('elevenlabs.remove_background_noise'),
+                timeout: config('elevenlabs.timeout'),
+                stability: config('elevenlabs.stability'),
+                similarityBoost: config('elevenlabs.similarity_boost'),
+            );
+        });
+
+        $this->app->bind(AudioIsolator::class, function ($app) {
+            return new ElevenLabsAudioIsolator(
+                apiKey: config('services.elevenlabs.api_key') ?? '',
+                httpClient: $app->make(HttpClient::class),
+                responseValidator: $app->make(HttpResponseValidator::class),
                 timeout: config('elevenlabs.timeout'),
             );
         });
