@@ -98,7 +98,7 @@ final class EloquentVideoRepository implements VideoRepository
             avatarId: $model->avatar_id ? AvatarId::fromString($model->avatar_id) : null,
             generationId: $model->generation_id ? GenerationId::fromString($model->generation_id) : null,
             videoLocalPath: $model->video_local_path ? LocalPath::fromString($model->video_local_path) : null,
-            completedAt: $model->completed_at ? new DateTime($model->completed_at) : null,
+            completedAt: $model->completed_at ? new DateTime($model->completed_at->toDateTimeImmutable()) : null,
         );
     }
 }

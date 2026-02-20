@@ -7,6 +7,7 @@ use Canalizador\Avatar\Infrastructure\Http\Api\Controllers\CreateAvatarControlle
 use Canalizador\Channel\Infrastructure\Http\Api\Controllers\SyncChannelController;
 use Canalizador\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelWithAIController;
 use Canalizador\News\Infrastructure\Http\Api\Controllers\DownloadNewsController;
+use Canalizador\Video\Infrastructure\Http\Api\Controllers\ApplyVoiceController;
 use Canalizador\Video\Infrastructure\Http\Api\Controllers\CreateVideoController;
 use Canalizador\Voice\Infrastructure\Http\Api\Controllers\CloneVoiceController;
 use Canalizador\Voice\Infrastructure\Http\Api\Controllers\GenerateVoiceController;
@@ -26,6 +27,7 @@ Route::middleware(['api.token'])->group(function () {
     Route::put('/channels/{channelId}/sync', SyncChannelController::class)
         ->middleware(EnsureGoogleToken::class);
     Route::post('/news/download', DownloadNewsController::class);
+    Route::post('/videos/{videoId}/apply-voice', ApplyVoiceController::class);
     Route::post('/voice/clone', CloneVoiceController::class);
     Route::post('/voice/generate', GenerateVoiceController::class);
 });

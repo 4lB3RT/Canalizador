@@ -14,12 +14,14 @@ use Canalizador\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\IntegerId;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Voice\Domain\ValueObjects\VoiceId;
 
 final class Avatar
 {
     public function __construct(
         private readonly AvatarId $id,
         private readonly IntegerId $userId,
+        private ?VoiceId $voiceId,
         private readonly AvatarName $name,
         private readonly LocalPath $profileImagePath,
         private readonly DateTime $createdAt,
@@ -27,7 +29,6 @@ final class Avatar
         private PresentationStyle $presentationStyle,
         private AvatarDescription $description,
         private ImageCollection $images = new ImageCollection([]),
-        private ?string $platformId = null,
         private ?DateTime $updatedAt = null,
         private readonly ?Clock $clock = null,
     ) {
@@ -101,14 +102,14 @@ final class Avatar
         $this->updateTimestamp();
     }
 
-    public function platformId(): ?string
+    public function voiceId(): ?VoiceId
     {
-        return $this->platformId;
+        return $this->voiceId;
     }
 
-    public function updatePlatformId(string $platformId): void
+    public function updateVoiceId(VoiceId $voiceId): void
     {
-        $this->platformId = $platformId;
+        $this->voiceId = $voiceId;
         $this->updateTimestamp();
     }
 
@@ -136,7 +137,7 @@ final class Avatar
             'presentation_style' => $this->presentationStyle->value,
             'description' => $this->description->value(),
             'images' => array_map(fn ($image) => $image->toArray(), $this->images->items()),
-            'platform_id' => $this->platformId,
+            'voice_id' => $this->voiceId?->value(),
             'created_at' => $this->createdAt->value()->format('Y-m-d H:i:s'),
             'updated_at' => $this->updatedAt?->value()->format('Y-m-d H:i:s'),
         ];

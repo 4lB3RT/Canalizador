@@ -20,6 +20,7 @@ use Canalizador\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\IntegerId;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Voice\Domain\ValueObjects\VoiceId;
 use Illuminate\Support\Facades\DB;
 
 final class EloquentAvatarRepository implements AvatarRepository
@@ -41,7 +42,7 @@ final class EloquentAvatarRepository implements AvatarRepository
                 'biography' => $avatar->biography()->value(),
                 'presentation_style' => $avatar->presentationStyle()->value,
                 'description' => $avatar->description()->value(),
-                'platform_id' => $avatar->platformId(),
+                'voice_id' => $avatar->voiceId()?->value(),
                 'created_at' => $avatar->createdAt()->value(),
                 'updated_at' => $avatar->updatedAt()?->value() ?? now(),
             ]
@@ -126,6 +127,7 @@ final class EloquentAvatarRepository implements AvatarRepository
         return new Avatar(
             id: AvatarId::fromString($model->id),
             userId: new IntegerId($model->user_id),
+            voiceId: $model->voice_id ? VoiceId::fromString($model->voice_id) : null,
             name: AvatarName::fromString($model->name),
             profileImagePath: LocalPath::fromString($model->profile_image_path),
             createdAt: $createdAt,
@@ -133,7 +135,6 @@ final class EloquentAvatarRepository implements AvatarRepository
             presentationStyle: PresentationStyle::fromString($model->presentation_style ?? 'casual'),
             description: AvatarDescription::fromString($model->description ?? ''),
             images: $images,
-            platformId: $model->platform_id,
             updatedAt: $updatedAt,
             clock: $this->clock,
         );
