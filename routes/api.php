@@ -13,6 +13,7 @@ use Canalizador\Voice\Infrastructure\Http\Api\Controllers\CloneVoiceController;
 use Canalizador\Voice\Infrastructure\Http\Api\Controllers\GenerateVoiceController;
 use Canalizador\Video\Infrastructure\Http\Api\Controllers\PublishVideoController;
 use Canalizador\Video\Infrastructure\Http\Api\Controllers\RetrieveVideoContentController;
+use Canalizador\Weather\Infrastructure\Http\Api\Controllers\GetForecastsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['api.token'])->group(function () {
@@ -30,4 +31,5 @@ Route::middleware(['api.token'])->group(function () {
     Route::post('/videos/{videoId}/apply-voice', ApplyVoiceController::class);
     Route::post('/voice/clone', CloneVoiceController::class);
     Route::post('/voice/generate', GenerateVoiceController::class);
+    Route::get('/weather', GetForecastsController::class);
 });
