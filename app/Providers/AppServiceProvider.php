@@ -366,6 +366,10 @@ class AppServiceProvider extends ServiceProvider
                 clipRepository: $app->make(ClipRepository::class),
                 videoRepository: $app->make(VideoRepository::class),
                 clock: $app->make(Clock::class),
+                avatarRepository: $app->make(AvatarRepository::class),
+                voiceRepository: $app->make(VoiceRepository::class),
+                voiceGenerator: $app->make(VoiceGenerator::class),
+                videoComposer: $app->make(VideoComposer::class),
             );
         });
 
