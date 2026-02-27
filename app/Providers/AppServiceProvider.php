@@ -244,6 +244,7 @@ class AppServiceProvider extends ServiceProvider
                 eventBus: $app->make(EventBus::class),
                 clock: $app->make(Clock::class),
                 newsRepository: $app->make(NewsRepository::class),
+                forecastRepository: $app->make(ForecastRepository::class),
             );
         });
 

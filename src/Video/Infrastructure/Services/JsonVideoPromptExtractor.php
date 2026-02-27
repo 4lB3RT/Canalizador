@@ -16,15 +16,17 @@ final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
     {
         $content = $script->content()->value();
         $scriptData = json_decode($content, true);
-        
+
         $videoPrompt = $scriptData['full_script'];
-        
+
         $technicalVideo = $this->getTechnicalVideoPrompt($category);
+        $referenceImagePaths = $this->getReferenceImagePaths($category);
 
         return new VideoPrompt(
             prompt: $videoPrompt,
             technicalVideo: $technicalVideo,
             host: $avatar,
+            referenceImagePaths: $referenceImagePaths,
         );
     }
 
@@ -34,13 +36,15 @@ final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
         $scriptData = json_decode($content, true);
 
         $videoPrompt = $scriptData['full_script'];
-        
+
         $technicalVideo = $this->getTechnicalVideoPrompt($category);
+        $referenceImagePaths = $this->getReferenceImagePaths($category);
 
         return new VideoPrompt(
             prompt: $videoPrompt,
             technicalVideo: $technicalVideo,
             host: null,
+            referenceImagePaths: $referenceImagePaths,
         );
     }
 
@@ -48,6 +52,16 @@ final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
     {
         return match ($category) {
             VideoCategory::GAMING => config('prompts.video.talking_head.system_prompt'),
+            VideoCategory::METEOROLOGY => config('prompts.video.talking_head.system_prompt'),
+        };
+    }
+
+    /** @return string[] */
+    private function getReferenceImagePaths(VideoCategory $category): array
+    {
+        return match ($category) {
+            VideoCategory::METEOROLOGY => array_filter([config('weather.map_image_path')]),
+            default => [],
         };
     }
 }
