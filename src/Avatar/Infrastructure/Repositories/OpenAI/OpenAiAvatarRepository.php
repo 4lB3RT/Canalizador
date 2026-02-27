@@ -7,6 +7,7 @@ namespace Canalizador\Avatar\Infrastructure\Repositories\OpenAI;
 use Canalizador\Avatar\Domain\ValueObjects\AvatarDescription;
 use Canalizador\Avatar\Domain\ValueObjects\AvatarName;
 use Canalizador\Avatar\Domain\ValueObjects\Biography;
+use Canalizador\Avatar\Domain\ValueObjects\Category;
 use Canalizador\Avatar\Domain\ValueObjects\PresentationStyle;
 use Canalizador\Avatar\Infrastructure\Repositories\OpenAI\AvatarMetadataResult;
 use Canalizador\Image\Domain\Entities\ImageCollection;
@@ -48,11 +49,12 @@ final readonly class OpenAiAvatarRepository
         AvatarName $avatarName,
         Biography $biography,
         PresentationStyle $presentationStyle,
-        IntegerId $userId
+        IntegerId $userId,
+        Category $category = Category::GAMING
     ): AvatarMetadataResult {
         $description = $this->generateDescription($imagePath->value(), $avatarName, $biography, $presentationStyle);
         $avatarDescription = AvatarDescription::fromString($description);
-        $images = $this->generateImages($imagePath, $avatarDescription, $avatarName, $biography, $presentationStyle, $userId);
+        $images = $this->generateImages($imagePath, $avatarDescription, $avatarName, $biography, $presentationStyle, $userId, $category);
 
         return new AvatarMetadataResult($avatarDescription, $images);
     }
@@ -108,11 +110,17 @@ final readonly class OpenAiAvatarRepository
         AvatarName $avatarName,
         Biography $biography,
         PresentationStyle $presentationStyle,
-        IntegerId $userId
+        IntegerId $userId,
+        Category $category = Category::GAMING
     ): ImageCollection {
-        $systemPrompt = config('prompts.avatar.image_gaming_generator.system_prompt');
+        $promptKey = match ($category) {
+            Category::GAMING => 'prompts.avatar.image_gaming_generator.system_prompt',
+            Category::METEOROLOGY => 'prompts.avatar.image_meteorology_generator.system_prompt',
+        };
+
+        $systemPrompt = config($promptKey);
         if (empty($systemPrompt)) {
-            throw new \RuntimeException('Avatar image gaming generator prompt is not configured');
+            throw new \RuntimeException("Avatar image {$category->value} generator prompt is not configured");
         }
 
         $basePrompt = str_replace(
@@ -127,11 +135,18 @@ final readonly class OpenAiAvatarRepository
 
         $generatedImages = [];
 
-        $angleVariations = [
-            'front view, facing the camera directly, centered composition',
-            '30 degree angle from the left side, showing the person and gaming setup',
-            '30 degree angle from the right side, showing the person and gaming setup'
-        ];
+        $angleVariations = match ($category) {
+            Category::GAMING => [
+                'front view, facing the camera directly, centered composition',
+                '30 degree angle from the left side, showing the person and gaming setup',
+                '30 degree angle from the right side, showing the person and gaming setup',
+            ],
+            Category::METEOROLOGY => [
+                'front view of the presenter in the TV studio, facing the camera directly, weather map visible behind',
+                'presenter pointing at the weather map of Spain from the left side, showing interaction with the map data',
+                'presenter pointing at the weather map of Spain from the right side, different angle showing the studio setup',
+            ],
+        };
 
         for ($i = 0; $i < self::NUM_IMAGES; $i++) {
             try {

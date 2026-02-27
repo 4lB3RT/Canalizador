@@ -24,6 +24,7 @@ class AvatarDAO extends Model
         'profile_image_path',
         'biography',
         'presentation_style',
+        'category',
         'description',
         'created_at',
         'updated_at',

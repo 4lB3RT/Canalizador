@@ -9,17 +9,9 @@ use InvalidArgumentException;
 
 final readonly class Biography extends StringValue
 {
-    private const int MAX_LENGTH = 500;
 
     public function __construct(string $value)
     {
-        $length = strlen($value);
-        if ($length > self::MAX_LENGTH) {
-            throw new InvalidArgumentException(
-                sprintf('Biography cannot exceed %d characters. Current length: %d', self::MAX_LENGTH, $length)
-            );
-        }
-
         parent::__construct($value);
     }
 }

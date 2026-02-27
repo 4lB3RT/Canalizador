@@ -8,6 +8,7 @@ use Canalizador\Avatar\Domain\ValueObjects\AvatarDescription;
 use Canalizador\Avatar\Domain\ValueObjects\AvatarId;
 use Canalizador\Avatar\Domain\ValueObjects\AvatarName;
 use Canalizador\Avatar\Domain\ValueObjects\Biography;
+use Canalizador\Avatar\Domain\ValueObjects\Category;
 use Canalizador\Avatar\Domain\ValueObjects\PresentationStyle;
 use Canalizador\Image\Domain\Entities\ImageCollection;
 use Canalizador\Shared\Domain\Services\Clock;
@@ -27,6 +28,7 @@ final class Avatar
         private readonly DateTime $createdAt,
         private Biography $biography,
         private PresentationStyle $presentationStyle,
+        private Category $category,
         private AvatarDescription $description,
         private ImageCollection $images = new ImageCollection([]),
         private ?DateTime $updatedAt = null,
@@ -64,6 +66,11 @@ final class Avatar
         return $this->presentationStyle;
     }
 
+    public function category(): Category
+    {
+        return $this->category;
+    }
+
     public function description(): AvatarDescription
     {
         return $this->description;
@@ -93,6 +100,12 @@ final class Avatar
     public function updatePresentationStyle(PresentationStyle $presentationStyle): void
     {
         $this->presentationStyle = $presentationStyle;
+        $this->updateTimestamp();
+    }
+
+    public function updateCategory(Category $category): void
+    {
+        $this->category = $category;
         $this->updateTimestamp();
     }
 
@@ -135,6 +148,7 @@ final class Avatar
             'profile_image_path' => $this->profileImagePath->value(),
             'biography' => $this->biography->value(),
             'presentation_style' => $this->presentationStyle->value,
+            'category' => $this->category->value,
             'description' => $this->description->value(),
             'images' => array_map(fn ($image) => $image->toArray(), $this->images->items()),
             'voice_id' => $this->voiceId?->value(),

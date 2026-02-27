@@ -9,10 +9,12 @@ use Canalizador\Avatar\Domain\Repositories\AvatarRepository;
 use Canalizador\Avatar\Domain\ValueObjects\AvatarId;
 use Canalizador\Avatar\Domain\ValueObjects\AvatarName;
 use Canalizador\Avatar\Domain\ValueObjects\Biography;
+use Canalizador\Avatar\Domain\ValueObjects\Category;
 use Canalizador\Avatar\Domain\ValueObjects\PresentationStyle;
 use Canalizador\Avatar\Infrastructure\Repositories\OpenAI\OpenAiAvatarRepository;
 use Canalizador\Shared\Domain\ValueObjects\IntegerId;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Voice\Domain\ValueObjects\VoiceId;
 use Illuminate\Support\Facades\File;
 
 final readonly class CreateAvatar
@@ -32,13 +34,15 @@ final readonly class CreateAvatar
         $avatarName = AvatarName::fromString($request->name);
         $biography = Biography::fromString($request->biography);
         $presentationStyle = PresentationStyle::fromString($request->presentationStyle);
+        $category = Category::fromString($request->category);
 
         $metadataResult = $this->openAiAvatarRepository->generateMetadata(
             imagePath: $tmpImagePath,
             avatarName: $avatarName,
             biography: $biography,
             presentationStyle: $presentationStyle,
-            userId: $userId
+            userId: $userId,
+            category: $category
         );
 
         $description = $metadataResult->description();
@@ -63,8 +67,10 @@ final readonly class CreateAvatar
             profileImagePath: $profileImagePath,
             biography: Biography::fromString($request->biography),
             presentationStyle: PresentationStyle::fromString($request->presentationStyle),
+            category: $category,
             description: $description,
             images: $images,
+            voiceId: $request->voiceId ? VoiceId::fromString($request->voiceId) : null,
         );
 
         $this->avatarRepository->save($avatar);
