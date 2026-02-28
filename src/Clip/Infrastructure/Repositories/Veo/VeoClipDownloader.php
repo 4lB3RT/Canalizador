@@ -12,6 +12,7 @@ use Canalizador\Shared\Domain\ValueObjects\Url;
 use Canalizador\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\Video\Domain\ValueObjects\GenerationId;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 final readonly class VeoClipDownloader implements ClipDownloader
 {
@@ -48,7 +49,7 @@ final readonly class VeoClipDownloader implements ClipDownloader
 
             return [
                 'localPath' => $outputPath,
-                'videoUri' => Url::fromString($result['videoUrl']),
+                'videoUri' => Url::fromString($this->toFileUri($result['videoUrl'])),
             ];
         } catch (\RuntimeException $e) {
             throw VideoGenerationFailed::apiError($e->getMessage());
@@ -95,6 +96,14 @@ final readonly class VeoClipDownloader implements ClipDownloader
 
     private function extractVideoUrl(array $responseData): string
     {
+        $raiReasons = $responseData['response']['generateVideoResponse']['raiMediaFilteredReasons'] ?? null;
+
+        if ($raiReasons !== null) {
+            throw VideoGenerationFailed::apiError(
+                'Veo RAI filter blocked clip: ' . implode(', ', $raiReasons)
+            );
+        }
+
         $uri = $responseData['response']['generateVideoResponse']['generatedSamples'][0]['video']['uri'] ?? null;
 
         if ($uri !== null) {
@@ -107,7 +116,14 @@ final readonly class VeoClipDownloader implements ClipDownloader
             return $uri;
         }
 
+        Log::error('Veo clip response structure', ['response' => $responseData]);
+
         throw VideoGenerationFailed::apiError('No video URL found in Veo clip response');
+    }
+
+    private function toFileUri(string $downloadUrl): string
+    {
+        return preg_replace('/:download\?alt=media$/', '', $downloadUrl);
     }
 
     private function downloadVideo(string $videoUrl): string

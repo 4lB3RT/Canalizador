@@ -13,6 +13,8 @@ final readonly class CreateAvatarRequest
         public string $profileImagePath,
         public string $biography,
         public string $presentationStyle,
+        public string $category = 'gaming',
+        public ?string $voiceId = null,
     ) {
     }
 }

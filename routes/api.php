@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 use App\Http\Middleware\EnsureGoogleToken;
 use Canalizador\Avatar\Infrastructure\Http\Api\Controllers\CreateAvatarController;
+use Canalizador\Avatar\Infrastructure\Http\Api\Controllers\UpdateAvatarController;
 use Canalizador\Channel\Infrastructure\Http\Api\Controllers\SyncChannelController;
 use Canalizador\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelWithAIController;
 use Canalizador\News\Infrastructure\Http\Api\Controllers\DownloadNewsController;
@@ -13,10 +14,12 @@ use Canalizador\Voice\Infrastructure\Http\Api\Controllers\CloneVoiceController;
 use Canalizador\Voice\Infrastructure\Http\Api\Controllers\GenerateVoiceController;
 use Canalizador\Video\Infrastructure\Http\Api\Controllers\PublishVideoController;
 use Canalizador\Video\Infrastructure\Http\Api\Controllers\RetrieveVideoContentController;
+use Canalizador\Weather\Infrastructure\Http\Api\Controllers\GetForecastsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['api.token'])->group(function () {
     Route::post('/avatars', CreateAvatarController::class);
+    Route::put('/avatars/{avatarId}', UpdateAvatarController::class);
     Route::post('/videos/create', CreateVideoController::class);
     Route::get('/videos/{videoId}/content', RetrieveVideoContentController::class)
         ->middleware(EnsureGoogleToken::class);
@@ -30,4 +33,5 @@ Route::middleware(['api.token'])->group(function () {
     Route::post('/videos/{videoId}/apply-voice', ApplyVoiceController::class);
     Route::post('/voice/clone', CloneVoiceController::class);
     Route::post('/voice/generate', GenerateVoiceController::class);
+    Route::get('/weather', GetForecastsController::class);
 });

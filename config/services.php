@@ -56,4 +56,8 @@ return [
     'elevenlabs' => [
         'api_key' => env('ELEVENLABS_API_KEY'),
     ],
+
+    'aemet' => [
+        'api_key' => env('AEMET_API_KEY'),
+    ],
 ];

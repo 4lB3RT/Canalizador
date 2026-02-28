@@ -15,7 +15,7 @@ use Canalizador\Video\Domain\ValueObjects\VideoId;
 
 final class Clip
 {
-    public const int TOTAL_CLIPS = 5;
+    public const int TOTAL_CLIPS = 1;
 
     public function __construct(
         private readonly ClipId $id,

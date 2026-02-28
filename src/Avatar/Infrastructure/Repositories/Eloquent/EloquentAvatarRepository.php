@@ -11,6 +11,7 @@ use Canalizador\Avatar\Domain\ValueObjects\AvatarDescription;
 use Canalizador\Avatar\Domain\ValueObjects\AvatarId;
 use Canalizador\Avatar\Domain\ValueObjects\AvatarName;
 use Canalizador\Avatar\Domain\ValueObjects\Biography;
+use Canalizador\Avatar\Domain\ValueObjects\Category;
 use Canalizador\Avatar\Domain\ValueObjects\PresentationStyle;
 use Canalizador\Avatar\Infrastructure\DAO\AvatarDAO;
 use Canalizador\Image\Domain\Entities\ImageCollection;
@@ -41,6 +42,7 @@ final class EloquentAvatarRepository implements AvatarRepository
                 'profile_image_path' => $avatar->profileImagePath()->value(),
                 'biography' => $avatar->biography()->value(),
                 'presentation_style' => $avatar->presentationStyle()->value,
+                'category' => $avatar->category()->value,
                 'description' => $avatar->description()->value(),
                 'voice_id' => $avatar->voiceId()?->value(),
                 'created_at' => $avatar->createdAt()->value(),
@@ -133,6 +135,7 @@ final class EloquentAvatarRepository implements AvatarRepository
             createdAt: $createdAt,
             biography: Biography::fromString($model->biography ?? ''),
             presentationStyle: PresentationStyle::fromString($model->presentation_style ?? 'casual'),
+            category: Category::fromString($model->category ?? 'gaming'),
             description: AvatarDescription::fromString($model->description ?? ''),
             images: $images,
             updatedAt: $updatedAt,

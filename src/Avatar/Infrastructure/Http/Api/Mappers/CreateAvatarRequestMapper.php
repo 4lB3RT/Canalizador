@@ -16,8 +16,10 @@ final readonly class CreateAvatarRequestMapper
             'avatar_id' => 'required|string|uuid',
             'name' => 'required|string|max:100',
             'profile_image' => 'required|image|mimes:jpeg,jpg,png|max:20480',
-            'biography' => 'nullable|string|max:500',
+            'biography' => 'nullable|string|max:2000',
             'presentation_style' => 'required|string|in:energetic,calm,professional,casual',
+            'category' => 'nullable|string|in:gaming,meteorology',
+            'voice_id' => 'nullable|string',
         ]);
 
         $user = $request->user();
@@ -46,6 +48,8 @@ final readonly class CreateAvatarRequestMapper
             profileImagePath: $fullImagePath,
             biography: $validated['biography'] ?? '',
             presentationStyle: $validated['presentation_style'],
+            category: $validated['category'] ?? 'gaming',
+            voiceId: $validated['voice_id'] ?? null,
         );
     }
 }

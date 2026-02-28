@@ -13,11 +13,13 @@ use Canalizador\Script\Domain\ValueObjects\ScriptId;
 use Canalizador\Shared\Domain\Events\EventBus;
 use Canalizador\Shared\Domain\Services\Clock;
 use Canalizador\Video\Domain\Events\VideoCreated;
+use Canalizador\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\Video\Domain\Factories\VideoFactory;
 use Canalizador\Video\Domain\Repositories\VideoMetadataGenerator;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
 use Canalizador\Video\Domain\ValueObjects\VideoCategory;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
+use Canalizador\Weather\Domain\Repositories\ForecastRepository;
 
 final readonly class CreateVideo
 {
@@ -30,40 +32,57 @@ final readonly class CreateVideo
         private EventBus $eventBus,
         private Clock $clock,
         private NewsRepository $newsRepository,
+        private ForecastRepository $forecastRepository,
     ) {
     }
 
     public function execute(CreateVideoRequest $request): CreateVideoResponse
     {
-        $scriptId = ScriptId::fromString($request->scriptId);
-        $channelId = ChannelId::fromString($request->channelId);
-        $category = VideoCategory::from($request->category);
+        $videoId = VideoId::fromString($request->videoId);
 
-        $script = $this->scriptRepository->findById($scriptId);
+        try {
+            $video = $this->videoRepository->findById($videoId);
 
-        if ($script === null) {
-            $script = $this->generateScript->generate(
-                scriptId: $request->scriptId,
-                channelId: $request->channelId,
-                prompt: $this->buildPromptFromLatestNews(),
-                totalClips: (int) config('veo.total_clips', 5),
-                clipDuration: (int) config('veo.duration', 8),
+        } catch (VideoNotFound) {
+            $scriptId = ScriptId::fromString($request->scriptId);
+            $channelId = ChannelId::fromString($request->channelId);
+            $category = VideoCategory::from($request->category);
+
+            $script = $this->scriptRepository->findById($scriptId);
+
+            if ($script === null) {
+                $script = match ($category) {
+                    VideoCategory::GAMING => $this->generateScript->generate(
+                        scriptId: $request->scriptId,
+                        channelId: $request->channelId,
+                        prompt: $this->buildPromptFromLatestNews(),
+                        totalClips: (int) config('veo.total_clips', 5),
+                        clipDuration: (int) config('veo.duration', 8),
+                    ),
+                    VideoCategory::METEOROLOGY => $this->generateScript->generateWeather(
+                        scriptId: $request->scriptId,
+                        channelId: $request->channelId,
+                        prompt: $this->buildPromptFromForecasts(),
+                        totalClips: (int) config('veo.total_clips', 5),
+                        clipDuration: (int) config('veo.duration', 8),
+                    ),
+                };
+            }
+
+            $metadata = $this->videoMetadataGenerator->generate($script->content()->value());
+
+            $video = $this->videoFactory->create(
+                id: $videoId,
+                script: $script,
+                channelId: $channelId,
+                title: $metadata->title,
+                description: $metadata->description,
+                category: $category,
+                avatarId: $request->avatarId ? AvatarId::fromString($request->avatarId) : null,
             );
+
+            $this->videoRepository->save($video);
         }
-
-        $metadata = $this->videoMetadataGenerator->generate($script->content()->value());
-
-        $video = $this->videoFactory->create(
-            id: VideoId::fromString($request->videoId),
-            script: $script,
-            channelId: $channelId,
-            title: $metadata->title,
-            description: $metadata->description,
-            category: $category,
-            avatarId: $request->avatarId ? AvatarId::fromString($request->avatarId) : null,
-        );
-
-        $this->videoRepository->save($video);
 
         $this->eventBus->publish(
             new VideoCreated($video->id()->value(), $this->clock->now())
@@ -85,5 +104,27 @@ final readonly class CreateVideo
             $news->title()->value(),
             $news->description()->value()
         );
+    }
+
+    private function buildPromptFromForecasts(): string
+    {
+        $today = $this->clock->now()->value()->format('Y-m-d');
+        $forecasts = $this->forecastRepository->findByDate($today);
+
+        if (empty($forecasts)) {
+            throw new \RuntimeException('No forecasts available for today. Run POST /api/weather/forecasts first.');
+        }
+
+        $lines = ["=== PREVISIÓN METEOROLÓGICA PARA HOY ($today) ===\n"];
+
+        foreach ($forecasts as $forecast) {
+            $lines[] = sprintf(
+                "%s: %s\n",
+                $forecast->cityName()->value(),
+                $forecast->summary() ?? 'Sin resumen disponible',
+            );
+        }
+
+        return implode("\n", $lines);
     }
 }

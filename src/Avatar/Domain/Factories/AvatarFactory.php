@@ -9,6 +9,7 @@ use Canalizador\Avatar\Domain\ValueObjects\AvatarDescription;
 use Canalizador\Avatar\Domain\ValueObjects\AvatarId;
 use Canalizador\Avatar\Domain\ValueObjects\AvatarName;
 use Canalizador\Avatar\Domain\ValueObjects\Biography;
+use Canalizador\Avatar\Domain\ValueObjects\Category;
 use Canalizador\Avatar\Domain\ValueObjects\PresentationStyle;
 use Canalizador\Image\Domain\Entities\ImageCollection;
 use Canalizador\Shared\Domain\Services\Clock;
@@ -31,6 +32,7 @@ final readonly class AvatarFactory
         LocalPath $profileImagePath,
         Biography $biography,
         PresentationStyle $presentationStyle,
+        Category $category,
         AvatarDescription $description,
         ?DateTime $createdAt = null,
         ?ImageCollection $images = null,
@@ -45,6 +47,7 @@ final readonly class AvatarFactory
             createdAt: $createdAt ?? $this->clock->now(),
             biography: $biography,
             presentationStyle: $presentationStyle,
+            category: $category,
             description: $description,
             images: $images ?? ImageCollection::empty(),
             clock: $this->clock,

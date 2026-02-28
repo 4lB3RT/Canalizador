@@ -8,10 +8,12 @@ use Canalizador\Avatar\Domain\Entities\Avatar;
 
 final readonly class VideoPrompt
 {
+    /** @param string[] $referenceImagePaths */
     public function __construct(
         private string $prompt,
         private string $technicalVideo,
         private ?Avatar $host = null,
+        private array $referenceImagePaths = [],
     ) {
     }
 
@@ -28,6 +30,12 @@ final readonly class VideoPrompt
     public function technicalVideo(): string
     {
         return $this->technicalVideo;
+    }
+
+    /** @return string[] */
+    public function referenceImagePaths(): array
+    {
+        return $this->referenceImagePaths;
     }
 
     public function toPromptString(): string

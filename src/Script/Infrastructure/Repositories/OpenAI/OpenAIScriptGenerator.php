@@ -30,6 +30,25 @@ final class OpenAIScriptGenerator implements ScriptGenerator
         return $this->executeGeneration($systemPrompt, $userPrompt);
     }
 
+    public function generateWeather(string $prompt, ?Channel $channel = null, int $totalClips = 5, int $clipDuration = 8): string
+    {
+        $systemPrompt = config('prompts.script.generator_weather.system_prompt');
+
+        $totalDuration = $clipDuration + ($totalClips - 1) * ($clipDuration - 1);
+        $totalWordsMin = (int) ceil($totalDuration * 2.5);
+        $totalWordsMax = (int) floor($totalDuration * 3.0);
+
+        $systemPrompt = str_replace(
+            ['{total_clips}', '{clip_duration}', '{total_duration}', '{total_words_min}', '{total_words_max}'],
+            [(string) $totalClips, (string) $clipDuration, (string) $totalDuration, (string) $totalWordsMin, (string) $totalWordsMax],
+            $systemPrompt
+        );
+
+        $userPrompt = $this->buildUserPrompt($prompt, $channel, includeThumbnail: true);
+
+        return $this->executeGeneration($systemPrompt, $userPrompt);
+    }
+
     private function executeGeneration(string $systemPrompt, string $prompt): string
     {
         $response = Prism::text()

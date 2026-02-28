@@ -111,6 +111,13 @@ use Canalizador\Video\Infrastructure\Services\YouTube\YouTubeVideoBuilder;
 use Canalizador\Video\Infrastructure\Services\YouTube\YouTubeVideoUploader;
 use Canalizador\VideoLegacy\Application\UseCases\GetYoutubeVideo;
 use Canalizador\VideoLegacy\Infrastructure\Repositories\Youtube\YoutubeVideoRepository;
+use Canalizador\Weather\Application\UseCases\GetForecasts\GetForecasts;
+use Canalizador\Weather\Domain\Repositories\ForecastRepository;
+use Canalizador\Weather\Domain\Repositories\WeatherProvider;
+use Canalizador\Weather\Infrastructure\Repositories\Aemet\AemetWeatherProvider;
+use Canalizador\Weather\Infrastructure\Repositories\Eloquent\EloquentForecastRepository;
+use Canalizador\Weather\Domain\Repositories\ForecastSummarizer;
+use Canalizador\Weather\Infrastructure\Repositories\OpenAI\OpenAIForecastSummarizer;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -126,6 +133,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerImageServices();
         $this->registerNewsServices();
         $this->registerVoiceServices();
+        $this->registerWeatherServices();
     }
 
     public function boot(): void
@@ -236,6 +244,7 @@ class AppServiceProvider extends ServiceProvider
                 eventBus: $app->make(EventBus::class),
                 clock: $app->make(Clock::class),
                 newsRepository: $app->make(NewsRepository::class),
+                forecastRepository: $app->make(ForecastRepository::class),
             );
         });
 
@@ -357,6 +366,10 @@ class AppServiceProvider extends ServiceProvider
                 clipRepository: $app->make(ClipRepository::class),
                 videoRepository: $app->make(VideoRepository::class),
                 clock: $app->make(Clock::class),
+                avatarRepository: $app->make(AvatarRepository::class),
+                voiceRepository: $app->make(VoiceRepository::class),
+                voiceGenerator: $app->make(VoiceGenerator::class),
+                videoComposer: $app->make(VideoComposer::class),
             );
         });
 
@@ -505,6 +518,31 @@ class AppServiceProvider extends ServiceProvider
                 clock: $app->make(Clock::class),
             );
         });
+    }
+
+    private function registerWeatherServices(): void
+    {
+        $this->app->singleton(AemetWeatherProvider::class, function ($app) {
+            return new AemetWeatherProvider(
+                apiKey: config('services.aemet.api_key') ?? '',
+                httpClient: $app->make(HttpClient::class),
+                responseValidator: $app->make(HttpResponseValidator::class),
+            );
+        });
+
+        $this->app->bind(WeatherProvider::class, AemetWeatherProvider::class);
+        $this->app->bind(ForecastRepository::class, EloquentForecastRepository::class);
+
+        $this->app->bind(GetForecasts::class, function ($app) {
+            return new GetForecasts(
+                weatherProvider: $app->make(WeatherProvider::class),
+                forecastRepository: $app->make(ForecastRepository::class),
+                forecastSummarizer: $app->make(ForecastSummarizer::class),
+                clock: $app->make(Clock::class),
+            );
+        });
+
+        $this->app->bind(ForecastSummarizer::class, OpenAIForecastSummarizer::class);
     }
 
     private function registerNewsServices(): void

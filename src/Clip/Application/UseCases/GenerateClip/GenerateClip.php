@@ -20,6 +20,7 @@ use Canalizador\Video\Domain\Repositories\VideoGenerator;
 use Canalizador\Video\Domain\Repositories\VideoRepository;
 use Canalizador\Video\Domain\Services\VideoPromptExtractor;
 use Canalizador\Video\Domain\ValueObjects\GenerationId;
+use Canalizador\Video\Domain\ValueObjects\Resolution;
 
 final readonly class GenerateClip
 {
@@ -72,24 +73,15 @@ final readonly class GenerateClip
         );
     }
 
-    private function generateFirstClip(Video $video, ?string $clipScript): string
+    private function generateFirstClip(Video $video): string
     {
-        $videoPrompt = $video->avatarId() !== null
-            ? $this->videoPromptExtractor->extractWithAvatar(
+        $videoPrompt = $this->videoPromptExtractor->extractWithAvatar(
                 $video->script(),
                 $this->avatarRepository->findById($video->avatarId()),
                 $video->category()
-            )
-            : $this->videoPromptExtractor->extract($video->script(), $video->category());
-
-        if ($clipScript !== null) {
-            $videoPrompt = new VideoPrompt(
-                prompt: $clipScript,
-                technicalVideo: $videoPrompt->technicalVideo(),
-                host: $videoPrompt->host(),
             );
-        }
 
-        return $this->videoGenerator->generate($videoPrompt);
+
+        return $this->videoGenerator->generate($videoPrompt, Resolution::HD);
     }
 }

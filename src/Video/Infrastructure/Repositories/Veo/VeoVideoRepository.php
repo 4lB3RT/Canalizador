@@ -39,7 +39,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
     /**
      * @throws VideoGenerationFailed
      */
-    public function generate(VideoPrompt $videoPrompt): string
+    public function generate(VideoPrompt $videoPrompt, ?Resolution $resolution = null): string
     {
         $model = config('veo.model', 'veo-3.1-generate-preview');
         $url = self::API_BASE_URL . "/models/{$model}:predictLongRunning";
@@ -60,7 +60,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
             ? VideoDuration::forReferenceImages()
             : VideoDuration::fromSeconds(config('veo.duration', 8));
 
-        $resolution = Resolution::fromString(config('veo.resolution', '720p'));
+        $resolution = $resolution ?? Resolution::fromString(config('veo.resolution', '720p'));
 
         $instance = [
             'prompt' => $videoPrompt->toPromptString(),
@@ -150,7 +150,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
             ],
             'parameters' => [
                 'aspectRatio' => config('veo.aspect_ratio', '9:16'),
-                'resolution' => config('veo.resolution', '720p'),
+                'resolution' => Resolution::HD->value,
                 'durationSeconds' => config('veo.duration', 8),
             ],
         ];
@@ -211,6 +211,14 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
      */
     private function extractVideoUrl(array $responseData): string
     {
+        $raiReasons = $responseData['response']['generateVideoResponse']['raiMediaFilteredReasons'] ?? null;
+
+        if ($raiReasons !== null) {
+            throw VideoGenerationFailed::apiError(
+                'Veo RAI filter blocked video: ' . implode(', ', $raiReasons)
+            );
+        }
+
         $uri = $responseData['response']['generateVideoResponse']['generatedSamples'][0]['video']['uri'] ?? null;
 
         if ($uri !== null) {
@@ -240,26 +248,42 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
 
     private function buildReferenceImages(VideoPrompt $videoPrompt): array
     {
-        if ($videoPrompt->host() === null) {
-            return [];
+        $referenceImages = [];
+
+        if ($videoPrompt->host() !== null) {
+            $avatarImages = array_slice($videoPrompt->host()->images()->items(), 0, self::MAX_REFERENCE_IMAGES);
+
+            foreach ($avatarImages as $avatarImage) {
+                $imagePath = $avatarImage->path()->value();
+
+                if (!File::exists($imagePath)) {
+                    continue;
+                }
+
+                $referenceImages[] = [
+                    'image' => [
+                        'bytesBase64Encoded' => base64_encode(File::get($imagePath)),
+                        'mimeType' => ImageMimeType::fromFilePath($imagePath)->value,
+                    ],
+                    'referenceType' => 'asset',
+                ];
+            }
         }
 
-        $images = array_slice($videoPrompt->host()->images()->items(), 0, self::MAX_REFERENCE_IMAGES);
-
-        return array_filter(array_map(function ($avatarImage) {
-            $imagePath = $avatarImage->path()->value();
-
+        foreach ($videoPrompt->referenceImagePaths() as $imagePath) {
             if (!File::exists($imagePath)) {
-                return null;
+                continue;
             }
 
-            return [
+            $referenceImages[] = [
                 'image' => [
                     'bytesBase64Encoded' => base64_encode(File::get($imagePath)),
                     'mimeType' => ImageMimeType::fromFilePath($imagePath)->value,
                 ],
                 'referenceType' => 'asset',
             ];
-        }, $images));
+        }
+
+        return array_slice($referenceImages, 0, self::MAX_REFERENCE_IMAGES);
     }
 }

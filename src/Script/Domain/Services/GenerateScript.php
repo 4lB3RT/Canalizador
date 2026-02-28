@@ -41,4 +41,25 @@ final readonly class GenerateScript
 
         return $script;
     }
+
+    public function generateWeather(
+        string $scriptId,
+        string $channelId,
+        string $prompt,
+        int $totalClips = 5,
+        int $clipDuration = 8,
+    ): Script {
+        $channel = $this->channelRepository->findById(ChannelId::fromString($channelId));
+
+        $scriptContent = $this->scriptGenerator->generateWeather($prompt, $channel, $totalClips, $clipDuration);
+
+        $script = $this->scriptFactory->createFromStrings(
+            id: $scriptId,
+            content: $scriptContent
+        );
+
+        $this->scriptRepository->save($script);
+
+        return $script;
+    }
 }

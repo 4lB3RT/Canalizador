@@ -12,6 +12,7 @@ use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
 use Canalizador\Video\Domain\Repositories\VideoGenerator;
+use Canalizador\Video\Domain\ValueObjects\Resolution;
 use Illuminate\Support\Facades\File;
 
 final readonly class SoraVideoRepository implements VideoGenerator, VideoContentRetriever
@@ -31,7 +32,7 @@ final readonly class SoraVideoRepository implements VideoGenerator, VideoContent
     /**
      * @throws VideoGenerationFailed
      */
-    public function generate(VideoPrompt $videoPrompt): string
+    public function generate(VideoPrompt $videoPrompt, ?Resolution $resolution = null): string
     {
         $url = self::API_BASE_URL . '/videos';
         $headers = [
