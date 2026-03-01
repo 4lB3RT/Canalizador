@@ -30,7 +30,7 @@ Crea un Step (historia de usuario) en GitHub y lo añade al tablero Steps.
 ## Ejemplo de uso
 
 ```
-/create-step Sistema de notificaciones: como usuario quiero recibir alertas cuando mis videos estén listos, para no revisar manualmente. Contexto: los videos tardan minutos en generarse. Criterios: dado un video procesado, cuando termina, entonces recibo notificación.
+/step/create Sistema de notificaciones: como usuario quiero recibir alertas cuando mis videos estén listos, para no revisar manualmente. Contexto: los videos tardan minutos en generarse. Criterios: dado un video procesado, cuando termina, entonces recibo notificación.
 ```
 
 ## Argumento

@@ -5,7 +5,7 @@ Ejecuta una tarea: obtiene el plan de GitHub, crea rama, implementa, y crea PR.
 ## Workflow
 
 ```
-/do-task #número
+/task/do #número
     │
     ├── 1. Obtener tarea de GitHub (mcp__github__get_issue)
     │
@@ -18,7 +18,7 @@ Ejecuta una tarea: obtiene el plan de GitHub, crea rama, implementa, y crea PR.
     ├── 5. Ejecutar plan de acción (archivos a modificar)
     │
     ├── 6. Al terminar:
-    │       ├── /post-commit
+    │       ├── /post/commit
     │       ├── Push rama
     │       ├── Crear PR vinculada a la tarea
     │       └── Mover tarea a "Review"
@@ -69,23 +69,14 @@ Lee la sección "Archivos a modificar" de la tarea y:
 
 ### 6. Al terminar
 
-1. **Ejecuta /post-commit** para narrar los cambios
+1. **Ejecuta /post/commit** para narrar los cambios
 
 2. **Push de la rama**:
    ```bash
    git push -u origin task/#[número]-[titulo-slug]
    ```
 
-3. **Crear PR**:
-   ```bash
-   gh pr create --title "[Título de la tarea]" --body "Closes #[número]
-
-   ## Cambios
-   [Lista de cambios realizados]
-
-   ## Definition of Done
-   [Checklist de la tarea]"
-   ```
+3. **Crear PR** siguiendo el template en `pr-body.md`
 
 4. **Mover a Review**: `mcp__github__move_task_status` con status "review"
 
@@ -99,7 +90,7 @@ Lee la sección "Archivos a modificar" de la tarea y:
 ## Ejemplo de uso
 
 ```
-/do-task #14
+/task/do #14
 ```
 
 ## Argumento
