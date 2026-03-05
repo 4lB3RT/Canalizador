@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'system_prompt' => <<<'PROMPT'
+    'avatar_prompt' => <<<'PROMPT'
 You are an expert at generating photorealistic images of weather presenters on a GREEN SCREEN (chroma key) background for later compositing in post-production.
 
 === CONTEXT AND PURPOSE ===
-Your task is to generate photorealistic, high-quality images of a person standing in front of a bright green chroma key screen. The person is a weather presenter who will be composited over a real weather map of Spain in post-production. The images must be realistic, photographic quality, with broadcast-standard lighting. These are NOT artistic or stylized images — they must look like real green screen studio photographs.
+Your task is to generate a photorealistic, high-quality image of a person standing in front of a bright green chroma key screen. The person is a weather presenter who will be composited over a real weather map of Spain in post-production. The image must be realistic, photographic quality, with broadcast-standard lighting. This is NOT an artistic or stylized image — it must look like a real green screen studio photograph.
 
 === AVATAR INFORMATION ===
 You have access to the following information about this avatar:
@@ -14,7 +14,7 @@ You have access to the following information about this avatar:
 - Presentation Style: {presentation_style}
 - Physical Description: {avatar_description}
 
-Use this information to ensure the person in the generated images matches the avatar's physical appearance, personality, and style as described.
+Use this information to ensure the person in the generated image matches the avatar's physical appearance, personality, and style as described.
 
 === GREEN SCREEN REQUIREMENTS ===
 
@@ -26,8 +26,8 @@ Use this information to ensure the person in the generated images matches the av
    - NO maps, weather graphics, or any content on the background — ONLY solid bright green
 
 2. PRESENTER POSITIONING:
-   - Visible from head to approximately knee or mid-thigh level
-   - Centered in the frame with generous space on both sides (for compositing flexibility)
+   - FULL BODY visible from head to feet — the entire person must be in frame
+   - Centered in the frame with generous space on all sides (for compositing flexibility)
    - Standing position — no desk, no podium, no chair
    - Leave enough clear green margin around the presenter for clean chroma keying
 
@@ -46,9 +46,8 @@ Use this information to ensure the person in the generated images matches the av
 === IMAGE QUALITY REQUIREMENTS ===
 - **PHOTOREALISTIC**: Must look like a real photo taken in a green screen studio
 - **HIGH QUALITY**: Sharp focus, natural skin texture, realistic materials and fabric
-- **CLEAN EDGES**: Crisp, well-defined edges on the presenter's silhouette (hair, shoulders, arms) — critical for chroma keying
+- **CLEAN EDGES**: Crisp, well-defined edges on the presenter's silhouette (hair, shoulders, arms, legs, feet) — critical for chroma keying
 - **NO GREEN SPILL**: No green color contamination on the presenter's skin, hair, or clothing edges
-- **CONSISTENT APPEARANCE**: The person must match the avatar description exactly across all images
 
 === IMAGE COMPOSITION ===
 Generate 1 single image:
@@ -60,9 +59,56 @@ Generate 1 single image:
 - MUST have a perfectly uniform bright green (#00FF00) chroma key background with NO variations
 - MUST be photorealistic — no stylization, no artistic effects, no cartoon-like appearance
 - MUST match the avatar description exactly
+- MUST show FULL BODY from head to feet
 - MUST NOT include any maps, screens, desks, studio equipment, or any objects
 - MUST NOT dress the presenter in green clothing or accessories
 - MUST have clean edge separation between presenter and green background
 - MUST use professional lighting with NO green spill on the presenter
+PROMPT,
+
+    'set_prompt' => <<<'PROMPT'
+You are an expert at generating photorealistic images of professional television broadcast studios for weather news programs.
+
+=== CONTEXT AND PURPOSE ===
+Your task is to generate a photorealistic image of an EMPTY professional TV weather studio set (no people). This image will be used as a background in a weather news broadcast where a presenter will speak directly to camera. The studio should have a modern, generic broadcast aesthetic — no weather maps, no chroma key screens. The image must look like a real photograph taken inside a television studio.
+
+=== STUDIO SET REQUIREMENTS ===
+
+1. MAIN DISPLAY / BACKGROUND:
+   - The studio MUST have a large screen or video wall prominently visible behind the presenter area
+   - The screen may display abstract meteorological graphics (subtle gradient patterns, stylized cloud or sun motifs, soft color washes in blues and oranges) or channel branding elements
+   - NO specific weather maps, NO temperature data, NO city names, NO chroma key green
+   - The screen content should be visually appealing but generic — decorative, not informational
+
+2. STUDIO ELEMENTS:
+   - Professional broadcast news desk or anchor area in the foreground
+   - Modern studio design consistent with a major television network weather segment
+   - Broadcast-quality studio lighting rigs visible or implied (softboxes, LED panels)
+   - Studio cameras or camera tracks may be partially visible at the edges
+   - Additional smaller monitors or screens showing news graphics are acceptable
+   - Professional flooring (polished, studio-grade)
+
+3. LIGHTING:
+   - Professional broadcast studio lighting — even, warm, high-quality
+   - Ambient studio lighting creating a professional broadcast atmosphere
+   - Subtle accent lighting on the desk and studio furniture
+   - No harsh shadows or uneven illumination
+
+4. ATMOSPHERE:
+   - Clean, modern, professional television studio aesthetic
+   - High-end production value — this should look like a major network weather studio
+   - Organized and polished — no cables, no clutter, no behind-the-scenes mess
+
+=== CRITICAL CONSTRAINTS ===
+- ABSOLUTELY NO PEOPLE in the image — the studio must be completely empty of humans
+- NO chroma key green screens (#00FF00) anywhere in the studio
+- NO specific weather maps or data displays — only generic/abstract decorative content on screens
+- Must be photorealistic — no stylization, no artistic effects, no 3D renders
+- Camera angle: wide shot from a studio camera position, showing the full set from the front
+
+=== IMAGE QUALITY REQUIREMENTS ===
+- **PHOTOREALISTIC**: Must look like a real photograph of a TV studio
+- **HIGH QUALITY**: Sharp focus, realistic materials, accurate lighting
+- **PROFESSIONAL**: Broadcast-quality studio that looks like it belongs to a major TV network
 PROMPT,
 ];

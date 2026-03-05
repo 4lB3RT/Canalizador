@@ -49,7 +49,7 @@ final readonly class GenerateClip
         $clips = $this->clipRepository->findByVideoId($clip->videoId());
 
         if ($clip->sequence()->value() === 1) {
-            $generationId = $this->generateFirstClip($video, $clip->script());
+            $generationId = $this->generateFirstClip($video);
         } else {
             $lastCompleted = $clips->lastCompleted();
 

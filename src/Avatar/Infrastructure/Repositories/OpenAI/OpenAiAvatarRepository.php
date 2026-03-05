@@ -31,7 +31,6 @@ final readonly class OpenAiAvatarRepository
 {
     private const string TEXT_MODEL = 'gpt-5.2';
     private const string IMAGE_MODEL = 'gpt-image-1.5';
-    private const int NUM_IMAGES = 3;
 
     public function __construct(
         private string $apiKey,
@@ -113,51 +112,32 @@ final readonly class OpenAiAvatarRepository
         IntegerId $userId,
         Category $category = Category::GAMING
     ): ImageCollection {
-        $promptKey = match ($category) {
-            Category::GAMING => 'prompts.avatar.image_gaming_generator.system_prompt',
-            Category::METEOROLOGY => 'prompts.avatar.image_meteorology_generator.system_prompt',
+        $placeholders = [
+            '{avatar_description}' => $description->value(),
+            '{avatar_name}' => $avatarName->value(),
+            '{biography}' => $biography->value(),
+            '{presentation_style}' => $presentationStyle->value,
+        ];
+
+        $imageConfigs = match ($category) {
+            Category::GAMING => $this->buildGamingImageConfigs($placeholders),
+            Category::METEOROLOGY => $this->buildMeteorologyImageConfigs($placeholders),
         };
-
-        $systemPrompt = config($promptKey);
-        if (empty($systemPrompt)) {
-            throw new \RuntimeException("Avatar image {$category->value} generator prompt is not configured");
-        }
-
-        $basePrompt = str_replace(
-            ['{avatar_description}', '{avatar_name}', '{biography}', '{presentation_style}'],
-            [$description->value(), $avatarName->value(), $biography->value(), $presentationStyle->value],
-            $systemPrompt
-        );
 
         $imagesDir = storage_path('app/images');
-
         $referenceImage = Image::fromLocalPath($avatarImagePath->value());
-
         $generatedImages = [];
 
-        $angleVariations = match ($category) {
-            Category::GAMING => [
-                'front view, facing the camera directly, centered composition',
-                '30 degree angle from the left side, showing the person and gaming setup',
-                '30 degree angle from the right side, showing the person and gaming setup',
-            ],
-            Category::METEOROLOGY => [
-                'front view of the presenter in the TV studio, facing the camera directly, weather map visible behind',
-                'presenter pointing at the weather map of Spain from the left side, showing interaction with the map data',
-                'presenter pointing at the weather map of Spain from the right side, different angle showing the studio setup',
-            ],
-        };
-
-        for ($i = 0; $i < self::NUM_IMAGES; $i++) {
+        foreach ($imageConfigs as $index => $config) {
             try {
-                $prompt = $basePrompt . ' Camera angle: ' . $angleVariations[$i] . '. Photorealistic, professional photography quality.';
+                $promptMedia = $config['useReferenceImage'] ? [$referenceImage] : [];
 
                 $response = Prism::image()
                     ->using(Provider::OpenAI, self::IMAGE_MODEL)
-                    ->withPrompt($prompt, [$referenceImage])
+                    ->withPrompt($config['prompt'], $promptMedia)
                     ->withProviderOptions([
                         'size' => '1536x1024',
-                        'quality' => 'medium'
+                        'quality' => 'medium',
                     ])
                     ->generate();
 
@@ -176,12 +156,55 @@ final readonly class OpenAiAvatarRepository
                 $this->imageRepository->save($image);
                 $generatedImages[] = $image;
             } catch (\Exception $e) {
-                \Log::error("Failed to generate image {$i} for avatar: " . $e->getMessage());
+                \Log::error("Failed to generate image {$index} for avatar: " . $e->getMessage());
                 continue;
             }
         }
 
         return new ImageCollection($generatedImages);
+    }
+
+    /** @return array<int, array{prompt: string, useReferenceImage: bool}> */
+    private function buildGamingImageConfigs(array $placeholders): array
+    {
+        $systemPrompt = config('prompts.avatar.image_gaming_generator.system_prompt');
+        if (empty($systemPrompt)) {
+            throw new \RuntimeException('Avatar image gaming generator prompt is not configured');
+        }
+
+        $basePrompt = str_replace(array_keys($placeholders), array_values($placeholders), $systemPrompt);
+
+        $angleVariations = [
+            'front view, facing the camera directly, centered composition',
+            '30 degree angle from the left side, showing the person and gaming setup',
+            '30 degree angle from the right side, showing the person and gaming setup',
+        ];
+
+        return array_map(fn (string $angle) => [
+            'prompt' => $basePrompt . ' Camera angle: ' . $angle . '. Photorealistic, professional photography quality.',
+            'useReferenceImage' => true,
+        ], $angleVariations);
+    }
+
+    /** @return array<int, array{prompt: string, useReferenceImage: bool}> */
+    private function buildMeteorologyImageConfigs(array $placeholders): array
+    {
+        $avatarPrompt = config('prompts.avatar.image_meteorology_generator.avatar_prompt');
+        $setPrompt = config('prompts.avatar.image_meteorology_generator.set_prompt');
+
+        if (empty($avatarPrompt)) {
+            throw new \RuntimeException('Avatar image meteorology avatar_prompt is not configured');
+        }
+        if (empty($setPrompt)) {
+            throw new \RuntimeException('Avatar image meteorology set_prompt is not configured');
+        }
+
+        $avatarPrompt = str_replace(array_keys($placeholders), array_values($placeholders), $avatarPrompt);
+
+        return [
+            ['prompt' => $avatarPrompt, 'useReferenceImage' => true],
+            ['prompt' => $setPrompt, 'useReferenceImage' => false],
+        ];
     }
 
     private function saveGeneratedImage(object $image, string $savePath): void

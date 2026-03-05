@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\File;
 final readonly class VeoVideoRepository implements VideoGenerator, VideoContentRetriever, VideoExtender
 {
     private const string API_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
-    private const int MAX_REFERENCE_IMAGES = 3;
+    private const int MAX_REFERENCE_IMAGES = 5;
 
     public function __construct(
         private string $apiKey,
@@ -52,9 +52,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
         $referenceImages = $this->buildReferenceImages($videoPrompt);
         $hasReferenceImages = !empty($referenceImages);
 
-        $aspectRatio = $hasReferenceImages
-            ? AspectRatio::forReferenceImages()
-            : AspectRatio::fromString(config('veo.aspect_ratio', '16:9'));
+        $aspectRatio = AspectRatio::fromString(config('veo.aspect_ratio', '16:9'));
 
         $duration = $hasReferenceImages
             ? VideoDuration::forReferenceImages()

@@ -52,7 +52,7 @@ final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
     {
         return match ($category) {
             VideoCategory::GAMING => config('prompts.video.talking_head.system_prompt'),
-            VideoCategory::METEOROLOGY => config('prompts.video.talking_head.system_prompt'),
+            VideoCategory::METEOROLOGY => config('prompts.video.technical_meteorology.prompt'),
         };
     }
 

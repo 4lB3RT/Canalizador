@@ -42,7 +42,6 @@ final readonly class CreateVideo
 
         try {
             $video = $this->videoRepository->findById($videoId);
-
         } catch (VideoNotFound) {
             $scriptId = ScriptId::fromString($request->scriptId);
             $channelId = ChannelId::fromString($request->channelId);
