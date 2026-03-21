@@ -17,6 +17,7 @@ use Canalizador\VideoProduction\Weather\Infrastructure\Http\Api\Controllers\GetF
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\DownloadLatestChannelVideoController;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\FragmentAndPublishVideoController;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\PublishVideoController;
+use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\SmartFragmentAndPublishVideoController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['api.token'])->group(function () {
@@ -41,5 +42,7 @@ Route::middleware(['api.token'])->group(function () {
     Route::post('/youtube/channels/{channelId}/download-latest', DownloadLatestChannelVideoController::class)
         ->middleware(EnsureGoogleToken::class);
     Route::post('/youtube/videos/fragment-and-publish', FragmentAndPublishVideoController::class)
+        ->middleware(EnsureGoogleToken::class);
+    Route::post('/youtube/videos/smart-fragment-and-publish', SmartFragmentAndPublishVideoController::class)
         ->middleware(EnsureGoogleToken::class);
 });

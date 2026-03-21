@@ -101,16 +101,26 @@ use Canalizador\VideoProduction\Video\Infrastructure\Services\YouTube\GoogleYouT
 use Canalizador\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo\DownloadLatestChannelVideo;
 use Canalizador\YouTube\Video\Application\UseCases\FragmentAndPublishVideo\FragmentAndPublishVideo;
 use Canalizador\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
+use Canalizador\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo\SmartFragmentAndPublishVideo;
 use Canalizador\YouTube\Video\Domain\Factories\VideoPublisherFactory;
+use Canalizador\YouTube\Video\Domain\Repositories\AudioExtractor;
 use Canalizador\YouTube\Video\Domain\Repositories\ChannelVideoFinder;
+use Canalizador\YouTube\Video\Domain\Repositories\SmartVideoFragmenter;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoDownloader;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoFragmenter;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoPublisher;
+use Canalizador\YouTube\Video\Domain\Repositories\VideoTranscriber;
 use Canalizador\YouTube\Shared\Domain\Services\YouTubeServiceFactory as YouTubeServiceFactoryYouTubeBC;
 use Canalizador\YouTube\Shared\Infrastructure\Services\GoogleYouTubeServiceFactory as YouTubeGoogleServiceFactory;
 use Canalizador\YouTube\Video\Infrastructure\Factories\VideoPublisherFactory as VideoPublisherFactoryImpl;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\FragmentAndPublishVideoRequestMapper;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\PublishVideoRequestMapper;
+use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\SmartFragmentAndPublishVideoRequestMapper;
+use Canalizador\YouTube\Video\Infrastructure\Services\FfmpegAudioExtractor;
+use Canalizador\YouTube\Video\Infrastructure\Services\OpenAIVideoTranscriber;
+use Canalizador\YouTube\Video\Infrastructure\Services\PrismSmartVideoFragmenter;
+use Canalizador\YouTube\Video\Infrastructure\Agents\SmartVideoEditor;
+use Canalizador\YouTube\Video\Infrastructure\Tools\VideoCutter;
 use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\GoogleYouTubeChannelVideoFinder;
 use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YoutubeVideoPublisher;
 use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YtDlpVideoDownloader;
@@ -349,6 +359,32 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(FragmentAndPublishVideo::class, function ($app) {
             return new FragmentAndPublishVideo(
                 videoFragmenter: $app->make(VideoFragmenter::class),
+                videoPublisherFactory: $app->make(VideoPublisherFactory::class),
+            );
+        });
+
+        $this->app->bind(AudioExtractor::class, FfmpegAudioExtractor::class);
+        $this->app->bind(VideoTranscriber::class, OpenAIVideoTranscriber::class);
+
+        $this->app->bind(SmartVideoEditor::class, function ($app) {
+            return new SmartVideoEditor(
+                videoCutter: $app->make(VideoCutter::class),
+            );
+        });
+
+        $this->app->bind(SmartVideoFragmenter::class, function ($app) {
+            return new PrismSmartVideoFragmenter(
+                smartVideoEditor: $app->make(SmartVideoEditor::class),
+            );
+        });
+
+        $this->app->bind(SmartFragmentAndPublishVideoRequestMapper::class, SmartFragmentAndPublishVideoRequestMapper::class);
+
+        $this->app->bind(SmartFragmentAndPublishVideo::class, function ($app) {
+            return new SmartFragmentAndPublishVideo(
+                audioExtractor:       $app->make(AudioExtractor::class),
+                videoTranscriber:     $app->make(VideoTranscriber::class),
+                smartVideoFragmenter: $app->make(SmartVideoFragmenter::class),
                 videoPublisherFactory: $app->make(VideoPublisherFactory::class),
             );
         });
