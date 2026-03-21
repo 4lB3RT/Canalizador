@@ -27,13 +27,10 @@ Sustituir el verde (#00FF00) de la pantalla LED del plató por el MAPA.
 El mapa llena la pantalla como una LED real emitiendo el gráfico.
 El resultado final = emisión real de informativos meteorológicos de TV nacional.
 
-[SCREEN — STATIC BROADCAST GRAPHIC]
-La pantalla LED muestra EXCLUSIVAMENTE el gráfico del mapa proporcionado,
-reproducido píxel a píxel tal como se entrega. Es un frozen static overlay —
-el contenido completo y único de la pantalla. Toda la información meteorológica
-la comunica la presentadora verbalmente. La superficie de la pantalla conserva
-iluminación uniforme. El contenido geográfico (ciudades, fronteras, posiciones)
-permanece exactamente como en la imagen fuente.
+[SCREEN — STATIC PLAYBACK]
+The LED screen plays back the provided map as a frozen still image
+for the entire shot. Maintain the screen content exactly as provided —
+the map does not animate and receives no additional elements.
 
 [ACTION — PRESENTER DIRECTION]
 Gestos naturales y profesionales. Lenguaje corporal de presentadora de televisión.

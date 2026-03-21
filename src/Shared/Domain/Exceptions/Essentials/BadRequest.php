@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace Canalizador\Shared\Domain\Errors\Essentials;
+namespace Canalizador\Shared\Domain\Exceptions\Essentials;
 
 use Exception;
 

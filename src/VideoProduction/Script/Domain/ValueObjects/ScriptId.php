@@ -1,0 +1,11 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Canalizador\VideoProduction\Script\Domain\ValueObjects;
+
+use Canalizador\VideoProduction\Shared\Domain\ValueObjects\StringValue;
+
+final readonly class ScriptId extends StringValue
+{
+}

@@ -10,12 +10,12 @@ RUN apk add --no-cache \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install gd
 
-RUN apk add --no-cache linux-headers $PHPIZE_DEPS php-pear
+RUN apk add --no-cache linux-headers $PHPIZE_DEPS php-pear imagemagick-dev
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql sockets
+RUN docker-php-ext-install mysqli pdo pdo_mysql sockets exif
 
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
+RUN pecl install xdebug imagick \
+    && docker-php-ext-enable xdebug imagick
 
 RUN curl https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 RUN composer self-update

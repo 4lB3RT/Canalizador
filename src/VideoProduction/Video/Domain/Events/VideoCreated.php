@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Canalizador\VideoProduction\Video\Domain\Events;
+
+use Canalizador\VideoProduction\Shared\Domain\Events\DomainEvent;
+use Canalizador\VideoProduction\Shared\Domain\ValueObjects\DateTime;
+
+final readonly class VideoCreated implements DomainEvent
+{
+    public function __construct(
+        private string $videoId,
+        private DateTime $occurredAt,
+    ) {
+    }
+
+    public function eventName(): string
+    {
+        return 'video.created';
+    }
+
+    public function occurredAt(): DateTime
+    {
+        return $this->occurredAt;
+    }
+
+    public function payload(): array
+    {
+        return [
+            'video_id' => $this->videoId,
+        ];
+    }
+
+    public function videoId(): string
+    {
+        return $this->videoId;
+    }
+}

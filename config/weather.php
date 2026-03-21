@@ -22,4 +22,6 @@ return [
     'fetch_delay_ms' => (int) env('WEATHER_FETCH_DELAY_MS', 200),
 
     'map_image_path' => env('WEATHER_MAP_IMAGE_PATH', storage_path('app/maps/spain_communities.png')),
+
+    'studio_image_path' => env('WEATHER_STUDIO_IMAGE_PATH'),
 ];
