@@ -1,0 +1,13 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Canalizador\YouTube\Video\Domain\Services;
+
+use Google_Client;
+use Google_Service_YouTube;
+
+interface YouTubeServiceFactory
+{
+    public function create(Google_Client $client): Google_Service_YouTube;
+}

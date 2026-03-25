@@ -76,9 +76,9 @@ Your task is to generate a photorealistic image of an EMPTY professional TV weat
 
 1. MAIN DISPLAY / BACKGROUND:
    - The studio MUST have a large screen or video wall prominently visible behind the presenter area
-   - The screen may display abstract meteorological graphics (subtle gradient patterns, stylized cloud or sun motifs, soft color washes in blues and oranges) or channel branding elements
-   - NO specific weather maps, NO temperature data, NO city names, NO chroma key green
-   - The screen content should be visually appealing but generic — decorative, not informational
+   - The screen MUST display a perfectly uniform, bright green chroma key color (#00FF00) — solid green, no gradients, no graphics
+   - The green MUST be evenly lit with ZERO shadows, hotspots, or color variations across the screen surface
+   - This green screen area will be replaced with a weather map in post-production via chroma key compositing
 
 2. STUDIO ELEMENTS:
    - Professional broadcast news desk or anchor area in the foreground
@@ -101,8 +101,8 @@ Your task is to generate a photorealistic image of an EMPTY professional TV weat
 
 === CRITICAL CONSTRAINTS ===
 - ABSOLUTELY NO PEOPLE in the image — the studio must be completely empty of humans
-- NO chroma key green screens (#00FF00) anywhere in the studio
-- NO specific weather maps or data displays — only generic/abstract decorative content on screens
+- The ONLY green (#00FF00) in the image must be the main LED screen/video wall — nowhere else
+- NO specific weather maps, temperature data, or city names on any screen
 - Must be photorealistic — no stylization, no artistic effects, no 3D renders
 - Camera angle: wide shot from a studio camera position, showing the full set from the front
 

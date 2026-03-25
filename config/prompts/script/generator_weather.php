@@ -43,23 +43,35 @@ El full_script SIEMPRE debe seguir esta estructura de 3 partes:
 
 === REGLAS DE CLIP_PROMPTS ===
 
-CRÍTICO — NUNCA describir la apariencia física del presentador (pelo, cara, cuerpo, ropa, atuendo, vestuario). Ya se proporciona una foto de referencia por separado. El presentador debe mantener SIEMPRE el mismo aspecto y vestimenta en todos los clips — no cambiar ni mencionar su ropa, accesorios ni peinado.
+CRÍTICO — NUNCA describir la apariencia física de la presentadora (pelo, cara, cuerpo, ropa, atuendo, vestuario). Ya se proporciona una foto de referencia por separado. La presentadora debe mantener SIEMPRE el mismo aspecto y vestimenta en todos los clips — no cambiar ni mencionar su ropa, accesorios ni peinado.
 
-IMPORTANTE: Cada clip_prompt se usa DE FORMA AISLADA para generar su clip de vídeo. Debe ser auto-contenido con suficiente contexto para entenderse sin los demás clips.
+IMPORTANTE — CLIPS AISLADOS Y AUTO-CONTENIDOS:
+El clip 1 se genera junto con la especificación técnica global (que describe el plató, la pantalla LED, el chroma key y la cámara base).
+Los clips 2+ se generan DE FORMA AISLADA — solo se envía el clip_prompt.
+Por tanto, cada clip_prompt 2+ DEBE incluir:
+- Que la escena es un plató de TV profesional con una pantalla LED que muestra una imagen estática fija de España
+- Que la presentadora mantiene el mismo aspecto que en la imagen de referencia
+- Contexto suficiente para entenderse sin los demás clips
+El clip 1 puede omitir lo que ya cubre la spec técnica global.
 
-El escenario es un PLATÓ DE TELEVISIÓN profesional de informativos. El presentador habla DIRECTAMENTE A CÁMARA, sin mapa, sin pantalla verde, sin elementos interactivos de fondo. El fondo es un plató genérico de TV con iluminación broadcast profesional.
+El escenario es un PLATÓ DE TELEVISIÓN profesional con una PANTALLA LED que muestra un mapa de España. La presentadora habla a cámara y señala las ciudades en la pantalla cuando las menciona.
+
+REGLA DE UNA ACCIÓN PRINCIPAL POR CLIP:
+Cada clip contiene exactamente UNA acción física principal de la presentadora.
+Ejemplos: "señala hacia Madrid en la pantalla", "barre con la mano de norte a sur",
+"se desplaza a la izquierda para mostrar la costa este".
 
 Cada clip_prompt DEBE incluir estas 5 secciones (TODO EN CASTELLANO EUROPEO):
-1. CONTEXTO: El tema global del vídeo y qué representa visualmente este clip — presentador del tiempo en un plató de TV hablando a cámara. Incluir qué ciudades/zonas cubre este clip.
-2. ACCIONES: Gestos naturales del presentador — movimientos de manos para enfatizar, expresiones faciales, lenguaje corporal. Sin señalar mapas ni pantallas.
-3. CÁMARA: Ángulo, movimiento, zoom para este segmento. Variedad entre clips para dinamismo visual.
-4. SUBTÍTULOS: La porción exacta del full_script narrada en este clip. Distribuir uniformemente entre los {total_clips} clips. Clip 1 debe incluir el saludo; clip final debe incluir la despedida. SIEMPRE EN CASTELLANO EUROPEO (España) — es una copia literal del full_script. IMPORTANTE: cortar SIEMPRE en pausas naturales (final de frase, después de punto o coma), NUNCA en mitad de una frase o palabra. Formato: 'SUBTÍTULOS: "palabras exactas en castellano europeo"'
-5. CONTINUIDAD: Cómo conecta con el clip anterior (para clips 2+). Para clip 1: establece el tono y escenario.
+1. CONTEXT: El tema global del vídeo y qué representa este clip. Presentadora del tiempo en un plató de TV con pantalla LED mostrando mapa de España. Qué ciudades/zonas cubre. Para clips 2+: conexión narrativa con lo anterior.
+2. ACTION: UNA acción física principal de la presentadora — señalar ciudad en la pantalla, barrer zona con la mano, desplazarse lateralmente. Gestos profesionales de presentadora de televisión.
+3. CINEMATOGRAPHY: Shot size (medium shot, medium close-up, wide shot), movement (static, slow push-in, gentle lateral dolly, subtle pull-back), framing (rule of thirds, presenter camera-left/right).
+4. DIALOGUE: La porción exacta del full_script narrada en este clip. Distribuir uniformemente entre los {total_clips} clips. Clip 1 incluye el saludo; clip final incluye la despedida. SIEMPRE EN CASTELLANO EUROPEO (España) — copia literal del full_script. Cortar SIEMPRE en pausas naturales (final de frase, después de punto o coma), NUNCA en mitad de una frase. Formato: 'The presenter says: "palabras exactas en castellano europeo"'
+5. STYLE & AMBIANCE: Iluminación broadcast cálida y uniforme. Ambiente de estudio profesional con room tone sutil.
 
-Estructura narrativa de los clips (IMPORTANTE — cada clip_prompt es independiente y debe contener estos requisitos explícitamente):
-- Clip 1: ACCIONES debe incluir un gesto de saludo breve. SUBTÍTULOS debe comenzar con el saludo del full_script. Establece plató de TV y presentador hablando a cámara.
-- Clips intermedios: Recorrido por zonas — el presentador gesticula naturalmente al hablar del tiempo en cada zona.
-- Clip final: ACCIONES debe incluir un gesto de despedida casual. SUBTÍTULOS debe terminar con la despedida del full_script. La escena termina de forma natural.
+Estructura narrativa de los clips (cada clip_prompt es independiente):
+- Clip 1: ACTION incluye un gesto de saludo breve. DIALOGUE comienza con el saludo del full_script. Establece plató de TV, presentadora y pantalla LED con mapa.
+- Clips intermedios: Recorrido por zonas — la presentadora señala ciudades en la pantalla LED y gesticula naturalmente al hablar del tiempo.
+- Clip final: ACTION incluye un gesto de despedida casual. DIALOGUE termina con la despedida del full_script. La escena termina de forma natural.
 
 === RESTRICCIONES ===
 
@@ -68,7 +80,7 @@ Estructura narrativa de los clips (IMPORTANTE — cada clip_prompt es independie
 - Contenido basado EXCLUSIVAMENTE en los datos meteorológicos proporcionados
 - No inventar datos que no aparezcan en el prompt
 - clip_prompts: exactamente {total_clips} elementos, 200-300 palabras cada uno, TODO EN CASTELLANO EUROPEO
-- CERO descripciones de apariencia, ropa o atuendo del presentador en clip_prompts — debe mantener el mismo aspecto en todos los clips
+- CERO descripciones de apariencia, ropa o atuendo de la presentadora en clip_prompts
 
 === EJEMPLO ===
 
@@ -77,14 +89,19 @@ Ejemplo — Previsión del tiempo ({total_clips} clips):
 Prompt del usuario: "=== PREVISIÓN METEOROLÓGICA PARA HOY (2026-02-24) ===
 Ciudad: Madrid\nTemperatura: 5°C - 15°C\nEstado: Despejado\nProbabilidad de precipitación: 10%\nViento: NO 15 km/h\nResumen: Día soleado y fresco en Madrid con cielos despejados.
 
-Ciudad: Barcelona\nTemperatura: 8°C - 14°C\nEstado: Nuboso\nProbabilidad de precipitación: 40%\nViento: E 20 km/h\nResumen: Cielos nubosos en Barcelona con posibilidad de chubascos por la tarde."
+Ciudad: Barcelona\nTemperatura: 8°C - 14°C\nEstado: Nuboso\nProbabilidad de precipitación: 40%\nViento: E 20 km/h\nResumen: Cielos nubosos en Barcelona con posibilidad de chubascos por la tarde.
+
+Ciudad: Sevilla\nTemperatura: 12°C - 22°C\nEstado: Soleado\nProbabilidad de precipitación: 5%\nViento: SO 10 km/h\nResumen: Día soleado y templado en Sevilla.
+
+Ciudad: Málaga\nTemperatura: 14°C - 20°C\nEstado: Parcialmente nuboso\nProbabilidad de precipitación: 15%\nViento: S 12 km/h\nResumen: Nubes y claros en Málaga con ambiente suave."
 
 {
-  "thinking": "Tengo datos de Madrid y Barcelona. Madrid soleado y fresco, Barcelona nuboso con posibles chubascos. Buen contraste para crear narrativa: arrancar con el buen tiempo de Madrid y contrastar con Barcelona. Tono profesional pero cercano, como un presentador del tiempo real.",
-  "full_script": "Buenos días. Vamos a ver qué tiempo nos espera hoy en España. Si estáis en Madrid, tenéis un día bastante agradable, con cielos despejados y temperaturas que van a ir de los cinco grados de primera hora hasta unos quince por la tarde. Eso sí, abrigaos por la mañana que el fresquito se nota. Si nos vamos a Barcelona, la cosa cambia bastante. Allí los cielos van a estar nubosos durante buena parte del día, con temperaturas entre los ocho y los catorce grados, y ojo porque por la tarde hay un cuarenta por ciento de probabilidad de chubascos. Así que si salís, llevaos un paraguas por si acaso. Eso es todo por hoy, pasad buen día y nos vemos mañana.",
+  "thinking": "Tengo datos de Madrid, Barcelona, Sevilla y Málaga. Madrid soleado y fresco, Barcelona nuboso con posibles chubascos, Sevilla soleado y templado, Málaga con nubes y claros. Buen recorrido geográfico: centro, noreste, sur. Arrancar con Madrid, contrastar con Barcelona, y cerrar con el sur más cálido. Tono profesional pero cercano.",
+  "full_script": "Buenos días. Vamos a ver qué tiempo nos espera hoy en España. Si estáis en Madrid, tenéis un día bastante agradable, con cielos despejados y temperaturas que van a ir de los cinco grados de primera hora hasta unos quince por la tarde. Eso sí, abrigaos por la mañana que el fresquito se nota. Si nos vamos a Barcelona, la cosa cambia bastante. Allí los cielos van a estar nubosos durante buena parte del día, con temperaturas entre los ocho y los catorce grados, y ojo porque por la tarde hay un cuarenta por ciento de probabilidad de chubascos. Así que si salís, llevaos un paraguas por si acaso. Y si bajamos al sur, en Sevilla tenemos un día espléndido, con sol y máximas de veintidós grados, perfecto para pasear. En Málaga, algo más de nubes, pero con temperaturas muy agradables entre los catorce y los veinte grados. Eso es todo por hoy, pasad buen día y nos vemos mañana.",
   "clip_prompts": [
-    "CONTEXTO: Este vídeo es una previsión meteorológica diaria para ciudades españolas. Este clip cubre Madrid (centro de España). El presentador saluda a la audiencia y presenta el tiempo de hoy para Madrid. La escena muestra al presentador en un plató de televisión profesional, hablando directamente a cámara. ACCIONES: El presentador saluda brevemente con la mano mirando a cámara, sonríe con naturalidad y comienza a hablar del tiempo en Madrid. Hace un gesto abierto con las manos para transmitir buen tiempo y amplitud. Después junta los brazos simulando frío para reforzar el consejo de abrigarse por la mañana. CÁMARA: Plano medio, ligero push-in hacia el presentador. Composición en regla de tercios. Iluminación de estudio suave y profesional. SUBTÍTULOS: \"Buenos días. Vamos a ver qué tiempo nos espera hoy en España. Si estáis en Madrid, tenéis un día bastante agradable, con cielos despejados y temperaturas que van a ir de los cinco grados de primera hora hasta unos quince por la tarde. Eso sí, abrigaos por la mañana que el fresquito se nota.\" CONTINUIDAD: Plano de apertura — establece el plató de televisión y el tono profesional y cercano del presentador.",
-    "CONTEXTO: Este vídeo es una previsión meteorológica diaria para ciudades españolas. Este clip cubre Barcelona (noreste de España). El presentador hace la transición de Madrid a Barcelona y cierra la previsión. La escena continúa en el mismo plató de televisión profesional, presentador hablando a cámara. ACCIONES: El presentador hace un gesto de transición con la mano, cambia su expresión a una más precavida al hablar del tiempo nuboso en Barcelona. Simula sujetar un paraguas para reforzar el consejo. Termina asintiendo con calidez y hace un gesto de despedida casual mirando a cámara. CÁMARA: Ligero reencuadre manteniendo plano medio. Movimiento lateral suave para dar dinamismo. Iluminación de estudio consistente. SUBTÍTULOS: \"Si nos vamos a Barcelona, la cosa cambia bastante. Allí los cielos van a estar nubosos durante buena parte del día, con temperaturas entre los ocho y los catorce grados, y ojo porque por la tarde hay un cuarenta por ciento de probabilidad de chubascos. Así que si salís, llevaos un paraguas por si acaso. Eso es todo por hoy, pasad buen día y nos vemos mañana.\" CONTINUIDAD: Continuación del clip 1 — mismo plató. El presentador transiciona del buen tiempo de Madrid al tiempo más inestable de Barcelona. Clip final — la escena termina de forma natural con una despedida cálida."
+    "CONTEXT: Previsión meteorológica diaria para ciudades españolas. Este clip cubre Madrid (centro de España). La presentadora saluda a la audiencia y presenta el tiempo de hoy. Plató de televisión profesional con pantalla LED mostrando mapa de España al fondo. ACTION: La presentadora saluda brevemente con la mano mirando a cámara, sonríe con naturalidad y señala hacia el centro de la pantalla LED donde se encuentra Madrid en el mapa. CINEMATOGRAPHY: Medium shot, slow push-in. Presenter camera-left, rule of thirds. Static camera with subtle forward movement. DIALOGUE: The presenter says: \"Buenos días. Vamos a ver qué tiempo nos espera hoy en España. Si estáis en Madrid, tenéis un día bastante agradable, con cielos despejados y temperaturas que van a ir de los cinco grados de primera hora hasta unos quince por la tarde. Eso sí, abrigaos por la mañana que el fresquito se nota.\" STYLE & AMBIANCE: Warm broadcast studio lighting, even and diffused. Quiet studio ambient with subtle room tone. Photorealistic national television quality.",
+    "CONTEXT: Previsión meteorológica diaria para ciudades españolas. Este clip cubre Barcelona (noreste de España). Plató de televisión profesional con pantalla LED que muestra una imagen estática fija de España. La presentadora — misma persona que en la imagen de referencia, mismo aspecto y vestimenta — hace la transición de Madrid a Barcelona. ACTION: La presentadora barre con la mano desde el centro hacia la esquina superior derecha de la pantalla LED, señalando la posición de Barcelona en el mapa. CINEMATOGRAPHY: Medium shot, gentle lateral dolly right. Presenter camera-left, framing adjusts as she gestures toward the screen. Static base with subtle lateral movement. DIALOGUE: The presenter says: \"Si nos vamos a Barcelona, la cosa cambia bastante. Allí los cielos van a estar nubosos durante buena parte del día, con temperaturas entre los ocho y los catorce grados, y ojo porque por la tarde hay un cuarenta por ciento de probabilidad de chubascos. Así que si salís, llevaos un paraguas por si acaso.\" STYLE & AMBIANCE: Warm broadcast studio lighting, even and diffused. Quiet studio ambient with subtle room tone. Photorealistic national television quality.",
+    "CONTEXT: Previsión meteorológica diaria para ciudades españolas. Este clip cubre Sevilla y Málaga (sur de España). Plató de televisión profesional con pantalla LED que muestra una imagen estática fija de España. La presentadora — misma persona que en la imagen de referencia, mismo aspecto y vestimenta — transiciona desde Barcelona hacia el sur del país y cierra la previsión. ACTION: La presentadora barre con la mano en diagonal descendente desde la esquina superior derecha hacia la zona inferior izquierda de la pantalla LED, señalando Sevilla en el mapa, y luego hace un gesto corto hacia la derecha para indicar Málaga. Termina con un gesto de despedida casual mirando a cámara. CINEMATOGRAPHY: Medium close-up, subtle pull-back to medium shot as she gestures across the screen. Presenter camera-right, rule of thirds. Static base with gentle widening. DIALOGUE: The presenter says: \"Y si bajamos al sur, en Sevilla tenemos un día espléndido, con sol y máximas de veintidós grados, perfecto para pasear. En Málaga, algo más de nubes, pero con temperaturas muy agradables entre los catorce y los veinte grados. Eso es todo por hoy, pasad buen día y nos vemos mañana.\" STYLE & AMBIANCE: Warm broadcast studio lighting, even and diffused. Quiet studio ambient with subtle room tone. Photorealistic national television quality."
   ]
 }
 """

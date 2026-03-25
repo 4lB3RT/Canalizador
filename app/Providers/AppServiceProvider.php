@@ -4,120 +4,142 @@ namespace App\Providers;
 
 use App\Services\GoogleClientService;
 use App\Services\GoogleTokenService;
-use Canalizador\Avatar\Application\UseCases\CreateAvatar\CreateAvatar;
-use Canalizador\Avatar\Domain\Factories\AvatarFactory;
-use Canalizador\Avatar\Domain\Repositories\AvatarRepository;
-use Canalizador\Avatar\Infrastructure\Http\Api\Mappers\CreateAvatarRequestMapper;
-use Canalizador\Avatar\Infrastructure\Repositories\Eloquent\EloquentAvatarRepository;
-use Canalizador\Avatar\Infrastructure\Repositories\OpenAI\OpenAiAvatarRepository;
-use Canalizador\Channel\Application\UseCases\SyncChannel\SyncChannel;
-use Canalizador\Channel\Application\UseCases\UpdateChannelWithAI\UpdateChannelWithAI;
-use Canalizador\Channel\Domain\Repositories\ChannelMetadataRepository;
-use Canalizador\Channel\Domain\Repositories\ChannelRepository;
-use Canalizador\Channel\Infrastructure\Repositories\Eloquent\EloquentChannelRepository;
-use Canalizador\Channel\Infrastructure\Repositories\OpenAI\OpenAIChannelRepository;
-use Canalizador\Channel\Infrastructure\Repositories\Youtube\YoutubeChannelRepository;
-use Canalizador\Image\Domain\Factories\ImageFactory;
-use Canalizador\Image\Domain\Repositories\ImageRepository;
-use Canalizador\Image\Infrastructure\Repositories\Eloquent\EloquentImageRepository;
-use Canalizador\News\Application\UseCases\DownloadNews\DownloadNews;
-use Canalizador\News\Domain\Repositories\NewsProvider;
-use Canalizador\News\Domain\Repositories\NewsRepository;
-use Canalizador\News\Infrastructure\Repositories\Eloquent\EloquentNewsRepository;
-use Canalizador\News\Infrastructure\Repositories\TresDJuegos\TresDJuegosClient;
-use Canalizador\Voice\Application\UseCases\CloneVoice\CloneVoice;
-use Canalizador\Voice\Application\UseCases\GenerateVoice\GenerateVoice;
-use Canalizador\Voice\Domain\Repositories\AudioIsolator;
-use Canalizador\Voice\Domain\Repositories\VoiceCloner;
-use Canalizador\Voice\Domain\Repositories\VoiceGenerator;
-use Canalizador\Voice\Domain\Repositories\VoiceRepository;
-use Canalizador\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsAudioIsolator;
-use Canalizador\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsVoiceCloner;
-use Canalizador\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsVoiceGenerator;
-use Canalizador\Voice\Infrastructure\Repositories\Eloquent\EloquentVoiceRepository;
-use Canalizador\Script\Domain\Factories\ScriptFactory;
-use Canalizador\Script\Domain\Repositories\ScriptGenerator;
-use Canalizador\Script\Domain\Repositories\ScriptRepository;
-use Canalizador\Script\Domain\Services\GenerateScript;
-use Canalizador\Script\Infrastructure\Repositories\Eloquent\EloquentScriptRepository;
-use Canalizador\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptGenerator;
-use Canalizador\Shared\Domain\Events\EventBus;
-use Canalizador\Shared\Infrastructure\Console\SetupRabbitMQCommand;
-use Canalizador\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Domain\Services\HttpClient;
-use Canalizador\Shared\Domain\Services\HttpResponseValidator;
-use Canalizador\Shared\Domain\Services\YouTubeAnalyticsServiceFactory;
-use Canalizador\Shared\Infrastructure\Events\EventHandlerRegistry;
-use Canalizador\Shared\Infrastructure\Events\LaravelQueueEventBus;
-use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeAnalyticsApiClient;
-use Canalizador\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
-use Canalizador\Shared\Infrastructure\Services\GoogleYouTubeAnalyticsServiceFactory;
-use Canalizador\Shared\Infrastructure\Services\HttpErrorExtractor;
-use Canalizador\Shared\Infrastructure\Services\HttpResponseValidator as HttpResponseValidatorImpl;
-use Canalizador\Shared\Infrastructure\Services\LaravelHttpClient;
-use Canalizador\Shared\Infrastructure\Services\SystemClock;
-use Canalizador\Clip\Application\Handlers\OnAllClipsCompletedHandler;
-use Canalizador\Clip\Application\Handlers\OnClipCompletedHandler;
-use Canalizador\Clip\Application\Handlers\OnClipCreatedHandler;
-use Canalizador\Clip\Application\Handlers\OnClipGeneratedHandler;
-use Canalizador\Clip\Application\Handlers\OnVideoCreatedHandler;
-use Canalizador\Clip\Application\UseCases\ComposeShort\ComposeShort;
-use Canalizador\Clip\Application\UseCases\CreateClip\CreateClip;
-use Canalizador\Clip\Application\UseCases\DownloadClip\DownloadClip;
-use Canalizador\Clip\Application\UseCases\GenerateClip\GenerateClip;
-use Canalizador\Clip\Domain\Events\AllClipsCompleted;
-use Canalizador\Clip\Domain\Events\ClipCompleted;
-use Canalizador\Clip\Domain\Events\ClipCreated;
-use Canalizador\Clip\Domain\Events\ClipGenerated;
-use Canalizador\Clip\Domain\Factories\ClipFactory;
-use Canalizador\Clip\Domain\Repositories\ClipDownloader;
-use Canalizador\Clip\Domain\Repositories\ClipRepository;
-use Canalizador\Clip\Infrastructure\Repositories\Eloquent\EloquentClipRepository;
-use Canalizador\Clip\Infrastructure\Repositories\Veo\VeoClipDownloader;
-use Canalizador\Clip\Domain\Services\VideoComposer;
-use Canalizador\Clip\Infrastructure\Services\FfmpegVideoComposer;
-use Canalizador\Video\Application\UseCases\ApplyVoice\ApplyVoice;
-use Canalizador\Video\Application\UseCases\CreateVideo\CreateVideo;
-use Canalizador\Video\Application\UseCases\PublishVideo\PublishVideo;
-use Canalizador\Video\Application\UseCases\RetrieveVideoContent\RetrieveVideoContent;
-use Canalizador\Video\Domain\Events\VideoCreated;
-use Canalizador\Video\Domain\Factories\VideoFactory;
-use Canalizador\Video\Domain\Factories\VideoPublisherFactory;
-use Canalizador\Video\Domain\Repositories\VideoContentRetriever;
-use Canalizador\Video\Domain\Repositories\VideoExtender;
-use Canalizador\Video\Domain\Repositories\VideoGenerator;
-use Canalizador\Video\Domain\Repositories\VideoMetadataGenerator;
-use Canalizador\Video\Domain\Repositories\VideoRepository;
-use Canalizador\Video\Domain\Services\FileSystem;
-use Canalizador\Video\Domain\Services\VideoFileValidator;
-use Canalizador\Video\Domain\Services\VideoPromptExtractor;
-use Canalizador\Video\Domain\Services\YouTubeServiceFactory;
-use Canalizador\Video\Infrastructure\Factories\VideoPublisherFactory as VideoPublisherFactoryImpl;
-use Canalizador\Video\Infrastructure\Http\Api\Mappers\CreateVideoRequestMapper;
-use Canalizador\Video\Infrastructure\Http\Api\Mappers\PublishVideoRequestMapper;
-use Canalizador\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
-use Canalizador\Video\Infrastructure\Repositories\OpenAI\OpenAIVideoMetadataGenerator;
-use Canalizador\Video\Infrastructure\Repositories\Veo\VeoVideoRepository;
-use Canalizador\Video\Infrastructure\Repositories\YouTube\YoutubeVideoPublisher;
-use Canalizador\Video\Infrastructure\Services\JsonVideoPromptExtractor;
-use Canalizador\Video\Infrastructure\Services\LaravelFileSystem;
-use Canalizador\Video\Infrastructure\Services\VideoFileValidator as VideoFileValidatorImpl;
-use Canalizador\Video\Infrastructure\Services\YouTube\GoogleYouTubeErrorExtractor;
-use Canalizador\Video\Infrastructure\Services\YouTube\GoogleYouTubeServiceFactory;
-use Canalizador\Video\Infrastructure\Services\YouTube\GoogleYouTubeVideoBuilder;
-use Canalizador\Video\Infrastructure\Services\YouTube\GoogleYouTubeVideoUploader;
-use Canalizador\Video\Infrastructure\Services\YouTube\YouTubeErrorExtractor;
-use Canalizador\Video\Infrastructure\Services\YouTube\YouTubeVideoBuilder;
-use Canalizador\Video\Infrastructure\Services\YouTube\YouTubeVideoUploader;
-use Canalizador\VideoLegacy\Application\UseCases\GetYoutubeVideo;
-use Canalizador\VideoLegacy\Infrastructure\Repositories\Youtube\YoutubeVideoRepository;
-use Canalizador\Weather\Application\UseCases\GetForecasts\GetForecasts;
-use Canalizador\Weather\Domain\Repositories\ForecastRepository;
-use Canalizador\Weather\Domain\Repositories\WeatherProvider;
-use Canalizador\Weather\Infrastructure\Repositories\Aemet\AemetWeatherProvider;
-use Canalizador\Weather\Infrastructure\Repositories\Eloquent\EloquentForecastRepository;
-use Canalizador\Weather\Domain\Repositories\ForecastSummarizer;
-use Canalizador\Weather\Infrastructure\Repositories\OpenAI\OpenAIForecastSummarizer;
+use Canalizador\VideoProduction\Avatar\Application\UseCases\CreateAvatar\CreateAvatar;
+use Canalizador\VideoProduction\Avatar\Domain\Factories\AvatarFactory;
+use Canalizador\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
+use Canalizador\VideoProduction\Avatar\Infrastructure\Http\Api\Mappers\CreateAvatarRequestMapper;
+use Canalizador\VideoProduction\Avatar\Infrastructure\Repositories\Eloquent\EloquentAvatarRepository;
+use Canalizador\VideoProduction\Avatar\Infrastructure\Repositories\OpenAI\OpenAiAvatarRepository;
+use Canalizador\YouTube\Channel\Application\UseCases\SyncChannel\SyncChannel;
+use Canalizador\YouTube\Channel\Application\UseCases\UpdateChannelWithAI\UpdateChannelWithAI;
+use Canalizador\YouTube\Channel\Domain\Repositories\ChannelMetadataRepository;
+use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Canalizador\YouTube\Channel\Infrastructure\Repositories\Eloquent\EloquentChannelRepository;
+use Canalizador\YouTube\Channel\Infrastructure\Repositories\OpenAI\OpenAIChannelRepository;
+use Canalizador\YouTube\Channel\Infrastructure\Repositories\Youtube\YoutubeChannelRepository;
+use Canalizador\VideoProduction\Image\Domain\Factories\ImageFactory;
+use Canalizador\VideoProduction\Image\Domain\Repositories\ImageRepository;
+use Canalizador\VideoProduction\Image\Infrastructure\Repositories\Eloquent\EloquentImageRepository;
+use Canalizador\VideoProduction\News\Application\UseCases\DownloadNews\DownloadNews;
+use Canalizador\VideoProduction\News\Domain\Repositories\NewsProvider;
+use Canalizador\VideoProduction\News\Domain\Repositories\NewsRepository;
+use Canalizador\VideoProduction\News\Infrastructure\Repositories\Eloquent\EloquentNewsRepository;
+use Canalizador\VideoProduction\News\Infrastructure\Repositories\TresDJuegos\TresDJuegosClient;
+use Canalizador\VideoProduction\Voice\Application\UseCases\CloneVoice\CloneVoice;
+use Canalizador\VideoProduction\Voice\Application\UseCases\GenerateVoice\GenerateVoice;
+use Canalizador\VideoProduction\Voice\Domain\Repositories\AudioIsolator;
+use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceCloner;
+use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceGenerator;
+use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
+use Canalizador\VideoProduction\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsAudioIsolator;
+use Canalizador\VideoProduction\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsVoiceCloner;
+use Canalizador\VideoProduction\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsVoiceGenerator;
+use Canalizador\VideoProduction\Voice\Infrastructure\Repositories\Eloquent\EloquentVoiceRepository;
+use Canalizador\VideoProduction\Script\Domain\Factories\ScriptFactory;
+use Canalizador\VideoProduction\Script\Domain\Repositories\ScriptGenerator;
+use Canalizador\VideoProduction\Script\Domain\Repositories\ScriptRepository;
+use Canalizador\VideoProduction\Script\Domain\Services\GenerateScript;
+use Canalizador\VideoProduction\Script\Infrastructure\Repositories\Eloquent\EloquentScriptRepository;
+use Canalizador\VideoProduction\Script\Infrastructure\Repositories\OpenAI\OpenAIScriptGenerator;
+use Canalizador\VideoProduction\Shared\Domain\Events\EventBus;
+use Canalizador\VideoProduction\Shared\Infrastructure\Console\SetupRabbitMQCommand;
+use Canalizador\VideoProduction\Shared\Domain\Services\Clock;
+use Canalizador\VideoProduction\Shared\Domain\Services\HttpClient;
+use Canalizador\VideoProduction\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\VideoProduction\Shared\Infrastructure\Events\EventHandlerRegistry;
+use Canalizador\VideoProduction\Shared\Infrastructure\Events\LaravelQueueEventBus;
+use Canalizador\YouTube\Shared\Domain\Services\YouTubeAnalyticsServiceFactory;
+use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeAnalyticsApiClient;
+use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
+use Canalizador\YouTube\Shared\Infrastructure\Services\GoogleYouTubeAnalyticsServiceFactory;
+use Canalizador\VideoProduction\Shared\Infrastructure\Services\HttpErrorExtractor;
+use Canalizador\VideoProduction\Shared\Infrastructure\Services\HttpResponseValidator as HttpResponseValidatorImpl;
+use Canalizador\VideoProduction\Shared\Infrastructure\Services\LaravelHttpClient;
+use Canalizador\VideoProduction\Shared\Infrastructure\Services\SystemClock;
+use Canalizador\VideoProduction\Clip\Application\Handlers\OnAllClipsCompletedHandler;
+use Canalizador\VideoProduction\Clip\Application\Handlers\OnClipCompletedHandler;
+use Canalizador\VideoProduction\Clip\Application\Handlers\OnClipCreatedHandler;
+use Canalizador\VideoProduction\Clip\Application\Handlers\OnClipGeneratedHandler;
+use Canalizador\VideoProduction\Clip\Application\Handlers\OnVideoCreatedHandler;
+use Canalizador\VideoProduction\Clip\Application\UseCases\ComposeShort\ComposeShort;
+use Canalizador\VideoProduction\Clip\Application\UseCases\CreateClip\CreateClip;
+use Canalizador\VideoProduction\Clip\Application\UseCases\DownloadClip\DownloadClip;
+use Canalizador\VideoProduction\Clip\Application\UseCases\GenerateClip\GenerateClip;
+use Canalizador\VideoProduction\Clip\Domain\Events\AllClipsCompleted;
+use Canalizador\VideoProduction\Clip\Domain\Events\ClipCompleted;
+use Canalizador\VideoProduction\Clip\Domain\Events\ClipCreated;
+use Canalizador\VideoProduction\Clip\Domain\Events\ClipGenerated;
+use Canalizador\VideoProduction\Clip\Domain\Factories\ClipFactory;
+use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipDownloader;
+use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipRepository;
+use Canalizador\VideoProduction\Clip\Infrastructure\Repositories\Eloquent\EloquentClipRepository;
+use Canalizador\VideoProduction\Clip\Infrastructure\Repositories\Veo\VeoClipDownloader;
+use Canalizador\VideoProduction\Clip\Domain\Services\VideoComposer;
+use Canalizador\VideoProduction\Clip\Infrastructure\Services\FfmpegVideoComposer;
+use Canalizador\VideoProduction\Video\Application\UseCases\ApplyVoice\ApplyVoice;
+use Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo\CreateVideo;
+use Canalizador\VideoProduction\Video\Application\UseCases\RetrieveVideoContent\RetrieveVideoContent;
+use Canalizador\VideoProduction\Video\Domain\Events\VideoCreated;
+use Canalizador\VideoProduction\Video\Domain\Factories\VideoFactory;
+use Canalizador\VideoProduction\Video\Domain\Repositories\VideoContentRetriever;
+use Canalizador\VideoProduction\Video\Domain\Repositories\VideoExtender;
+use Canalizador\VideoProduction\Video\Domain\Repositories\VideoGenerator;
+use Canalizador\VideoProduction\Video\Domain\Repositories\VideoMetadataGenerator;
+use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository;
+use Canalizador\VideoProduction\Video\Domain\Services\FileSystem;
+use Canalizador\VideoProduction\Video\Domain\Services\VideoFileValidator;
+use Canalizador\VideoProduction\Video\Domain\Services\VideoPromptExtractor;
+use Canalizador\VideoProduction\Video\Domain\Services\YouTubeServiceFactory;
+use Canalizador\VideoProduction\Video\Infrastructure\Http\Api\Mappers\CreateVideoRequestMapper;
+use Canalizador\VideoProduction\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
+use Canalizador\VideoProduction\Video\Infrastructure\Repositories\OpenAI\OpenAIVideoMetadataGenerator;
+use Canalizador\VideoProduction\Video\Infrastructure\Repositories\Veo\VeoVideoRepository;
+use Canalizador\VideoProduction\Video\Infrastructure\Services\JsonVideoPromptExtractor;
+use Canalizador\VideoProduction\Video\Infrastructure\Services\LaravelFileSystem;
+use Canalizador\VideoProduction\Video\Infrastructure\Services\VideoFileValidator as VideoFileValidatorImpl;
+use Canalizador\VideoProduction\Video\Infrastructure\Services\YouTube\GoogleYouTubeServiceFactory;
+use Canalizador\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo\DownloadLatestChannelVideo;
+use Canalizador\YouTube\Video\Application\UseCases\FragmentAndPublishVideo\FragmentAndPublishVideo;
+use Canalizador\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
+use Canalizador\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo\SmartFragmentAndPublishVideo;
+use Canalizador\YouTube\Video\Domain\Factories\VideoPublisherFactory;
+use Canalizador\YouTube\Video\Domain\Repositories\AudioExtractor;
+use Canalizador\YouTube\Video\Domain\Repositories\ChannelVideoFinder;
+use Canalizador\YouTube\Video\Domain\Repositories\SmartVideoFragmenter;
+use Canalizador\YouTube\Video\Domain\Repositories\VideoDownloader;
+use Canalizador\YouTube\Video\Domain\Repositories\VideoFragmenter;
+use Canalizador\YouTube\Video\Domain\Repositories\VideoPublisher;
+use Canalizador\YouTube\Video\Domain\Repositories\VideoTranscriber;
+use Canalizador\YouTube\Shared\Domain\Services\YouTubeServiceFactory as YouTubeServiceFactoryYouTubeBC;
+use Canalizador\YouTube\Shared\Infrastructure\Services\GoogleYouTubeServiceFactory as YouTubeGoogleServiceFactory;
+use Canalizador\YouTube\Video\Infrastructure\Factories\VideoPublisherFactory as VideoPublisherFactoryImpl;
+use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\FragmentAndPublishVideoRequestMapper;
+use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\PublishVideoRequestMapper;
+use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\SmartFragmentAndPublishVideoRequestMapper;
+use Canalizador\YouTube\Video\Infrastructure\Services\FfmpegAudioExtractor;
+use Canalizador\YouTube\Video\Infrastructure\Services\OpenAIVideoTranscriber;
+use Canalizador\YouTube\Video\Infrastructure\Services\PrismSmartVideoFragmenter;
+use Canalizador\YouTube\Video\Infrastructure\Agents\SmartVideoEditor;
+use Canalizador\YouTube\Video\Infrastructure\Tools\VideoCutter;
+use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\GoogleYouTubeChannelVideoFinder;
+use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YoutubeVideoPublisher;
+use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YtDlpVideoDownloader;
+use Canalizador\YouTube\Video\Infrastructure\Services\FfmpegVideoFragmenter;
+use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\GoogleYouTubeErrorExtractor;
+use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\GoogleYouTubeVideoBuilder;
+use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\GoogleYouTubeVideoUploader;
+use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\YouTubeErrorExtractor;
+use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\YouTubeVideoBuilder;
+use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\YouTubeVideoUploader;
+use Canalizador\VideoProduction\VideoLegacy\Application\UseCases\GetYoutubeVideo;
+use Canalizador\VideoProduction\VideoLegacy\Infrastructure\Repositories\Youtube\YoutubeVideoRepository;
+use Canalizador\VideoProduction\Weather\Application\UseCases\GetForecasts\GetForecasts;
+use Canalizador\VideoProduction\Weather\Domain\Repositories\ForecastRepository;
+use Canalizador\VideoProduction\Weather\Domain\Repositories\WeatherProvider;
+use Canalizador\VideoProduction\Weather\Infrastructure\Repositories\Aemet\AemetWeatherProvider;
+use Canalizador\VideoProduction\Weather\Infrastructure\Repositories\Eloquent\EloquentForecastRepository;
+use Canalizador\VideoProduction\Weather\Domain\Repositories\ForecastSummarizer;
+use Canalizador\VideoProduction\Weather\Infrastructure\Repositories\OpenAI\OpenAIForecastSummarizer;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -126,7 +148,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->registerSharedServices();
         $this->registerScriptServices();
-        $this->registerVideoServices();
+        $this->registerVideoProductionServices();
+        $this->registerYouTubeServices();
         $this->registerClipServices();
         $this->registerChannelServices();
         $this->registerAvatarServices();
@@ -173,7 +196,7 @@ class AppServiceProvider extends ServiceProvider
             return new YoutubeDataApiClient(
                 apiKey: config('services.youtube.api_key'),
                 googleClientService: $app->make(GoogleClientService::class),
-                youtubeServiceFactory: $app->make(YouTubeServiceFactory::class)
+                youtubeServiceFactory: $app->make(YouTubeServiceFactoryYouTubeBC::class)
             );
         });
 
@@ -199,15 +222,12 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    private function registerVideoServices(): void
+    private function registerVideoProductionServices(): void
     {
         $this->app->bind(CreateVideoRequestMapper::class, CreateVideoRequestMapper::class);
-        $this->app->bind(PublishVideoRequestMapper::class, PublishVideoRequestMapper::class);
         $this->app->bind(VideoPromptExtractor::class, JsonVideoPromptExtractor::class);
         $this->app->bind(VideoMetadataGenerator::class, OpenAIVideoMetadataGenerator::class);
         $this->app->bind(FileSystem::class, LaravelFileSystem::class);
-        $this->app->bind(YouTubeVideoBuilder::class, GoogleYouTubeVideoBuilder::class);
-        $this->app->bind(YouTubeErrorExtractor::class, GoogleYouTubeErrorExtractor::class);
         $this->app->bind(YouTubeServiceFactory::class, GoogleYouTubeServiceFactory::class);
 
         $this->app->bind(VideoRepository::class, function ($app) {
@@ -262,6 +282,32 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
+        $this->app->bind(ApplyVoice::class, function ($app) {
+            return new ApplyVoice(
+                videoRepository: $app->make(VideoRepository::class),
+                avatarRepository: $app->make(AvatarRepository::class),
+                voiceRepository: $app->make(VoiceRepository::class),
+                voiceGenerator: $app->make(VoiceGenerator::class),
+                videoComposer: $app->make(VideoComposer::class),
+                audioIsolator: $app->make(AudioIsolator::class),
+            );
+        });
+
+        $this->app->bind(GetYoutubeVideo::class, function ($app) {
+            return new GetYoutubeVideo(
+                externalVideoRepository: $app->make(YoutubeVideoRepository::class)
+            );
+        });
+    }
+
+    private function registerYouTubeServices(): void
+    {
+        $this->app->bind(PublishVideoRequestMapper::class, PublishVideoRequestMapper::class);
+        $this->app->bind(FragmentAndPublishVideoRequestMapper::class, FragmentAndPublishVideoRequestMapper::class);
+        $this->app->bind(YouTubeVideoBuilder::class, GoogleYouTubeVideoBuilder::class);
+        $this->app->bind(YouTubeErrorExtractor::class, GoogleYouTubeErrorExtractor::class);
+        $this->app->bind(YouTubeServiceFactoryYouTubeBC::class, YouTubeGoogleServiceFactory::class);
+
         $this->app->bind(YouTubeVideoUploader::class, function ($app) {
             return new GoogleYouTubeVideoUploader(
                 fileSystem: $app->make(FileSystem::class)
@@ -271,12 +317,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(YoutubeVideoPublisher::class, function ($app) {
             return new YoutubeVideoPublisher(
                 googleClientService: $app->make(GoogleClientService::class),
-                videoFileValidator: $app->make(VideoFileValidator::class),
                 youtubeVideoBuilder: $app->make(YouTubeVideoBuilder::class),
                 youtubeVideoUploader: $app->make(YouTubeVideoUploader::class),
-                youtubeServiceFactory: $app->make(YouTubeServiceFactory::class)
+                youtubeServiceFactory: $app->make(YouTubeServiceFactoryYouTubeBC::class)
             );
         });
+
+        $this->app->bind(VideoPublisher::class, YoutubeVideoPublisher::class);
 
         $this->app->bind(VideoPublisherFactory::class, function ($app) {
             return new VideoPublisherFactoryImpl(
@@ -291,20 +338,54 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind(GetYoutubeVideo::class, function ($app) {
-            return new GetYoutubeVideo(
-                externalVideoRepository: $app->make(YoutubeVideoRepository::class)
+        $this->app->bind(ChannelVideoFinder::class, function ($app) {
+            return new GoogleYouTubeChannelVideoFinder(
+                googleClientService: $app->make(GoogleClientService::class),
+                youtubeServiceFactory: $app->make(YouTubeServiceFactoryYouTubeBC::class)
             );
         });
 
-        $this->app->bind(ApplyVoice::class, function ($app) {
-            return new ApplyVoice(
-                videoRepository: $app->make(VideoRepository::class),
-                avatarRepository: $app->make(AvatarRepository::class),
-                voiceRepository: $app->make(VoiceRepository::class),
-                voiceGenerator: $app->make(VoiceGenerator::class),
-                videoComposer: $app->make(VideoComposer::class),
-                audioIsolator: $app->make(AudioIsolator::class),
+        $this->app->bind(VideoDownloader::class, YtDlpVideoDownloader::class);
+
+        $this->app->bind(VideoFragmenter::class, FfmpegVideoFragmenter::class);
+
+        $this->app->bind(DownloadLatestChannelVideo::class, function ($app) {
+            return new DownloadLatestChannelVideo(
+                channelVideoFinder: $app->make(ChannelVideoFinder::class),
+                videoDownloader: $app->make(VideoDownloader::class),
+            );
+        });
+
+        $this->app->bind(FragmentAndPublishVideo::class, function ($app) {
+            return new FragmentAndPublishVideo(
+                videoFragmenter: $app->make(VideoFragmenter::class),
+                videoPublisherFactory: $app->make(VideoPublisherFactory::class),
+            );
+        });
+
+        $this->app->bind(AudioExtractor::class, FfmpegAudioExtractor::class);
+        $this->app->bind(VideoTranscriber::class, OpenAIVideoTranscriber::class);
+
+        $this->app->bind(SmartVideoEditor::class, function ($app) {
+            return new SmartVideoEditor(
+                videoCutter: $app->make(VideoCutter::class),
+            );
+        });
+
+        $this->app->bind(SmartVideoFragmenter::class, function ($app) {
+            return new PrismSmartVideoFragmenter(
+                smartVideoEditor: $app->make(SmartVideoEditor::class),
+            );
+        });
+
+        $this->app->bind(SmartFragmentAndPublishVideoRequestMapper::class, SmartFragmentAndPublishVideoRequestMapper::class);
+
+        $this->app->bind(SmartFragmentAndPublishVideo::class, function ($app) {
+            return new SmartFragmentAndPublishVideo(
+                audioExtractor:       $app->make(AudioExtractor::class),
+                videoTranscriber:     $app->make(VideoTranscriber::class),
+                smartVideoFragmenter: $app->make(SmartVideoFragmenter::class),
+                videoPublisherFactory: $app->make(VideoPublisherFactory::class),
             );
         });
     }
