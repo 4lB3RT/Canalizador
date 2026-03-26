@@ -20,6 +20,9 @@ final class Video
         private readonly Url         $url,
         private ?LocalPath           $localPath = null,
         private ?AudioPath           $audioPath = null,
+        private array                $transcription = [],
+        private array                $publishedShortIds = [],
+        private readonly ?string     $channelId = null,
     ) {
     }
 
@@ -63,15 +66,43 @@ final class Video
         $this->audioPath = $path;
     }
 
+    public function transcription(): array
+    {
+        return $this->transcription;
+    }
+
+    public function updateTranscription(array $segments): void
+    {
+        $this->transcription = $segments;
+    }
+
+    public function publishedShortIds(): array
+    {
+        return $this->publishedShortIds;
+    }
+
+    public function addPublishedShortId(string $id): void
+    {
+        $this->publishedShortIds[] = $id;
+    }
+
+    public function channelId(): ?string
+    {
+        return $this->channelId;
+    }
+
     public function toArray(): array
     {
         return [
-            'id'           => $this->id->value(),
-            'title'        => $this->title->value(),
-            'published_at' => $this->publishedAt->format('Y-m-d H:i:s'),
-            'url'          => $this->url->value(),
-            'local_path'   => $this->localPath?->value(),
-            'audio_path'   => $this->audioPath?->value(),
+            'id'                  => $this->id->value(),
+            'title'               => $this->title->value(),
+            'published_at'        => $this->publishedAt->format('Y-m-d H:i:s'),
+            'url'                 => $this->url->value(),
+            'local_path'          => $this->localPath?->value(),
+            'audio_path'          => $this->audioPath?->value(),
+            'transcription'       => $this->transcription,
+            'published_short_ids' => $this->publishedShortIds,
+            'channel_id'          => $this->channelId,
         ];
     }
 }

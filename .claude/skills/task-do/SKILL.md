@@ -5,9 +5,9 @@ Ejecuta una tarea: obtiene el plan de GitHub, crea rama, implementa, y crea PR.
 ## Workflow
 
 ```
-/task/do #número
+/task-do #número
     │
-    ├── 1. Obtener tarea de GitHub (mcp__github__get_issue)
+    ├── 1. Obtener tarea de GitHub (mcp__github-server__get_issue)
     │
     ├── 2. Preguntar rama base (master recomendado / actual / otra)
     │
@@ -18,7 +18,7 @@ Ejecuta una tarea: obtiene el plan de GitHub, crea rama, implementa, y crea PR.
     ├── 5. Ejecutar plan de acción (archivos a modificar)
     │
     ├── 6. Al terminar:
-    │       ├── /post/commit
+    │       ├── /post-commit
     │       ├── Push rama
     │       ├── Crear PR vinculada a la tarea
     │       └── Mover tarea a "Review"
@@ -30,7 +30,7 @@ Ejecuta una tarea: obtiene el plan de GitHub, crea rama, implementa, y crea PR.
 
 ### 1. Obtener la tarea
 
-Usa `mcp__github__get_issue` con el número de la tarea.
+Usa `mcp__github-server__get_issue` con el número de la tarea.
 Extrae:
 - Título
 - Objetivo
@@ -56,7 +56,7 @@ Formato: `task/#14-crear-endpoint-upload`
 
 ### 4. Mover a Doing
 
-Usa `mcp__github__move_task_status` con:
+Usa `mcp__github-server__move_task_status` con:
 - `issue_number`: número de la tarea
 - `status`: "doing"
 
@@ -69,7 +69,7 @@ Lee la sección "Archivos a modificar" de la tarea y:
 
 ### 6. Al terminar
 
-1. **Ejecuta /post/commit** para narrar los cambios
+1. **Ejecuta /post-commit** para narrar los cambios
 
 2. **Push de la rama**:
    ```bash
@@ -78,7 +78,7 @@ Lee la sección "Archivos a modificar" de la tarea y:
 
 3. **Crear PR** siguiendo el template en `pr-body.md`
 
-4. **Mover a Review**: `mcp__github__move_task_status` con status "review"
+4. **Mover a Review**: `mcp__github-server__move_task_status` con status "review"
 
 ### 7. Mostrar resumen
 
@@ -90,7 +90,7 @@ Lee la sección "Archivos a modificar" de la tarea y:
 ## Ejemplo de uso
 
 ```
-/task/do #14
+/task-do #14
 ```
 
 ## Argumento

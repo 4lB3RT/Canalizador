@@ -22,6 +22,7 @@ final readonly class YoutubeVideoRepository implements VideoRepository
 
     /**
      * @throws VideoNotFound
+     * @throws \Throwable
      */
     public function findById(Id $id): Video
     {
@@ -37,5 +38,10 @@ final readonly class YoutubeVideoRepository implements VideoRepository
             publishedAt: PublishedAt::fromString($data['snippet']['publishedAt']),
             url:         Url::fromId($id),
         );
+    }
+
+    public function save(Video $video): void
+    {
+        // TODO: Implement save() method.
     }
 }

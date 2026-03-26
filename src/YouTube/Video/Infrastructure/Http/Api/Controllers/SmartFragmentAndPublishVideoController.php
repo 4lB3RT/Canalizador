@@ -6,6 +6,7 @@ namespace Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers;
 
 use Canalizador\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo\SmartFragmentAndPublishVideo;
 use Canalizador\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
+use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\SmartFragmentAndPublishVideoRequestMapper;
 use Illuminate\Http\JsonResponse;
@@ -28,6 +29,11 @@ final class SmartFragmentAndPublishVideoController extends Controller
             $response = $this->smartFragmentAndPublishVideo->execute($smartRequest);
 
             return response()->json($response->toArray(), 201);
+        } catch (VideoNotFound $e) {
+            return response()->json([
+                'error'   => 'Video not found',
+                'message' => $e->getMessage(),
+            ], 404);
         } catch (VideoFragmentationFailed $e) {
             return response()->json([
                 'error'   => 'Smart video fragmentation failed',

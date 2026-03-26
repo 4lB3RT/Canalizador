@@ -5,7 +5,7 @@ Cada tarea debe ser funcional: la aplicación siempre queda funcionando después
 
 ## Tool a usar
 
-`mcp__github__create_task` con los siguientes parámetros:
+`mcp__github-server__create_task` con los siguientes parámetros:
 
 | Parámetro | Tipo | Requerido | Descripción |
 |-----------|------|-----------|-------------|
@@ -34,14 +34,14 @@ Cada tarea debe ser funcional: la aplicación siempre queda funcionando después
 
 3. Construye la descripción siguiendo el template en `description.md`
 
-4. Llama a `mcp__github__create_task`
+4. Llama a `mcp__github-server__create_task`
 
 5. Muestra el resultado: Task #número + URL
 
 ## Ejemplo de uso
 
 ```
-/task/create Crear endpoint upload de imagen para el step #6: recibir imagen jpg/png y validarla
+/task-create Crear endpoint upload de imagen para el step #6: recibir imagen jpg/png y validarla
 ```
 
 ## Argumento

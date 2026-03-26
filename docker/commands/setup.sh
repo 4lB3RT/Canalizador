@@ -27,7 +27,12 @@ info "Starting containers..."
 docker compose -f "$DOCKER_DIR/docker-compose.yml" up -d
 green "Containers started"
 
-# 4. Wait for services
+# 4. Install dependencies
+info "Installing Composer dependencies..."
+docker exec php_canalizador sh -c "cd /code && composer install --no-interaction"
+green "Composer dependencies installed"
+
+# 5. Wait for services
 info "Waiting for MySQL..."
 until docker exec php_canalizador php -r "new PDO('mysql:host=mysql_canalizador;port=3306', 'root', getenv('MYSQL_PASSWORD') ?: 'root');" 2>/dev/null; do
     sleep 2
@@ -40,7 +45,7 @@ until docker exec rabbitmq_canalizador rabbitmq-diagnostics -q ping 2>/dev/null;
 done
 green "RabbitMQ ready"
 
-# 5. Migrations
+# 6. Migrations
 info "Wiping database..."
 "$COMMANDS_DIR/artisan.sh" db:wipe --force
 green "Database wiped"
@@ -49,12 +54,12 @@ info "Running migrations..."
 "$COMMANDS_DIR/artisan.sh" migrate --force
 green "Migrations completed"
 
-# 6. RabbitMQ setup
+# 7. RabbitMQ setup
 info "Declaring RabbitMQ queues..."
 "$COMMANDS_DIR/artisan.sh" rabbitmq:setup
 green "RabbitMQ queues declared"
 
-# 7. Health checks
+# 8. Health checks
 info "Running health checks..."
 
 if docker exec php_canalizador php artisan db:monitor --databases=mysql 2>/dev/null; then
