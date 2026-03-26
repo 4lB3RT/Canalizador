@@ -1,0 +1,13 @@
+type: object
+required:
+  - audio_path
+  - name
+properties:
+  audio_path:
+    type: string
+    description: Absolute path to the source audio file
+    example: '/storage/audio/source.mp3'
+  name:
+    type: string
+    description: Name to assign to the cloned voice
+    example: 'My Cloned Voice'

@@ -1,0 +1,26 @@
+get:
+  tags: [VideoProduction - Weather]
+  operationId: getForecasts
+  summary: Get weather forecasts
+  security:
+    - ApiToken: []
+  parameters:
+    - name: date
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+      description: Filter forecasts by date
+      example: '2026-03-26'
+  responses:
+    '200':
+      description: Forecasts retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../Response/GetForecasts.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

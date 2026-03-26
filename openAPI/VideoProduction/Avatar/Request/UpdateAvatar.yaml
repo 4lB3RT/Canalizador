@@ -1,0 +1,36 @@
+put:
+  tags: [VideoProduction - Avatar]
+  operationId: updateAvatar
+  summary: Update avatar properties
+  security:
+    - ApiToken: []
+  parameters:
+    - name: avatarId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Avatar ID
+      example: '550e8400-e29b-41d4-a716-446655440000'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../Body/UpdateAvatar.yaml'
+  responses:
+    '200':
+      description: Avatar updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../Response/UpdateAvatar.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '404':
+      $ref: '../../../Shared/Response/404.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

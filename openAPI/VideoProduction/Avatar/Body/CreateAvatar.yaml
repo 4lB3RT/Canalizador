@@ -1,0 +1,37 @@
+type: object
+required:
+  - avatar_id
+  - name
+  - profile_image
+  - presentation_style
+properties:
+  avatar_id:
+    type: string
+    format: uuid
+    example: '550e8400-e29b-41d4-a716-446655440000'
+  name:
+    type: string
+    maxLength: 100
+    example: 'Alex'
+  profile_image:
+    type: string
+    format: binary
+    description: JPEG or PNG image, max 20MB
+  biography:
+    type: string
+    nullable: true
+    example: 'Tech enthusiast and content creator'
+  presentation_style:
+    type: string
+    enum: [energetic, calm, professional, casual]
+    example: 'energetic'
+  category:
+    type: string
+    enum: [gaming, meteorology]
+    default: gaming
+    nullable: true
+    example: 'gaming'
+  voice_id:
+    type: string
+    nullable: true
+    example: 'voice_abc123'

@@ -1,0 +1,6 @@
+type: object
+properties:
+  audio_path:
+    type: string
+    description: Absolute path to the generated audio file
+    example: '/storage/audio/generated/output.mp3'

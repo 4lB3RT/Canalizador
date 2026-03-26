@@ -1,0 +1,28 @@
+post:
+  tags: [YouTube - Channel]
+  operationId: downloadLatestChannelVideo
+  summary: Download latest video from channel
+  security:
+    - ApiToken: []
+    - GoogleToken: []
+  parameters:
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: YouTube channel ID
+      example: 'UCxxxxxxxxxxxxxxxxxxxxxx'
+  responses:
+    '200':
+      description: Video downloaded successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../Response/DownloadLatestVideo.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '403':
+      $ref: '../../../Shared/Response/403.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

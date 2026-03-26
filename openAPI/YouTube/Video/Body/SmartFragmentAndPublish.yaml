@@ -1,0 +1,23 @@
+type: object
+required:
+  - video_id
+  - local_path
+  - base_title
+  - base_description
+properties:
+  video_id:
+    type: string
+    description: ID of the video to fragment
+    example: 'dQw4w9WgXcQ'
+  local_path:
+    type: string
+    description: Absolute path to the local video file
+    example: '/storage/videos/my-video.mp4'
+  base_title:
+    type: string
+    description: Base title used for each published fragment
+    example: 'My Video Tutorial'
+  base_description:
+    type: string
+    description: Base description used for each published fragment
+    example: 'Part of my video series'

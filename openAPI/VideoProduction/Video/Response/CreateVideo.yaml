@@ -1,0 +1,44 @@
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+    example: '550e8400-e29b-41d4-a716-446655440000'
+  script_id:
+    type: string
+    format: uuid
+    example: '660e8400-e29b-41d4-a716-446655440001'
+  channel_id:
+    type: string
+    example: 'UCxxxxxxxxxxxxxxxxxxxxxx'
+  avatar_id:
+    type: string
+    format: uuid
+    nullable: true
+    example: '770e8400-e29b-41d4-a716-446655440002'
+  title:
+    type: string
+    example: 'My Awesome Video'
+  description:
+    type: string
+    example: 'Video description generated from script'
+  category:
+    type: string
+    example: 'gaming'
+  generation_id:
+    type: string
+    nullable: true
+    example: 'gen_abc123'
+  video_local_path:
+    type: string
+    nullable: true
+    example: '/storage/videos/my-video.mp4'
+  created_at:
+    type: string
+    format: date-time
+    example: '2026-03-26T10:00:00Z'
+  completed_at:
+    type: string
+    format: date-time
+    nullable: true
+    example: '2026-03-26T10:05:00Z'

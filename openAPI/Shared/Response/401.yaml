@@ -1,0 +1,9 @@
+description: Unauthorized — API token missing or invalid
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Unauthorized'

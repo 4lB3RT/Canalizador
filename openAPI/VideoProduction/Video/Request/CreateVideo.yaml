@@ -1,0 +1,25 @@
+post:
+  tags: [VideoProduction - Video]
+  operationId: createVideo
+  summary: Create a new video linked to a script
+  security:
+    - ApiToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../Body/CreateVideo.yaml'
+  responses:
+    '200':
+      description: Video created successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../Response/CreateVideo.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

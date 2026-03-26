@@ -1,0 +1,18 @@
+type: object
+properties:
+  voice_id:
+    type: string
+    nullable: true
+    example: 'voice_abc123'
+  biography:
+    type: string
+    nullable: true
+    example: 'Updated biography text'
+  presentation_style:
+    type: string
+    nullable: true
+    example: 'calm'
+  description:
+    type: string
+    nullable: true
+    example: 'Updated description'

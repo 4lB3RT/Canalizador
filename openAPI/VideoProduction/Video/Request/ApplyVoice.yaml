@@ -1,0 +1,37 @@
+post:
+  tags: [VideoProduction - Video]
+  operationId: applyVoiceToVideo
+  summary: Apply avatar voice to video — returns binary file
+  security:
+    - ApiToken: []
+  parameters:
+    - name: videoId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Video ID
+      example: '550e8400-e29b-41d4-a716-446655440000'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../Body/ApplyVoice.yaml'
+  responses:
+    '200':
+      description: Video with voice applied (binary download)
+      content:
+        application/octet-stream:
+          schema:
+            type: string
+            format: binary
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '404':
+      $ref: '../../../Shared/Response/404.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

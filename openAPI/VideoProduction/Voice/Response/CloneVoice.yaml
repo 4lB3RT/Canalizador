@@ -1,0 +1,9 @@
+type: object
+properties:
+  voice_id:
+    type: string
+    description: ID of the cloned voice in the voice provider
+    example: 'voice_abc123'
+  name:
+    type: string
+    example: 'My Cloned Voice'

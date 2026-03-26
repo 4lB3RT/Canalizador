@@ -1,0 +1,27 @@
+type: object
+required:
+  - video_id
+  - script_id
+  - channel_id
+  - category
+properties:
+  video_id:
+    type: string
+    format: uuid
+    example: '550e8400-e29b-41d4-a716-446655440000'
+  script_id:
+    type: string
+    format: uuid
+    example: '660e8400-e29b-41d4-a716-446655440001'
+  channel_id:
+    type: string
+    example: 'UCxxxxxxxxxxxxxxxxxxxxxx'
+  category:
+    type: string
+    enum: [gaming, meteorology]
+    example: 'gaming'
+  avatar_id:
+    type: string
+    format: uuid
+    nullable: true
+    example: '770e8400-e29b-41d4-a716-446655440002'

@@ -1,0 +1,18 @@
+description: Unprocessable Entity — validation failed
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'The given data was invalid'
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            video_id: ['The video id field is required']
+            platform: ['The selected platform is invalid']

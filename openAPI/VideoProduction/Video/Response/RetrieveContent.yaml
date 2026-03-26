@@ -1,0 +1,6 @@
+type: object
+properties:
+  video_path:
+    type: string
+    description: Absolute local path to the processed video file
+    example: '/storage/videos/processed/my-video.mp4'

@@ -1,0 +1,21 @@
+post:
+  tags: [VideoProduction - Avatar]
+  operationId: createAvatar
+  summary: Create AI avatar
+  security:
+    - ApiToken: []
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          $ref: '../Body/CreateAvatar.yaml'
+  responses:
+    '200':
+      description: Avatar created successfully
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

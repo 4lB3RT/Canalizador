@@ -1,0 +1,27 @@
+type: object
+properties:
+  forecasts:
+    type: array
+    items:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: '2026-03-26'
+        location:
+          type: string
+          example: 'Madrid'
+        temperature_min:
+          type: number
+          example: 12.5
+        temperature_max:
+          type: number
+          example: 22.0
+        description:
+          type: string
+          example: 'Partly cloudy'
+        icon:
+          type: string
+          nullable: true
+          example: 'cloud-sun'

@@ -1,0 +1,25 @@
+post:
+  tags: [VideoProduction - Voice]
+  operationId: cloneVoice
+  summary: Clone a voice from an audio file
+  security:
+    - ApiToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../Body/CloneVoice.yaml'
+  responses:
+    '200':
+      description: Voice cloned successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../Response/CloneVoice.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

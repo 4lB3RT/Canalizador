@@ -1,0 +1,9 @@
+description: Bad Request
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Video local path not set'

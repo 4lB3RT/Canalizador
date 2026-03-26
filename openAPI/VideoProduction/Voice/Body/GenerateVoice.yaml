@@ -1,0 +1,13 @@
+type: object
+required:
+  - avatar_id
+  - source_audio_path
+properties:
+  avatar_id:
+    type: string
+    description: ID of the avatar whose voice profile to use
+    example: '770e8400-e29b-41d4-a716-446655440002'
+  source_audio_path:
+    type: string
+    description: Absolute path to the source audio file
+    example: '/storage/audio/source.mp3'

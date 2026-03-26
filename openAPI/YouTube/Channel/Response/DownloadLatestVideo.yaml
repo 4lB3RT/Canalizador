@@ -1,0 +1,13 @@
+type: object
+required:
+  - youtube_video_id
+  - local_path
+properties:
+  youtube_video_id:
+    type: string
+    description: YouTube video ID
+    example: 'dQw4w9WgXcQ'
+  local_path:
+    type: string
+    description: Absolute path to the downloaded video file
+    example: '/storage/videos/dQw4w9WgXcQ.mp4'

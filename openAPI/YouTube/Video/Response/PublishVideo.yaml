@@ -1,0 +1,18 @@
+type: object
+required:
+  - platform_video_id
+  - platform_url
+  - platform
+properties:
+  platform_video_id:
+    type: string
+    description: Video ID assigned by the platform
+    example: 'dQw4w9WgXcQ'
+  platform_url:
+    type: string
+    format: uri
+    description: Public URL of the published video
+    example: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+  platform:
+    type: string
+    example: 'youtube'

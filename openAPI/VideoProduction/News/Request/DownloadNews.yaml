@@ -1,0 +1,17 @@
+post:
+  tags: [VideoProduction - News]
+  operationId: downloadNews
+  summary: Download latest news items
+  security:
+    - ApiToken: []
+  responses:
+    '200':
+      description: News downloaded successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../Response/DownloadNews.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

@@ -1,0 +1,9 @@
+description: Forbidden — Google token required
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Google token required. Visit /auth/google/login'

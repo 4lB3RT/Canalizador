@@ -1,0 +1,30 @@
+post:
+  tags: [YouTube - Video]
+  operationId: smartFragmentAndPublishVideo
+  summary: Smart fragment video using AI cut points and publish
+  security:
+    - ApiToken: []
+    - GoogleToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../Body/SmartFragmentAndPublish.yaml'
+  responses:
+    '201':
+      description: Smart video fragments published successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../Response/SmartFragmentAndPublish.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '403':
+      $ref: '../../../Shared/Response/403.yaml'
+    '404':
+      $ref: '../../../Shared/Response/404.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

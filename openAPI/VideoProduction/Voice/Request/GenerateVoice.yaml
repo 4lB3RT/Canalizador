@@ -1,0 +1,25 @@
+post:
+  tags: [VideoProduction - Voice]
+  operationId: generateVoice
+  summary: Generate voice audio using an avatar voice profile
+  security:
+    - ApiToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../Body/GenerateVoice.yaml'
+  responses:
+    '200':
+      description: Voice generated successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../Response/GenerateVoice.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

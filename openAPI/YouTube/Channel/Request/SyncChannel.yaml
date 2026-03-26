@@ -1,0 +1,26 @@
+put:
+  tags: [YouTube - Channel]
+  operationId: syncChannel
+  summary: Sync channel from YouTube
+  security:
+    - ApiToken: []
+    - GoogleToken: []
+  parameters:
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: YouTube channel ID
+      example: 'UCxxxxxxxxxxxxxxxxxxxxxx'
+  responses:
+    '204':
+      description: Channel synced successfully
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '403':
+      $ref: '../../../Shared/Response/403.yaml'
+    '404':
+      $ref: '../../../Shared/Response/404.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

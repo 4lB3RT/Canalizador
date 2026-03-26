@@ -1,0 +1,89 @@
+openapi: 3.0.3
+
+info:
+  title: Canalizador API
+  description: API for automating YouTube video optimization and content repurposing
+  version: 1.0.0
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://canalizador.test
+    description: Local development
+
+security:
+  - ApiToken: []
+
+components:
+  securitySchemes:
+    ApiToken:
+      type: http
+      scheme: bearer
+      description: Bearer token via `Authorization` header
+    GoogleToken:
+      type: apiKey
+      in: header
+      name: X-Google-Token
+      description: Google OAuth token required for YouTube operations
+
+paths:
+
+  # ─── YouTube / Channel ───────────────────────────────────────────────────
+
+  /api/youtube/channels/{channelId}/sync:
+    $ref: './YouTube/Channel/Request/SyncChannel.yaml'
+
+  /api/youtube/channels/{channelId}/update-with-ai:
+    $ref: './YouTube/Channel/Request/UpdateChannelWithAI.yaml'
+
+  /api/youtube/channels/{channelId}/download-latest:
+    $ref: './YouTube/Channel/Request/DownloadLatestVideo.yaml'
+
+  # ─── YouTube / Video ─────────────────────────────────────────────────────
+
+  /api/youtube/videos/publish:
+    $ref: './YouTube/Video/Request/PublishVideo.yaml'
+
+  /api/youtube/videos/fragment-and-publish:
+    $ref: './YouTube/Video/Request/FragmentAndPublish.yaml'
+
+  /api/youtube/videos/smart-fragment-and-publish:
+    $ref: './YouTube/Video/Request/SmartFragmentAndPublish.yaml'
+
+  # ─── VideoProduction / Avatar ─────────────────────────────────────────────
+
+  /api/video-production/avatars:
+    $ref: './VideoProduction/Avatar/Request/CreateAvatar.yaml'
+
+  /api/video-production/avatars/{avatarId}:
+    $ref: './VideoProduction/Avatar/Request/UpdateAvatar.yaml'
+
+  # ─── VideoProduction / Video ──────────────────────────────────────────────
+
+  /api/video-production/videos/create:
+    $ref: './VideoProduction/Video/Request/CreateVideo.yaml'
+
+  /api/video-production/videos/{videoId}/content:
+    $ref: './VideoProduction/Video/Request/RetrieveContent.yaml'
+
+  /api/video-production/videos/{videoId}/apply-voice:
+    $ref: './VideoProduction/Video/Request/ApplyVoice.yaml'
+
+  # ─── VideoProduction / Voice ──────────────────────────────────────────────
+
+  /api/video-production/voice/clone:
+    $ref: './VideoProduction/Voice/Request/CloneVoice.yaml'
+
+  /api/video-production/voice/generate:
+    $ref: './VideoProduction/Voice/Request/GenerateVoice.yaml'
+
+  # ─── VideoProduction / News ───────────────────────────────────────────────
+
+  /api/video-production/news/download:
+    $ref: './VideoProduction/News/Request/DownloadNews.yaml'
+
+  # ─── VideoProduction / Weather ────────────────────────────────────────────
+
+  /api/video-production/weather:
+    $ref: './VideoProduction/Weather/Request/GetForecasts.yaml'

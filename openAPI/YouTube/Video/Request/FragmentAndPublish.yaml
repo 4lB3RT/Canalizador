@@ -1,0 +1,28 @@
+post:
+  tags: [YouTube - Video]
+  operationId: fragmentAndPublishVideo
+  summary: Fragment video and publish each segment
+  security:
+    - ApiToken: []
+    - GoogleToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../Body/FragmentAndPublish.yaml'
+  responses:
+    '201':
+      description: Video fragments published successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../Response/FragmentAndPublish.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '403':
+      $ref: '../../../Shared/Response/403.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

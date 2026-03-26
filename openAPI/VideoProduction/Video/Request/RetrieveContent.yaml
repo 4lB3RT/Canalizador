@@ -1,0 +1,31 @@
+get:
+  tags: [VideoProduction - Video]
+  operationId: retrieveVideoContent
+  summary: Retrieve processed video content path
+  security:
+    - ApiToken: []
+    - GoogleToken: []
+  parameters:
+    - name: videoId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Video ID
+      example: '550e8400-e29b-41d4-a716-446655440000'
+  responses:
+    '200':
+      description: Video content retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../Response/RetrieveContent.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '403':
+      $ref: '../../../Shared/Response/403.yaml'
+    '404':
+      $ref: '../../../Shared/Response/404.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

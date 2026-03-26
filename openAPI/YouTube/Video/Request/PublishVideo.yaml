@@ -1,0 +1,32 @@
+post:
+  tags: [YouTube - Video]
+  operationId: publishVideo
+  summary: Publish video to YouTube
+  security:
+    - ApiToken: []
+    - GoogleToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../Body/PublishVideo.yaml'
+  responses:
+    '201':
+      description: Video published successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../Response/PublishVideo.yaml'
+    '400':
+      $ref: '../../../Shared/Response/400.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '403':
+      $ref: '../../../Shared/Response/403.yaml'
+    '404':
+      $ref: '../../../Shared/Response/404.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'
