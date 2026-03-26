@@ -7,6 +7,7 @@ namespace Canalizador\YouTube\Video\Application\UseCases\SmartFragmentAndPublish
 final readonly class SmartFragmentAndPublishVideoRequest
 {
     public function __construct(
+        public string $videoId,
         public string $localPath,
         public string $baseTitle,
         public string $baseDescription,

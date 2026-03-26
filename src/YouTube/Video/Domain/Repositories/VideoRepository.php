@@ -14,4 +14,6 @@ interface VideoRepository
      * @throws VideoNotFound
      */
     public function findById(Id $id): Video;
+
+    public function save(Video $video): void;
 }
