@@ -6,13 +6,13 @@ Actúa como **Product Owner**: define funcionalidades desde la perspectiva del u
 ## Workflow
 
 ```
-/plan/create
+/plan-create
     │
-    ├── 1. /step/create → Crear Step en GitHub
+    ├── 1. /step-create → Crear Step en GitHub
     │
-    ├── 2. /task/create → Crear tareas (opcional, por cada tarea)
+    ├── 2. /task-create → Crear tareas (opcional, por cada tarea)
     │
-    └── 3. /post/plan → Publicar en X
+    └── 3. /post-plan → Publicar en X
 ```
 
 ## Instrucciones
@@ -23,13 +23,13 @@ Actúa como **Product Owner**: define funcionalidades desde la perspectiva del u
    - **Contexto**
    - **Criterios de aceptación**
 
-2. **Ejecuta /step/create** con la información extraída
+2. **Ejecuta /step-create** con la información extraída
 
 3. **Pregunta si quiere crear tareas** para este Step
 
-4. Si sí, **ejecuta /task/create** por cada tarea necesaria
+4. Si sí, **ejecuta /task-create** por cada tarea necesaria
 
-5. **Ejecuta /post/plan** con la información del plan
+5. **Ejecuta /post-plan** con la información del plan
 
 6. Muestra resumen con todos los enlaces:
    - Step en GitHub
@@ -39,7 +39,7 @@ Actúa como **Product Owner**: define funcionalidades desde la perspectiva del u
 ## Ejemplo de uso
 
 ```
-/plan/create Sistema de notificaciones: como usuario quiero recibir alertas cuando mis videos estén listos, para no revisar manualmente. Contexto: los videos tardan minutos en generarse.
+/plan-create Sistema de notificaciones: como usuario quiero recibir alertas cuando mis videos estén listos, para no revisar manualmente. Contexto: los videos tardan minutos en generarse.
 ```
 
 ## Argumento

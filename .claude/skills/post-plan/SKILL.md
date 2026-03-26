@@ -9,7 +9,7 @@ El tono es **storytelling personal**: cuenta el problema como una historia vivid
 2. Usa el argumento como contexto para definir la funcionalidad
 3. Redacta en primera persona, como developer contando qué va a construir y por qué
 4. Sigue la estructura y tono del `template.md`
-5. Publica con `mcp__x__tweet` usando `reply_to` del `thread.md`
+5. Publica con `mcp__x-server__tweet` usando `reply_to` del `thread.md`
 
 ## Argumento
 
