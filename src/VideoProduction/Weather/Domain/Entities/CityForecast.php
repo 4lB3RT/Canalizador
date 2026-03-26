@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Weather\Domain\Entities;
 
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\VideoProduction\Weather\Domain\ValueObjects\CityName;
 use Canalizador\VideoProduction\Weather\Domain\ValueObjects\MunicipalityCode;
 use Canalizador\VideoProduction\Weather\Domain\ValueObjects\Percentage;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Weather\Infrastructure\Repositories\Aemet;
 
-use Canalizador\VideoProduction\Shared\Domain\Services\HttpClient;
-use Canalizador\VideoProduction\Shared\Domain\Services\HttpResponseValidator;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Domain\Services\HttpClient;
+use Canalizador\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\VideoProduction\Weather\Domain\Entities\CityForecast;
 use Canalizador\VideoProduction\Weather\Domain\Repositories\WeatherProvider;
 use Canalizador\VideoProduction\Weather\Domain\ValueObjects\CityName;

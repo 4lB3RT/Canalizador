@@ -7,8 +7,8 @@ namespace Canalizador\VideoProduction\Clip\Application\Handlers;
 use Canalizador\VideoProduction\Clip\Application\UseCases\ComposeShort\ComposeShort;
 use Canalizador\VideoProduction\Clip\Application\UseCases\ComposeShort\ComposeShortRequest;
 use Canalizador\VideoProduction\Clip\Domain\Events\AllClipsCompleted;
-use Canalizador\VideoProduction\Shared\Domain\Events\DomainEvent;
-use Canalizador\VideoProduction\Shared\Domain\Events\DomainEventHandler;
+use Canalizador\Shared\Domain\Events\DomainEvent;
+use Canalizador\Shared\Domain\Events\DomainEventHandler;
 
 final readonly class OnAllClipsCompletedHandler implements DomainEventHandler
 {

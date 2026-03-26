@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Voice\Infrastructure\Repositories\ElevenLabs;
 
-use Canalizador\VideoProduction\Shared\Domain\Services\HttpClient;
-use Canalizador\VideoProduction\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Shared\Domain\Services\HttpClient;
+use Canalizador\Shared\Domain\Services\HttpResponseValidator;
 use Canalizador\VideoProduction\Voice\Domain\Exceptions\VoiceGenerationFailed;
 use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceGenerator;
 use Illuminate\Support\Str;

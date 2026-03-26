@@ -7,8 +7,8 @@ namespace Canalizador\VideoProduction\Clip\Application\Handlers;
 use Canalizador\VideoProduction\Clip\Application\UseCases\DownloadClip\DownloadClip;
 use Canalizador\VideoProduction\Clip\Application\UseCases\DownloadClip\DownloadClipRequest;
 use Canalizador\VideoProduction\Clip\Domain\Events\ClipGenerated;
-use Canalizador\VideoProduction\Shared\Domain\Events\DomainEvent;
-use Canalizador\VideoProduction\Shared\Domain\Events\DomainEventHandler;
+use Canalizador\Shared\Domain\Events\DomainEvent;
+use Canalizador\Shared\Domain\Events\DomainEventHandler;
 
 final readonly class OnClipGeneratedHandler implements DomainEventHandler
 {

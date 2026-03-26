@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\VideoLegacy\Application\UseCases;
 
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\Minutes;
+use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Domain\ValueObjects\Minutes;
 use Canalizador\VideoProduction\VideoLegacy\Domain\Entities\Video;
 use Canalizador\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
 use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Canalizador\VideoProduction\Clip\Infrastructure\Repositories\Veo;
 
 use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipDownloader;
-use Canalizador\VideoProduction\Shared\Domain\Services\HttpClient;
-use Canalizador\VideoProduction\Shared\Domain\Services\HttpResponseValidator;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\Url;
+use Canalizador\Shared\Domain\Services\HttpClient;
+use Canalizador\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Domain\ValueObjects\Url;
 use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 use Illuminate\Support\Facades\File;

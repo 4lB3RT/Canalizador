@@ -8,10 +8,10 @@ use Canalizador\VideoProduction\Clip\Domain\Entities\Clip;
 use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipId;
 use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
 use Canalizador\VideoProduction\Clip\Domain\ValueObjects\Sequence;
-use Canalizador\VideoProduction\Shared\Domain\Services\Clock;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\Url;
+use Canalizador\Shared\Domain\Services\Clock;
+use Canalizador\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Domain\ValueObjects\Url;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
 

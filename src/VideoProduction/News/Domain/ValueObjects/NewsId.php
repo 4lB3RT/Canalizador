@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\News\Domain\ValueObjects;
 
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\StringValue;
+use Canalizador\Shared\Domain\ValueObjects\StringValue;
 
 final readonly class NewsId extends StringValue
 {

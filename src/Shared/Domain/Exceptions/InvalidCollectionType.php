@@ -1,10 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Canalizador\Shared\Domain\Exceptions;
 
-use Canalizador\Shared\Domain\Exceptions\Essentials\BadRequest;
+use VendingMachine\Shared\Domain\Errors\Essentials\BadRequest;
 
 final class InvalidCollectionType extends BadRequest
 {

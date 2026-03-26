@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Canalizador\VideoProduction\Image\Domain\Entities;
 
 use Canalizador\VideoProduction\Image\Domain\ValueObjects\ImageId;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\IntegerId;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Domain\ValueObjects\IntegerId;
+use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 
 final class Image
 {

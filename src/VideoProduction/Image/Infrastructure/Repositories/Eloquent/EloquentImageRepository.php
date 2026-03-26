@@ -10,9 +10,9 @@ use Canalizador\VideoProduction\Image\Domain\Exceptions\ImageNotFound;
 use Canalizador\VideoProduction\Image\Domain\Repositories\ImageRepository;
 use Canalizador\VideoProduction\Image\Domain\ValueObjects\ImageId;
 use Canalizador\VideoProduction\Image\Infrastructure\DAO\ImageDAO;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\IntegerId;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Domain\ValueObjects\IntegerId;
+use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 
 final class EloquentImageRepository implements ImageRepository
 {
