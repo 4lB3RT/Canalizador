@@ -10,8 +10,8 @@ use Canalizador\VideoProduction\News\Domain\ValueObjects\Description;
 use Canalizador\VideoProduction\News\Domain\ValueObjects\NewsId;
 use Canalizador\VideoProduction\News\Domain\ValueObjects\PublishedAt;
 use Canalizador\VideoProduction\News\Domain\ValueObjects\Title;
-use Canalizador\VideoProduction\Shared\Domain\Services\HttpClient;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Domain\Services\HttpClient;
+use Canalizador\Shared\Domain\ValueObjects\DateTime;
 
 final readonly class TresDJuegosClient implements NewsProvider
 {

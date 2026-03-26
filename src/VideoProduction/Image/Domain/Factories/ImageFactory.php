@@ -6,10 +6,10 @@ namespace Canalizador\VideoProduction\Image\Domain\Factories;
 
 use Canalizador\VideoProduction\Image\Domain\Entities\Image;
 use Canalizador\VideoProduction\Image\Domain\ValueObjects\ImageId;
-use Canalizador\VideoProduction\Shared\Domain\Services\Clock;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\IntegerId;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Domain\Services\Clock;
+use Canalizador\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Domain\ValueObjects\IntegerId;
+use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 
 final readonly class ImageFactory
 {

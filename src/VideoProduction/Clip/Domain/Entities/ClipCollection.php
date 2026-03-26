@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Canalizador\VideoProduction\Clip\Domain\Entities;
 
 use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
-use Canalizador\VideoProduction\Shared\Domain\Collection;
+use Canalizador\Shared\Domain\Collection;
 
 final class ClipCollection extends Collection
 {

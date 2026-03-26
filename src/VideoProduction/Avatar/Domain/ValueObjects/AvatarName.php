@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Avatar\Domain\ValueObjects;
 
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\StringValue;
+use Canalizador\Shared\Domain\ValueObjects\StringValue;
 use InvalidArgumentException;
 
 final readonly class AvatarName extends StringValue

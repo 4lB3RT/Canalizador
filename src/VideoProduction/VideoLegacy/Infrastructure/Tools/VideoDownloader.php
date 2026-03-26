@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Tools;
 
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\Minutes;
+use Canalizador\Shared\Domain\ValueObjects\Minutes;
 use Canalizador\VideoProduction\VideoLegacy\Application\UseCases\DownloadVideo;
 use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
 use Prism\Prism\Tool;

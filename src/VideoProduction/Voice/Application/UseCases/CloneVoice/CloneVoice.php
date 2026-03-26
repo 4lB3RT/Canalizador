@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Voice\Application\UseCases\CloneVoice;
 
-use Canalizador\VideoProduction\Shared\Domain\Services\Clock;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Domain\Services\Clock;
+use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\VideoProduction\Voice\Domain\Entities\Voice;
 use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceCloner;
 use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceRepository;

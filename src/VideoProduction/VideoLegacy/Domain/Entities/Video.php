@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Canalizador\VideoProduction\VideoLegacy\Domain\Entities;
 
 use Canalizador\Metric\Domain\Entities\MetricCollection;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\Url;
+use Canalizador\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Domain\ValueObjects\Url;
 use Canalizador\Transcription\Domain\Entities\Transcription;
 use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\Category;
 use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\Title;

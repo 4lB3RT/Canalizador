@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Clip\Domain\Exceptions;
 
-use Canalizador\VideoProduction\Shared\Domain\Exceptions\EntityNotFound;
+use Canalizador\Shared\Domain\Exceptions\EntityNotFound;
 
 final class ClipNotFound extends EntityNotFound
 {

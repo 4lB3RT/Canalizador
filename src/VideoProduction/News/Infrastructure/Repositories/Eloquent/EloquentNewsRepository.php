@@ -11,7 +11,7 @@ use Canalizador\VideoProduction\News\Domain\ValueObjects\NewsId;
 use Canalizador\VideoProduction\News\Domain\ValueObjects\PublishedAt;
 use Canalizador\VideoProduction\News\Domain\ValueObjects\Title;
 use Canalizador\VideoProduction\News\Infrastructure\DAO\NewsDAO;
-use Canalizador\VideoProduction\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Domain\ValueObjects\DateTime;
 
 final class EloquentNewsRepository implements NewsRepository
 {

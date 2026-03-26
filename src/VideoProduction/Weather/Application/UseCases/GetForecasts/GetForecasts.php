@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Weather\Application\UseCases\GetForecasts;
 
-use Canalizador\VideoProduction\Shared\Domain\Services\Clock;
+use Canalizador\Shared\Domain\Services\Clock;
 use Canalizador\VideoProduction\Weather\Domain\Entities\CityForecast;
 use Canalizador\VideoProduction\Weather\Domain\Repositories\ForecastRepository;
 use Canalizador\VideoProduction\Weather\Domain\Repositories\ForecastSummarizer;
