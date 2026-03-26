@@ -1,6 +1,6 @@
 <?php
 
-namespace Canalizador\Transcription\Domain\ValueObjects;
+namespace Canalizador\YouTube\Transcription\Domain\ValueObjects;
 
 use Canalizador\Shared\Domain\ValueObjects\StringValue;
 

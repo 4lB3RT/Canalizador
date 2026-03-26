@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\VideoLegacy\Domain\Entities;
 
-use Canalizador\Metric\Domain\Entities\MetricCollection;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
 use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\Shared\Domain\ValueObjects\Url;
-use Canalizador\Transcription\Domain\Entities\Transcription;
-use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\Category;
 use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\Title;
 use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
+use Canalizador\YouTube\Metric\Domain\Entities\MetricCollection;
+use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
+use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
 
 final class Video
 {

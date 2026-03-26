@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace Canalizador\Metric\Domain\ValueObjects;
+namespace Canalizador\YouTube\Metric\Domain\ValueObjects;
 
 final readonly class MetricValue
 {

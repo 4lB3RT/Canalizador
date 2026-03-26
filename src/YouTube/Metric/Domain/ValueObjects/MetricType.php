@@ -1,8 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace Canalizador\Metric\Domain\ValueObjects;
+namespace Canalizador\YouTube\Metric\Domain\ValueObjects;
+
+use InvalidArgumentException;
 
 final readonly class MetricType
 {
@@ -10,7 +12,7 @@ final readonly class MetricType
     {
         $allowed = ['int', 'INTEGER', 'FLOAT', 'float', 'string'];
         if (!in_array($value, $allowed, true)) {
-            throw new \InvalidArgumentException('Invalid metric type');
+            throw new InvalidArgumentException('Invalid metric type');
         }
     }
 

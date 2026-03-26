@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Repositories\Redis;
 
-use Canalizador\Metric\Domain\Entities\MetricCollection;
 use Canalizador\VideoProduction\VideoLegacy\Domain\Entities\Video;
 use Canalizador\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
 use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
 use Canalizador\VideoProduction\VideoLegacy\Infrastructure\DataTransformers\VideoDataTransformer;
+use Canalizador\YouTube\Metric\Domain\Entities\MetricCollection;
 use Illuminate\Redis\Connections\Connection;
 
 final readonly class RedisVideoRepository implements VideoRepository

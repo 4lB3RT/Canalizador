@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects;
+namespace Canalizador\YouTube\Video\Domain\ValueObjects;
 
 enum Category: string
 {

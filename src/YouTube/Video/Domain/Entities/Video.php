@@ -1,28 +1,30 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Canalizador\YouTube\Video\Domain\Entities;
 
-use Canalizador\YouTube\Video\Domain\ValueObjects\AudioPath;
+use Canalizador\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Domain\ValueObjects\Url;
+use Canalizador\YouTube\Metric\Domain\Entities\MetricCollection;
+use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
+use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
-use Canalizador\YouTube\Video\Domain\ValueObjects\LocalPath;
-use Canalizador\YouTube\Video\Domain\ValueObjects\PublishedAt;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Title;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Url;
 
 final class Video
 {
     public function __construct(
-        private readonly Id          $id,
-        private readonly Title       $title,
-        private readonly PublishedAt $publishedAt,
-        private readonly Url         $url,
-        private ?LocalPath           $localPath = null,
-        private ?AudioPath           $audioPath = null,
-        private array                $transcription = [],
-        private array                $publishedShortIds = [],
-        private readonly ?string     $channelId = null,
+        private readonly Id       $id,
+        private readonly Title    $title,
+        private readonly DateTime $publishedAt,
+        private MetricCollection  $metrics,
+        private readonly Category $category,
+        private readonly ?Url     $url = null,
+        private ?LocalPath        $videoLocalPath = null,
+        private ?LocalPath        $audioLocalPath = null,
+        private ?Transcription    $transcription = null,
     ) {
     }
 
@@ -36,73 +38,79 @@ final class Video
         return $this->title;
     }
 
-    public function publishedAt(): PublishedAt
+    public function publishedAt(): DateTime
     {
         return $this->publishedAt;
     }
 
-    public function url(): Url
+    public function metrics(): MetricCollection
     {
-        return $this->url;
+        return $this->metrics;
     }
 
-    public function localPath(): ?LocalPath
+    public function category(): Category
     {
-        return $this->localPath;
+        return $this->category;
     }
 
-    public function updateLocalPath(LocalPath $path): void
+    public function updateMetrics(MetricCollection $metrics): void
     {
-        $this->localPath = $path;
+        $this->metrics = $metrics;
     }
 
-    public function audioPath(): ?AudioPath
-    {
-        return $this->audioPath;
-    }
-
-    public function updateAudioPath(AudioPath $path): void
-    {
-        $this->audioPath = $path;
-    }
-
-    public function transcription(): array
+    public function transcription(): ?Transcription
     {
         return $this->transcription;
     }
 
-    public function updateTranscription(array $segments): void
+    public function updateTranscription(Transcription $transcription): void
     {
-        $this->transcription = $segments;
+        $this->transcription = $transcription;
     }
 
-    public function publishedShortIds(): array
+    public function url(): ?Url
     {
-        return $this->publishedShortIds;
+        return $this->url;
     }
 
-    public function addPublishedShortId(string $id): void
+    public function videoLocalPath(): ?LocalPath
     {
-        $this->publishedShortIds[] = $id;
+        return $this->videoLocalPath;
     }
 
-    public function channelId(): ?string
+    public function updateVideoLocalPath(LocalPath $videoLocalPath): void
     {
-        return $this->channelId;
+        $this->videoLocalPath = $videoLocalPath;
+    }
+
+    public function audioLocalPath(): ?LocalPath
+    {
+        return $this->audioLocalPath;
+    }
+
+    public function updateAudioLocalPath(LocalPath $audioLocalPath): void
+    {
+        $this->audioLocalPath = $audioLocalPath;
     }
 
     public function toArray(): array
     {
         return [
-            'id'                  => $this->id->value(),
-            'title'               => $this->title->value(),
-            'published_at'        => $this->publishedAt->format('Y-m-d H:i:s'),
-            'url'                 => $this->url->value(),
-            'local_path'          => $this->localPath?->value(),
-            'audio_path'          => $this->audioPath?->value(),
-            'transcription'       => $this->transcription,
-            'published_short_ids' => $this->publishedShortIds,
-            'channel_id'          => $this->channelId,
+            'id'           => $this->id->value(),
+            'title'        => $this->title->value(),
+            'published_at' => $this->publishedAt->value()->format('Y-m-d H:i:s'),
+            'category'     => $this->category->value,
+            'metrics'      => $this->metrics->map(function ($metric) {
+                return [
+                    'name'  => $metric->name()->value(),
+                    'type'  => $metric->type()->value(),
+                    'value' => $metric->value()->value(),
+                ];
+            }),
+            'transcription'    => $this->transcription?->toArray(),
+            'url'              => $this->url?->value(),
+            'video_local_path' => $this->videoLocalPath?->value(),
+            'audio_local_path' => $this->audioLocalPath?->value(),
         ];
     }
 }

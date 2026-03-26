@@ -2,18 +2,18 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Transcription\Infrastructure\Repositories\Elevenlabs;
+namespace Canalizador\YouTube\Transcription\Infrastructure\Repositories\Elevenlabs;
 
 use Canalizador\Shared\Domain\ValueObjects\Language;
-use Canalizador\Transcription\Domain\Collections\WordCollection;
-use Canalizador\Transcription\Domain\Entities\Transcription;
-use Canalizador\Transcription\Domain\Repositories\TranscriptionRepository;
-use Canalizador\Transcription\Domain\ValueObjects\EndTime;
-use Canalizador\Transcription\Domain\ValueObjects\StartTime;
-use Canalizador\Transcription\Domain\ValueObjects\Text;
-use Canalizador\Transcription\Domain\ValueObjects\Word;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Exceptions\VideoLocalPathNotFound;
+use Canalizador\YouTube\Transcription\Domain\Collections\WordCollection;
+use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
+use Canalizador\YouTube\Transcription\Domain\Repositories\TranscriptionRepository;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\EndTime;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\StartTime;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\Text;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\Word;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Prism;
 use Prism\Prism\ValueObjects\Media\Audio;

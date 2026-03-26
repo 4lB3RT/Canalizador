@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\VideoLegacy\Domain\Repositories;
 
-use Canalizador\Metric\Domain\Entities\MetricCollection;
 use Canalizador\VideoProduction\VideoLegacy\Domain\Entities\Video;
 use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
+use Canalizador\YouTube\Metric\Domain\Entities\MetricCollection;
 
 interface VideoRepository
 {

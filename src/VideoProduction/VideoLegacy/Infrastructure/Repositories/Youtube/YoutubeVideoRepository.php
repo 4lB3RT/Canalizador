@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Repositories\Youtube;
 
-use Canalizador\Metric\Domain\Entities\Metric;
-use Canalizador\Metric\Domain\Entities\MetricCollection;
-use Canalizador\Metric\Domain\ValueObjects\MetricName;
-use Canalizador\Metric\Domain\ValueObjects\MetricType;
-use Canalizador\Metric\Domain\ValueObjects\MetricValue;
 use Canalizador\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeAnalyticsApiClient;
-use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\VideoProduction\VideoLegacy\Domain\Entities\Video;
 use Canalizador\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
 use Canalizador\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
-use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\Category;
 use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
 use Canalizador\VideoProduction\VideoLegacy\Infrastructure\DataTransformers\VideoDataTransformer;
+use Canalizador\YouTube\Metric\Domain\Entities\Metric;
+use Canalizador\YouTube\Metric\Domain\Entities\MetricCollection;
+use Canalizador\YouTube\Metric\Domain\ValueObjects\MetricName;
+use Canalizador\YouTube\Metric\Domain\ValueObjects\MetricType;
+use Canalizador\YouTube\Metric\Domain\ValueObjects\MetricValue;
+use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeAnalyticsApiClient;
+use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
+use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
 use DateTimeImmutable;
 use Throwable;
 

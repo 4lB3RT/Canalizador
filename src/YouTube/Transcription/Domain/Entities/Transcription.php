@@ -2,25 +2,25 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Transcription\Domain\Entities;
+namespace Canalizador\YouTube\Transcription\Domain\Entities;
 
 use Canalizador\Shared\Domain\ValueObjects\Language;
-use Canalizador\Transcription\Domain\Collections\WordCollection;
-use Canalizador\Transcription\Domain\ValueObjects\Text;
-use Canalizador\Transcription\Domain\ValueObjects\Word;
-use Canalizador\Video\Domain\ValueObjects\VideoId;
+use Canalizador\Youtube\Video\Domain\ValueObjects\Id;
+use Canalizador\YouTube\Transcription\Domain\Collections\WordCollection;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\Text;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\Word;
 
 final class Transcription
 {
     public function __construct(
-        private readonly VideoId                $videoId,
+        private readonly Id                     $videoId,
         private readonly Text                   $text,
         private readonly Language               $language,
         private WordCollection                  $words,
     ) {
     }
 
-    public function videoId(): VideoId
+    public function videoId(): Id
     {
         return $this->videoId;
     }

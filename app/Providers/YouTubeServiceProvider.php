@@ -33,7 +33,10 @@ use Canalizador\YouTube\Video\Domain\Repositories\VideoFragmenter;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoPublisher;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoTranscriber;
+use Canalizador\YouTube\Video\Infrastructure\Agents\AudioTranscriptor;
+use Canalizador\YouTube\Video\Infrastructure\Agents\CartoonVideoMaker;
 use Canalizador\YouTube\Video\Infrastructure\Agents\SmartVideoEditor;
+use Canalizador\YouTube\Video\Infrastructure\Commands\VideoAgentCommand;
 use Canalizador\YouTube\Video\Infrastructure\Factories\VideoPublisherFactory as VideoPublisherFactoryImpl;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\FragmentAndPublishVideoRequestMapper;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\PublishVideoRequestMapper;
@@ -52,7 +55,10 @@ use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\GoogleYouTubeVideo
 use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\YouTubeErrorExtractor;
 use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\YouTubeVideoBuilder;
 use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\YouTubeVideoUploader;
+use Canalizador\YouTube\Video\Infrastructure\Tools\AudioExtractor as AudioExtractorTool;
+use Canalizador\YouTube\Video\Infrastructure\Tools\AudioTranscription;
 use Canalizador\YouTube\Video\Infrastructure\Tools\VideoCutter;
+use Canalizador\YouTube\Video\Infrastructure\Tools\VideoDownloader as VideoDownloaderTool;
 use Illuminate\Support\ServiceProvider;
 
 class YouTubeServiceProvider extends ServiceProvider
@@ -62,6 +68,13 @@ class YouTubeServiceProvider extends ServiceProvider
         $this->registerGoogleServices();
         $this->registerChannelServices();
         $this->registerVideoServices();
+    }
+
+    public function boot(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([VideoAgentCommand::class]);
+        }
     }
 
     private function registerGoogleServices(): void
@@ -207,6 +220,32 @@ class YouTubeServiceProvider extends ServiceProvider
                 videoTranscriber:     $app->make(VideoTranscriber::class),
                 smartVideoFragmenter: $app->make(SmartVideoFragmenter::class),
                 videoPublisherFactory: $app->make(VideoPublisherFactory::class),
+            );
+        });
+
+        $this->app->bind(VideoDownloaderTool::class, function ($app) {
+            return new VideoDownloaderTool(
+                videoDownloader: $app->make(VideoDownloader::class),
+            );
+        });
+
+        $this->app->bind(AudioExtractorTool::class, function ($app) {
+            return new AudioExtractorTool(
+                audioExtractor: $app->make(AudioExtractor::class),
+            );
+        });
+
+        $this->app->bind(AudioTranscriptor::class, function ($app) {
+            return new AudioTranscriptor(
+                videoDownloader:    $app->make(VideoDownloaderTool::class),
+                audioExtractor:     $app->make(AudioExtractorTool::class),
+                audioTranscription: $app->make(AudioTranscription::class),
+            );
+        });
+
+        $this->app->bind(CartoonVideoMaker::class, function ($app) {
+            return new CartoonVideoMaker(
+                audioExtractor: $app->make(AudioExtractorTool::class),
             );
         });
     }

@@ -2,37 +2,36 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Transcription\Infrastructure\DataTransformer;
+namespace Canalizador\YouTube\Transcription\Infrastructure\DataTransformer;
 
 use Canalizador\Shared\Domain\ValueObjects\Language;
-use Canalizador\Transcription\Domain\Collections\WordCollection;
-use Canalizador\Transcription\Domain\Entities\Transcription;
-use Canalizador\Transcription\Domain\ValueObjects\EndTime;
-use Canalizador\Transcription\Domain\ValueObjects\StartTime;
-use Canalizador\Transcription\Domain\ValueObjects\Text;
-use Canalizador\Transcription\Domain\ValueObjects\Word;
-use Canalizador\Video\Domain\ValueObjects\VideoId;
+use Canalizador\YouTube\Transcription\Domain\Collections\WordCollection;
+use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\EndTime;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\StartTime;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\Text;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\Word;
+use Canalizador\Youtube\Video\Domain\ValueObjects\Id;
 
 final class TranscriptionDataTransformer
 {
     public static function transformArray(array $data): Transcription
     {
         if ($data['words'] !== null) {
-            $words =
-                array_map(
+            $words = array_map(
                     fn (array $wordData) => new Word(
                         Text::fromString($wordData['text']),
                         StartTime::fromFloat($wordData['start']),
                         EndTime::fromFloat($wordData['end']),
                     ),
                     $data['words']
-            );
+                );
         }
 
         $words = new WordCollection($words ?? []);
 
         return new Transcription(
-            VideoId::fromString($data['videoId']),
+            Id::fromString($data['videoId']),
             Text::fromString($data['text']),
             Language::tryFrom($data['language']),
             $words

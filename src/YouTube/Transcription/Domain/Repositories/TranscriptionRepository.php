@@ -2,12 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Transcription\Domain\Repositories;
+namespace Canalizador\YouTube\Transcription\Domain\Repositories;
 
-use Canalizador\Transcription\Domain\Entities\Transcription;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Exceptions\VideoLocalPathNotFound;
 use Canalizador\Video\Domain\ValueObjects\VideoId;
+use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
 
 interface TranscriptionRepository
 {
