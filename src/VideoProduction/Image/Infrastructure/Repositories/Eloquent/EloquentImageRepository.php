@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Image\Infrastructure\Repositories\Eloquent;
 
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
 use Canalizador\VideoProduction\Image\Domain\Entities\Image;
 use Canalizador\VideoProduction\Image\Domain\Entities\ImageCollection;
 use Canalizador\VideoProduction\Image\Domain\Exceptions\ImageNotFound;
 use Canalizador\VideoProduction\Image\Domain\Repositories\ImageRepository;
 use Canalizador\VideoProduction\Image\Domain\ValueObjects\ImageId;
 use Canalizador\VideoProduction\Image\Infrastructure\DAO\ImageDAO;
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\Shared\Domain\ValueObjects\IntegerId;
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 
 final class EloquentImageRepository implements ImageRepository
 {

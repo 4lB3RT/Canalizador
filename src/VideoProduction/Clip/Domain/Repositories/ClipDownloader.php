@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Clip\Domain\Repositories;
 
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Domain\ValueObjects\Url;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Url;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 
 interface ClipDownloader

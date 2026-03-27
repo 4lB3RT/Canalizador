@@ -4,11 +4,11 @@ declare(strict_types = 1);
 
 namespace Canalizador\YouTube\Transcription\Domain\Entities;
 
-use Canalizador\Shared\Domain\ValueObjects\Language;
-use Canalizador\Youtube\Video\Domain\ValueObjects\Id;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Language;
 use Canalizador\YouTube\Transcription\Domain\Collections\WordCollection;
 use Canalizador\YouTube\Transcription\Domain\ValueObjects\Text;
 use Canalizador\YouTube\Transcription\Domain\ValueObjects\Word;
+use Canalizador\Youtube\Video\Domain\ValueObjects\Id;
 
 final class Transcription
 {

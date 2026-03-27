@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Clip\Application\UseCases\ComposeShort;
 
+use Canalizador\Shared\Shared\Domain\Services\Clock;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
 use Canalizador\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
 use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipRepository;
 use Canalizador\VideoProduction\Clip\Domain\Services\VideoComposer;
-use Canalizador\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\VideoProduction\Video\Domain\Entities\Video;
 use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;

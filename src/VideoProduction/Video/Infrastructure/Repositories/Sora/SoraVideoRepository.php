@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Video\Infrastructure\Repositories\Sora;
 
-use Canalizador\Shared\Domain\Services\HttpClient;
-use Canalizador\Shared\Domain\Services\HttpResponse;
-use Canalizador\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Shared\Shared\Domain\Services\HttpClient;
+use Canalizador\Shared\Shared\Domain\Services\HttpResponseValidator;
 use Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
 use Canalizador\VideoProduction\Video\Domain\Entities\Video;
 use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;

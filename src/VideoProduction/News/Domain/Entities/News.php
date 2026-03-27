@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\News\Domain\Entities;
 
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Canalizador\VideoProduction\News\Domain\ValueObjects\Description;
 use Canalizador\VideoProduction\News\Domain\ValueObjects\NewsId;
 use Canalizador\VideoProduction\News\Domain\ValueObjects\PublishedAt;
 use Canalizador\VideoProduction\News\Domain\ValueObjects\Title;
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
 
 final class News
 {

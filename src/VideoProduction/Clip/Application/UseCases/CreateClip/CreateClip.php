@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Clip\Application\UseCases\CreateClip;
 
+use Canalizador\Shared\Shared\Domain\Events\EventBus;
+use Canalizador\Shared\Shared\Domain\Services\Clock;
 use Canalizador\VideoProduction\Clip\Domain\Entities\Clip;
 use Canalizador\VideoProduction\Clip\Domain\Entities\ClipCollection;
 use Canalizador\VideoProduction\Clip\Domain\Events\AllClipsCompleted;
 use Canalizador\VideoProduction\Clip\Domain\Events\ClipCreated;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
 use Canalizador\VideoProduction\Clip\Domain\Factories\ClipFactory;
 use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipRepository;
 use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipId;
+use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
 use Canalizador\VideoProduction\Clip\Domain\ValueObjects\Sequence;
-use Canalizador\Shared\Domain\Events\EventBus;
-use Canalizador\Shared\Domain\Services\Clock;
 use Canalizador\VideoProduction\Video\Domain\Entities\Video;
 use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;

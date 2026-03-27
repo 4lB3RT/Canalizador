@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Video\Infrastructure\Repositories\Eloquent;
 
+use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\VideoProduction\Script\Domain\Repositories\ScriptRepository;
 use Canalizador\VideoProduction\Script\Domain\ValueObjects\ScriptId;
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\VideoProduction\Video\Domain\Entities\Video;
 use Canalizador\VideoProduction\Video\Domain\Entities\VideoCollection;
 use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\Description;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\Title;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
 use Canalizador\VideoProduction\Video\Infrastructure\DAO\VideoDAO;
+use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 
 final class EloquentVideoRepository implements VideoRepository
 {

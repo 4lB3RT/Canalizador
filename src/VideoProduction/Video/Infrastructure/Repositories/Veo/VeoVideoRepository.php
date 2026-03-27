@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Video\Infrastructure\Repositories\Veo;
 
-use Canalizador\Shared\Domain\Services\HttpClient;
-use Canalizador\Shared\Domain\Services\HttpResponseValidator;
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\Shared\Domain\ValueObjects\ImageMimeType;
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Domain\ValueObjects\Url;
+use Canalizador\Shared\Shared\Domain\Services\HttpClient;
+use Canalizador\Shared\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\ImageMimeType;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Url;
 use Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
 use Canalizador\VideoProduction\Video\Domain\Entities\Video;
 use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;

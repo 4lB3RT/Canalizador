@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Canalizador\YouTube\Transcription\Infrastructure\Repositories\Elevenlabs;
 
-use Canalizador\Shared\Domain\ValueObjects\Language;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Language;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Exceptions\VideoLocalPathNotFound;
 use Canalizador\YouTube\Transcription\Domain\Collections\WordCollection;

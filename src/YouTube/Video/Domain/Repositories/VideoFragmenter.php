@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\YouTube\Video\Domain\Repositories;
 
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
 use Canalizador\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
 
 interface VideoFragmenter

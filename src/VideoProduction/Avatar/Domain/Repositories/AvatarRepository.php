@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Avatar\Domain\Repositories;
 
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Canalizador\VideoProduction\Avatar\Domain\Entities\Avatar;
 use Canalizador\VideoProduction\Avatar\Domain\Exceptions\AvatarNotFound;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Canalizador\Shared\Domain\ValueObjects\IntegerId;
 
 interface AvatarRepository
 {

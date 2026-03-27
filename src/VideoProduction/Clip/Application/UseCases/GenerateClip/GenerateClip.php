@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Clip\Application\UseCases\GenerateClip;
 
+use Canalizador\Shared\Shared\Domain\Events\EventBus;
+use Canalizador\Shared\Shared\Domain\Services\Clock;
 use Canalizador\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
 use Canalizador\VideoProduction\Clip\Domain\Events\ClipGenerated;
 use Canalizador\VideoProduction\Clip\Domain\Exceptions\ClipNotFound;
 use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipRepository;
 use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipId;
-use Canalizador\Shared\Domain\Events\EventBus;
-use Canalizador\Shared\Domain\Services\Clock;
-use Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
 use Canalizador\VideoProduction\Video\Domain\Entities\Video;
 use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoNotFound;

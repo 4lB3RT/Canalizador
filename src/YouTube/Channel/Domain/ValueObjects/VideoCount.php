@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\YouTube\Channel\Domain\ValueObjects;
 
-use Canalizador\Shared\Domain\ValueObjects\IntegerValue;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerValue;
 
 final readonly class VideoCount extends IntegerValue
 {

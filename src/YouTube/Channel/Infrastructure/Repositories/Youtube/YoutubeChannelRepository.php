@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\YouTube\Channel\Infrastructure\Repositories\Youtube;
 
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Canalizador\YouTube\Channel\Domain\Entities\Channel;
 use Canalizador\YouTube\Channel\Domain\Entities\ChannelCollection;
 use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
@@ -19,13 +21,9 @@ use Canalizador\YouTube\Channel\Domain\ValueObjects\ThumbnailUrl;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\Title;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\VideoCount;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ViewCount;
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\Shared\Domain\ValueObjects\IntegerId;
 use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use DateTimeImmutable;
 use Google_Service_Exception;
-use GuzzleHttp\Exception\GuzzleException;
-use RuntimeException;
 
 final readonly class YoutubeChannelRepository implements ChannelRepository
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Weather\Infrastructure\Repositories\Eloquent;
 
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Canalizador\VideoProduction\Weather\Domain\Entities\CityForecast;
 use Canalizador\VideoProduction\Weather\Domain\Repositories\ForecastRepository;
 use Canalizador\VideoProduction\Weather\Domain\ValueObjects\CityName;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Video\Domain\Repositories;
 
-use Canalizador\Shared\Domain\ValueObjects\Url;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Url;
 
 interface VideoExtender
 {

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Clip\Application\Handlers;
 
+use Canalizador\Shared\Shared\Domain\Events\DomainEvent;
+use Canalizador\Shared\Shared\Domain\Events\DomainEventHandler;
 use Canalizador\VideoProduction\Clip\Application\UseCases\CreateClip\CreateClip;
 use Canalizador\VideoProduction\Clip\Application\UseCases\CreateClip\CreateClipRequest;
 use Canalizador\VideoProduction\Clip\Domain\Events\ClipCompleted;
-use Canalizador\Shared\Domain\Events\DomainEvent;
-use Canalizador\Shared\Domain\Events\DomainEventHandler;
 
 final readonly class OnClipCompletedHandler implements DomainEventHandler
 {

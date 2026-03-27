@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use Canalizador\Shared\Domain\Events\EventBus;
-use Canalizador\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Domain\Services\HttpClient;
-use Canalizador\Shared\Domain\Services\HttpResponseValidator;
-use Canalizador\Shared\Infrastructure\Events\EventHandlerRegistry;
-use Canalizador\Shared\Infrastructure\Events\LaravelQueueEventBus;
-use Canalizador\Shared\Infrastructure\Services\HttpErrorExtractor;
-use Canalizador\Shared\Infrastructure\Services\HttpResponseValidator as HttpResponseValidatorImpl;
-use Canalizador\Shared\Infrastructure\Services\LaravelHttpClient;
-use Canalizador\Shared\Infrastructure\Services\SystemClock;
+use Canalizador\Shared\Shared\Domain\Events\EventBus;
+use Canalizador\Shared\Shared\Domain\Services\Clock;
+use Canalizador\Shared\Shared\Domain\Services\HttpClient;
+use Canalizador\Shared\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Shared\Shared\Infrastructure\Events\EventHandlerRegistry;
+use Canalizador\Shared\Shared\Infrastructure\Events\LaravelQueueEventBus;
+use Canalizador\Shared\Shared\Infrastructure\Services\HttpErrorExtractor;
+use Canalizador\Shared\Shared\Infrastructure\Services\HttpResponseValidator as HttpResponseValidatorImpl;
+use Canalizador\Shared\Shared\Infrastructure\Services\LaravelHttpClient;
+use Canalizador\Shared\Shared\Infrastructure\Services\SystemClock;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

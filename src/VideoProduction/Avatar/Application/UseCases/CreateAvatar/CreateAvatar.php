@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Avatar\Application\UseCases\CreateAvatar;
 
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
 use Canalizador\VideoProduction\Avatar\Domain\Factories\AvatarFactory;
 use Canalizador\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
@@ -12,8 +14,6 @@ use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\Biography;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\Category;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
 use Canalizador\VideoProduction\Avatar\Infrastructure\Repositories\OpenAI\OpenAiAvatarRepository;
-use Canalizador\Shared\Domain\ValueObjects\IntegerId;
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 use Illuminate\Support\Facades\File;
 

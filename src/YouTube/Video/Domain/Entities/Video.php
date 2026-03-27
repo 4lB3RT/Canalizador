@@ -4,21 +4,27 @@ declare(strict_types = 1);
 
 namespace Canalizador\YouTube\Video\Domain\Entities;
 
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Domain\ValueObjects\Url;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Duration;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Url;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
 use Canalizador\YouTube\Metric\Domain\Entities\MetricCollection;
 use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Title;
+use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
 
 final class Video
 {
+    /** @var YouTubeVideoId[] */
+    private array $publishedShortIds = [];
+
     public function __construct(
         private readonly Id       $id,
         private readonly Title    $title,
         private readonly DateTime $publishedAt,
+        private readonly Duration $duration,
         private MetricCollection  $metrics,
         private readonly Category $category,
         private readonly ?Url     $url = null,
@@ -93,6 +99,22 @@ final class Video
         $this->audioLocalPath = $audioLocalPath;
     }
 
+    public function duration(): Duration
+    {
+        return $this->duration;
+    }
+
+    public function addPublishedShortId(YouTubeVideoId $id): void
+    {
+        $this->publishedShortIds[] = $id;
+    }
+
+    /** @return YouTubeVideoId[] */
+    public function publishedShortIds(): array
+    {
+        return $this->publishedShortIds;
+    }
+
     public function toArray(): array
     {
         return [
@@ -111,6 +133,7 @@ final class Video
             'url'              => $this->url?->value(),
             'video_local_path' => $this->videoLocalPath?->value(),
             'audio_local_path' => $this->audioLocalPath?->value(),
+            'duration' => $this->duration->value(),
         ];
     }
 }

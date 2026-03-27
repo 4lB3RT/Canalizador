@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Voice\Domain\Entities;
 
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
 use Canalizador\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 
 final class Voice

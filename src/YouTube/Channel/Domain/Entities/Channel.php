@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\YouTube\Channel\Domain\Entities;
 
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelBrand;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\Country;
@@ -15,8 +17,6 @@ use Canalizador\YouTube\Channel\Domain\ValueObjects\ThumbnailUrl;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\Title;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\VideoCount;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ViewCount;
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\Shared\Domain\ValueObjects\IntegerId;
 
 final class Channel
 {

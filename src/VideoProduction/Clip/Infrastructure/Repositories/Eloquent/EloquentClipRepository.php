@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Clip\Infrastructure\Repositories\Eloquent;
 
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Url;
 use Canalizador\VideoProduction\Clip\Domain\Entities\Clip;
 use Canalizador\VideoProduction\Clip\Domain\Entities\ClipCollection;
 use Canalizador\VideoProduction\Clip\Domain\Exceptions\ClipNotFound;
@@ -12,9 +15,6 @@ use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipId;
 use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
 use Canalizador\VideoProduction\Clip\Domain\ValueObjects\Sequence;
 use Canalizador\VideoProduction\Clip\Infrastructure\DAO\ClipDAO;
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Domain\ValueObjects\Url;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
 

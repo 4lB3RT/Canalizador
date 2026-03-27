@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Video\Application\UseCases\RetrieveVideoContent;
 
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
 
 final readonly class RetrieveVideoContentResponse
 {

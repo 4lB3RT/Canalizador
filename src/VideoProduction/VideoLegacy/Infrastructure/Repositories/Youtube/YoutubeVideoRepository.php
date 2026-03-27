@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Repositories\Youtube;
 
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Canalizador\VideoProduction\VideoLegacy\Domain\Entities\Video;
 use Canalizador\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
 use Canalizador\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;

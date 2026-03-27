@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Tools;
 
-use Canalizador\Shared\Domain\ValueObjects\IntegerValue;
 use Canalizador\VideoProduction\VideoLegacy\Application\UseCases\SaveAudio;
 use Canalizador\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
 use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;

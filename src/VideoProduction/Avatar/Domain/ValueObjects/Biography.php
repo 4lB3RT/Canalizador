@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Avatar\Domain\ValueObjects;
 
-use Canalizador\Shared\Domain\ValueObjects\StringValue;
-use InvalidArgumentException;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\StringValue;
 
 final readonly class Biography extends StringValue
 {

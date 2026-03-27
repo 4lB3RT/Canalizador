@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Canalizador\YouTube\Transcription\Infrastructure\DataTransformer;
 
-use Canalizador\Shared\Domain\ValueObjects\Language;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Language;
 use Canalizador\YouTube\Transcription\Domain\Collections\WordCollection;
 use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
 use Canalizador\YouTube\Transcription\Domain\ValueObjects\EndTime;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Clip\Domain\Events;
 
-use Canalizador\Shared\Domain\Events\DomainEvent;
-use Canalizador\Shared\Domain\ValueObjects\DateTime;
+use Canalizador\Shared\Shared\Domain\Events\DomainEvent;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 
 final readonly class ClipGenerated implements DomainEvent
 {

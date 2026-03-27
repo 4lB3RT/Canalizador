@@ -2,7 +2,7 @@
 
 namespace Canalizador\YouTube\Transcription\Domain\ValueObjects;
 
-use Canalizador\Shared\Domain\ValueObjects\StringValue;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\StringValue;
 
 final readonly class Word
 {

@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo;
 
+use Canalizador\Shared\Shared\Domain\Events\EventBus;
+use Canalizador\Shared\Shared\Domain\Services\Clock;
+use Canalizador\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\VideoProduction\News\Domain\Repositories\NewsRepository;
 use Canalizador\VideoProduction\Script\Domain\Repositories\ScriptRepository;
 use Canalizador\VideoProduction\Script\Domain\Services\GenerateScript;
 use Canalizador\VideoProduction\Script\Domain\ValueObjects\ScriptId;
-use Canalizador\Shared\Domain\Events\EventBus;
-use Canalizador\Shared\Domain\Services\Clock;
 use Canalizador\VideoProduction\Video\Domain\Events\VideoCreated;
 use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\VideoProduction\Video\Domain\Factories\VideoFactory;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoMetadataGenerator;
 use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
 use Canalizador\VideoProduction\Weather\Domain\Repositories\ForecastRepository;
+use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 
 final readonly class CreateVideo
 {

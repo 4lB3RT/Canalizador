@@ -34,6 +34,7 @@ final class EloquentVideoRepository implements VideoRepository
             'video_local_path' => $model->local_path,
             'audio_local_path' => $model->audio_path,
             'transcription'    => $model->transcription,
+            'duration'         => $model->duration,
         ]);
     }
 
@@ -51,6 +52,7 @@ final class EloquentVideoRepository implements VideoRepository
                 'audio_path'   => $data['audio_local_path'],
                 'transcription' => $data['transcription'],
                 'category'     => $data['category'],
+                'duration'     => $data['duration'],
             ]
         );
     }

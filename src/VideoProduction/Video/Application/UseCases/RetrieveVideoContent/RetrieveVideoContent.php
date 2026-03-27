@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Video\Application\UseCases\RetrieveVideoContent;
 
-use Canalizador\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Shared\Domain\Services\Clock;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
 use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\VideoProduction\Video\Domain\Repositories\VideoContentRetriever;

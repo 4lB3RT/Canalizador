@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Image\Domain\Entities;
 
-use Canalizador\Shared\Domain\Collection;
+use Canalizador\Shared\Shared\Domain\Collection;
 
 final class ImageCollection extends Collection
 {

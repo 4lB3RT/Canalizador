@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Canalizador\VideoProduction\Clip\Infrastructure\Repositories\Veo;
 
+use Canalizador\Shared\Shared\Domain\Services\HttpClient;
+use Canalizador\Shared\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Url;
 use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipDownloader;
-use Canalizador\Shared\Domain\Services\HttpClient;
-use Canalizador\Shared\Domain\Services\HttpResponseValidator;
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Domain\ValueObjects\Url;
 use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
 use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 use Illuminate\Support\Facades\File;

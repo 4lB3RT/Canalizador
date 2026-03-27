@@ -20,8 +20,11 @@ use Canalizador\YouTube\Channel\Infrastructure\Repositories\OpenAI\OpenAIChannel
 use Canalizador\YouTube\Channel\Infrastructure\Repositories\Youtube\YoutubeChannelRepository;
 use Canalizador\YouTube\Shared\Domain\Services\YouTubeServiceFactory as YouTubeSharedServiceFactory;
 use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
+use Canalizador\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
+use Canalizador\Shared\Video\Infrastructure\Repositories\OpenAI\OpenAIVideoMetadataGenerator;
 use Canalizador\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo\DownloadLatestChannelVideo;
 use Canalizador\YouTube\Video\Application\UseCases\FragmentAndPublishVideo\FragmentAndPublishVideo;
+use Canalizador\YouTube\Video\Application\UseCases\GenerateShorts\GenerateShorts;
 use Canalizador\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
 use Canalizador\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo\SmartFragmentAndPublishVideo;
 use Canalizador\YouTube\Video\Domain\Factories\VideoPublisherFactory;
@@ -41,9 +44,12 @@ use Canalizador\YouTube\Video\Infrastructure\Factories\VideoPublisherFactory as 
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\FragmentAndPublishVideoRequestMapper;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\PublishVideoRequestMapper;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\SmartFragmentAndPublishVideoRequestMapper;
+use Canalizador\VideoProduction\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository as VideoProductionEloquentVideoRepository;
+use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository as VideoProductionVideoRepository;
 use Canalizador\YouTube\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
 use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\GoogleYouTubeChannelVideoFinder;
 use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YoutubeVideoPublisher;
+use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YoutubeVideoRepository;
 use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YtDlpVideoDownloader;
 use Canalizador\YouTube\Video\Infrastructure\Services\FfmpegAudioExtractor;
 use Canalizador\YouTube\Video\Infrastructure\Services\FfmpegVideoFragmenter;
@@ -165,7 +171,7 @@ class YouTubeServiceProvider extends ServiceProvider
 
         $this->app->bind(PublishVideo::class, function ($app) {
             return new PublishVideo(
-                videoRepository: $app->make(VideoRepository::class),
+                videoRepository: $app->make(VideoProductionVideoRepository::class),
                 videoPublisherFactory: $app->make(VideoPublisherFactory::class)
             );
         });
@@ -195,6 +201,12 @@ class YouTubeServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(VideoRepository::class, EloquentVideoRepository::class);
+
+        $this->app->bind(YoutubeVideoRepository::class, function ($app) {
+            return new YoutubeVideoRepository(
+                youtubeClient: $app->make(YoutubeDataApiClient::class),
+            );
+        });
 
         $this->app->bind(AudioExtractor::class, FfmpegAudioExtractor::class);
         $this->app->bind(VideoTranscriber::class, OpenAIVideoTranscriber::class);
@@ -246,6 +258,20 @@ class YouTubeServiceProvider extends ServiceProvider
         $this->app->bind(CartoonVideoMaker::class, function ($app) {
             return new CartoonVideoMaker(
                 audioExtractor: $app->make(AudioExtractorTool::class),
+            );
+        });
+
+        $this->app->bind(VideoMetadataGenerator::class, OpenAIVideoMetadataGenerator::class);
+
+        $this->app->bind(GenerateShorts::class, function ($app) {
+            return new GenerateShorts(
+                videoRepository:        $app->make(VideoRepository::class),
+                videoDownloader:        $app->make(VideoDownloader::class),
+                audioExtractor:         $app->make(AudioExtractor::class),
+                videoTranscriber:       $app->make(VideoTranscriber::class),
+                videoFragmenter:        $app->make(VideoFragmenter::class),
+                videoMetadataGenerator: $app->make(VideoMetadataGenerator::class),
+                videoPublisherFactory:  $app->make(VideoPublisherFactory::class),
             );
         });
     }

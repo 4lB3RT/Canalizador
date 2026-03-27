@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Canalizador\YouTube\Channel\Domain\ValueObjects;
 
-use Canalizador\Shared\Domain\ValueObjects\StringValue;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Description as SharedDescription;
 use InvalidArgumentException;
 
-final readonly class Description extends StringValue
+final readonly class Description extends SharedDescription
 {
     private const int MAX_LENGTH = 1000;
 

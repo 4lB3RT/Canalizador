@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube;
 
-use Canalizador\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
 use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoDownloader;
 use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
