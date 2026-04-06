@@ -25,6 +25,6 @@ Route::middleware(['api.token'])->group(function () {
         ->middleware(EnsureGoogleToken::class);
     Route::post('/videos/smart-fragment-and-publish', SmartFragmentAndPublishVideoController::class)
         ->middleware(EnsureGoogleToken::class);
-    Route::post('/videos/{videoYoutubeId}/shorts/generate', GenerateShortsController::class)
+    Route::post('/videos/{video_id}/shorts/generate', GenerateShortsController::class)
         ->middleware(EnsureGoogleToken::class);
 });

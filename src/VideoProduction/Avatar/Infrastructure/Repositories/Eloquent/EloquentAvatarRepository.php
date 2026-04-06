@@ -7,7 +7,7 @@ namespace Canalizador\VideoProduction\Avatar\Infrastructure\Repositories\Eloquen
 use Canalizador\Shared\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\VideoProduction\Avatar\Domain\Entities\Avatar;
 use Canalizador\VideoProduction\Avatar\Domain\Exceptions\AvatarNotFound;
 use Canalizador\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;

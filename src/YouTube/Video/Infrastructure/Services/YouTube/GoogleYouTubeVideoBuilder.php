@@ -20,17 +20,23 @@ final class GoogleYouTubeVideoBuilder implements YouTubeVideoBuilder
         return $snippet;
     }
 
-    public function buildVideoStatus(string $privacyStatus): Google_Service_YouTube_VideoStatus
-    {
+    public function buildVideoStatus(
+        string              $privacyStatus,
+        ?\DateTimeImmutable $publishAt = null,
+    ): Google_Service_YouTube_VideoStatus {
         $status = new Google_Service_YouTube_VideoStatus();
         $status->setPrivacyStatus($privacyStatus);
+
+        if ($publishAt !== null) {
+            $status->setPublishAt($publishAt->format(\DateTimeInterface::RFC3339));
+        }
 
         return $status;
     }
 
     public function buildVideo(
         Google_Service_YouTube_VideoSnippet $snippet,
-        Google_Service_YouTube_VideoStatus $status
+        Google_Service_YouTube_VideoStatus  $status,
     ): Google_Service_YouTube_Video {
         $video = new Google_Service_YouTube_Video();
         $video->setSnippet($snippet);

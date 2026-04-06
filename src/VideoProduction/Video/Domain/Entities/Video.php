@@ -1,12 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Canalizador\VideoProduction\Video\Domain\Entities;
 
 use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
 use Canalizador\VideoProduction\Script\Domain\Entities\Script;
@@ -75,7 +75,7 @@ final class Video
     public function markAsCompleted(LocalPath $videoLocalPath, DateTime $completedAt): void
     {
         $this->videoLocalPath = $videoLocalPath;
-        $this->completedAt = $completedAt;
+        $this->completedAt    = $completedAt;
     }
 
     public function createdAt(): DateTime
@@ -96,18 +96,18 @@ final class Video
     public function toArray(): array
     {
         return [
-            'id' => $this->id->value(),
-            'script_id' => $this->script->id()->value(),
-            'channel_id' => $this->channelId->value(),
-            'avatar_id' => $this->avatarId?->value(),
-            'script' => $this->script->toArray(),
-            'title' => $this->title->value(),
-            'description' => $this->description->value(),
-            'category' => $this->category->value,
-            'generation_id' => $this->generationId?->value(),
+            'id'               => $this->id->value(),
+            'script_id'        => $this->script->id()->value(),
+            'channel_id'       => $this->channelId->value(),
+            'avatar_id'        => $this->avatarId?->value(),
+            'script'           => $this->script->toArray(),
+            'title'            => $this->title->value(),
+            'description'      => $this->description->value(),
+            'category'         => $this->category->value,
+            'generation_id'    => $this->generationId?->value(),
             'video_local_path' => $this->videoLocalPath?->value(),
-            'created_at' => $this->createdAt->value()->format('Y-m-d H:i:s'),
-            'completed_at' => $this->completedAt?->value()->format('Y-m-d H:i:s'),
+            'created_at'       => $this->createdAt->value()->format('Y-m-d H:i:s'),
+            'completed_at'     => $this->completedAt?->value()->format('Y-m-d H:i:s'),
         ];
     }
 }

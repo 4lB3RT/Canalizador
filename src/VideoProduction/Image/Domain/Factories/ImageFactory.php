@@ -7,7 +7,7 @@ namespace Canalizador\VideoProduction\Image\Domain\Factories;
 use Canalizador\Shared\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\VideoProduction\Image\Domain\Entities\Image;
 use Canalizador\VideoProduction\Image\Domain\ValueObjects\ImageId;
 

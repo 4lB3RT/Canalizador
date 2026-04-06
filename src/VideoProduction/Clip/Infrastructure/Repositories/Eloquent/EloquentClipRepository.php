@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Canalizador\VideoProduction\Clip\Infrastructure\Repositories\Eloquent;
 
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Url;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
 use Canalizador\VideoProduction\Clip\Domain\Entities\Clip;
 use Canalizador\VideoProduction\Clip\Domain\Entities\ClipCollection;
 use Canalizador\VideoProduction\Clip\Domain\Exceptions\ClipNotFound;

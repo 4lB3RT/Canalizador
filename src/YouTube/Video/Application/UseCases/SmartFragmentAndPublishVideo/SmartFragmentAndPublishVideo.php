@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Canalizador\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo;
 
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Language;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
-use Canalizador\YouTube\Transcription\Domain\Collections\WordCollection;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\YouTube\Transcription\Domain\Collections\SentenceCollection;
 use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
 use Canalizador\YouTube\Transcription\Domain\ValueObjects\EndTime;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\Sentence;
 use Canalizador\YouTube\Transcription\Domain\ValueObjects\StartTime;
 use Canalizador\YouTube\Transcription\Domain\ValueObjects\Text as TranscriptionText;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\Word;
 use Canalizador\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
 use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
@@ -22,7 +22,6 @@ use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoTranscriber;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
 use Canalizador\Youtube\Video\Domain\ValueObjects\Id as TranscriptionId;
-use Canalizador\YouTube\Video\Domain\ValueObjects\VideoToPublish;
 
 final readonly class SmartFragmentAndPublishVideo
 {
@@ -57,7 +56,6 @@ final readonly class SmartFragmentAndPublishVideo
         $this->videoRepository->save($video);
 
         $fragments = $this->smartVideoFragmenter->fragment($videoPath, $transcription);
-
         $publisher = $this->videoPublisherFactory->create('youtube');
 
         foreach ($fragments as $index => $fragmentPath) {
@@ -82,8 +80,8 @@ final readonly class SmartFragmentAndPublishVideo
     {
         $fullText = implode(' ', array_column($segments, 'text'));
 
-        $words = array_map(
-            static fn(array $segment) => new Word(
+        $sentences = array_map(
+            static fn(array $segment) => new Sentence(
                 TranscriptionText::fromString(trim($segment['text'])),
                 StartTime::fromFloat($segment['start']),
                 EndTime::fromFloat($segment['end']),
@@ -95,7 +93,7 @@ final readonly class SmartFragmentAndPublishVideo
             TranscriptionId::fromString($videoId),
             TranscriptionText::fromString($fullText),
             Language::SPANISH,
-            new WordCollection($words),
+            new SentenceCollection($sentences),
         );
     }
 }

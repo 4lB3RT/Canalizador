@@ -7,7 +7,7 @@ namespace Canalizador\VideoProduction\Avatar\Domain\Entities;
 use Canalizador\Shared\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;

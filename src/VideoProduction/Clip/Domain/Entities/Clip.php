@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Canalizador\VideoProduction\Clip\Domain\Entities;
 
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Url;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
 use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipId;
 use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
 use Canalizador\VideoProduction\Clip\Domain\ValueObjects\Sequence;

@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Canalizador\YouTube\Transcription\Domain\ValueObjects;
 
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\StringValue;
 
-final readonly class Word
+final readonly class Sentence
 {
     public function __construct(
-        private Text $text,
+        private Text      $text,
         private StartTime $start,
-        private EndTime $end,
+        private EndTime   $end,
     ) {
     }
 

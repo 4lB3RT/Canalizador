@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Canalizador\VideoProduction\Voice\Infrastructure\Repositories\Eloquent;
 
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\VideoProduction\Voice\Domain\Entities\Voice;
 use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
 use Canalizador\VideoProduction\Voice\Domain\ValueObjects\VoiceId;

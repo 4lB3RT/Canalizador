@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\DataTransformers;
 
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Url;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Entities\Video;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
 use Canalizador\Shared\Video\Domain\ValueObjects\Title;
+use Canalizador\VideoProduction\VideoLegacy\Domain\Entities\Video;
 use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
 use Canalizador\YouTube\Metric\Domain\Entities\MetricCollection;
 use Canalizador\YouTube\Transcription\Infrastructure\DataTransformer\TranscriptionDataTransformer;

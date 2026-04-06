@@ -7,13 +7,13 @@ namespace Canalizador\YouTube\Transcription\Infrastructure\Repositories\Elevenla
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Language;
 use Canalizador\Video\Domain\Entities\Video;
 use Canalizador\Video\Domain\Exceptions\VideoLocalPathNotFound;
-use Canalizador\YouTube\Transcription\Domain\Collections\WordCollection;
+use Canalizador\YouTube\Transcription\Domain\Collections\SentenceCollection;
 use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
 use Canalizador\YouTube\Transcription\Domain\Repositories\TranscriptionRepository;
 use Canalizador\YouTube\Transcription\Domain\ValueObjects\EndTime;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\Sentence;
 use Canalizador\YouTube\Transcription\Domain\ValueObjects\StartTime;
 use Canalizador\YouTube\Transcription\Domain\ValueObjects\Text;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\Word;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Prism;
 use Prism\Prism\ValueObjects\Media\Audio;
@@ -39,19 +39,18 @@ final readonly class ElevenlabsTranscriptionRepository implements TranscriptionR
             ])
             ->asText();
 
-
         $transcription = new Transcription(
             videoId: $video->id(),
             text: Text::fromString($transcriptionResponse->text),
             language: Language::SPANISH,
-            words: WordCollection::empty(),
+            sentences: SentenceCollection::empty(),
         );
 
-        $words = WordCollection::empty();
+        $sentences = SentenceCollection::empty();
         foreach ($transcriptionResponse->additionalContent['words'] as $word) {
             if ($word['type'] === 'word') {
-                $words->add(
-                    new Word(
+                $sentences->add(
+                    new Sentence(
                         text: Text::fromString($word['text']),
                         start: StartTime::fromFloat($word['start']),
                         end: EndTime::fromFloat($word['end']),
@@ -60,7 +59,7 @@ final readonly class ElevenlabsTranscriptionRepository implements TranscriptionR
             }
         }
 
-        $transcription->updateWords($words);
+        $transcription->updateSentences($sentences);
 
         return $transcription;
     }

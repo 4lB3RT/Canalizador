@@ -6,7 +6,7 @@ namespace Canalizador\VideoProduction\Clip\Application\UseCases\DownloadClip;
 
 use Canalizador\Shared\Shared\Domain\Events\EventBus;
 use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\VideoProduction\Clip\Domain\Events\ClipCompleted;
 use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipDownloader;
 use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipRepository;

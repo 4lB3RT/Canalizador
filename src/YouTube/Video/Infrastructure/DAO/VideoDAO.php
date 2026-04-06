@@ -18,8 +18,14 @@ class VideoDAO extends Model
 
     protected $fillable = [
         'id',
+        'platform_id',
+        'parent_id',
         'title',
+        'description',
         'url',
+        'category',
+        'status',
+        'duration',
         'published_at',
         'local_path',
         'audio_path',

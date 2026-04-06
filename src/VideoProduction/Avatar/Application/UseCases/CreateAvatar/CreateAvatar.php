@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Canalizador\VideoProduction\Avatar\Application\UseCases\CreateAvatar;
 
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\VideoProduction\Avatar\Domain\Factories\AvatarFactory;
 use Canalizador\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;

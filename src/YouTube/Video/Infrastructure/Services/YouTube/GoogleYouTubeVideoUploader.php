@@ -1,26 +1,28 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Canalizador\YouTube\Video\Infrastructure\Services\YouTube;
 
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
 use Canalizador\VideoProduction\Video\Domain\Services\FileSystem;
+use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Google\Service\Exception;
 use Google_Client;
 use Google_Http_MediaFileUpload;
 use Google_Service_Exception;
 use Google_Service_YouTube;
 use Google_Service_YouTube_Video;
 
-final class GoogleYouTubeVideoUploader implements YouTubeVideoUploader
+final readonly class GoogleYouTubeVideoUploader implements YouTubeVideoUploader
 {
     public function __construct(
-        private readonly FileSystem $fileSystem
+        private FileSystem $fileSystem
     ) {
     }
 
     /**
      * @throws YouTubeOperationFailed
+     * @throws Exception
      */
     public function upload(
         Google_Client $client,

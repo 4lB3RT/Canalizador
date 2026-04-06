@@ -7,7 +7,7 @@ namespace Canalizador\VideoProduction\Avatar\Infrastructure\Repositories\OpenAI;
 use Canalizador\Shared\Shared\Domain\Exceptions\InvalidCollectionType;
 use Canalizador\Shared\Shared\Domain\Services\HttpClient;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\Biography;

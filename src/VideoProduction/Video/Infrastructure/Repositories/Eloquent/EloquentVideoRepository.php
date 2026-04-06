@@ -6,7 +6,7 @@ namespace Canalizador\VideoProduction\Video\Infrastructure\Repositories\Eloquent
 
 use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\LocalPath;
+use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
 use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
 use Canalizador\VideoProduction\Script\Domain\Repositories\ScriptRepository;

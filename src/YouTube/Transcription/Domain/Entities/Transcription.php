@@ -5,18 +5,18 @@ declare(strict_types = 1);
 namespace Canalizador\YouTube\Transcription\Domain\Entities;
 
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Language;
-use Canalizador\YouTube\Transcription\Domain\Collections\WordCollection;
+use Canalizador\YouTube\Transcription\Domain\Collections\SentenceCollection;
+use Canalizador\YouTube\Transcription\Domain\ValueObjects\Sentence;
 use Canalizador\YouTube\Transcription\Domain\ValueObjects\Text;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\Word;
 use Canalizador\Youtube\Video\Domain\ValueObjects\Id;
 
 final class Transcription
 {
     public function __construct(
-        private readonly Id                     $videoId,
-        private readonly Text                   $text,
-        private readonly Language               $language,
-        private WordCollection                  $words,
+        private readonly Id                $videoId,
+        private readonly Text              $text,
+        private readonly Language          $language,
+        private SentenceCollection         $sentences,
     ) {
     }
 
@@ -35,23 +35,23 @@ final class Transcription
         return $this->language;
     }
 
-    public function words(): WordCollection
+    public function sentences(): SentenceCollection
     {
-        return $this->words;
+        return $this->sentences;
     }
 
-    public function updateWords(WordCollection $words): void
+    public function updateSentences(SentenceCollection $sentences): void
     {
-        $this->words = $words;
+        $this->sentences = $sentences;
     }
 
     public function toArray(): array
     {
         return [
-            'videoId'  => $this->videoId->value(),
-            'text'     => $this->text->value(),
-            'language' => $this->language->value,
-            'words'    => $this->words->map(fn (Word $word) => $word->toArray()),
+            'videoId'   => $this->videoId->value(),
+            'text'      => $this->text->value(),
+            'language'  => $this->language->value,
+            'sentences' => $this->sentences->map(fn (Sentence $sentence) => $sentence->toArray()),
         ];
     }
 }
