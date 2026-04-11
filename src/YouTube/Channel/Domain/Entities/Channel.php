@@ -4,36 +4,32 @@ declare(strict_types=1);
 
 namespace Canalizador\YouTube\Channel\Domain\Entities;
 
+use Canalizador\Shared\Shared\Domain\ValueObjects\Country;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelBrand;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\Country;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\CustomUrl;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\Description;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\PrivacyStatus;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\SubscriberCount;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ThumbnailUrl;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\Title;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\VideoCount;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ViewCount;
 
 final class Channel
 {
     public function __construct(
-        private readonly ChannelId $id,
-        private readonly IntegerId $userId,
-        private Title $title,
-        private Description $description,
-        private readonly DateTime $publishedAt,
-        private readonly ViewCount $viewCount,
-        private readonly SubscriberCount $subscriberCount,
-        private readonly VideoCount $videoCount,
+        private readonly ChannelId    $id,
+        private IntegerId             $userId,
+        private Title                 $title,
+        private Description           $description,
+        private readonly DateTime     $publishedAt,
+        private readonly int          $viewCount,
+        private readonly int          $subscriberCount,
+        private readonly int          $videoCount,
         private readonly PrivacyStatus $privacyStatus,
-        private Country $country,
-        private ChannelBrand $channelBrand,
-        private readonly ?CustomUrl $customUrl = null,
-        private readonly ?ThumbnailUrl $thumbnailUrl = null,
+        private Country               $country,
+        private ChannelBrand          $channelBrand,
+        private readonly ?Url         $customUrl = null,
+        private readonly ?Url         $thumbnailUrl = null,
     ) {
     }
 
@@ -62,17 +58,17 @@ final class Channel
         return $this->publishedAt;
     }
 
-    public function viewCount(): ViewCount
+    public function viewCount(): int
     {
         return $this->viewCount;
     }
 
-    public function subscriberCount(): SubscriberCount
+    public function subscriberCount(): int
     {
         return $this->subscriberCount;
     }
 
-    public function videoCount(): VideoCount
+    public function videoCount(): int
     {
         return $this->videoCount;
     }
@@ -82,12 +78,12 @@ final class Channel
         return $this->privacyStatus;
     }
 
-    public function customUrl(): ?CustomUrl
+    public function customUrl(): ?Url
     {
         return $this->customUrl;
     }
 
-    public function thumbnailUrl(): ?ThumbnailUrl
+    public function thumbnailUrl(): ?Url
     {
         return $this->thumbnailUrl;
     }
@@ -100,6 +96,11 @@ final class Channel
     public function channelBrand(): ChannelBrand
     {
         return $this->channelBrand;
+    }
+
+    public function updateUserId(IntegerId $userId): void
+    {
+        $this->userId = $userId;
     }
 
     public function updateCountry(Country $country): void
@@ -133,12 +134,11 @@ final class Channel
             'published_at' => $this->publishedAt->value()->format('Y-m-d H:i:s'),
             'thumbnail_url' => $this->thumbnailUrl?->value(),
             'country' => $this->country->value(),
-            'view_count' => $this->viewCount->value(),
-            'subscriber_count' => $this->subscriberCount->value(),
-            'video_count' => $this->videoCount->value(),
+            'view_count' => $this->viewCount,
+            'subscriber_count' => $this->subscriberCount,
+            'video_count' => $this->videoCount,
             'privacy_status' => $this->privacyStatus->value,
             'channel_brand' => $this->channelBrand->value(),
         ];
     }
 }
-

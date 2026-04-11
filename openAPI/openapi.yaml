@@ -31,6 +31,9 @@ paths:
 
   # ─── YouTube / Channel ───────────────────────────────────────────────────
 
+  /api/youtube/channels/{channelId}/register:
+    $ref: './YouTube/Channel/Request/RegisterChannel.yaml'
+
   /api/youtube/channels/{channelId}/sync:
     $ref: './YouTube/Channel/Request/SyncChannel.yaml'
 

@@ -10,11 +10,7 @@ use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
 use Canalizador\YouTube\Video\Domain\Factories\VideoPublisherFactory;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
-use Canalizador\YouTube\Video\Domain\ValueObjects\PlatformId;
 use Canalizador\YouTube\Video\Infrastructure\Builders\YouTubeVideoBuilder;
-use DateMalformedIntervalStringException;
-use DateMalformedStringException;
-use Throwable;
 
 final readonly class GenerateShorts
 {
@@ -26,38 +22,32 @@ final readonly class GenerateShorts
     }
 
     /**
-     * @throws DateMalformedStringException
-     * @throws Throwable
      * @throws YouTubeOperationFailed
      * @throws VideoNotFound
      * @throws VideoFragmentationFailed
-     * @throws DateMalformedIntervalStringException
      */
     public function execute(GenerateShortsRequest $request): GenerateShortsResponse
     {
-        $video = $this->videoBuilder
+        $this->videoBuilder
             ->fromYouTubeId($request->videoYoutubeId)
             ->withDownload()
             ->withAudio()
-            ->withTranscription()
-            ->build();
-
-        $this->videoRepository->save($video);
+            ->withTranscription();
 
         $shorts = $this->videoBuilder
-            ->withSegmentDuration(30)
-            ->withMaxFragments(1)
+            ->withSegmentDuration(60)
             ->buildShorts();
+
+        dd($shorts);
 
         $publisher = $this->videoPublisherFactory->create('youtube');
         $publishedIds = [];
 
         /* @var Video $short */
         foreach ($shorts as $short) {
-            $publishedId = $publisher->publish($short);
-            $short->updatePlatformId(PlatformId::fromString($publishedId));
+            $publisher->publish($short);
             $this->videoRepository->save($short);
-            $publishedIds[] = $publishedId;
+            $publishedIds[] = $short->platformId()->value();
         }
 
         return new GenerateShortsResponse(publishedShortIds: $publishedIds);

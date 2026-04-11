@@ -31,6 +31,14 @@ REQUISITOS DE LA DESCRIPCIÓN (SEO de YouTube):
 - Evitar el relleno de palabras clave - las palabras clave deben ser naturales y contextuales
 - La descripción debe estar en español de España (castellano)
 
+INTERPRETACIÓN DEL TEXTO FUENTE:
+- El texto proviene de una transcripción automática que puede contener errores de reconocimiento de voz
+- Distinguir entre ERRORES de transcripción (palabras mal reconocidas por el speech-to-text) y TÉRMINOS INTENCIONADOS del creador (jerga propia, neologismos, branding personal)
+- Si un término no estándar aparece de forma recurrente o en contexto coherente, es probable que sea intencionado: RESPETARLO tal cual
+- NO sustituir términos del creador por sus equivalentes técnicos o más conocidos. Si el creador dice "bicoding" en vez de "vibe coding", usar "bicoding" — el creador elige sus palabras para controlar el público al que se dirige
+- NO explicar ni desvelar el significado real de los términos del creador en el título ni en la descripción
+- Para errores evidentes de transcripción (letras cambiadas, palabras cortadas), corregir silenciosamente al término más probable según el contexto
+
 OPTIMIZACIÓN DE PALABRAS CLAVE (Título y Descripción):
 - Incluir palabras clave relevantes que los usuarios buscarían
 - Usar términos específicos y descriptivos en lugar de genéricos

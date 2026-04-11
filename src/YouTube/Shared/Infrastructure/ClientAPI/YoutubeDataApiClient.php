@@ -13,21 +13,21 @@ use Google_Service_Exception;
 use Google_Service_YouTube;
 use Google_Service_YouTube_Channel;
 use Google_Service_YouTube_ChannelBrandingSettings;
-use Google_Service_YouTube_ChannelSnippet;
 use Google_Service_YouTube_ChannelSettings;
 use RuntimeException;
 
-final class YoutubeDataApiClient
+final readonly class YoutubeDataApiClient
 {
     public function __construct(
-        private readonly string $apiKey,
-        private readonly ?GoogleClientService $googleClientService = null,
-        private readonly ?YouTubeServiceFactory $youtubeServiceFactory = null,
+        private string                 $apiKey,
+        private ?GoogleClientService   $googleClientService = null,
+        private ?YouTubeServiceFactory $youtubeServiceFactory = null,
     ) {
     }
 
     /**
      * @throws Google_Service_Exception
+     * @throws Exception
      */
     public function getChannelById(string $channelId): ?array
     {
@@ -45,6 +45,7 @@ final class YoutubeDataApiClient
         }
 
         $channel = $items[0];
+
         return json_decode(json_encode($channel), true);
     }
 
@@ -65,6 +66,7 @@ final class YoutubeDataApiClient
             }
 
             $video = $items[0];
+
             return json_decode(json_encode($video), true);
         } catch (\Throwable $e) {
             throw $e;
@@ -134,6 +136,34 @@ final class YoutubeDataApiClient
         $youtubeChannel->setBrandingSettings($channelBrandingSettings);
 
         $youtubeService->channels->update('brandingSettings', $youtubeChannel);
+    }
+
+    public function getLastVideoIdByChannelId(string $channelId, ?string $categoryFilter = null): ?string
+    {
+        $client = $this->createClientWithoutAuth();
+        $youtubeService = new Google_Service_YouTube($client);
+
+        $params = [
+            'channelId' => $channelId,
+            'type' => 'video',
+            'order' => 'date',
+            'maxResults' => 1,
+        ];
+
+        if ($categoryFilter === 'video') {
+            $params['videoDuration'] = 'medium';
+        } elseif ($categoryFilter === 'short') {
+            $params['videoDuration'] = 'short';
+        }
+
+        $response = $youtubeService->search->listSearch('snippet', $params);
+        $items = $response->getItems();
+
+        if (empty($items)) {
+            return null;
+        }
+
+        return $items[0]->getId()->getVideoId();
     }
 
     private function createClientWithoutAuth(): Google_Client

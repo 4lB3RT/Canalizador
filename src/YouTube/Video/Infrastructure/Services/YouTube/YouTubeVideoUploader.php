@@ -16,5 +16,5 @@ interface YouTubeVideoUploader
         Google_Service_YouTube_Video $video,
         string $videoPath,
         int $chunkSize
-    ): string;
+    ): array;
 }

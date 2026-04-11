@@ -12,5 +12,5 @@ interface VideoPublisher
     /**
      * @throws YouTubeOperationFailed
      */
-    public function publish(Video $video): string;
+    public function publish(Video $video): void;
 }

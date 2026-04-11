@@ -10,6 +10,11 @@ final readonly class Id
     {
     }
 
+    public static function generate(): self
+    {
+        return new self(\Illuminate\Support\Str::uuid()->toString());
+    }
+
     public static function fromString(string $value): self
     {
         return new self($value);

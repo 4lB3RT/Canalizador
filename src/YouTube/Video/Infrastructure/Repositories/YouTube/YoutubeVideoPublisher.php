@@ -5,9 +5,12 @@ declare(strict_types = 1);
 namespace Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube;
 
 use App\Services\GoogleClientService;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
+use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\YouTube\Shared\Domain\Services\YouTubeServiceFactory;
 use Canalizador\YouTube\Video\Domain\Entities\Video;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoPublisher;
+use Canalizador\YouTube\Video\Domain\ValueObjects\PlatformId;
 use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
 use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\YouTubeVideoBuilder;
 use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\YouTubeVideoUploader;
@@ -24,7 +27,7 @@ final class YoutubeVideoPublisher implements VideoPublisher
     ) {
     }
 
-    public function publish(Video $video): string
+    public function publish(Video $video): void
     {
         $snippet = $this->youtubeVideoBuilder->buildVideoSnippet(
             $video->title()->value(),
@@ -46,12 +49,19 @@ final class YoutubeVideoPublisher implements VideoPublisher
         $client         = $this->googleClientService->buildYouTubeClient();
         $youtubeService = $this->youtubeServiceFactory->create($client);
 
-        return $this->youtubeVideoUploader->upload(
+        $result = $this->youtubeVideoUploader->upload(
             client:    $client,
             service:   $youtubeService,
             video:     $youtubeVideo,
             videoPath: $video->videoLocalPath()->value(),
             chunkSize: self::CHUNK_SIZE_BYTES
         );
+
+        $video->updatePlatformId(PlatformId::fromString($result['id']));
+        $video->updateUrl(Url::fromString('https://www.youtube.com/watch?v=' . $result['id']));
+
+        if (isset($result['channel_id'])) {
+            $video->updateChannelId(ChannelId::fromString($result['channel_id']));
+        }
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Canalizador\YouTube\Video\Infrastructure\Builders;
 
+use Canalizador\Shared\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Duration;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
@@ -13,7 +14,7 @@ use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
 use Canalizador\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
 use Canalizador\Shared\Video\Domain\ValueObjects\VideoMetadata;
-use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
+use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
 use Canalizador\YouTube\Transcription\Infrastructure\DataTransformer\TranscriptionDataTransformer;
 use Canalizador\YouTube\Video\Domain\Entities\Video;
@@ -24,7 +25,6 @@ use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
 use Canalizador\YouTube\Video\Domain\Repositories\AudioExtractor;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoDownloader;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoFragmenter;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoTranscriber;
 use Canalizador\YouTube\Video\Domain\ValueObjects\AudioPath;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
@@ -32,12 +32,8 @@ use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
 use Canalizador\YouTube\Video\Domain\ValueObjects\PlatformId;
 use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
 use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
-use Canalizador\YouTube\Video\Infrastructure\DataTransformers\VideoDataTransformer;
-use DateInterval;
-use DateMalformedIntervalStringException;
-use DateMalformedStringException;
-use DateTimeImmutable;
-use Throwable;
+use Canalizador\YouTube\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
+use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YoutubeVideoRepository;
 
 final class YouTubeVideoBuilder
 {
@@ -50,6 +46,7 @@ final class YouTubeVideoBuilder
     private int  $segmentSeconds = 60;
     private ?int $maxFragments   = null;
 
+    private ChannelId $channelId;
     private ?Url         $url             = null;
     private ?LocalPath   $videoLocalPath  = null;
     private ?LocalPath   $audioLocalPath  = null;
@@ -63,93 +60,97 @@ final class YouTubeVideoBuilder
     private ?VideoMetadata $lastMetadata  = null;
 
     public function __construct(
-        private readonly YoutubeDataApiClient   $youtubeClient,
-        private readonly VideoRepository        $videoRepository,
-        private readonly VideoDownloader        $videoDownloader,
-        private readonly AudioExtractor         $audioExtractor,
-        private readonly VideoTranscriber       $videoTranscriber,
-        private readonly VideoMetadataGenerator $videoMetadataGenerator,
-        private readonly VideoFragmenter        $videoFragmenter,
+        private readonly EloquentVideoRepository $localRepository,
+        private readonly YoutubeVideoRepository  $youtubeRepository,
+        private readonly VideoDownloader         $videoDownloader,
+        private readonly AudioExtractor          $audioExtractor,
+        private readonly VideoTranscriber        $videoTranscriber,
+        private readonly VideoMetadataGenerator  $videoMetadataGenerator,
+        private readonly VideoFragmenter         $videoFragmenter,
+        private readonly Clock                   $clock,
     ) {
     }
 
-    /**
-     * @throws DateMalformedStringException
-     * @throws Throwable
-     * @throws VideoNotFound
-     * @throws DateMalformedIntervalStringException
-     */
+    /* @throws VideoNotFound */
     public function fromYouTubeId(string $id): self
     {
-        $videoId = Id::fromString($id);
+        $platformId = PlatformId::fromString($id);
 
         try {
-            $this->cachedVideo = $this->videoRepository->findById($videoId);
-
-            return $this;
+            $video = $this->localRepository->findByPlatformId($platformId);
         } catch (VideoNotFound) {
+            $video = $this->youtubeRepository->findByPlatformId($platformId);
         }
 
-        $data = $this->youtubeClient->getVideoById($id);
-
-        if (!$data) {
-            throw VideoNotFound::withId($id);
-        }
-
-        $durationMinutes = 0;
-        if (isset($data['contentDetails']['duration'])) {
-            $interval        = new DateInterval($data['contentDetails']['duration']);
-            $totalSeconds    = $interval->h * 3600 + $interval->i * 60 + $interval->s;
-            $durationMinutes = (int) ceil($totalSeconds / 60);
-        }
-
-        $this->id          = $videoId;
-        $this->platformId  = PlatformId::fromString($id);
-        $this->parentId    = null;
-        $this->status      = YouTubeStatus::Public;
-        $this->title       = Title::fromString($data['snippet']['title']);
-        $this->publishedAt = new DateTime(new DateTimeImmutable($data['snippet']['publishedAt']));
-        $this->duration    = new Duration($durationMinutes);
-        $this->category    = Category::VIDEO;
-        $this->url         = Url::fromString('https://www.youtube.com/watch?v=' . $id);
+        $this->cachedVideo    = $video;
+        $this->id             = $video->id();
+        $this->channelId      = $video->channelId();
+        $this->title          = $video->title();
+        $this->publishedAt    = $video->publishedAt();
+        $this->duration       = $video->duration();
+        $this->category       = $video->category();
+        $this->status         = $video->status();
+        $this->platformId     = $video->platformId();
+        $this->url            = $video->url();
+        $this->videoLocalPath = $video->videoLocalPath();
+        $this->audioLocalPath = $video->audioLocalPath();
+        $this->transcription  = $video->transcription();
+        $this->description    = $video->description();
 
         return $this;
     }
 
-    /**
-     * @throws YouTubeOperationFailed
-     */
+    /* @throws YouTubeOperationFailed */
     public function withDownload(): self
     {
-        if ($this->cachedVideo !== null) {
+        if ($this->cachedVideo?->videoLocalPath() !== null) {
             return $this;
         }
 
-        $this->videoLocalPath = $this->videoDownloader->download(new YouTubeVideoId($this->id->value()));
+        $youtubeVideoId = $this->cachedVideo !== null
+            ? new YouTubeVideoId($this->cachedVideo->platformId()->value())
+            : new YouTubeVideoId($this->id->value());
+        $localPath            = $this->videoDownloader->download($youtubeVideoId);
+        $this->videoLocalPath = $localPath;
+
+        if ($this->cachedVideo !== null) {
+            $this->cachedVideo->updateVideoLocalPath($localPath);
+        }
 
         return $this;
     }
 
     public function withAudio(): self
     {
-        if ($this->cachedVideo !== null) {
+        if ($this->cachedVideo?->audioLocalPath() !== null) {
             return $this;
         }
 
-        $this->audioPath      = $this->audioExtractor->extract($this->videoLocalPath);
-        $this->audioLocalPath = LocalPath::fromString($this->audioPath->value());
+        $videoLocalPath       = $this->cachedVideo?->videoLocalPath() ?? $this->videoLocalPath;
+        $this->audioPath      = $this->audioExtractor->extract($videoLocalPath);
+        $audioLocalPath       = LocalPath::fromString($this->audioPath->value());
+        $this->audioLocalPath = $audioLocalPath;
+
+        if ($this->cachedVideo !== null) {
+            $this->cachedVideo->updateAudioLocalPath($audioLocalPath);
+        }
 
         return $this;
     }
 
     public function withTranscription(): self
     {
-        if ($this->cachedVideo !== null) {
+        if ($this->cachedVideo?->transcription() !== null) {
             return $this;
         }
 
         $segments            = $this->videoTranscriber->transcribe($this->audioPath);
-        $this->transcription = $this->buildTranscription($segments);
+        $transcription       = $this->buildTranscription($segments);
+        $this->transcription = $transcription;
+
+        if ($this->cachedVideo !== null) {
+            $this->cachedVideo->updateTranscription($transcription);
+        }
 
         return $this;
     }
@@ -169,10 +170,11 @@ final class YouTubeVideoBuilder
 
         $this->cachedVideo    = null;
         $this->lastMetadata   = $metadata;
+        $this->channelId      = $parent->channelId();
         $this->platformId     = null;
         $this->parentId       = $parent->id();
         $this->status         = YouTubeStatus::Scheduled;
-        $this->id             = Id::fromString(md5($fragmentPath->value()));
+        $this->id             = Id::generate();
         $this->title          = Title::fromString($metadata->title->value());
         $this->description    = new Description($metadata->description->value());
         $this->publishedAt    = $parent->publishedAt();
@@ -235,28 +237,30 @@ final class YouTubeVideoBuilder
             return $this->cachedVideo;
         }
 
-        return VideoDataTransformer::fromArray([
-            'id'               => $this->id->value(),
-            'title'            => $this->title->value(),
-            'published_at'     => $this->publishedAt->value()->format('Y-m-d H:i:s'),
-            'duration'         => $this->duration->value(),
-            'metrics'          => [],
-            'category'         => $this->category->value,
-            'status'           => $this->status->value,
-            'url'              => $this->url?->value(),
-            'video_local_path' => $this->videoLocalPath?->value(),
-            'audio_local_path' => $this->audioLocalPath?->value(),
-            'transcription'    => $this->transcription?->toArray(),
-            'description'      => $this->description?->value(),
-            'platform_id'      => $this->platformId?->value(),
-            'parent_id'        => $this->parentId?->value(),
-        ]);
+        return Video::create(
+            id:             $this->id,
+            channelId:      $this->channelId,
+            title:          $this->title,
+            publishedAt:    $this->publishedAt,
+            duration:       $this->duration,
+            category:       $this->category,
+            status:         $this->status,
+            clock:          $this->clock,
+            shorts:         new VideoCollection([]),
+            platformId:     $this->platformId,
+            url:            $this->url,
+            videoLocalPath: $this->videoLocalPath,
+            audioLocalPath: $this->audioLocalPath,
+            transcription:  $this->transcription,
+            description:    $this->description,
+            parentId:       $this->parentId,
+        );
     }
 
     private function buildTranscription(array $segments): Transcription
     {
         return TranscriptionDataTransformer::transformArray([
-            'videoId'   => $this->id->value(),
+            'videoId'   => $this->cachedVideo?->id()->value() ?? $this->id->value(),
             'text'      => implode(' ', array_column($segments, 'text')),
             'language'  => Language::SPANISH->value,
             'sentences' => array_map(

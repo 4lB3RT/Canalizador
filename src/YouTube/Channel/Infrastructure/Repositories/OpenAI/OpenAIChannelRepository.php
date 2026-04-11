@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Canalizador\YouTube\Channel\Infrastructure\Repositories\OpenAI;
 
+use Canalizador\Shared\Shared\Domain\ValueObjects\Country;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
 use Canalizador\YouTube\Channel\Domain\Entities\Channel;
 use Canalizador\YouTube\Channel\Domain\Repositories\ChannelMetadataRepository;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelBrand;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelMetadata;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\Country;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\Description;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\Title;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Facades\Prism;
 

@@ -6,14 +6,19 @@ namespace App\Providers;
 
 use App\Services\GoogleClientService;
 use App\Services\GoogleTokenService;
+use Canalizador\Shared\Shared\Domain\Events\EventBus;
+use Canalizador\Shared\Shared\Domain\Services\Clock;
+use Canalizador\Shared\Shared\Infrastructure\Events\EventHandlerRegistry;
 use Canalizador\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
 use Canalizador\Shared\Video\Infrastructure\Repositories\OpenAI\OpenAIVideoMetadataGenerator;
 use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository as VideoProductionVideoRepository;
 use Canalizador\VideoProduction\Video\Domain\Services\FileSystem;
+use Canalizador\YouTube\Channel\Application\UseCases\RegisterChannel\RegisterChannel;
 use Canalizador\YouTube\Channel\Application\UseCases\SyncChannel\SyncChannel;
 use Canalizador\YouTube\Channel\Application\UseCases\UpdateChannelWithAI\UpdateChannelWithAI;
 use Canalizador\YouTube\Channel\Domain\Repositories\ChannelMetadataRepository;
 use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Canalizador\YouTube\Channel\Infrastructure\Commands\RegisterChannelCommand;
 use Canalizador\YouTube\Channel\Infrastructure\Repositories\Eloquent\EloquentChannelRepository;
 use Canalizador\YouTube\Channel\Infrastructure\Repositories\OpenAI\OpenAIChannelRepository;
 use Canalizador\YouTube\Channel\Infrastructure\Repositories\Youtube\YoutubeChannelRepository;
@@ -23,11 +28,14 @@ use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeAnalyticsApiClien
 use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\YouTube\Shared\Infrastructure\Services\GoogleYouTubeAnalyticsServiceFactory;
 use Canalizador\YouTube\Shared\Infrastructure\Services\GoogleYouTubeServiceFactory;
+use Canalizador\YouTube\Video\Application\Handlers\OnYouTubeVideoCreatedHandler;
 use Canalizador\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo\DownloadLatestChannelVideo;
 use Canalizador\YouTube\Video\Application\UseCases\FragmentAndPublishVideo\FragmentAndPublishVideo;
 use Canalizador\YouTube\Video\Application\UseCases\GenerateShorts\GenerateShorts;
 use Canalizador\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
 use Canalizador\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo\SmartFragmentAndPublishVideo;
+use Canalizador\YouTube\Video\Application\UseCases\SyncLastVideo\SyncLastVideo;
+use Canalizador\YouTube\Video\Domain\Events\VideoCreated;
 use Canalizador\YouTube\Video\Domain\Factories\VideoPublisherFactory;
 use Canalizador\YouTube\Video\Domain\Repositories\AudioExtractor;
 use Canalizador\YouTube\Video\Domain\Repositories\ChannelVideoFinder;
@@ -41,6 +49,8 @@ use Canalizador\YouTube\Video\Infrastructure\Agents\AudioTranscriptor;
 use Canalizador\YouTube\Video\Infrastructure\Agents\CartoonVideoMaker;
 use Canalizador\YouTube\Video\Infrastructure\Agents\SmartVideoEditor;
 use Canalizador\YouTube\Video\Infrastructure\Builders\YouTubeVideoBuilder;
+use Canalizador\YouTube\Video\Infrastructure\Commands\GenerateShortsCommand;
+use Canalizador\YouTube\Video\Infrastructure\Commands\SyncLastVideoCommand;
 use Canalizador\YouTube\Video\Infrastructure\Commands\VideoAgentCommand;
 use Canalizador\YouTube\Video\Infrastructure\Factories\VideoPublisherFactory as VideoPublisherFactoryImpl;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\FragmentAndPublishVideoRequestMapper;
@@ -50,6 +60,7 @@ use Canalizador\YouTube\Video\Infrastructure\Repositories\Eloquent\EloquentVideo
 use Canalizador\YouTube\Video\Infrastructure\Repositories\Redis\RedisVideoRepository;
 use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\GoogleYouTubeChannelVideoFinder;
 use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YoutubeVideoPublisher;
+use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YoutubeVideoRepository;
 use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YtDlpVideoDownloader;
 use Canalizador\YouTube\Video\Infrastructure\Services\FfmpegAudioExtractor;
 use Canalizador\YouTube\Video\Infrastructure\Services\FfmpegVideoFragmenter;
@@ -75,12 +86,18 @@ class YouTubeServiceProvider extends ServiceProvider
         $this->registerGoogleServices();
         $this->registerChannelServices();
         $this->registerVideoServices();
+        $this->registerVideoEventHandlers();
     }
 
     public function boot(): void
     {
         if ($this->app->runningInConsole()) {
-            $this->commands([VideoAgentCommand::class]);
+            $this->commands([
+                GenerateShortsCommand::class,
+                RegisterChannelCommand::class,
+                SyncLastVideoCommand::class,
+                VideoAgentCommand::class,
+            ]);
         }
     }
 
@@ -137,6 +154,13 @@ class YouTubeServiceProvider extends ServiceProvider
             return new SyncChannel(
                 channelRepository: $app->make(ChannelRepository::class),
                 youtubeChannelRepository: $app->make(YoutubeChannelRepository::class)
+            );
+        });
+
+        $this->app->bind(RegisterChannel::class, function ($app) {
+            return new RegisterChannel(
+                externalChannelRepository: $app->make(YoutubeChannelRepository::class),
+                internalChannelRepository: $app->make(EloquentChannelRepository::class),
             );
         });
     }
@@ -209,15 +233,22 @@ class YouTubeServiceProvider extends ServiceProvider
             );
         });
 
+        $this->app->bind(YoutubeVideoRepository::class, function ($app) {
+            return new YoutubeVideoRepository(
+                youtubeClient: $app->make(YoutubeDataApiClient::class),
+            );
+        });
+
         $this->app->bind(YouTubeVideoBuilder::class, function ($app) {
             return new YouTubeVideoBuilder(
-                youtubeClient:          $app->make(YoutubeDataApiClient::class),
-                videoRepository:        $app->make(EloquentVideoRepository::class),
+                localRepository: $app->make(EloquentVideoRepository::class),
+                youtubeRepository: $app->make(YoutubeVideoRepository::class),
                 videoDownloader:        $app->make(VideoDownloader::class),
                 audioExtractor:         $app->make(AudioExtractor::class),
                 videoTranscriber:       $app->make(VideoTranscriber::class),
                 videoMetadataGenerator: $app->make(VideoMetadataGenerator::class),
                 videoFragmenter:        $app->make(VideoFragmenter::class),
+                clock: $app->make(Clock::class),
             );
         });
 
@@ -276,6 +307,16 @@ class YouTubeServiceProvider extends ServiceProvider
 
         $this->app->bind(VideoMetadataGenerator::class, OpenAIVideoMetadataGenerator::class);
 
+        $this->app->bind(SyncLastVideo::class, function ($app) {
+            return new SyncLastVideo(
+                channelRepository: $app->make(ChannelRepository::class),
+                internalVideoRepository: $app->make(EloquentVideoRepository::class),
+                externalVideoRepository: $app->make(YoutubeVideoRepository::class),
+                videoBuilder: $app->make(YouTubeVideoBuilder::class),
+                eventBus: $app->make(EventBus::class),
+            );
+        });
+
         $this->app->bind(GenerateShorts::class, function ($app) {
             return new GenerateShorts(
                 videoBuilder:         $app->make(YouTubeVideoBuilder::class),
@@ -283,5 +324,13 @@ class YouTubeServiceProvider extends ServiceProvider
                 videoPublisherFactory: $app->make(VideoPublisherFactory::class),
             );
         });
+    }
+
+    private function registerVideoEventHandlers(): void
+    {
+        /** @var EventHandlerRegistry $registry */
+        $registry = $this->app->make(EventHandlerRegistry::class);
+
+        $registry->register(VideoCreated::class, OnYouTubeVideoCreatedHandler::class);
     }
 }

@@ -30,7 +30,8 @@ final readonly class GoogleYouTubeVideoUploader implements YouTubeVideoUploader
         Google_Service_YouTube_Video $video,
         string $videoPath,
         int $chunkSize
-    ): string {
+    ): array
+    {
         $videoFileSize = $this->fileSystem->size($videoPath);
         $mimeType      = $this->fileSystem->mimeType($videoPath);
 
@@ -62,7 +63,10 @@ final readonly class GoogleYouTubeVideoUploader implements YouTubeVideoUploader
             $client->setDefer(false);
 
             if ($status && isset($status['id'])) {
-                return $status['id'];
+                return [
+                    'id' => $status['id'],
+                    'channel_id' => $status['snippet']['channelId'] ?? null,
+                ];
             }
 
             throw YouTubeOperationFailed::apiError('Failed to upload video to YouTube');

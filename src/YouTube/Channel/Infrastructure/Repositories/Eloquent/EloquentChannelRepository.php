@@ -1,27 +1,17 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Canalizador\YouTube\Channel\Infrastructure\Repositories\Eloquent;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Canalizador\YouTube\Channel\Domain\Entities\Channel;
 use Canalizador\YouTube\Channel\Domain\Entities\ChannelCollection;
 use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
 use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelBrand;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\Country;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\CustomUrl;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\Description;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\PrivacyStatus;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\SubscriberCount;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ThumbnailUrl;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\Title;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\VideoCount;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ViewCount;
 use Canalizador\YouTube\Channel\Infrastructure\DAO\ChannelDAO;
+use Canalizador\YouTube\Channel\Infrastructure\DataTransformers\ChannelDataTransformer;
 
 final class EloquentChannelRepository implements ChannelRepository
 {
@@ -30,18 +20,18 @@ final class EloquentChannelRepository implements ChannelRepository
         ChannelDAO::updateOrCreate(
             ['id' => $channel->id()->value()],
             [
-                'user_id' => $channel->userId()->value(),
-                'title' => $channel->title()->value(),
-                'description' => $channel->description()->value(),
-                'custom_url' => $channel->customUrl()?->value(),
-                'published_at' => $channel->publishedAt()->value(),
-                'thumbnail_url' => $channel->thumbnailUrl()?->value(),
-                'country' => $channel->country()->value(),
-                'view_count' => $channel->viewCount()->value(),
-                'subscriber_count' => $channel->subscriberCount()->value(),
-                'video_count' => $channel->videoCount()->value(),
-                'privacy_status' => $channel->privacyStatus()->value,
-                'channel_brand' => $channel->channelBrand()->value(),
+                'user_id'          => $channel->userId()->value(),
+                'title'            => $channel->title()->value(),
+                'description'      => $channel->description()->value(),
+                'custom_url'       => $channel->customUrl()?->value(),
+                'published_at'     => $channel->publishedAt()->value(),
+                'thumbnail_url'    => $channel->thumbnailUrl()?->value(),
+                'country'          => $channel->country()->value(),
+                'view_count'       => $channel->viewCount(),
+                'subscriber_count' => $channel->subscriberCount(),
+                'video_count'      => $channel->videoCount(),
+                'privacy_status'   => $channel->privacyStatus()->value,
+                'channel_brand'    => $channel->channelBrand()->value(),
             ]
         );
     }
@@ -79,29 +69,20 @@ final class EloquentChannelRepository implements ChannelRepository
 
     private function toEntity(ChannelDAO $model): Channel
     {
-        if (!$model->country) {
-            throw new \RuntimeException("Channel {$model->id} does not have a country. It must be set before loading.");
-        }
-
-        if (!$model->channel_brand) {
-            throw new \RuntimeException("Channel {$model->id} does not have a channel brand. It must be set before loading.");
-        }
-
-        return new Channel(
-            id: ChannelId::fromString($model->id),
-            userId: new IntegerId($model->user_id),
-            title: Title::fromString($model->title),
-            description: Description::fromString($model->description),
-            publishedAt: new DateTime($model->published_at->toDateTimeImmutable()),
-            viewCount: ViewCount::fromInt($model->view_count),
-            subscriberCount: SubscriberCount::fromInt($model->subscriber_count),
-            videoCount: VideoCount::fromInt($model->video_count),
-            privacyStatus: PrivacyStatus::from($model->privacy_status),
-            country: Country::fromString($model->country),
-            channelBrand: ChannelBrand::fromString($model->channel_brand),
-            customUrl: $model->custom_url ? CustomUrl::fromString($model->custom_url) : null,
-            thumbnailUrl: $model->thumbnail_url ? ThumbnailUrl::fromString($model->thumbnail_url) : null,
-        );
+        return ChannelDataTransformer::fromArray([
+            'id'               => $model->id,
+            'user_id'          => $model->user_id,
+            'title'            => $model->title,
+            'description'      => $model->description,
+            'published_at'     => $model->published_at->format('Y-m-d H:i:s'),
+            'view_count'       => $model->view_count,
+            'subscriber_count' => $model->subscriber_count,
+            'video_count'      => $model->video_count,
+            'privacy_status'   => $model->privacy_status,
+            'country'          => $model->country,
+            'channel_brand'    => $model->channel_brand,
+            'custom_url'       => $model->custom_url,
+            'thumbnail_url'    => $model->thumbnail_url,
+        ]);
     }
 }
-

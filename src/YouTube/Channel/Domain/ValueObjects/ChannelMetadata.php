@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Canalizador\YouTube\Channel\Domain\ValueObjects;
 
+use Canalizador\Shared\Shared\Domain\ValueObjects\Country;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
+
 final readonly class ChannelMetadata
 {
     public function __construct(

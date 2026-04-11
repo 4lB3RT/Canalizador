@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 
 use App\Http\Middleware\EnsureGoogleToken;
+use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\RegisterChannelController;
 use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\SyncChannelController;
 use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelWithAIController;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\DownloadLatestChannelVideoController;
@@ -13,6 +14,8 @@ use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\SmartFragmentA
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['api.token'])->group(function () {
+    Route::post('/channels/{channelId}/register', RegisterChannelController::class)
+        ->middleware(EnsureGoogleToken::class);
     Route::put('/channels/{channelId}/sync', SyncChannelController::class)
         ->middleware(EnsureGoogleToken::class);
     Route::put('/channels/{channelId}/update-with-ai', UpdateChannelWithAIController::class)

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ChannelDAO extends Model
 {
-    protected $table = 'channels';
+    protected $table = 'youtube_channels';
 
     protected $primaryKey = 'id';
 

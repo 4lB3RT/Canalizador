@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Canalizador\YouTube\Video\Infrastructure\DAO;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class VideoDAO extends Model
 {
@@ -43,4 +44,9 @@ class VideoDAO extends Model
         'created_at'          => 'datetime',
         'updated_at'          => 'datetime',
     ];
+
+    public function shorts(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id', 'id');
+    }
 }

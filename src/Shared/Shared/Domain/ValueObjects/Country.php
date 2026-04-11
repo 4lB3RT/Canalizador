@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Domain\ValueObjects;
+namespace Canalizador\Shared\Shared\Domain\ValueObjects;
 
 final readonly class Country
 {
@@ -46,37 +46,9 @@ final readonly class Country
         return new self($value);
     }
 
-    private const array COUNTRY_TO_LANGUAGE_MAP = [
-        'ES' => 'es', 'MX' => 'es', 'AR' => 'es', 'CO' => 'es', 'CL' => 'es', 'PE' => 'es',
-        'US' => 'en', 'GB' => 'en', 'CA' => 'en', 'AU' => 'en',
-        'BR' => 'pt', 'PT' => 'pt',
-        'FR' => 'fr',
-        'IT' => 'it',
-        'DE' => 'de',
-    ];
-
-    private const array VALID_LANGUAGE_CODES = [
-        'en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'ja', 'ko', 'zh', 'ar', 'hi', 'nl', 'pl', 'tr', 'vi', 'th', 'id', 'cs', 'sv', 'da', 'fi', 'no', 'he', 'uk', 'ro', 'hu', 'el', 'bg', 'hr', 'sk', 'sl', 'et', 'lv', 'lt', 'mt', 'ga', 'cy',
-    ];
-
     public function value(): ?string
     {
         return $this->value;
-    }
-
-    public function toLanguageCode(): string
-    {
-        if ($this->value === null) {
-            return 'en';
-        }
-
-        $countryCode = strtoupper($this->value);
-        return self::COUNTRY_TO_LANGUAGE_MAP[$countryCode] ?? 'en';
-    }
-
-    public static function isValidLanguageCode(string $code): bool
-    {
-        return in_array(strtolower($code), self::VALID_LANGUAGE_CODES, true);
     }
 }
 
