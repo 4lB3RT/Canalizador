@@ -7,18 +7,18 @@ namespace Canalizador\YouTube\Video\Domain\Events;
 use Canalizador\Shared\Shared\Domain\Events\DomainEvent;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 
-final readonly class ShortGenerated implements DomainEvent
+final readonly class ShortCreated implements DomainEvent
 {
     public function __construct(
-        private string   $shortId,
-        private string   $parentVideoId,
+        private string   $videoId,
+        private string   $parentId,
         private DateTime $occurredAt,
     ) {
     }
 
     public function eventName(): string
     {
-        return 'youtube.short.generated';
+        return 'youtube.short.created';
     }
 
     public function occurredAt(): DateTime
@@ -29,18 +29,18 @@ final readonly class ShortGenerated implements DomainEvent
     public function payload(): array
     {
         return [
-            'short_id'        => $this->shortId,
-            'parent_video_id' => $this->parentVideoId,
+            'video_id'  => $this->videoId,
+            'parent_id' => $this->parentId,
         ];
     }
 
-    public function shortId(): string
+    public function videoId(): string
     {
-        return $this->shortId;
+        return $this->videoId;
     }
 
-    public function parentVideoId(): string
+    public function parentId(): string
     {
-        return $this->parentVideoId;
+        return $this->parentId;
     }
 }

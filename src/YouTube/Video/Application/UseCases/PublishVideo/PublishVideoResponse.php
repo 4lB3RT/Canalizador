@@ -10,6 +10,7 @@ final readonly class PublishVideoResponse
         public string $platformVideoId,
         public string $platformUrl,
         public string $platform,
+        public string $scheduledAt,
     ) {
     }
 
@@ -19,6 +20,7 @@ final readonly class PublishVideoResponse
             'platform_video_id' => $this->platformVideoId,
             'platform_url'      => $this->platformUrl,
             'platform'          => $this->platform,
+            'scheduled_at'      => $this->scheduledAt,
         ];
     }
 }

@@ -8,7 +8,7 @@ use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\SyncChannelC
 use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelWithAIController;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\DownloadLatestChannelVideoController;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\FragmentAndPublishVideoController;
-use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\GenerateShortsController;
+use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\GenerateShortController;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\PublishVideoController;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\SmartFragmentAndPublishVideoController;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +28,6 @@ Route::middleware(['api.token'])->group(function () {
         ->middleware(EnsureGoogleToken::class);
     Route::post('/videos/smart-fragment-and-publish', SmartFragmentAndPublishVideoController::class)
         ->middleware(EnsureGoogleToken::class);
-    Route::post('/videos/{video_id}/shorts/generate', GenerateShortsController::class)
+    Route::post('/videos/{video_id}/shorts/generate', GenerateShortController::class)
         ->middleware(EnsureGoogleToken::class);
 });

@@ -11,8 +11,7 @@ final readonly class VideoCreated implements DomainEvent
 {
     public function __construct(
         private string   $videoId,
-        private string   $platformId,
-        private DateTime $occurredAt,
+        private DateTime $occurredAt
     ) {
     }
 
@@ -29,18 +28,12 @@ final readonly class VideoCreated implements DomainEvent
     public function payload(): array
     {
         return [
-            'video_id'    => $this->videoId,
-            'platform_id' => $this->platformId,
+            'video_id' => $this->videoId,
         ];
     }
 
     public function videoId(): string
     {
         return $this->videoId;
-    }
-
-    public function platformId(): string
-    {
-        return $this->platformId;
     }
 }

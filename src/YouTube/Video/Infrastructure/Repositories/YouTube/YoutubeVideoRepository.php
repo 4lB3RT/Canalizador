@@ -78,6 +78,11 @@ final readonly class YoutubeVideoRepository implements VideoRepository
         return PlatformId::fromString($youtubeId);
     }
 
+    public function findFutureShorts(): array
+    {
+        return [];
+    }
+
     public function save(Video $video): void
     {
         throw new \LogicException('YoutubeVideoRepository is read-only');

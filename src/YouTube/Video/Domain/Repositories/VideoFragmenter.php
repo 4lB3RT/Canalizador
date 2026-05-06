@@ -14,4 +14,9 @@ interface VideoFragmenter
      * @throws VideoFragmentationFailed
      */
     public function fragment(LocalPath $videoPath, int $segmentDurationSeconds): array;
+
+    /**
+     * @throws VideoFragmentationFailed
+     */
+    public function fragmentAt(LocalPath $videoPath, int $startSeconds, int $durationSeconds): LocalPath;
 }

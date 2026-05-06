@@ -46,15 +46,13 @@ final readonly class SyncLastVideo
         }
 
         $video = $this->videoBuilder
-            ->fromYouTubeId($platformId->value())
+            ->fromPlatformId($platformId)
             ->withDownload()
             ->withAudio()
             ->withTranscription()
             ->build();
 
         $this->internalVideoRepository->save($video);
-
-        $video->created();
 
         $this->eventBus->publish(...$video->releaseEvents());
     }

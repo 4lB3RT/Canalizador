@@ -24,6 +24,11 @@ final readonly class RedisVideoRepository implements VideoRepository
         $this->redis->set($key, json_encode($video->toArray()));
     }
 
+    public function findFutureShorts(): array
+    {
+        return [];
+    }
+
     /**
      * @throws VideoNotFound
      */

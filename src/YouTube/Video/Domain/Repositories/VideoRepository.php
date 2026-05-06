@@ -25,5 +25,7 @@ interface VideoRepository
 
     public function findLastByChannelId(ChannelId $channelId, ?Category $category = null): ?PlatformId;
 
+    public function findFutureShorts(): array;
+
     public function save(Video $video): void;
 }

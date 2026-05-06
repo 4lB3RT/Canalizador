@@ -15,7 +15,7 @@ use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\YouTube\Metric\Domain\Entities\MetricCollection;
 use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
-use Canalizador\YouTube\Video\Domain\Events\ShortGenerated;
+use Canalizador\YouTube\Video\Domain\Events\ShortCreated;
 use Canalizador\YouTube\Video\Domain\Events\VideoCreated;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
@@ -31,11 +31,11 @@ final class Video extends AggregateRoot
     public function __construct(
         private readonly Id            $id,
         private readonly Title         $title,
-        private readonly DateTime      $publishedAt,
+        private DateTime               $publishedAt,
         private readonly Duration      $duration,
         private MetricCollection       $metrics,
         private readonly Category        $category,
-        private readonly YouTubeStatus   $status,
+        private YouTubeStatus            $status,
         private ChannelId                $channelId,
         private ?Url                     $url = null,
         private ?LocalPath               $videoLocalPath = null,
@@ -65,8 +65,7 @@ final class Video extends AggregateRoot
         ?Transcription  $transcription = null,
         ?Description    $description = null,
         ?Id             $parentId = null,
-    ): self
-    {
+    ): self {
         $video = new self(
             id: $id,
             title: $title,
@@ -86,9 +85,14 @@ final class Video extends AggregateRoot
             shorts: $shorts,
         );
 
-        if ($platformId !== null) {
-            $video->recordEvent(new VideoCreated($id->value(), $platformId->value(), $clock->now()));
-        }
+        $video->recordEvent(match ($category) {
+            Category::VIDEO => new VideoCreated($id->value(), $clock->now()),
+            Category::SHORT => new ShortCreated(
+                videoId:    $id->value(),
+                parentId:   $parentId->value(),
+                occurredAt: $clock->now(),
+            ),
+        });
 
         return $video;
     }
@@ -121,6 +125,17 @@ final class Video extends AggregateRoot
     public function status(): YouTubeStatus
     {
         return $this->status;
+    }
+
+    public function scheduleAt(DateTime $publishedAt): void
+    {
+        $this->publishedAt = $publishedAt;
+        $this->status      = YouTubeStatus::Scheduled;
+    }
+
+    public function markAsPublic(): void
+    {
+        $this->status = YouTubeStatus::Public;
     }
 
     public function updateMetrics(MetricCollection $metrics): void
@@ -188,10 +203,14 @@ final class Video extends AggregateRoot
         return $this->duration;
     }
 
-    public function addShort(Video $short, Clock $clock): void
+    public function maxShorts(int $segmentSeconds): int
+    {
+        return (int) floor(($this->duration->value() * 60) / $segmentSeconds);
+    }
+
+    public function addShort(Video $short): void
     {
         $this->shorts->add($short);
-        $this->recordEvent(new ShortGenerated($short->id()->value(), $this->id->value(), $clock->now()));
     }
 
     public function shorts(): VideoCollection
@@ -232,7 +251,7 @@ final class Video extends AggregateRoot
             'title'        => $this->title->value(),
             'published_at' => $this->publishedAt->value()->format('Y-m-d H:i:s'),
             'category'     => $this->category->value,
-            'status' => $this->status->value,
+            'status'       => $this->status->value,
             'metrics'      => $this->metrics->map(function ($metric) {
                 return [
                     'name'  => $metric->name()->value(),
@@ -240,20 +259,15 @@ final class Video extends AggregateRoot
                     'value' => $metric->value()->value(),
                 ];
             }),
-            'channel_id' => $this->channelId->value(),
+            'channel_id'       => $this->channelId->value(),
             'transcription'    => $this->transcription?->toArray(),
             'url'              => $this->url?->value(),
             'video_local_path' => $this->videoLocalPath?->value(),
             'audio_local_path' => $this->audioLocalPath?->value(),
-            'duration' => $this->duration->value(),
-            'description' => $this->description?->value(),
-            'platform_id' => $this->platformId?->value(),
-            'parent_id' => $this->parentId?->value(),
+            'duration'         => $this->duration->value(),
+            'description'      => $this->description?->value(),
+            'platform_id'      => $this->platformId?->value(),
+            'parent_id'        => $this->parentId?->value(),
         ];
-    }
-
-    public function created(): void
-    {
-        $this->recordEvent(new VideoCreated($this->id->value(), $this->platformId->value(), DateTime::now()));
     }
 }

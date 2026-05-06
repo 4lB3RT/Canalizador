@@ -21,7 +21,7 @@ REQUISITOS DEL TÍTULO (SEO de YouTube):
 - Evitar emojis o caracteres especiales excesivos
 
 REQUISITOS DE LA DESCRIPCIÓN (SEO de YouTube):
-- Debe tener entre 200 y 250 caracteres (estrictamente obligatorio)
+- El cuerpo SEO de la descripción (antes del bloque fijo) debe tener entre 200 y 250 caracteres (estrictamente obligatorio)
 - Debe explicar el contenido del vídeo de forma clara y concisa
 - Incluir palabras clave relevantes de forma natural a lo largo de la descripción
 - Debe complementar el título y proporcionar contexto adicional
@@ -30,6 +30,27 @@ REQUISITOS DE LA DESCRIPCIÓN (SEO de YouTube):
 - Debe incluir una llamada a la acción cuando sea apropiado
 - Evitar el relleno de palabras clave - las palabras clave deben ser naturales y contextuales
 - La descripción debe estar en español de España (castellano)
+
+BLOQUE FIJO AL FINAL DE LA DESCRIPCIÓN:
+- Tras el cuerpo SEO, añadir SIEMPRE dos saltos de línea y a continuación copiar TEXTUALMENTE el siguiente bloque (sin modificar nada: ni emojis, ni URLs, ni saltos de línea, ni mayúsculas/minúsculas, ni puntuación):
+
+💻 GITHUB: https://github.com/4lB3RT
+✍ X: https://twitter.com/4LB3RTTT
+🤩 INSTAGRAM: https://www.instagram.com/albert.gc/
+👊 DISCORD: https://discord.gg/YsRPtfCy2P
+🎤 TIKTOK: https://www.tiktok.com/@albert.gc4
+
+SÍ TE GUSTA TODO ESTE TIPO DE CONTENIDO NO OLVIDES DEJAR TU LIKE 👍
+Y SUSCRÍBIRTE AL CANAL 🦾
+
+🧰 💥 Experimentos Apps 💥🧰
+https://youtube.com/playlist?list=PL41O_iSI2Ekde4yKKfqsWu3zqfbWTXWYV
+
+📸 Vlogs 📸
+https://youtube.com/playlist?list=PL41O_iSI2EkeRtCuz6OInGmiTteipPU-q
+
+- Este bloque NO cuenta para el límite de 200-250 caracteres (que aplica solo al cuerpo SEO)
+- NO traducir, abreviar, comentar ni reordenar este bloque bajo ningún concepto
 
 INTERPRETACIÓN DEL TEXTO FUENTE:
 - El texto proviene de una transcripción automática que puede contener errores de reconocimiento de voz
@@ -57,7 +78,7 @@ Debes responder SOLO con un objeto JSON válido. NO incluir ningún texto antes 
 
 {
   "title": "El título SEO-optimizado generado aquí (60-100 caracteres)",
-  "description": "La descripción SEO-optimizada generada aquí (200-250 caracteres)"
+  "description": "Cuerpo SEO (200-250 caracteres)\n\n💻 GITHUB: https://github.com/4lB3RT\n✍ X: https://twitter.com/4LB3RTTT\n🤩 INSTAGRAM: https://www.instagram.com/albert.gc/\n👊 DISCORD: https://discord.gg/YsRPtfCy2P\n🎤 TIKTOK: https://www.tiktok.com/@albert.gc4\n\nSÍ TE GUSTA TODO ESTE TIPO DE CONTENIDO NO OLVIDES DEJAR TU LIKE 👍\nY SUSCRÍBIRTE AL CANAL 🦾\n\n🧰 💥 Experimentos Apps 💥🧰\nhttps://youtube.com/playlist?list=PL41O_iSI2Ekde4yKKfqsWu3zqfbWTXWYV\n\n📸 Vlogs 📸\nhttps://youtube.com/playlist?list=PL41O_iSI2EkeRtCuz6OInGmiTteipPU-q"
 }
 
 REGLAS CRÍTICAS:
@@ -66,7 +87,7 @@ REGLAS CRÍTICAS:
 - El JSON debe ser válido y parseable
 - Usar comillas dobles escapadas dentro de las cadenas con \\"
 - El campo title debe tener entre 60-100 caracteres
-- El campo description debe tener EXACTAMENTE entre 200-250 caracteres (estrictamente obligatorio)
+- El cuerpo SEO del campo description debe tener EXACTAMENTE entre 200-250 caracteres (estrictamente obligatorio); el bloque fijo posterior se añade aparte y no cuenta
 - Tanto el título como la descripción deben estar optimizados para SEO de YouTube
 - Ambos deben reflejar con precisión el contenido del guion
 - Tanto el título como la descripción deben estar en español de España (castellano)

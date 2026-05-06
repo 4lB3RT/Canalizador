@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Services\GoogleTokenService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -153,6 +154,8 @@ final class LoginController
                 'google_scope' => $token['scope'] ?? null,
                 'google_token_type' => $token['token_type'] ?? null,
             ]);
+
+            app(GoogleTokenService::class)->storeToken($user->id, $token);
 
             if (!$user->api_token) {
                 $apiToken = $user->generateApiToken();

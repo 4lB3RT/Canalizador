@@ -6,7 +6,7 @@ namespace Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube;
 
 use App\Services\GoogleClientService;
 use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
 use Canalizador\YouTube\Shared\Domain\Services\YouTubeServiceFactory;
 use Canalizador\YouTube\Video\Domain\Entities\Video;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoPublisher;
@@ -24,6 +24,7 @@ final class YoutubeVideoPublisher implements VideoPublisher
         private readonly YouTubeVideoBuilder   $youtubeVideoBuilder,
         private readonly YouTubeVideoUploader  $youtubeVideoUploader,
         private readonly YouTubeServiceFactory $youtubeServiceFactory,
+        private readonly ChannelRepository     $channelRepository,
     ) {
     }
 
@@ -46,7 +47,8 @@ final class YoutubeVideoPublisher implements VideoPublisher
         $status       = $this->youtubeVideoBuilder->buildVideoStatus($privacyStatus, $publishAt);
         $youtubeVideo = $this->youtubeVideoBuilder->buildVideo($snippet, $status);
 
-        $client         = $this->googleClientService->buildYouTubeClient();
+        $channel        = $this->channelRepository->findById($video->channelId());
+        $client         = $this->googleClientService->buildYouTubeClient($channel->userId()->value());
         $youtubeService = $this->youtubeServiceFactory->create($client);
 
         $result = $this->youtubeVideoUploader->upload(
@@ -59,9 +61,5 @@ final class YoutubeVideoPublisher implements VideoPublisher
 
         $video->updatePlatformId(PlatformId::fromString($result['id']));
         $video->updateUrl(Url::fromString('https://www.youtube.com/watch?v=' . $result['id']));
-
-        if (isset($result['channel_id'])) {
-            $video->updateChannelId(ChannelId::fromString($result['channel_id']));
-        }
     }
 }

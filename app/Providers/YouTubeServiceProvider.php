@@ -28,13 +28,15 @@ use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeAnalyticsApiClien
 use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
 use Canalizador\YouTube\Shared\Infrastructure\Services\GoogleYouTubeAnalyticsServiceFactory;
 use Canalizador\YouTube\Shared\Infrastructure\Services\GoogleYouTubeServiceFactory;
+use Canalizador\YouTube\Video\Application\Handlers\OnYouTubeShortCreatedHandler;
 use Canalizador\YouTube\Video\Application\Handlers\OnYouTubeVideoCreatedHandler;
 use Canalizador\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo\DownloadLatestChannelVideo;
 use Canalizador\YouTube\Video\Application\UseCases\FragmentAndPublishVideo\FragmentAndPublishVideo;
-use Canalizador\YouTube\Video\Application\UseCases\GenerateShorts\GenerateShorts;
+use Canalizador\YouTube\Video\Application\UseCases\GenerateShort\GenerateShort;
 use Canalizador\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
 use Canalizador\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo\SmartFragmentAndPublishVideo;
 use Canalizador\YouTube\Video\Application\UseCases\SyncLastVideo\SyncLastVideo;
+use Canalizador\YouTube\Video\Domain\Events\ShortCreated;
 use Canalizador\YouTube\Video\Domain\Events\VideoCreated;
 use Canalizador\YouTube\Video\Domain\Factories\VideoPublisherFactory;
 use Canalizador\YouTube\Video\Domain\Repositories\AudioExtractor;
@@ -49,7 +51,8 @@ use Canalizador\YouTube\Video\Infrastructure\Agents\AudioTranscriptor;
 use Canalizador\YouTube\Video\Infrastructure\Agents\CartoonVideoMaker;
 use Canalizador\YouTube\Video\Infrastructure\Agents\SmartVideoEditor;
 use Canalizador\YouTube\Video\Infrastructure\Builders\YouTubeVideoBuilder;
-use Canalizador\YouTube\Video\Infrastructure\Commands\GenerateShortsCommand;
+use Canalizador\YouTube\Video\Infrastructure\Commands\GenerateShortCommand;
+use Canalizador\YouTube\Video\Infrastructure\Commands\PublishVideoCommand;
 use Canalizador\YouTube\Video\Infrastructure\Commands\SyncLastVideoCommand;
 use Canalizador\YouTube\Video\Infrastructure\Commands\VideoAgentCommand;
 use Canalizador\YouTube\Video\Infrastructure\Factories\VideoPublisherFactory as VideoPublisherFactoryImpl;
@@ -93,7 +96,8 @@ class YouTubeServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                GenerateShortsCommand::class,
+                GenerateShortCommand::class,
+                PublishVideoCommand::class,
                 RegisterChannelCommand::class,
                 SyncLastVideoCommand::class,
                 VideoAgentCommand::class,
@@ -179,10 +183,11 @@ class YouTubeServiceProvider extends ServiceProvider
 
         $this->app->bind(YoutubeVideoPublisher::class, function ($app) {
             return new YoutubeVideoPublisher(
-                googleClientService: $app->make(GoogleClientService::class),
-                youtubeVideoBuilder: $app->make(GoogleAPIVideoBuilder::class),
-                youtubeVideoUploader: $app->make(YouTubeVideoUploader::class),
-                youtubeServiceFactory: $app->make(YouTubeSharedServiceFactory::class)
+                googleClientService:   $app->make(GoogleClientService::class),
+                youtubeVideoBuilder:   $app->make(GoogleAPIVideoBuilder::class),
+                youtubeVideoUploader:  $app->make(YouTubeVideoUploader::class),
+                youtubeServiceFactory: $app->make(YouTubeSharedServiceFactory::class),
+                channelRepository:     $app->make(ChannelRepository::class),
             );
         });
 
@@ -196,8 +201,9 @@ class YouTubeServiceProvider extends ServiceProvider
 
         $this->app->bind(PublishVideo::class, function ($app) {
             return new PublishVideo(
-                videoRepository: $app->make(VideoProductionVideoRepository::class),
-                videoPublisherFactory: $app->make(VideoPublisherFactory::class)
+                videoRepository: $app->make(VideoRepository::class),
+                videoPublisherFactory: $app->make(VideoPublisherFactory::class),
+                clock: $app->make(Clock::class),
             );
         });
 
@@ -247,7 +253,6 @@ class YouTubeServiceProvider extends ServiceProvider
                 audioExtractor:         $app->make(AudioExtractor::class),
                 videoTranscriber:       $app->make(VideoTranscriber::class),
                 videoMetadataGenerator: $app->make(VideoMetadataGenerator::class),
-                videoFragmenter:        $app->make(VideoFragmenter::class),
                 clock: $app->make(Clock::class),
             );
         });
@@ -317,11 +322,12 @@ class YouTubeServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind(GenerateShorts::class, function ($app) {
-            return new GenerateShorts(
-                videoBuilder:         $app->make(YouTubeVideoBuilder::class),
-                videoRepository:      $app->make(EloquentVideoRepository::class),
-                videoPublisherFactory: $app->make(VideoPublisherFactory::class),
+        $this->app->bind(GenerateShort::class, function ($app) {
+            return new GenerateShort(
+                videoBuilder: $app->make(YouTubeVideoBuilder::class),
+                videoRepository: $app->make(EloquentVideoRepository::class),
+                videoFragmenter: $app->make(VideoFragmenter::class),
+                eventBus: $app->make(EventBus::class),
             );
         });
     }
@@ -332,5 +338,6 @@ class YouTubeServiceProvider extends ServiceProvider
         $registry = $this->app->make(EventHandlerRegistry::class);
 
         $registry->register(VideoCreated::class, OnYouTubeVideoCreatedHandler::class);
+        $registry->register(ShortCreated::class, OnYouTubeShortCreatedHandler::class);
     }
 }

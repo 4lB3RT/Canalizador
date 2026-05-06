@@ -39,6 +39,17 @@ final class EloquentVideoRepository implements VideoRepository
         return $this->toEntity($model);
     }
 
+    public function findFutureShorts(): array
+    {
+        $models = VideoDAO::with('shorts')
+            ->where('category', Category::SHORT->value)
+            ->where('published_at', '>', now())
+            ->orderBy('id')
+            ->get();
+
+        return $models->map(fn (VideoDAO $model) => $this->toEntity($model))->all();
+    }
+
     public function findLastByChannelId(ChannelId $channelId, ?Category $category = null): ?PlatformId
     {
         $query = VideoDAO::where('channel_id', $channelId->value())
