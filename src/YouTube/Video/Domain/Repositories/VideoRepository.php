@@ -6,6 +6,7 @@ namespace Canalizador\YouTube\Video\Domain\Repositories;
 
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\YouTube\Video\Domain\Entities\Video;
+use Canalizador\YouTube\Video\Domain\Entities\VideoCollection;
 use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
@@ -25,7 +26,7 @@ interface VideoRepository
 
     public function findLastByChannelId(ChannelId $channelId, ?Category $category = null): ?PlatformId;
 
-    public function findFutureShorts(): array;
+    public function findScheduledShortsByChannelId(ChannelId $channelId): VideoCollection;
 
     public function save(Video $video): void;
 }

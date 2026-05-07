@@ -25,7 +25,8 @@ final readonly class PublishVideo
     private const string YOUTUBE_VIDEO_URL_PREFIX = 'https://www.youtube.com/watch?v=';
 
     public function __construct(
-        private VideoRepository       $videoRepository,
+        private VideoRepository       $internalVideoRepository,
+        private VideoRepository       $externalVideoRepository,
         private VideoPublisherFactory $videoPublisherFactory,
         private Clock                 $clock,
     ) {
@@ -37,7 +38,7 @@ final readonly class PublishVideo
      */
     public function execute(PublishVideoRequest $request): PublishVideoResponse
     {
-        $short = $this->videoRepository->findById(new Id($request->videoId));
+        $short = $this->internalVideoRepository->findById(new Id($request->videoId));
 
         if ($short->videoLocalPath() === null) {
             throw VideoLocalPathNotSet::forVideoId($request->videoId);
@@ -49,7 +50,7 @@ final readonly class PublishVideo
         $this->videoPublisherFactory->create($request->platform)->publish($short);
 
         $short->markAsPublic();
-        $this->videoRepository->save($short);
+        $this->internalVideoRepository->save($short);
 
         return new PublishVideoResponse(
             platformVideoId: $short->platformId()?->value() ?? '',
@@ -61,33 +62,20 @@ final readonly class PublishVideo
 
     private function publishSlot(Video $short): DateTime
     {
-        $pendingByVideo = $this->pendingShortsBySourceVideo($short);
-        $timezone       = new DateTimeZone(self::PUBLISH_TIMEZONE);
-        $now            = $this->clock->now()->value()->setTimezone($timezone);
-        $targetShortId  = $short->id()->value();
-        $day            = $now->setTime(0, 0, 0);
+        $occupiedSlots = $this->occupiedSlots($short);
+        $timezone      = new DateTimeZone(self::PUBLISH_TIMEZONE);
+        $now           = $this->clock->now()->value()->setTimezone($timezone);
+        $day           = $now->setTime(0, 0, 0);
 
         for ($i = 0; $i < 365; $i++, $day = $day->modify('+1 day')) {
-            $activeVideos = array_keys(array_filter($pendingByVideo));
-
-            if ($activeVideos === []) {
-                break;
-            }
-
-            foreach (self::LANE_HOURS as $lane => $hour) {
-                $sourceVideoId = $activeVideos[$lane] ?? null;
-
-                if ($sourceVideoId === null) {
-                    continue;
-                }
-
+            foreach (self::LANE_HOURS as $hour) {
                 $slot = $day->setTime($hour, 0, 0);
 
                 if ($slot <= $now) {
                     continue;
                 }
 
-                if (array_shift($pendingByVideo[$sourceVideoId]) === $targetShortId) {
+                if (!isset($occupiedSlots[$this->slotKey($slot)])) {
                     return new DateTime($slot);
                 }
             }
@@ -96,27 +84,25 @@ final readonly class PublishVideo
         throw YouTubeOperationFailed::apiError('No available publishing slot found within the next year.');
     }
 
-    private function pendingShortsBySourceVideo(Video $short): array
+    /**
+     * @return array<string, true>
+     */
+    private function occupiedSlots(Video $short): array
     {
-        $pending = [];
+        $scheduled = $this->externalVideoRepository->findScheduledShortsByChannelId($short->channelId());
+        $timezone  = new DateTimeZone(self::PUBLISH_TIMEZONE);
+        $occupied  = [];
 
-        foreach ($this->videoRepository->findFutureShorts() as $futureShort) {
-            $sourceVideoId = $futureShort->parentId()?->value();
-
-            if ($sourceVideoId === null) {
-                continue;
-            }
-
-            $pending[$sourceVideoId][] = $futureShort->id()->value();
+        foreach ($scheduled->items() as $scheduledShort) {
+            $slot = $scheduledShort->publishedAt()->value()->setTimezone($timezone);
+            $occupied[$this->slotKey($slot)] = true;
         }
 
-        $sourceVideoId = $short->parentId()?->value() ?? $short->id()->value();
-        $shortId       = $short->id()->value();
+        return $occupied;
+    }
 
-        if (!in_array($shortId, $pending[$sourceVideoId] ?? [], true)) {
-            $pending[$sourceVideoId][] = $shortId;
-        }
-
-        return $pending;
+    private function slotKey(DateTimeImmutable $slot): string
+    {
+        return $slot->format('Y-m-d H');
     }
 }

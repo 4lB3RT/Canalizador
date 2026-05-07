@@ -18,6 +18,44 @@ final class OpenAIVideoTranscriber implements VideoTranscriber
             throw new \InvalidArgumentException("Audio file not found: {$audioPath->value()}");
         }
 
+        $whisperReadyPath = $this->compressForWhisper($audioPath->value());
+
+        try {
+            return $this->callWhisper($whisperReadyPath);
+        } finally {
+            @unlink($whisperReadyPath);
+        }
+    }
+
+    private function compressForWhisper(string $sourcePath): string
+    {
+        $compressedPath = tempnam(sys_get_temp_dir(), 'whisper_') . '.mp3';
+
+        $cmd = sprintf(
+            'ffmpeg -i %s -vn -acodec libmp3lame -ar 16000 -ac 1 -ab 64k -f mp3 %s -y 2>&1',
+            escapeshellarg($sourcePath),
+            escapeshellarg($compressedPath)
+        );
+
+        $output     = [];
+        $resultCode = 0;
+        exec($cmd, $output, $resultCode);
+
+        if ($resultCode !== 0 || !is_file($compressedPath) || filesize($compressedPath) === 0) {
+            @unlink($compressedPath);
+            throw new \RuntimeException(
+                'Whisper audio compression failed for: ' . $sourcePath . "\n" . implode("\n", $output)
+            );
+        }
+
+        return $compressedPath;
+    }
+
+    /**
+     * @return array<int, array{start: float, end: float, text: string}>
+     */
+    private function callWhisper(string $audioPath): array
+    {
         $apiKey = config('services.openai.key');
         $url    = 'https://api.openai.com/v1/audio/transcriptions';
 
@@ -30,7 +68,7 @@ final class OpenAIVideoTranscriber implements VideoTranscriber
                 'Authorization: Bearer ' . $apiKey,
             ],
             CURLOPT_POSTFIELDS => [
-                'file'                      => new \CURLFile($audioPath->value()),
+                'file'                      => new \CURLFile($audioPath),
                 'model'                     => 'whisper-1',
                 'response_format'           => 'verbose_json',
                 'timestamp_granularities[]' => 'segment',

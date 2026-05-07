@@ -8,6 +8,8 @@ green() { printf "\033[32m✓ %s\033[0m\n" "$1"; }
 red()   { printf "\033[31m✗ %s\033[0m\n" "$1"; }
 info()  { printf "\033[36m→ %s\033[0m\n" "$1"; }
 
+PROJECT_ROOT="$(cd "$DOCKER_DIR/.." && pwd)"
+
 echo ""
 echo "Setting up Canalizador (fresh)..."
 echo ""
@@ -16,6 +18,22 @@ echo ""
 info "Stopping containers and removing volumes..."
 docker compose -f "$DOCKER_DIR/docker-compose.yml" down --volumes --remove-orphans --rmi local 2>/dev/null || true
 green "Containers, volumes and images removed"
+
+# 1b. Clean storage (regenerable artifacts) and Laravel caches
+info "Cleaning storage artifacts and Laravel caches..."
+find "$PROJECT_ROOT/storage/app" -mindepth 1 -maxdepth 1 \
+    ! -name '.gitignore' \
+    ! -name 'private' \
+    ! -name 'public' \
+    -exec rm -rf {} +
+find "$PROJECT_ROOT/storage/framework/cache" -mindepth 1 ! -name '.gitignore' -exec rm -rf {} + 2>/dev/null || true
+find "$PROJECT_ROOT/storage/framework/sessions" -mindepth 1 ! -name '.gitignore' -exec rm -rf {} + 2>/dev/null || true
+find "$PROJECT_ROOT/storage/framework/views" -mindepth 1 ! -name '.gitignore' -exec rm -rf {} + 2>/dev/null || true
+find "$PROJECT_ROOT/storage/framework/testing" -mindepth 1 ! -name '.gitignore' -exec rm -rf {} + 2>/dev/null || true
+find "$PROJECT_ROOT/storage/logs" -mindepth 1 ! -name '.gitignore' -exec rm -rf {} + 2>/dev/null || true
+find "$PROJECT_ROOT/storage/pail" -mindepth 1 ! -name '.gitignore' -exec rm -rf {} + 2>/dev/null || true
+find "$PROJECT_ROOT/bootstrap/cache" -mindepth 1 ! -name '.gitignore' -exec rm -rf {} + 2>/dev/null || true
+green "Storage artifacts and caches cleaned"
 
 # 2. Build (no cache)
 info "Building Docker images (no cache)..."
@@ -58,6 +76,11 @@ green "Migrations completed"
 info "Declaring RabbitMQ queues..."
 "$COMMANDS_DIR/artisan.sh" rabbitmq:setup
 green "RabbitMQ queues declared"
+
+# 7b. Clear Laravel runtime caches
+info "Clearing Laravel runtime caches..."
+"$COMMANDS_DIR/artisan.sh" optimize:clear
+green "Runtime caches cleared"
 
 # 8. Health checks
 info "Running health checks..."

@@ -21,6 +21,6 @@ RUN pecl install xdebug imagick \
 RUN curl https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 RUN composer self-update
 
-RUN apk add --no-cache python3 py3-pip ffmpeg yt-dlp
+RUN apk add --no-cache python3 py3-pip ffmpeg yt-dlp fontconfig ttf-dejavu font-noto && fc-cache -f
 
 WORKDIR /code

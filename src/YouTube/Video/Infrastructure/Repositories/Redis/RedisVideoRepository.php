@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Canalizador\YouTube\Video\Infrastructure\Repositories\Redis;
 
+use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\YouTube\Video\Domain\Entities\Video;
+use Canalizador\YouTube\Video\Domain\Entities\VideoCollection;
 use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
@@ -24,9 +26,9 @@ final readonly class RedisVideoRepository implements VideoRepository
         $this->redis->set($key, json_encode($video->toArray()));
     }
 
-    public function findFutureShorts(): array
+    public function findScheduledShortsByChannelId(ChannelId $channelId): VideoCollection
     {
-        return [];
+        return new VideoCollection([]);
     }
 
     /**

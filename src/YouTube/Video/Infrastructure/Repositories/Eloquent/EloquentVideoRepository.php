@@ -6,11 +6,13 @@ namespace Canalizador\YouTube\Video\Infrastructure\Repositories\Eloquent;
 
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\YouTube\Video\Domain\Entities\Video;
+use Canalizador\YouTube\Video\Domain\Entities\VideoCollection;
 use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
 use Canalizador\YouTube\Video\Domain\ValueObjects\PlatformId;
+use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
 use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
 use Canalizador\YouTube\Video\Infrastructure\DAO\VideoDAO;
 use Canalizador\YouTube\Video\Infrastructure\DataTransformers\VideoDataTransformer;
@@ -39,15 +41,19 @@ final class EloquentVideoRepository implements VideoRepository
         return $this->toEntity($model);
     }
 
-    public function findFutureShorts(): array
+    public function findScheduledShortsByChannelId(ChannelId $channelId): VideoCollection
     {
         $models = VideoDAO::with('shorts')
+            ->where('channel_id', $channelId->value())
             ->where('category', Category::SHORT->value)
+            ->where('status', YouTubeStatus::Scheduled->value)
             ->where('published_at', '>', now())
-            ->orderBy('id')
+            ->orderBy('published_at')
             ->get();
 
-        return $models->map(fn (VideoDAO $model) => $this->toEntity($model))->all();
+        $videos = $models->map(fn (VideoDAO $model) => $this->toEntity($model))->all();
+
+        return new VideoCollection($videos);
     }
 
     public function findLastByChannelId(ChannelId $channelId, ?Category $category = null): ?PlatformId

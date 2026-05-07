@@ -52,6 +52,7 @@ use Canalizador\YouTube\Video\Infrastructure\Agents\CartoonVideoMaker;
 use Canalizador\YouTube\Video\Infrastructure\Agents\SmartVideoEditor;
 use Canalizador\YouTube\Video\Infrastructure\Builders\YouTubeVideoBuilder;
 use Canalizador\YouTube\Video\Infrastructure\Commands\GenerateShortCommand;
+use Canalizador\YouTube\Video\Infrastructure\Commands\GetVideoCommand;
 use Canalizador\YouTube\Video\Infrastructure\Commands\PublishVideoCommand;
 use Canalizador\YouTube\Video\Infrastructure\Commands\SyncLastVideoCommand;
 use Canalizador\YouTube\Video\Infrastructure\Commands\VideoAgentCommand;
@@ -97,6 +98,7 @@ class YouTubeServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 GenerateShortCommand::class,
+                GetVideoCommand::class,
                 PublishVideoCommand::class,
                 RegisterChannelCommand::class,
                 SyncLastVideoCommand::class,
@@ -188,6 +190,7 @@ class YouTubeServiceProvider extends ServiceProvider
                 youtubeVideoUploader:  $app->make(YouTubeVideoUploader::class),
                 youtubeServiceFactory: $app->make(YouTubeSharedServiceFactory::class),
                 channelRepository:     $app->make(ChannelRepository::class),
+                videoRepository:       $app->make(VideoRepository::class),
             );
         });
 
@@ -201,9 +204,10 @@ class YouTubeServiceProvider extends ServiceProvider
 
         $this->app->bind(PublishVideo::class, function ($app) {
             return new PublishVideo(
-                videoRepository: $app->make(VideoRepository::class),
-                videoPublisherFactory: $app->make(VideoPublisherFactory::class),
-                clock: $app->make(Clock::class),
+                internalVideoRepository: $app->make(EloquentVideoRepository::class),
+                externalVideoRepository: $app->make(YoutubeVideoRepository::class),
+                videoPublisherFactory:   $app->make(VideoPublisherFactory::class),
+                clock:                   $app->make(Clock::class),
             );
         });
 
@@ -241,7 +245,8 @@ class YouTubeServiceProvider extends ServiceProvider
 
         $this->app->bind(YoutubeVideoRepository::class, function ($app) {
             return new YoutubeVideoRepository(
-                youtubeClient: $app->make(YoutubeDataApiClient::class),
+                youtubeClient:     $app->make(YoutubeDataApiClient::class),
+                channelRepository: $app->make(ChannelRepository::class),
             );
         });
 

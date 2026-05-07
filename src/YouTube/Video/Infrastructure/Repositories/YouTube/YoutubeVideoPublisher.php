@@ -10,6 +10,8 @@ use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
 use Canalizador\YouTube\Shared\Domain\Services\YouTubeServiceFactory;
 use Canalizador\YouTube\Video\Domain\Entities\Video;
 use Canalizador\YouTube\Video\Domain\Repositories\VideoPublisher;
+use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
+use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
 use Canalizador\YouTube\Video\Domain\ValueObjects\PlatformId;
 use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
 use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\YouTubeVideoBuilder;
@@ -18,6 +20,7 @@ use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\YouTubeVideoUpload
 final class YoutubeVideoPublisher implements VideoPublisher
 {
     private const int CHUNK_SIZE_BYTES = 1024 * 1024;
+    private const string SOURCE_VIDEO_LABEL = '🎬 Vídeo completo:';
 
     public function __construct(
         private readonly GoogleClientService   $googleClientService,
@@ -25,14 +28,17 @@ final class YoutubeVideoPublisher implements VideoPublisher
         private readonly YouTubeVideoUploader  $youtubeVideoUploader,
         private readonly YouTubeServiceFactory $youtubeServiceFactory,
         private readonly ChannelRepository     $channelRepository,
+        private readonly VideoRepository       $videoRepository,
     ) {
     }
 
     public function publish(Video $video): void
     {
+        $description = $this->buildDescription($video);
+
         $snippet = $this->youtubeVideoBuilder->buildVideoSnippet(
             $video->title()->value(),
-            $video->description()?->value() ?? '',
+            $description,
             []
         );
 
@@ -61,5 +67,27 @@ final class YoutubeVideoPublisher implements VideoPublisher
 
         $video->updatePlatformId(PlatformId::fromString($result['id']));
         $video->updateUrl(Url::fromString('https://www.youtube.com/watch?v=' . $result['id']));
+    }
+
+    private function buildDescription(Video $video): string
+    {
+        $description = $video->description()?->value() ?? '';
+
+        if ($video->category() !== Category::SHORT || $video->parentId() === null) {
+            return $description;
+        }
+
+        $parent           = $this->videoRepository->findById($video->parentId());
+        $parentPlatformId = $parent->platformId()?->value();
+
+        if ($parentPlatformId === null) {
+            return $description;
+        }
+
+        $sourceLink = self::SOURCE_VIDEO_LABEL . ' https://youtu.be/' . $parentPlatformId;
+
+        return $description === ''
+            ? $sourceLink
+            : $description . "\n\n" . $sourceLink;
     }
 }

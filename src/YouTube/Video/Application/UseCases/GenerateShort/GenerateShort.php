@@ -50,12 +50,16 @@ final readonly class GenerateShort
         $startSeconds = $existingCount * self::SEGMENT_SECONDS;
         $fragmentPath = $this->videoFragmenter->fragmentAt($parent->videoLocalPath(), $startSeconds, self::SEGMENT_SECONDS);
 
-        $this->videoBuilder->fromFragment($parent, $fragmentPath, $existingCount);
+        $this->videoBuilder
+            ->fromFragment($parent, $fragmentPath, $existingCount)
+            ->withSubtitles();
+
         $short = $this->videoBuilder->build();
 
         $parent->addShort($short);
         $this->videoRepository->save($short);
 
+        dd(1);
         $this->eventBus->publish(...$short->releaseEvents());
     }
 }

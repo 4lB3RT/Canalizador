@@ -85,6 +85,11 @@ final class YouTubeVideoBuilder
         );
     }
 
+    public function channelId(): ChannelId
+    {
+        return $this->channelId;
+    }
+
     /* @throws YouTubeOperationFailed */
     public function withDownload(): self
     {
@@ -140,6 +145,45 @@ final class YouTubeVideoBuilder
         return $this;
     }
 
+    public function withSubtitles(): self
+    {
+        if ($this->videoLocalPath === null || $this->transcription === null) {
+            return $this;
+        }
+
+        $finalPath  = $this->videoLocalPath->value();
+        $sourceDir  = dirname($finalPath);
+        $sourceName = pathinfo($finalPath, PATHINFO_FILENAME);
+        $assPath    = $sourceDir . '/' . $sourceName . '.ass';
+        $tempPath   = $sourceDir . '/' . $sourceName . '.subtitled.mp4';
+
+        file_put_contents($assPath, $this->transcriptionToAss($this->transcription));
+
+        $cmd = sprintf(
+            'ffmpeg -i %s -vf "ass=%s" -c:v libx264 -preset ultrafast -c:a copy %s -y 2>&1',
+            escapeshellarg($finalPath),
+            $assPath,
+            escapeshellarg($tempPath)
+        );
+
+        $output     = [];
+        $resultCode = 0;
+        exec($cmd, $output, $resultCode);
+
+        if ($resultCode !== 0 || !file_exists($tempPath)) {
+            @unlink($assPath);
+            @unlink($tempPath);
+            throw new \RuntimeException(
+                "Subtitle burn failed (exit {$resultCode}): " . implode("\n", $output)
+            );
+        }
+
+        rename($tempPath, $finalPath);
+        @unlink($assPath);
+
+        return $this;
+    }
+
     public function fromFragment(Video $parent, LocalPath $fragmentPath, int $index): self
     {
         $startSeconds = $index * $this->segmentSeconds;
@@ -175,7 +219,11 @@ final class YouTubeVideoBuilder
                 'text'      => $fragmentText,
                 'language'  => $parent->transcription()->language()->value,
                 'sentences' => array_map(
-                    static fn ($s) => ['text' => $s->text()->value(), 'start' => $s->start()->value(), 'end' => $s->end()->value()],
+                    static fn ($s) => [
+                        'text'  => $s->text()->value(),
+                        'start' => $s->start()->value() - $startSeconds,
+                        'end'   => $s->end()->value() - $startSeconds,
+                    ],
                     $fragmentSentences->items()
                 ),
             ])
@@ -242,5 +290,44 @@ final class YouTubeVideoBuilder
                 $segments
             ),
         ]);
+    }
+
+    private function transcriptionToAss(Transcription $transcription): string
+    {
+        $header = <<<'ASS'
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Arial,80,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,5,0,2,40,40,400,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+
+ASS;
+
+        $events = [];
+        foreach ($transcription->sentences()->items() as $sentence) {
+            $start = $this->formatAssTime((float) $sentence->start()->value());
+            $end   = $this->formatAssTime((float) $sentence->end()->value());
+            $text  = str_replace(["\r", "\n"], ' ', trim($sentence->text()->value()));
+
+            $events[] = "Dialogue: 0,{$start},{$end},Default,,0,0,0,,{$text}";
+        }
+
+        return $header . implode("\n", $events) . "\n";
+    }
+
+    private function formatAssTime(float $seconds): string
+    {
+        $seconds = max(0.0, $seconds);
+        $hours   = (int) floor($seconds / 3600);
+        $minutes = (int) floor(($seconds - $hours * 3600) / 60);
+        $secs    = $seconds - $hours * 3600 - $minutes * 60;
+
+        return sprintf('%01d:%02d:%05.2f', $hours, $minutes, $secs);
     }
 }
