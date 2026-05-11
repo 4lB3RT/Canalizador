@@ -21,6 +21,14 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->prepend(\Illuminate\Http\Middleware\HandleCors::class);
+
+        $middleware->validateCsrfTokens(except: [
+            'login',
+            'register',
+            'logout',
+        ]);
+
         $middleware->alias([
             'api.token' => \App\Http\Middleware\ValidateApiToken::class,
             'google.token' => \App\Http\Middleware\EnsureGoogleToken::class,
