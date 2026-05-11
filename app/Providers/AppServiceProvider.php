@@ -14,10 +14,21 @@ use Canalizador\Shared\Shared\Infrastructure\Services\HttpErrorExtractor;
 use Canalizador\Shared\Shared\Infrastructure\Services\HttpResponseValidator as HttpResponseValidatorImpl;
 use Canalizador\Shared\Shared\Infrastructure\Services\LaravelHttpClient;
 use Canalizador\Shared\Shared\Infrastructure\Services\SystemClock;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    public function boot(): void
+    {
+        ResetPassword::createUrlUsing(function ($user, string $token): string {
+            $base  = rtrim(config('app.frontend_url', env('FRONTEND_URL', 'http://localhost:5173')), '/');
+            $email = urlencode($user->getEmailForPasswordReset());
+
+            return "{$base}/reset-password?token={$token}&email={$email}";
+        });
+    }
+
     public function register(): void
     {
         $this->app->bind(Clock::class, SystemClock::class);

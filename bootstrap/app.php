@@ -27,6 +27,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'login',
             'register',
             'logout',
+            'forgot-password',
+            'reset-password',
         ]);
 
         $middleware->alias([
