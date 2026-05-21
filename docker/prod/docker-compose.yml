@@ -12,7 +12,6 @@ services:
       - ${NGINX_CONF_FILE:-./nginx.no-tls.conf}:/etc/nginx/conf.d/default.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /opt/canalizador/web:/var/www/canalizador:ro
-      - /opt/canalizador/data/storage/app/public:/var/www/canalizador/storage:ro
     depends_on:
       - php
     networks:
