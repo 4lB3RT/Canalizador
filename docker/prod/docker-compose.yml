@@ -28,6 +28,7 @@ services:
       - ./.env
     volumes:
       - /opt/canalizador/app:/code
+      - vendor:/code/vendor
       - /opt/canalizador/data/storage:/code/storage
       - /tmp/canalizador:/tmp/canalizador
       - ./opcache.ini:/usr/local/etc/php/conf.d/opcache.ini:ro
@@ -49,6 +50,7 @@ services:
       - ./.env
     volumes:
       - /opt/canalizador/app:/code
+      - vendor:/code/vendor
       - /opt/canalizador/data/storage:/code/storage
       - /tmp/canalizador:/tmp/canalizador
     depends_on:
@@ -108,6 +110,9 @@ services:
       retries: 10
     networks:
       canalizador:
+
+volumes:
+  vendor:
 
 networks:
   canalizador:

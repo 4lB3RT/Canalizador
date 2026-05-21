@@ -15,6 +15,7 @@ jobs:
       - name: Decrypt .env.prod
         env:
           ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          ANSIBLE_CONFIG: /dev/null
         run: |
           echo "$ANSIBLE_VAULT_PASSWORD" > /tmp/.vaultpass
           ansible-vault decrypt --vault-password-file=/tmp/.vaultpass \
@@ -78,14 +79,12 @@ jobs:
           mv app.new app
 
           docker compose -f docker/prod/docker-compose.yml pull
-          docker compose -f docker/prod/docker-compose.yml up -d --remove-orphans
+          docker compose -f docker/prod/docker-compose.yml up -d --remove-orphans --force-recreate
 
           docker compose -f docker/prod/docker-compose.yml exec -T php composer install --no-dev --no-interaction --optimize-autoloader --working-dir=/code
           docker compose -f docker/prod/docker-compose.yml exec -T php php /code/artisan migrate --force
           docker compose -f docker/prod/docker-compose.yml exec -T php php /code/artisan config:cache
           docker compose -f docker/prod/docker-compose.yml exec -T php php /code/artisan route:cache
-          docker compose -f docker/prod/docker-compose.yml restart php worker
-          docker compose -f docker/prod/docker-compose.yml exec -T nginx nginx -s reload
 
           rm -rf app.old
           REMOTE
