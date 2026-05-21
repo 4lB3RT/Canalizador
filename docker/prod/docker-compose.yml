@@ -12,6 +12,7 @@ services:
       - ${NGINX_CONF_FILE:-./nginx.no-tls.conf}:/etc/nginx/conf.d/default.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /opt/canalizador/web:/var/www/canalizador:ro
+      - /opt/canalizador/data/storage/app/public:/var/www/canalizador/storage:ro
     depends_on:
       - php
     networks:
@@ -24,7 +25,7 @@ services:
     env_file:
       - ./.env
     volumes:
-      - php_storage:/code/storage
+      - /opt/canalizador/data/storage:/code/storage
       - /tmp/canalizador:/tmp/canalizador
     depends_on:
       mysql:
@@ -43,7 +44,7 @@ services:
     env_file:
       - ./.env
     volumes:
-      - php_storage:/code/storage
+      - /opt/canalizador/data/storage:/code/storage
       - /tmp/canalizador:/tmp/canalizador
     depends_on:
       mysql:
@@ -102,9 +103,6 @@ services:
       retries: 10
     networks:
       canalizador:
-
-volumes:
-  php_storage:
 
 networks:
   canalizador:
