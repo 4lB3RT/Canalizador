@@ -5,63 +5,12 @@ on:
     branches: [ master ]
   workflow_dispatch:
 
-env:
-  GCP_PROJECT: galvanic-camp-493316-i2
-  GCP_REGION: europe-west1
-  AR_REPO: canalizador-images
-  IMAGE_NAME: backend
-
 jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    outputs:
-      image: ${{ steps.image.outputs.uri }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
-
-      - name: Set up gcloud
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Configure Docker for Artifact Registry
-        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
-
-      - name: Set image URI
-        id: image
-        run: |
-          URI="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/${AR_REPO}/${IMAGE_NAME}:${GITHUB_SHA}"
-          echo "uri=${URI}" >> "$GITHUB_OUTPUT"
-          echo "Image URI: ${URI}"
-
-      - name: Build backend image (prod target)
-        run: |
-          docker build \
-            --target prod \
-            -f docker/php/Dockerfile \
-            -t "${{ steps.image.outputs.uri }}" \
-            -t "${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/${AR_REPO}/${IMAGE_NAME}:latest" \
-            .
-
-      - name: Push backend image
-        run: |
-          docker push "${{ steps.image.outputs.uri }}"
-          docker push "${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/${AR_REPO}/${IMAGE_NAME}:latest"
-
   deploy:
-    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Compose runtime env
-        run: |
-          echo "PHP_IMAGE=${{ needs.build-and-push.outputs.image }}" > _ci.env
 
       - name: Decrypt .env.prod
         env:
@@ -71,7 +20,21 @@ jobs:
           ansible-vault decrypt --vault-password-file=/tmp/.vaultpass \
             --output=.env.decrypted docker/prod/.env.prod
           rm /tmp/.vaultpass
-          cat _ci.env >> .env.decrypted
+
+      - name: Pack application code
+        run: |
+          tar --exclude='./.git' \
+              --exclude='./node_modules' \
+              --exclude='./vendor' \
+              --exclude='./tests' \
+              --exclude='./.github' \
+              --exclude='./storage/logs/*' \
+              --exclude='./storage/framework/cache/*' \
+              --exclude='./storage/framework/sessions/*' \
+              --exclude='./storage/framework/views/*' \
+              --exclude='./docker/dev' \
+              --exclude='./.ansible' \
+              -czf /tmp/canalizador-app.tar.gz .
 
       - name: Install SSH key
         env:
@@ -84,35 +47,49 @@ jobs:
 
       - name: Prepare remote dirs
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} 'sudo mkdir -p /opt/canalizador/docker/prod && sudo chown -R ${{ secrets.VM_USER }}:${{ secrets.VM_USER }} /opt/canalizador'
+          ssh -i ~/.ssh/id_rsa ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} \
+            'sudo mkdir -p /opt/canalizador/{docker/prod,app} && sudo chown -R ${{ secrets.VM_USER }}:${{ secrets.VM_USER }} /opt/canalizador'
 
-      - name: SCP artifacts to VM
+      - name: Upload compose, nginx and env
         run: |
           scp -i ~/.ssh/id_rsa docker/prod/docker-compose.yml  ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/canalizador/docker/prod/docker-compose.yml
           scp -i ~/.ssh/id_rsa docker/prod/nginx.conf          ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/canalizador/docker/prod/nginx.conf
           scp -i ~/.ssh/id_rsa docker/prod/nginx.no-tls.conf   ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/canalizador/docker/prod/nginx.no-tls.conf
+          scp -i ~/.ssh/id_rsa docker/prod/opcache.ini         ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/canalizador/docker/prod/opcache.ini
           scp -i ~/.ssh/id_rsa .env.decrypted                  ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/canalizador/docker/prod/.env
+
+      - name: Upload application tarball
+        run: |
+          scp -i ~/.ssh/id_rsa /tmp/canalizador-app.tar.gz ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/tmp/canalizador-app.tar.gz
 
       - name: Apply on VM
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} \
-            "REGION=${{ env.GCP_REGION }} bash -s" <<'REMOTE'
+          ssh -i ~/.ssh/id_rsa ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} 'bash -s' <<'REMOTE'
           set -euo pipefail
           cd /opt/canalizador
 
-          set -a
-          source docker/prod/.env
-          set +a
+          rm -rf app.new
+          mkdir -p app.new
+          tar -xzf /tmp/canalizador-app.tar.gz -C app.new
+          rm /tmp/canalizador-app.tar.gz
 
-          gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
-          docker pull "$PHP_IMAGE"
+          rm -rf app.old
+          if [ -d app ]; then mv app app.old; fi
+          mv app.new app
 
+          docker compose -f docker/prod/docker-compose.yml pull
           docker compose -f docker/prod/docker-compose.yml up -d --remove-orphans
-          docker compose -f docker/prod/docker-compose.yml exec -T php php artisan migrate --force
-          docker compose -f docker/prod/docker-compose.yml exec -T php php artisan config:cache
+
+          docker compose -f docker/prod/docker-compose.yml exec -T php composer install --no-dev --no-interaction --optimize-autoloader --working-dir=/code
+          docker compose -f docker/prod/docker-compose.yml exec -T php php /code/artisan migrate --force
+          docker compose -f docker/prod/docker-compose.yml exec -T php php /code/artisan config:cache
+          docker compose -f docker/prod/docker-compose.yml exec -T php php /code/artisan route:cache
+          docker compose -f docker/prod/docker-compose.yml restart php worker
           docker compose -f docker/prod/docker-compose.yml exec -T nginx nginx -s reload
+
+          rm -rf app.old
           REMOTE
 
       - name: Cleanup local decrypted env
         if: always()
-        run: rm -f .env.decrypted _ci.env
+        run: rm -f .env.decrypted /tmp/canalizador-app.tar.gz

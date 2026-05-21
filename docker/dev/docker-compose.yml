@@ -1,5 +1,7 @@
 name: canalizador
 
+x-php-image: &php-image europe-west1-docker.pkg.dev/galvanic-camp-493316-i2/canalizador-images/php-base:php-8.5-v1
+
 services:
   nginx_canalizador:
     image: nginx:latest
@@ -16,15 +18,13 @@ services:
     networks:
       canalizador:
         ipv4_address: 10.7.0.5
+
   php_canalizador:
-    build:
-      context: ../..
-      dockerfile: docker/php/Dockerfile
-      target: dev
+    image: *php-image
     container_name: php_${PROJECT_NAME:?PROJECT_NAME required in docker/dev/.env}
     volumes:
       - ../../:/code
-      - ../php/php.ini:/usr/local/etc/php/php.ini
+      - ./php.ini:/usr/local/etc/php/php.ini
       - /tmp:/tmp
     ports:
       - "${PHP_PORT:-9000}:9000"
@@ -40,6 +40,7 @@ services:
     dns:
         - 8.8.8.8
         - 8.8.4.4
+
   mysql_canalizador:
       image: mysql:8.0
       container_name: mysql_${PROJECT_NAME:?PROJECT_NAME required in docker/dev/.env}
@@ -62,6 +63,7 @@ services:
       networks:
           canalizador:
               ipv4_address: 10.7.0.6
+
   redis_canalizador:
       image: redis:latest
       container_name: redis_${PROJECT_NAME:?PROJECT_NAME required in docker/dev/.env}
@@ -74,6 +76,7 @@ services:
       networks:
           canalizador:
               ipv4_address: 10.7.0.10
+
   rabbitmq_canalizador:
     image: rabbitmq:3.13-management-alpine
     container_name: rabbitmq_${PROJECT_NAME:?PROJECT_NAME required in docker/dev/.env}
@@ -93,11 +96,9 @@ services:
     networks:
       canalizador:
         ipv4_address: 10.7.0.11
+
   worker_canalizador:
-    build:
-      context: ../..
-      dockerfile: docker/php/Dockerfile
-      target: dev
+    image: *php-image
     container_name: worker_${PROJECT_NAME:?PROJECT_NAME required in docker/dev/.env}
     volumes:
       - ../../:/code
@@ -116,10 +117,12 @@ services:
     networks:
       canalizador:
         ipv4_address: 10.7.0.12
+
 volumes:
   rabbitmq_data:
   mysql_data:
   redis_data:
+
 networks:
   canalizador:
     driver: bridge
