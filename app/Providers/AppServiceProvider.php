@@ -7,6 +7,10 @@ namespace App\Providers;
 use Canalizador\Shared\Header\Application\UseCases\GetHeader\GetHeader;
 use Canalizador\Shared\Header\Domain\UserHeaderRepository;
 use Canalizador\Shared\Header\Infrastructure\Repositories\Eloquent\EloquentUserHeaderRepository;
+use Canalizador\Shared\HealthCheck\Application\UseCases\GetHealth\GetHealth;
+use Canalizador\Shared\HealthCheck\Infrastructure\Probes\MysqlHealthProbe;
+use Canalizador\Shared\HealthCheck\Infrastructure\Probes\RabbitMqHealthProbe;
+use Canalizador\Shared\HealthCheck\Infrastructure\Probes\RedisHealthProbe;
 use Canalizador\Shared\Profile\Application\UseCases\UpdateProfile\UpdateProfile;
 use Canalizador\Shared\Profile\Domain\ProfileRepository;
 use Canalizador\Shared\Profile\Infrastructure\Repositories\Eloquent\EloquentProfileRepository;
@@ -76,6 +80,27 @@ class AppServiceProvider extends ServiceProvider
             return new UpdateProfile(
                 profileRepository: $app->make(ProfileRepository::class),
                 passwordHasher:    $app->make(PasswordHasher::class),
+            );
+        });
+
+        $this->app->bind(GetHealth::class, function ($app) {
+            return new GetHealth(
+                probes: [
+                    new MysqlHealthProbe(
+                        connection: $app->make('db')->connection(),
+                    ),
+                    new RedisHealthProbe(
+                        redis: $app->make('redis'),
+                    ),
+                    new RabbitMqHealthProbe(
+                        host:     (string) config('queue.connections.rabbitmq.hosts.0.host', env('RABBITMQ_HOST', 'rabbitmq')),
+                        port:     (int) config('queue.connections.rabbitmq.hosts.0.port', env('RABBITMQ_PORT', 5672)),
+                        user:     (string) config('queue.connections.rabbitmq.hosts.0.user', env('RABBITMQ_USER', 'guest')),
+                        password: (string) config('queue.connections.rabbitmq.hosts.0.password', env('RABBITMQ_PASSWORD', 'guest')),
+                        vhost:    (string) config('queue.connections.rabbitmq.hosts.0.vhost', env('RABBITMQ_VHOST', '/')),
+                    ),
+                ],
+                version: (string) (env('APP_VERSION') ?: 'dev'),
             );
         });
     }
