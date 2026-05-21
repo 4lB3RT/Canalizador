@@ -6,19 +6,25 @@ namespace App\Providers;
 
 use App\Services\GoogleClientService;
 use App\Services\GoogleTokenService;
+use Canalizador\YouTube\Channel\Domain\Repositories\ChannelGoogleTokenRepository;
+use Canalizador\YouTube\Channel\Infrastructure\Repositories\Eloquent\EloquentChannelGoogleTokenRepository;
 use Canalizador\Shared\Shared\Domain\Events\EventBus;
 use Canalizador\Shared\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Shared\Infrastructure\Events\EventHandlerRegistry;
 use Canalizador\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
 use Canalizador\Shared\Video\Infrastructure\Repositories\OpenAI\OpenAIVideoMetadataGenerator;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository as VideoProductionVideoRepository;
 use Canalizador\VideoProduction\Video\Domain\Services\FileSystem;
+use Canalizador\YouTube\Channel\Application\UseCases\GetChannel\GetChannel;
+use Canalizador\YouTube\Channel\Application\UseCases\GetChannels\GetChannels;
+use Canalizador\YouTube\Channel\Application\UseCases\GetChannelVideos\GetChannelVideos;
 use Canalizador\YouTube\Channel\Application\UseCases\RegisterChannel\RegisterChannel;
 use Canalizador\YouTube\Channel\Application\UseCases\SyncChannel\SyncChannel;
+use Canalizador\YouTube\Channel\Application\UseCases\UpdateChannel\UpdateChannel;
 use Canalizador\YouTube\Channel\Application\UseCases\UpdateChannelWithAI\UpdateChannelWithAI;
 use Canalizador\YouTube\Channel\Domain\Repositories\ChannelMetadataRepository;
 use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
 use Canalizador\YouTube\Channel\Infrastructure\Commands\RegisterChannelCommand;
+use Canalizador\YouTube\Channel\Infrastructure\Commands\SyncAutoChannelsCommand;
 use Canalizador\YouTube\Channel\Infrastructure\Repositories\Eloquent\EloquentChannelRepository;
 use Canalizador\YouTube\Channel\Infrastructure\Repositories\OpenAI\OpenAIChannelRepository;
 use Canalizador\YouTube\Channel\Infrastructure\Repositories\Youtube\YoutubeChannelRepository;
@@ -33,9 +39,11 @@ use Canalizador\YouTube\Video\Application\Handlers\OnYouTubeVideoCreatedHandler;
 use Canalizador\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo\DownloadLatestChannelVideo;
 use Canalizador\YouTube\Video\Application\UseCases\FragmentAndPublishVideo\FragmentAndPublishVideo;
 use Canalizador\YouTube\Video\Application\UseCases\GenerateShort\GenerateShort;
+use Canalizador\YouTube\Video\Application\UseCases\GetVideos\GetVideos;
 use Canalizador\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
 use Canalizador\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo\SmartFragmentAndPublishVideo;
 use Canalizador\YouTube\Video\Application\UseCases\SyncLastVideo\SyncLastVideo;
+use Canalizador\YouTube\Video\Application\UseCases\SyncVideo\SyncVideo;
 use Canalizador\YouTube\Video\Domain\Events\ShortCreated;
 use Canalizador\YouTube\Video\Domain\Events\VideoCreated;
 use Canalizador\YouTube\Video\Domain\Factories\VideoPublisherFactory;
@@ -101,6 +109,7 @@ class YouTubeServiceProvider extends ServiceProvider
                 GetVideoCommand::class,
                 PublishVideoCommand::class,
                 RegisterChannelCommand::class,
+                SyncAutoChannelsCommand::class,
                 SyncLastVideoCommand::class,
                 VideoAgentCommand::class,
             ]);
@@ -109,9 +118,12 @@ class YouTubeServiceProvider extends ServiceProvider
 
     private function registerGoogleServices(): void
     {
+        $this->app->bind(ChannelGoogleTokenRepository::class, EloquentChannelGoogleTokenRepository::class);
+
         $this->app->bind(GoogleClientService::class, function ($app) {
             return new GoogleClientService(
-                googleTokenService: $app->make(GoogleTokenService::class)
+                googleTokenService:           $app->make(GoogleTokenService::class),
+                channelGoogleTokenRepository: $app->make(ChannelGoogleTokenRepository::class),
             );
         });
 
@@ -167,6 +179,24 @@ class YouTubeServiceProvider extends ServiceProvider
             return new RegisterChannel(
                 externalChannelRepository: $app->make(YoutubeChannelRepository::class),
                 internalChannelRepository: $app->make(EloquentChannelRepository::class),
+            );
+        });
+
+        $this->app->bind(GetChannels::class, function ($app) {
+            return new GetChannels(
+                channelRepository: $app->make(ChannelRepository::class)
+            );
+        });
+
+        $this->app->bind(GetChannel::class, function ($app) {
+            return new GetChannel(
+                channelRepository: $app->make(ChannelRepository::class)
+            );
+        });
+
+        $this->app->bind(UpdateChannel::class, function ($app) {
+            return new UpdateChannel(
+                channelRepository: $app->make(ChannelRepository::class)
             );
         });
     }
@@ -228,6 +258,19 @@ class YouTubeServiceProvider extends ServiceProvider
             );
         });
 
+        $this->app->bind(GetChannelVideos::class, function ($app) {
+            return new GetChannelVideos(
+                channelRepository: $app->make(ChannelRepository::class),
+                videoRepository:   $app->make(VideoRepository::class),
+            );
+        });
+
+        $this->app->bind(GetVideos::class, function ($app) {
+            return new GetVideos(
+                videoRepository: $app->make(VideoRepository::class),
+            );
+        });
+
         $this->app->bind(FragmentAndPublishVideo::class, function ($app) {
             return new FragmentAndPublishVideo(
                 videoFragmenter: $app->make(VideoFragmenter::class),
@@ -245,8 +288,9 @@ class YouTubeServiceProvider extends ServiceProvider
 
         $this->app->bind(YoutubeVideoRepository::class, function ($app) {
             return new YoutubeVideoRepository(
-                youtubeClient:     $app->make(YoutubeDataApiClient::class),
-                channelRepository: $app->make(ChannelRepository::class),
+                youtubeClient:        $app->make(YoutubeDataApiClient::class),
+                channelRepository:    $app->make(ChannelRepository::class),
+                localVideoRepository: $app->make(EloquentVideoRepository::class),
             );
         });
 
@@ -324,6 +368,16 @@ class YouTubeServiceProvider extends ServiceProvider
                 externalVideoRepository: $app->make(YoutubeVideoRepository::class),
                 videoBuilder: $app->make(YouTubeVideoBuilder::class),
                 eventBus: $app->make(EventBus::class),
+            );
+        });
+
+        $this->app->bind(SyncVideo::class, function ($app) {
+            return new SyncVideo(
+                channelRepository:       $app->make(ChannelRepository::class),
+                internalVideoRepository: $app->make(EloquentVideoRepository::class),
+                externalVideoRepository: $app->make(YoutubeVideoRepository::class),
+                videoBuilder:            $app->make(YouTubeVideoBuilder::class),
+                eventBus:                $app->make(EventBus::class),
             );
         });
 

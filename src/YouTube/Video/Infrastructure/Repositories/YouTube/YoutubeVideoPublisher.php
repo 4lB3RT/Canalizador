@@ -53,8 +53,8 @@ final class YoutubeVideoPublisher implements VideoPublisher
         $status       = $this->youtubeVideoBuilder->buildVideoStatus($privacyStatus, $publishAt);
         $youtubeVideo = $this->youtubeVideoBuilder->buildVideo($snippet, $status);
 
-        $channel        = $this->channelRepository->findById($video->channelId());
-        $client         = $this->googleClientService->buildYouTubeClient($channel->userId()->value());
+        $this->channelRepository->findById($video->channelId());
+        $client         = $this->googleClientService->buildYouTubeClientForChannel($video->channelId());
         $youtubeService = $this->youtubeServiceFactory->create($client);
 
         $result = $this->youtubeVideoUploader->upload(

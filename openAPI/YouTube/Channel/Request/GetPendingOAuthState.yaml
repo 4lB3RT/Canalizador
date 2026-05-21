@@ -1,0 +1,71 @@
+get:
+  tags: [YouTube - Channel]
+  operationId: getPendingChannelOAuthState
+  summary: Read the Google OAuth state of a pending channel link
+  description: >-
+    Returns the channels detected for the authenticated user once the OAuth
+    popup has completed. `pending: true` means Google has not yet redirected
+    back, the frontend should keep polling.
+  security:
+    - ApiToken: []
+  parameters:
+    - name: state
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Token returned by `POST /api/youtube/channels/oauth/start`.
+  responses:
+    '200':
+      description: Current state of the OAuth flow
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [data]
+            properties:
+              data:
+                type: object
+                required: [state, pending, channels]
+                properties:
+                  state:
+                    type: string
+                  pending:
+                    type: boolean
+                    description: True until Google completes the redirect.
+                  channels:
+                    type: array
+                    items:
+                      type: object
+                      required: [id, title]
+                      properties:
+                        id:
+                          type: string
+                          example: 'UCxxxxxxxxxxxxxxxxxxxxxx'
+                        title:
+                          type: string
+                          example: 'DevCast'
+                        custom_url:
+                          type: string
+                          nullable: true
+                          example: '@devcast'
+                        thumbnail_url:
+                          type: string
+                          nullable: true
+                          format: uri
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '404':
+      $ref: '../../../Shared/Response/404.yaml'
+    '410':
+      description: State expired
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'OAuth state has expired. Please start the flow again.'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

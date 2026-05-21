@@ -1,0 +1,57 @@
+get:
+  tags: [YouTube - Video]
+  operationId: getChannelVideos
+  summary: List videos of a channel owned by the authenticated user (paginated)
+  description: >-
+    Returns the videos belonging to the given channel from the local database
+    (no YouTube API call). The channel must belong to the authenticated user;
+    otherwise responds 404. Supports filtering by `category` and standard
+    `page` / `per_page` query parameters.
+  security:
+    - ApiToken: []
+  parameters:
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: YouTube channel ID.
+      example: 'UCxxxxxxxxxxxxxxxxxxxxxx'
+    - name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: 1-based page number.
+      example: 1
+    - name: per_page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 12
+      description: Items per page (max 100).
+      example: 12
+    - name: category
+      in: query
+      required: false
+      schema:
+        type: string
+        enum: [video, short]
+      description: Filter by video category. Omit to include both.
+      example: video
+  responses:
+    '200':
+      $ref: '../Response/GetChannelVideos.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '404':
+      $ref: '../../../Shared/Response/404.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

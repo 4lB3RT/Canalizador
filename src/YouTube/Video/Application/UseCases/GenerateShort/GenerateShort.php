@@ -59,7 +59,6 @@ final readonly class GenerateShort
         $parent->addShort($short);
         $this->videoRepository->save($short);
 
-        dd(1);
         $this->eventBus->publish(...$short->releaseEvents());
     }
 }

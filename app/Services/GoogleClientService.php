@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\User;
+use Canalizador\YouTube\Channel\Domain\Entities\ChannelGoogleToken;
+use Canalizador\YouTube\Channel\Domain\Repositories\ChannelGoogleTokenRepository;
+use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use DateTimeImmutable;
 use Google_Client;
 use Illuminate\Support\Facades\Auth;
 
 final class GoogleClientService
 {
     public function __construct(
-        private readonly GoogleTokenService $googleTokenService
+        private readonly GoogleTokenService $googleTokenService,
+        private readonly ChannelGoogleTokenRepository $channelGoogleTokenRepository,
     ) {
     }
 
@@ -67,6 +72,61 @@ final class GoogleClientService
             'https://www.googleapis.com/auth/youtube.upload',
             'https://www.googleapis.com/auth/youtube',
         ], $userId);
+    }
+
+    public function buildYouTubeClientForChannel(ChannelId $channelId): Google_Client
+    {
+        $token = $this->channelGoogleTokenRepository->findByChannelId($channelId);
+
+        $client = new Google_Client();
+        $client->setClientId(config('services.youtube_analytics.client_id'));
+        $client->setClientSecret(config('services.youtube_analytics.client_secret'));
+        $client->setRedirectUri(config('services.youtube_analytics.redirect_uri', 'http://localhost:8010/auth/google/callback'));
+        $client->setAccessType('offline');
+        $client->setScopes([
+            'https://www.googleapis.com/auth/youtube.upload',
+            'https://www.googleapis.com/auth/youtube',
+        ]);
+
+        $client->setAccessToken([
+            'access_token'  => $token->accessToken,
+            'refresh_token' => $token->refreshToken,
+            'expires_in'    => $token->expiresAt
+                ? max(0, $token->expiresAt->getTimestamp() - (new DateTimeImmutable())->getTimestamp())
+                : null,
+            'scope'         => $token->scope,
+            'token_type'    => $token->tokenType ?? 'Bearer',
+        ]);
+
+        if ($client->isAccessTokenExpired() && $token->refreshToken) {
+            try {
+                $client->refreshToken($token->refreshToken);
+                $newToken = $client->getAccessToken();
+
+                if (isset($newToken['access_token'])) {
+                    $expiresAt = isset($newToken['expires_in'])
+                        ? (new DateTimeImmutable())->modify('+' . (int) $newToken['expires_in'] . ' seconds')
+                        : null;
+
+                    $this->channelGoogleTokenRepository->save(new ChannelGoogleToken(
+                        channelId:    $channelId,
+                        accessToken:  (string) $newToken['access_token'],
+                        refreshToken: (string) ($newToken['refresh_token'] ?? $token->refreshToken),
+                        expiresAt:    $expiresAt,
+                        scope:        (string) ($newToken['scope']      ?? $token->scope),
+                        tokenType:    (string) ($newToken['token_type'] ?? $token->tokenType ?? 'Bearer'),
+                    ));
+                }
+            } catch (\Exception $e) {
+                throw new \RuntimeException(
+                    'Failed to refresh Google token for channel ' . $channelId->value() . '. Please re-link the channel.',
+                    0,
+                    $e,
+                );
+            }
+        }
+
+        return $client;
     }
 
     public function buildYouTubeAnalyticsClient(?int $userId = null): Google_Client

@@ -3,17 +3,28 @@
 declare(strict_types = 1);
 
 use App\Http\Middleware\EnsureGoogleToken;
+use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\GetChannelController;
+use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\GetChannelsController;
 use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\RegisterChannelController;
 use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\SyncChannelController;
+use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelController;
 use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelWithAIController;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\DownloadLatestChannelVideoController;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\FragmentAndPublishVideoController;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\GenerateShortController;
+use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\GetChannelVideosController;
+use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\GetVideosController;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\PublishVideoController;
 use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\SmartFragmentAndPublishVideoController;
+use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\SyncVideoController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['api.token'])->group(function () {
+    Route::get('/channels', GetChannelsController::class);
+    Route::get('/channels/{channelId}', GetChannelController::class);
+    Route::put('/channels/{channelId}', UpdateChannelController::class);
+    Route::get('/channels/{channelId}/videos', GetChannelVideosController::class);
+    Route::get('/videos', GetVideosController::class);
     Route::post('/channels/{channelId}/register', RegisterChannelController::class)
         ->middleware(EnsureGoogleToken::class);
     Route::put('/channels/{channelId}/sync', SyncChannelController::class)
@@ -29,5 +40,7 @@ Route::middleware(['api.token'])->group(function () {
     Route::post('/videos/smart-fragment-and-publish', SmartFragmentAndPublishVideoController::class)
         ->middleware(EnsureGoogleToken::class);
     Route::post('/videos/{video_id}/shorts/generate', GenerateShortController::class)
+        ->middleware(EnsureGoogleToken::class);
+    Route::post('/videos/sync', SyncVideoController::class)
         ->middleware(EnsureGoogleToken::class);
 });

@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace Canalizador\YouTube\Channel\Infrastructure\Repositories\Eloquent;
 
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Pagination;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Total;
 use Canalizador\YouTube\Channel\Domain\Entities\Channel;
 use Canalizador\YouTube\Channel\Domain\Entities\ChannelCollection;
 use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
@@ -32,6 +34,8 @@ final class EloquentChannelRepository implements ChannelRepository
                 'video_count'      => $channel->videoCount(),
                 'privacy_status'   => $channel->privacyStatus()->value,
                 'channel_brand'    => $channel->channelBrand()->value(),
+                'auto_sync'        => $channel->autoSync(),
+                'auto_publish'     => $channel->autoPublish(),
             ]
         );
     }
@@ -50,9 +54,32 @@ final class EloquentChannelRepository implements ChannelRepository
         return $this->toEntity($model);
     }
 
-    public function findByUserId(IntegerId $userId): ChannelCollection
+    public function findByUserId(IntegerId $userId, ?Pagination $pagination = null): ChannelCollection
     {
-        $models = ChannelDAO::where('user_id', $userId->value())->get();
+        $query = ChannelDAO::where('user_id', $userId->value())
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id');
+
+        if ($pagination !== null) {
+            $query->limit($pagination->limit())->offset($pagination->offset());
+        }
+
+        $channels = [];
+        foreach ($query->get() as $model) {
+            $channels[] = $this->toEntity($model);
+        }
+
+        return new ChannelCollection($channels);
+    }
+
+    public function countByUserId(IntegerId $userId): Total
+    {
+        return Total::fromInt(ChannelDAO::where('user_id', $userId->value())->count());
+    }
+
+    public function findAllWithAutoSync(): ChannelCollection
+    {
+        $models = ChannelDAO::where('auto_sync', true)->orderBy('id')->get();
 
         $channels = [];
         foreach ($models as $model) {
@@ -81,6 +108,8 @@ final class EloquentChannelRepository implements ChannelRepository
             'privacy_status'   => $model->privacy_status,
             'country'          => $model->country,
             'channel_brand'    => $model->channel_brand,
+            'auto_sync'        => (bool) $model->auto_sync,
+            'auto_publish'     => (bool) $model->auto_publish,
             'custom_url'       => $model->custom_url,
             'thumbnail_url'    => $model->thumbnail_url,
         ]);

@@ -29,7 +29,41 @@ components:
 
 paths:
 
+  # ─── Shared / Header ─────────────────────────────────────────────────────
+
+  /api/header:
+    $ref: './Shared/Header/Request/GetHeader.yaml'
+
+  # ─── Shared / Profile ────────────────────────────────────────────────────
+
+  /api/profile:
+    $ref: './Shared/Profile/Request/UpdateProfile.yaml'
+
   # ─── YouTube / Channel ───────────────────────────────────────────────────
+
+  /api/youtube/channels:
+    $ref: './YouTube/Channel/Request/GetChannels.yaml'
+
+  /api/youtube/channels/{channelId}:
+    $ref: './YouTube/Channel/Request/GetChannel.yaml'
+
+  /api/youtube/channels/{channelId}/videos:
+    $ref: './YouTube/Video/Request/GetChannelVideos.yaml'
+
+  /api/youtube/videos:
+    $ref: './YouTube/Video/Request/GetVideos.yaml'
+
+  /api/youtube/videos/sync:
+    $ref: './YouTube/Video/Request/SyncVideo.yaml'
+
+  /api/youtube/channels/oauth/start:
+    $ref: './YouTube/Channel/Request/StartChannelOAuth.yaml'
+
+  /api/youtube/channels/oauth/{state}:
+    $ref: './YouTube/Channel/Request/GetPendingOAuthState.yaml'
+
+  /api/youtube/channels/link:
+    $ref: './YouTube/Channel/Request/LinkChannel.yaml'
 
   /api/youtube/channels/{channelId}/register:
     $ref: './YouTube/Channel/Request/RegisterChannel.yaml'

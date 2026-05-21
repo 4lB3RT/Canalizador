@@ -30,6 +30,8 @@ class ChannelDAO extends Model
         'video_count',
         'privacy_status',
         'channel_brand',
+        'auto_sync',
+        'auto_publish',
         'created_at',
         'updated_at',
     ];
@@ -39,6 +41,8 @@ class ChannelDAO extends Model
         'view_count' => 'integer',
         'subscriber_count' => 'integer',
         'video_count' => 'integer',
+        'auto_sync' => 'boolean',
+        'auto_publish' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace Canalizador\YouTube\Channel\Infrastructure\Repositories\Youtube;
 
 use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Pagination;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Total;
 use Canalizador\YouTube\Channel\Domain\Entities\Channel;
 use Canalizador\YouTube\Channel\Domain\Entities\ChannelCollection;
 use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
@@ -75,7 +77,19 @@ final readonly class YoutubeChannelRepository implements ChannelRepository
     }
 
     /* @throws Exception */
-    public function findByUserId(IntegerId $userId): ChannelCollection
+    public function findByUserId(IntegerId $userId, ?Pagination $pagination = null): ChannelCollection
+    {
+        throw new Exception('Not implemented. Use EloquentChannelRepository for user-based queries.');
+    }
+
+    /* @throws Exception */
+    public function countByUserId(IntegerId $userId): Total
+    {
+        throw new Exception('Not implemented. Use EloquentChannelRepository for user-based queries.');
+    }
+
+    /* @throws Exception */
+    public function findAllWithAutoSync(): ChannelCollection
     {
         throw new Exception('Not implemented. Use EloquentChannelRepository for user-based queries.');
     }

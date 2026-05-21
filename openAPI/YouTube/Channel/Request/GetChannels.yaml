@@ -1,0 +1,40 @@
+get:
+  tags: [YouTube - Channel]
+  operationId: getChannels
+  summary: List authenticated user's channels (paginated)
+  description: >-
+    Returns the channels owned by the authenticated user, served from the local
+    database (no YouTube API call). Filtered by `Auth::id()` from the validated
+    API token; user_id cannot be overridden by the client. Pagination is
+    controlled by `page` and `per_page` query parameters.
+  security:
+    - ApiToken: []
+  parameters:
+    - name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: 1-based page number.
+      example: 1
+    - name: per_page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 12
+      description: Number of items per page (max 100).
+      example: 12
+  responses:
+    '200':
+      $ref: '../Response/GetChannels.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

@@ -1,0 +1,106 @@
+description: Paginated list of channel videos
+content:
+  application/json:
+    schema:
+      type: object
+      required: [data, meta]
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - title
+              - published_at
+              - category
+              - status
+              - channel_id
+              - duration
+            properties:
+              id:
+                type: string
+                description: Internal video ID.
+                example: '01HV9YQR3D8RXKMT9P5W4Z3GS5'
+              title:
+                type: string
+                example: 'React 19 en producción — lo bueno, lo malo y lo feo'
+              published_at:
+                type: string
+                description: 'Format: Y-m-d H:i:s'
+                example: '2025-04-22 18:00:00'
+              category:
+                type: string
+                enum: [video, short]
+                example: 'video'
+              status:
+                type: string
+                description: YouTube publish status (e.g. public, private, scheduled).
+                example: 'public'
+              channel_id:
+                type: string
+                example: 'UCxxxxxxxxxxxxxxxxxxxxxx'
+              url:
+                type: string
+                nullable: true
+                format: uri
+                example: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+              duration:
+                type: integer
+                description: Duration in minutes.
+                example: 14
+              description:
+                type: string
+                nullable: true
+                example: 'En este episodio…'
+              platform_id:
+                type: string
+                nullable: true
+                description: YouTube video ID (platform identifier).
+                example: 'dQw4w9WgXcQ'
+              parent_id:
+                type: string
+                nullable: true
+                description: Parent video ID when the entry is a short fragment.
+                example: null
+              video_local_path:
+                type: string
+                nullable: true
+              audio_local_path:
+                type: string
+                nullable: true
+              transcription:
+                type: object
+                nullable: true
+              metrics:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    type:
+                      type: string
+                    value:
+                      type: number
+        meta:
+          type: object
+          required: [page, per_page, total, last_page]
+          properties:
+            page:
+              type: integer
+              minimum: 1
+              example: 1
+            per_page:
+              type: integer
+              minimum: 1
+              maximum: 100
+              example: 12
+            total:
+              type: integer
+              minimum: 0
+              example: 42
+            last_page:
+              type: integer
+              minimum: 1
+              example: 4

@@ -1,0 +1,55 @@
+post:
+  tags: [YouTube - Channel]
+  operationId: linkChannel
+  summary: Link a channel to the authenticated user using a completed OAuth state
+  description: >-
+    Persists the Google token associated with the selected channel, registers
+    the channel in the local DB and assigns it to the authenticated user. The
+    OAuth state is consumed (deleted) on success.
+  security:
+    - ApiToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [state, channel_id]
+          properties:
+            state:
+              type: string
+              description: Token returned by `POST /api/youtube/channels/oauth/start`.
+            channel_id:
+              type: string
+              description: Channel ID returned in the `channels` list of the pending state.
+              example: 'UCxxxxxxxxxxxxxxxxxxxxxx'
+  responses:
+    '200':
+      $ref: '../Response/GetChannel.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '404':
+      $ref: '../../../Shared/Response/404.yaml'
+    '409':
+      description: OAuth flow not yet completed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Waiting for Google OAuth to complete.'
+    '410':
+      description: OAuth state expired
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

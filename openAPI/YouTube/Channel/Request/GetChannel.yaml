@@ -1,0 +1,73 @@
+get:
+  tags: [YouTube - Channel]
+  operationId: getChannel
+  summary: Get a single channel owned by the authenticated user
+  description: >-
+    Returns the channel identified by `channelId`, served from the local
+    database (no YouTube API call). Returns 404 if the channel does not exist
+    OR if it belongs to a different user (to avoid leaking channel existence).
+  security:
+    - ApiToken: []
+  parameters:
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: YouTube channel ID
+      example: 'UCxxxxxxxxxxxxxxxxxxxxxx'
+  responses:
+    '200':
+      $ref: '../Response/GetChannel.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '404':
+      $ref: '../../../Shared/Response/404.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'
+
+put:
+  tags: [YouTube - Channel]
+  operationId: updateChannel
+  summary: Update an owned channel
+  description: >-
+    Updates editable fields of the channel owned by the authenticated user.
+    Editable fields: `auto_sync` (periodic sync of the latest video) and
+    `auto_publish` (queue the publication of generated shorts). Responds 404
+    if the channel does not belong to the user.
+  security:
+    - ApiToken: []
+  parameters:
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: YouTube channel ID
+      example: 'UCxxxxxxxxxxxxxxxxxxxxxx'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            auto_sync:
+              type: boolean
+              description: When true the scheduler will sync the latest video periodically.
+              example: true
+            auto_publish:
+              type: boolean
+              description: When true the system will enqueue a job to publish generated shorts of this channel.
+              example: false
+  responses:
+    '200':
+      $ref: '../Response/GetChannel.yaml'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '404':
+      $ref: '../../../Shared/Response/404.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

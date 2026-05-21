@@ -4,6 +4,10 @@ declare(strict_types = 1);
 
 namespace Canalizador\YouTube\Video\Infrastructure\Repositories\Eloquent;
 
+use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Pagination;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Search;
+use Canalizador\Shared\Shared\Domain\ValueObjects\Total;
 use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\YouTube\Video\Domain\Entities\Video;
 use Canalizador\YouTube\Video\Domain\Entities\VideoCollection;
@@ -12,6 +16,7 @@ use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
 use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
 use Canalizador\YouTube\Video\Domain\ValueObjects\PlatformId;
+use Illuminate\Database\Eloquent\Builder;
 use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
 use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
 use Canalizador\YouTube\Video\Infrastructure\DAO\VideoDAO;
@@ -72,6 +77,98 @@ final class EloquentVideoRepository implements VideoRepository
         }
 
         return PlatformId::fromString($model->platform_id);
+    }
+
+    public function findByChannelId(
+        ChannelId $channelId,
+        ?Category $category = null,
+        ?Pagination $pagination = null,
+    ): VideoCollection {
+        $query = VideoDAO::with('shorts')
+            ->where('channel_id', $channelId->value())
+            ->orderBy('published_at', 'desc')
+            ->orderBy('id');
+
+        if ($category !== null) {
+            $query->where('category', $category->value);
+        }
+
+        if ($pagination !== null) {
+            $query->limit($pagination->limit())->offset($pagination->offset());
+        }
+
+        $videos = $query->get()->map(fn (VideoDAO $model) => $this->toEntity($model))->all();
+
+        return new VideoCollection($videos);
+    }
+
+    public function countByChannelId(ChannelId $channelId, ?Category $category = null): Total
+    {
+        $query = VideoDAO::where('channel_id', $channelId->value());
+
+        if ($category !== null) {
+            $query->where('category', $category->value);
+        }
+
+        return Total::fromInt($query->count());
+    }
+
+    public function findByUserId(
+        IntegerId $userId,
+        ?Category $category = null,
+        ?ChannelId $channelId = null,
+        ?Search $search = null,
+        ?Pagination $pagination = null,
+    ): VideoCollection {
+        $query = $this->userVideosQuery($userId, $category, $channelId, $search)
+            ->orderBy('youtube_videos.published_at', 'desc')
+            ->orderBy('youtube_videos.id')
+            ->with('shorts');
+
+        if ($pagination !== null) {
+            $query->limit($pagination->limit())->offset($pagination->offset());
+        }
+
+        $videos = $query->get()->map(fn (VideoDAO $model) => $this->toEntity($model))->all();
+
+        return new VideoCollection($videos);
+    }
+
+    public function countByUserId(
+        IntegerId $userId,
+        ?Category $category = null,
+        ?ChannelId $channelId = null,
+        ?Search $search = null,
+    ): Total {
+        return Total::fromInt(
+            $this->userVideosQuery($userId, $category, $channelId, $search)->count()
+        );
+    }
+
+    private function userVideosQuery(
+        IntegerId $userId,
+        ?Category $category,
+        ?ChannelId $channelId,
+        ?Search $search,
+    ): Builder {
+        $query = VideoDAO::query()
+            ->select('youtube_videos.*')
+            ->join('youtube_channels', 'youtube_channels.id', '=', 'youtube_videos.channel_id')
+            ->where('youtube_channels.user_id', $userId->value());
+
+        if ($category !== null) {
+            $query->where('youtube_videos.category', $category->value);
+        }
+
+        if ($channelId !== null) {
+            $query->where('youtube_videos.channel_id', $channelId->value());
+        }
+
+        if ($search !== null) {
+            $query->where('youtube_videos.title', 'like', '%' . $search->value() . '%');
+        }
+
+        return $query;
     }
 
     public function save(Video $video): void

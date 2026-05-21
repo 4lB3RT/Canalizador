@@ -1,0 +1,34 @@
+post:
+  tags: [YouTube - Channel]
+  operationId: startChannelOAuth
+  summary: Start Google OAuth flow to link a channel
+  description: >-
+    Creates a temporary OAuth state and returns the Google authorization URL.
+    The frontend should open that URL in a popup. The popup completes the OAuth
+    flow and posts a message with the resulting `state` back to the opener.
+  security:
+    - ApiToken: []
+  responses:
+    '200':
+      description: OAuth state created
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [data]
+            properties:
+              data:
+                type: object
+                required: [state, url]
+                properties:
+                  state:
+                    type: string
+                    example: 'YQ8B2v...'
+                  url:
+                    type: string
+                    format: uri
+                    example: 'https://accounts.google.com/o/oauth2/auth?...'
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

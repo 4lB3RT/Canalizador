@@ -6,6 +6,7 @@ namespace Canalizador\YouTube\Shared\Infrastructure\ClientAPI;
 
 use App\Services\GoogleClientService;
 use Canalizador\YouTube\Channel\Domain\Entities\Channel;
+use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Canalizador\YouTube\Shared\Domain\Services\YouTubeServiceFactory;
 use DateInterval;
 use DateTimeImmutable;

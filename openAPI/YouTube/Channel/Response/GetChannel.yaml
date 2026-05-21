@@ -1,0 +1,75 @@
+description: Channel detail owned by the authenticated user
+content:
+  application/json:
+    schema:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required:
+            - id
+            - user_id
+            - title
+            - description
+            - published_at
+            - country
+            - view_count
+            - subscriber_count
+            - video_count
+            - privacy_status
+            - channel_brand
+          properties:
+            id:
+              type: string
+              description: YouTube channel ID
+              example: 'UCxxxxxxxxxxxxxxxxxxxxxx'
+            user_id:
+              type: integer
+              example: 42
+            title:
+              type: string
+              example: 'DevCast'
+            description:
+              type: string
+              example: 'Podcast semanal sobre desarrollo web'
+            custom_url:
+              type: string
+              nullable: true
+              example: '@devcast'
+            published_at:
+              type: string
+              description: 'Format: Y-m-d H:i:s'
+              example: '2024-03-15 10:23:00'
+            thumbnail_url:
+              type: string
+              nullable: true
+              format: uri
+              example: 'https://yt3.googleusercontent.com/abc.jpg'
+            country:
+              type: string
+              example: 'ES'
+            view_count:
+              type: integer
+              example: 12345
+            subscriber_count:
+              type: integer
+              example: 678
+            video_count:
+              type: integer
+              example: 42
+            privacy_status:
+              type: string
+              enum: [public, private, unlisted]
+              example: 'public'
+            channel_brand:
+              type: string
+              example: 'DevCast'
+            auto_sync:
+              type: boolean
+              description: Whether the scheduler periodically syncs this channel.
+              example: false
+            auto_publish:
+              type: boolean
+              description: Whether generated shorts of this channel are auto-published via queue.
+              example: false

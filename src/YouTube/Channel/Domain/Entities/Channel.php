@@ -28,6 +28,8 @@ final class Channel
         private readonly PrivacyStatus $privacyStatus,
         private Country               $country,
         private ChannelBrand          $channelBrand,
+        private bool                  $autoSync = false,
+        private bool                  $autoPublish = false,
         private readonly ?Url         $customUrl = null,
         private readonly ?Url         $thumbnailUrl = null,
     ) {
@@ -123,6 +125,26 @@ final class Channel
         $this->title = $title;
     }
 
+    public function autoSync(): bool
+    {
+        return $this->autoSync;
+    }
+
+    public function updateAutoSync(bool $autoSync): void
+    {
+        $this->autoSync = $autoSync;
+    }
+
+    public function autoPublish(): bool
+    {
+        return $this->autoPublish;
+    }
+
+    public function updateAutoPublish(bool $autoPublish): void
+    {
+        $this->autoPublish = $autoPublish;
+    }
+
     public function toArray(): array
     {
         return [
@@ -139,6 +161,8 @@ final class Channel
             'video_count' => $this->videoCount,
             'privacy_status' => $this->privacyStatus->value,
             'channel_brand' => $this->channelBrand->value(),
+            'auto_sync' => $this->autoSync,
+            'auto_publish' => $this->autoPublish,
         ];
     }
 }

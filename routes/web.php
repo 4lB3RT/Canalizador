@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\GoogleChannelOAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,9 @@ Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name(
 
 Route::get('/auth/google/login', [LoginController::class, 'handleGoogleLogin'])->name('auth.google.login');
 Route::get('/auth/google/register', [RegisterController::class, 'handleGoogleRegister'])->name('auth.google.register');
+
+Route::get('/auth/google/channel/callback', [GoogleChannelOAuthController::class, 'callback'])
+    ->name('auth.google.channel.callback');
 
 Route::get('/auth/google/callback', function (Request $request) {
     $oauthType = session('oauth_type', 'register');

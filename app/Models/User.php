@@ -15,6 +15,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar_path',
         'email_verified_at',
         'google_access_token',
         'google_refresh_token',
@@ -51,6 +52,6 @@ class User extends Authenticatable
 
     public static function findByApiToken(string $token): ?self
     {
-        return self::where('api_token', $token)->first();
+        return self::where('api_token', hash('sha256', $token))->first();
     }
 }

@@ -1,0 +1,56 @@
+post:
+  tags: [YouTube - Video]
+  operationId: syncVideo
+  summary: Download and process a YouTube video synchronously
+  description: >-
+    Downloads the video identified by `platform_id`, extracts its audio and
+    generates a transcription. Requires the authenticated user to own the
+    channel that hosts the video; otherwise responds 404. The request blocks
+    until processing finishes (can take several minutes).
+  security:
+    - ApiToken: []
+    - GoogleToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [platform_id]
+          properties:
+            platform_id:
+              type: string
+              description: YouTube video ID.
+              minLength: 5
+              maxLength: 50
+              example: 'dQw4w9WgXcQ'
+  responses:
+    '200':
+      description: Video downloaded, processed and stored.
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [data]
+            properties:
+              data:
+                type: object
+                required: [platform_id, status]
+                properties:
+                  platform_id:
+                    type: string
+                    example: 'dQw4w9WgXcQ'
+                  status:
+                    type: string
+                    enum: [synced]
+                    example: synced
+    '401':
+      $ref: '../../../Shared/Response/401.yaml'
+    '403':
+      $ref: '../../../Shared/Response/403.yaml'
+    '404':
+      $ref: '../../../Shared/Response/404.yaml'
+    '422':
+      $ref: '../../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../../Shared/Response/500.yaml'

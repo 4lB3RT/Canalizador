@@ -45,6 +45,8 @@ class ChannelDataTransformer
             privacyStatus:   PrivacyStatus::from($data['privacy_status']),
             country:         Country::fromString($data['country']),
             channelBrand:    ChannelBrand::fromString($data['channel_brand']),
+            autoSync:        (bool) ($data['auto_sync'] ?? false),
+            autoPublish:     (bool) ($data['auto_publish'] ?? false),
             customUrl:       isset($data['custom_url'])    ? Url::fromString($data['custom_url'])          : null,
             thumbnailUrl:    isset($data['thumbnail_url']) ? Url::fromString($data['thumbnail_url'])       : null,
         );

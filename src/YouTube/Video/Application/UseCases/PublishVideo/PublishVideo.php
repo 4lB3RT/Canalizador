@@ -62,12 +62,30 @@ final readonly class PublishVideo
 
     private function publishSlot(Video $short): DateTime
     {
-        $occupiedSlots = $this->occupiedSlots($short);
+        $scheduled     = $this->externalVideoRepository->findScheduledShortsByChannelId($short->channelId());
         $timezone      = new DateTimeZone(self::PUBLISH_TIMEZONE);
-        $now           = $this->clock->now()->value()->setTimezone($timezone);
-        $day           = $now->setTime(0, 0, 0);
+        $occupiedSlots = [];
+        $parentDays    = [];
+
+        foreach ($scheduled->items() as $scheduledShort) {
+            $slot                                 = $scheduledShort->publishedAt()->value()->setTimezone($timezone);
+            $occupiedSlots[$this->slotKey($slot)] = true;
+
+            $parentId = $scheduledShort->parentId()?->value();
+            if ($parentId !== null) {
+                $parentDays[$slot->format('Y-m-d')][$parentId] = true;
+            }
+        }
+
+        $now          = $this->clock->now()->value()->setTimezone($timezone);
+        $day          = $now->setTime(0, 0, 0);
+        $newParentId  = $short->parentId()->value();
 
         for ($i = 0; $i < 365; $i++, $day = $day->modify('+1 day')) {
+            if (isset($parentDays[$day->format('Y-m-d')][$newParentId])) {
+                continue;
+            }
+
             foreach (self::LANE_HOURS as $hour) {
                 $slot = $day->setTime($hour, 0, 0);
 
@@ -82,23 +100,6 @@ final readonly class PublishVideo
         }
 
         throw YouTubeOperationFailed::apiError('No available publishing slot found within the next year.');
-    }
-
-    /**
-     * @return array<string, true>
-     */
-    private function occupiedSlots(Video $short): array
-    {
-        $scheduled = $this->externalVideoRepository->findScheduledShortsByChannelId($short->channelId());
-        $timezone  = new DateTimeZone(self::PUBLISH_TIMEZONE);
-        $occupied  = [];
-
-        foreach ($scheduled->items() as $scheduledShort) {
-            $slot = $scheduledShort->publishedAt()->value()->setTimezone($timezone);
-            $occupied[$this->slotKey($slot)] = true;
-        }
-
-        return $occupied;
     }
 
     private function slotKey(DateTimeImmutable $slot): string

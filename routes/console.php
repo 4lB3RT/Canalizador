@@ -11,3 +11,7 @@ Artisan::command('inspire', function () {
 Schedule::command('youtube:sync-last-video', [config('services.youtube.channel_id')])
     ->hourly()
     ->withoutOverlapping();
+
+Schedule::command('youtube:sync-channels')
+    ->everyFifteenMinutes()
+    ->withoutOverlapping();
