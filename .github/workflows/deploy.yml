@@ -15,12 +15,12 @@ jobs:
       - name: Decrypt .env.prod
         env:
           ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          ANSIBLE_CONFIG: /dev/null
         run: |
-          echo "$ANSIBLE_VAULT_PASSWORD" > /tmp/.vaultpass
-          ansible-vault decrypt --vault-password-file=/tmp/.vaultpass \
-            --output=.env.decrypted docker/prod/.env.prod
-          rm /tmp/.vaultpass
+          mkdir -p .ansible
+          echo "$ANSIBLE_VAULT_PASSWORD" > .ansible/vault-pass
+          chmod 600 .ansible/vault-pass
+          ansible-vault decrypt --output=.env.decrypted docker/prod/.env.prod
+          rm -f .ansible/vault-pass
 
       - name: Pack application code
         run: |
