@@ -1,0 +1,26 @@
+description: Updated profile of the authenticated user
+content:
+  application/json:
+    schema:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [id, name, email]
+          properties:
+            id:
+              type: integer
+              example: 42
+            name:
+              type: string
+              example: 'Albert Botet'
+            email:
+              type: string
+              format: email
+              example: 'albert@example.com'
+            avatar_url:
+              type: string
+              format: uri
+              nullable: true
+              example: 'http://localhost:8010/storage/avatars/42/file.jpg'

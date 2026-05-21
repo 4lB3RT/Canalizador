@@ -1,0 +1,39 @@
+description: Application header data for the authenticated user
+content:
+  application/json:
+    schema:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [user, google_linked, channels_count]
+          properties:
+            user:
+              type: object
+              required: [id, name, email]
+              properties:
+                id:
+                  type: integer
+                  example: 42
+                name:
+                  type: string
+                  example: 'Albert Botet'
+                email:
+                  type: string
+                  format: email
+                  example: 'albert@canalizador.dev'
+                avatar_url:
+                  type: string
+                  format: uri
+                  nullable: true
+                  description: Public URL of the user's avatar (null if not uploaded).
+                  example: 'http://localhost:8010/storage/avatars/42/file.jpg'
+            google_linked:
+              type: boolean
+              description: Whether the user has linked a Google account (YouTube OAuth).
+              example: true
+            channels_count:
+              type: integer
+              description: Total number of channels owned by the user.
+              example: 4

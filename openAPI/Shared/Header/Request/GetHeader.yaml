@@ -1,0 +1,18 @@
+get:
+  tags: [Shared - Header]
+  operationId: getHeader
+  summary: Get authenticated user's header data
+  description: >-
+    Returns the user and aggregated data used by the application shell
+    (sidebar, header, etc.). Intended to be called on every page load.
+  security:
+    - ApiToken: []
+  responses:
+    '200':
+      $ref: '../Response/GetHeader.yaml'
+    '401':
+      $ref: '../../Shared/Response/401.yaml'
+    '404':
+      $ref: '../../Shared/Response/404.yaml'
+    '500':
+      $ref: '../../Shared/Response/500.yaml'

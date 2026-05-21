@@ -1,0 +1,55 @@
+post:
+  tags: [Shared - Profile]
+  operationId: updateProfile
+  summary: Update authenticated user's profile
+  description: >-
+    Updates the authenticated user's profile. All fields are optional;
+    only the ones present in the multipart body are modified. Sending the
+    `avatar` field replaces the existing avatar (previous file is removed).
+    To change the password, send `password` and `password_confirmation`.
+  security:
+    - ApiToken: []
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              minLength: 1
+              maxLength: 120
+              example: 'Albert Botet'
+            email:
+              type: string
+              format: email
+              example: 'albert@example.com'
+            password:
+              type: string
+              minLength: 8
+              maxLength: 200
+              description: New password. Requires `current_password` and `password_confirmation`.
+              example: 'new-strong-password'
+            password_confirmation:
+              type: string
+              example: 'new-strong-password'
+            current_password:
+              type: string
+              description: Required when `password` is sent. Must match the user's current password.
+              example: 'current-password'
+            avatar:
+              type: string
+              format: binary
+              description: jpg/jpeg/png/webp up to 5 MB.
+  responses:
+    '200':
+      $ref: '../Response/UpdateProfile.yaml'
+    '401':
+      $ref: '../../Shared/Response/401.yaml'
+    '404':
+      $ref: '../../Shared/Response/404.yaml'
+    '422':
+      $ref: '../../Shared/Response/422.yaml'
+    '500':
+      $ref: '../../Shared/Response/500.yaml'

@@ -4,17 +4,27 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use Canalizador\Shared\Header\Application\UseCases\GetHeader\GetHeader;
+use Canalizador\Shared\Header\Domain\UserHeaderRepository;
+use Canalizador\Shared\Header\Infrastructure\Repositories\Eloquent\EloquentUserHeaderRepository;
+use Canalizador\Shared\Profile\Application\UseCases\UpdateProfile\UpdateProfile;
+use Canalizador\Shared\Profile\Domain\ProfileRepository;
+use Canalizador\Shared\Profile\Infrastructure\Repositories\Eloquent\EloquentProfileRepository;
 use Canalizador\Shared\Shared\Domain\Events\EventBus;
 use Canalizador\Shared\Shared\Domain\Services\Clock;
 use Canalizador\Shared\Shared\Domain\Services\HttpClient;
 use Canalizador\Shared\Shared\Domain\Services\HttpResponseValidator;
+use Canalizador\Shared\Shared\Domain\Services\PasswordHasher;
 use Canalizador\Shared\Shared\Infrastructure\Events\EventHandlerRegistry;
 use Canalizador\Shared\Shared\Infrastructure\Events\LaravelQueueEventBus;
 use Canalizador\Shared\Shared\Infrastructure\Services\HttpErrorExtractor;
 use Canalizador\Shared\Shared\Infrastructure\Services\HttpResponseValidator as HttpResponseValidatorImpl;
 use Canalizador\Shared\Shared\Infrastructure\Services\LaravelHttpClient;
+use Canalizador\Shared\Shared\Infrastructure\Services\LaravelPasswordHasher;
 use Canalizador\Shared\Shared\Infrastructure\Services\SystemClock;
+use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -43,6 +53,30 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EventBus::class, LaravelQueueEventBus::class);
         $this->app->singleton(EventHandlerRegistry::class, function ($app) {
             return new EventHandlerRegistry($app);
+        });
+
+        $this->app->bind(UserHeaderRepository::class, EloquentUserHeaderRepository::class);
+
+        $this->app->bind(GetHeader::class, function ($app) {
+            return new GetHeader(
+                userHeaderRepository: $app->make(UserHeaderRepository::class),
+                channelRepository:    $app->make(ChannelRepository::class),
+            );
+        });
+
+        $this->app->bind(PasswordHasher::class, function ($app) {
+            return new LaravelPasswordHasher(
+                hasher: $app->make(Hasher::class),
+            );
+        });
+
+        $this->app->bind(ProfileRepository::class, EloquentProfileRepository::class);
+
+        $this->app->bind(UpdateProfile::class, function ($app) {
+            return new UpdateProfile(
+                profileRepository: $app->make(ProfileRepository::class),
+                passwordHasher:    $app->make(PasswordHasher::class),
+            );
         });
     }
 }
