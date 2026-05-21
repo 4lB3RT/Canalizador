@@ -16,8 +16,34 @@ echo ""
 
 # 1. Stop & clean
 info "Stopping containers and removing volumes..."
-docker compose -f "$DOCKER_DIR/docker-compose.yml" down --volumes --remove-orphans --rmi local 2>/dev/null || true
+docker compose -f "$DOCKER_DIR/dev/docker-compose.yml" down --volumes --remove-orphans --rmi local
+docker ps -a --filter "name=canalizador" -q | xargs -r docker rm -f
 green "Containers, volumes and images removed"
+
+# 1a. Remove orphaned networks claiming our subnet (e.g. from previous project names)
+info "Checking for orphaned networks on subnet 10.7.0.0/16..."
+ORPHAN_NETS=$(docker network ls --filter driver=bridge --format '{{.Name}}' | {
+    while read net; do
+        subnet=$(docker network inspect "$net" --format '{{range .IPAM.Config}}{{.Subnet}}{{end}}' 2>/dev/null || true)
+        if [ "$subnet" = "10.7.0.0/16" ] && [ "$net" != "canalizador_canalizador" ]; then
+            echo "$net"
+        fi
+    done
+} || true)
+if [ -n "$ORPHAN_NETS" ]; then
+    for net in $ORPHAN_NETS; do
+        # Force-remove any containers still attached (from prior project names)
+        attached=$(docker network inspect "$net" --format '{{range .Containers}}{{.Name}} {{end}}' 2>/dev/null || true)
+        if [ -n "$attached" ]; then
+            info "Removing containers attached to $net: $attached"
+            echo "$attached" | xargs docker rm -f >/dev/null 2>&1 || true
+        fi
+        docker network rm "$net" >/dev/null 2>&1 || red "Failed to remove network $net"
+    done
+    green "Orphaned networks removed: $(echo "$ORPHAN_NETS" | tr '\n' ' ')"
+else
+    green "No orphaned networks found"
+fi
 
 # 1b. Clean storage (regenerable artifacts) and Laravel caches
 info "Cleaning storage artifacts and Laravel caches..."
@@ -37,12 +63,12 @@ green "Storage artifacts and caches cleaned"
 
 # 2. Build (no cache)
 info "Building Docker images (no cache)..."
-docker compose -f "$DOCKER_DIR/docker-compose.yml" build --no-cache
+docker compose -f "$DOCKER_DIR/dev/docker-compose.yml" build --no-cache
 green "Docker images built"
 
 # 3. Up
 info "Starting containers..."
-docker compose -f "$DOCKER_DIR/docker-compose.yml" up -d
+docker compose -f "$DOCKER_DIR/dev/docker-compose.yml" up -d
 green "Containers started"
 
 # 4. Install dependencies

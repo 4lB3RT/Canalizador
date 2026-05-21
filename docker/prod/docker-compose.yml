@@ -1,0 +1,111 @@
+name: canalizador
+
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: nginx_canalizador_prod
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ${NGINX_CONF_FILE:-./nginx.no-tls.conf}:/etc/nginx/conf.d/default.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /opt/canalizador/web:/var/www/canalizador:ro
+    depends_on:
+      - php
+    networks:
+      canalizador:
+
+  php:
+    image: ${PHP_IMAGE}
+    container_name: php_canalizador_prod
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    volumes:
+      - php_storage:/code/storage
+      - /tmp/canalizador:/tmp/canalizador
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      canalizador:
+
+  worker:
+    image: ${PHP_IMAGE}
+    container_name: worker_canalizador_prod
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    volumes:
+      - php_storage:/code/storage
+      - /tmp/canalizador:/tmp/canalizador
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    working_dir: /code
+    command: >
+      sh -c "php artisan queue:work rabbitmq
+        --queue=youtube.video.created,youtube.short.created,video.created,clip.created,clip.generated,clip.completed,video.all_clips_completed
+        --tries=3 --timeout=300 --sleep=3"
+    networks:
+      canalizador:
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_canalizador_prod
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - /opt/canalizador/data/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root --password=$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      canalizador:
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis_canalizador_prod
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - /opt/canalizador/data/redis:/data
+    networks:
+      canalizador:
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq_canalizador_prod
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+    volumes:
+      - /opt/canalizador/data/rabbitmq:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      canalizador:
+
+volumes:
+  php_storage:
+
+networks:
+  canalizador:
+    driver: bridge

@@ -1,0 +1,129 @@
+name: canalizador
+
+services:
+  nginx_canalizador:
+    image: nginx:latest
+    container_name: nginx_${PROJECT_NAME:?PROJECT_NAME required in docker/dev/.env}
+    ports:
+      - "${NGINX_PORT:-8010}:80"
+    expose:
+      - "${NGINX_PORT:-8010}"
+    volumes:
+      - ../../:/code
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php_canalizador
+    networks:
+      canalizador:
+        ipv4_address: 10.7.0.5
+  php_canalizador:
+    build:
+      context: ../..
+      dockerfile: docker/php/Dockerfile
+      target: dev
+    container_name: php_${PROJECT_NAME:?PROJECT_NAME required in docker/dev/.env}
+    volumes:
+      - ../../:/code
+      - ../php/php.ini:/usr/local/etc/php/php.ini
+      - /tmp:/tmp
+    ports:
+      - "${PHP_PORT:-9000}:9000"
+    expose:
+      - "${PHP_PORT:-9000}"
+    networks:
+      canalizador:
+        ipv4_address: 10.7.0.7
+    depends_on:
+      - mysql_canalizador
+      - redis_canalizador
+      - rabbitmq_canalizador
+    dns:
+        - 8.8.8.8
+        - 8.8.4.4
+  mysql_canalizador:
+      image: mysql:8.0
+      container_name: mysql_${PROJECT_NAME:?PROJECT_NAME required in docker/dev/.env}
+      command: --default-authentication-plugin=mysql_native_password
+      restart: always
+      ports:
+          - "${MYSQL_PORT:-3307}:3306"
+      expose:
+          - "${MYSQL_PORT:-3307}"
+      environment:
+          - MYSQL_DATABASE=${MYSQL_DATABASE:?MYSQL_DATABASE required in docker/dev/.env}
+          - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD:?MYSQL_PASSWORD required in docker/dev/.env}
+      volumes:
+          - mysql_data:/var/lib/mysql
+      healthcheck:
+          test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root --password=$$MYSQL_ROOT_PASSWORD"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
+      networks:
+          canalizador:
+              ipv4_address: 10.7.0.6
+  redis_canalizador:
+      image: redis:latest
+      container_name: redis_${PROJECT_NAME:?PROJECT_NAME required in docker/dev/.env}
+      ports:
+          - "${REDIS_PORT:-6379}:6379"
+      expose:
+          - "${REDIS_PORT:-6379}"
+      volumes:
+          - redis_data:/data
+      networks:
+          canalizador:
+              ipv4_address: 10.7.0.10
+  rabbitmq_canalizador:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq_${PROJECT_NAME:?PROJECT_NAME required in docker/dev/.env}
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-guest}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-guest}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      canalizador:
+        ipv4_address: 10.7.0.11
+  worker_canalizador:
+    build:
+      context: ../..
+      dockerfile: docker/php/Dockerfile
+      target: dev
+    container_name: worker_${PROJECT_NAME:?PROJECT_NAME required in docker/dev/.env}
+    volumes:
+      - ../../:/code
+      - /tmp:/tmp
+    depends_on:
+      mysql_canalizador:
+        condition: service_healthy
+      rabbitmq_canalizador:
+        condition: service_healthy
+    restart: unless-stopped
+    working_dir: /code
+    command: sh -c "php artisan queue:work rabbitmq --queue=youtube.video.created,youtube.short.created,video.created,clip.created,clip.generated,clip.completed,video.all_clips_completed --tries=3 --timeout=300 --sleep=3"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    networks:
+      canalizador:
+        ipv4_address: 10.7.0.12
+volumes:
+  rabbitmq_data:
+  mysql_data:
+  redis_data:
+networks:
+  canalizador:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.7.0.0/16
+          gateway: 10.7.0.1

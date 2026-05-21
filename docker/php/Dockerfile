@@ -1,26 +1,31 @@
-# Set master image
-FROM php:8.5-fpm-alpine
+ARG PHP_BASE_TAG=php-8.5-v1
+FROM europe-west1-docker.pkg.dev/galvanic-camp-493316-i2/canalizador-images/php-base:${PHP_BASE_TAG} AS base
 
-# Install GD dependencies and extension
-RUN apk add --no-cache \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    libwebp-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install gd
+# ---------------------------------------------------------------------------
+FROM base AS dev
 
-RUN apk add --no-cache linux-headers $PHPIZE_DEPS php-pear imagemagick imagemagick-dev
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql sockets exif
+# ---------------------------------------------------------------------------
+FROM base AS prod
 
-RUN pecl install xdebug imagick \
-    && mkdir -p /usr/local/etc/php/conf.d \
-    && docker-php-ext-enable xdebug imagick
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 
-RUN curl https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
-RUN composer self-update
+COPY . .
 
-RUN apk add --no-cache python3 py3-pip ffmpeg yt-dlp fontconfig ttf-dejavu font-noto && fc-cache -f
+RUN composer dump-autoload --optimize --no-dev \
+    && php artisan package:discover --ansi
 
-WORKDIR /code
+RUN chown -R www-data:www-data /code/storage /code/bootstrap/cache
+
+RUN { \
+    echo 'opcache.enable=1'; \
+    echo 'opcache.memory_consumption=192'; \
+    echo 'opcache.max_accelerated_files=20000'; \
+    echo 'opcache.validate_timestamps=0'; \
+} > /usr/local/etc/php/conf.d/opcache.ini
+
+EXPOSE 9000
+CMD ["php-fpm"]
