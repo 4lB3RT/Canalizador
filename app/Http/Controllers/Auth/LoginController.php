@@ -179,6 +179,22 @@ final class LoginController
                 ]);
             }
 
+            // SPA flow: Google returns here via a browser navigation (not JSON),
+            // so hand the token to the front-end. We pass it in the URL fragment
+            // (#…) rather than the query string so it never reaches the server,
+            // logs or the Referer header. The SPA reads it on boot and stores it.
+            $frontend = config('services.youtube_analytics.frontend_redirect_uri');
+            if ($frontend) {
+                $params = http_build_query([
+                    'token' => $apiToken,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'id' => $user->id,
+                ]);
+
+                return redirect()->away(rtrim($frontend, '/') . '/auth/callback#' . $params);
+            }
+
             return redirect()->intended('/')->with('success', '¡Bienvenido de nuevo!');
 
         } catch (\Exception $e) {
@@ -192,6 +208,11 @@ final class LoginController
                     'error' => 'Error procesando la autenticación',
                     'message' => $e->getMessage(),
                 ], 500);
+            }
+
+            $frontend = config('services.youtube_analytics.frontend_redirect_uri');
+            if ($frontend) {
+                return redirect()->away(rtrim($frontend, '/') . '/login#error=oauth_failed');
             }
 
             return redirect()->route('login')->with('error', 'Error procesando la autenticación: ' . $e->getMessage());
