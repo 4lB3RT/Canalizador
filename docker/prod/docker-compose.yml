@@ -1,6 +1,7 @@
 name: canalizador
 
 x-php-image: &php-image europe-west1-docker.pkg.dev/galvanic-camp-493316-i2/canalizador-images/php-base:php-8.5-v1
+x-mysql-image: &mysql-image europe-west1-docker.pkg.dev/galvanic-camp-493316-i2/canalizador-images/mysql:mysql-8.0-v1
 
 services:
   nginx:
@@ -67,13 +68,13 @@ services:
       canalizador:
 
   mysql:
-    image: mysql:8.0
+    image: *mysql-image
     container_name: mysql_canalizador_prod
     restart: unless-stopped
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - /opt/canalizador/data/mysql:/var/lib/mysql
     healthcheck:

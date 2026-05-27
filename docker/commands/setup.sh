@@ -78,7 +78,7 @@ green "Composer dependencies installed"
 
 # 5. Wait for services
 info "Waiting for MySQL..."
-until docker exec php_canalizador php -r "new PDO('mysql:host=mysql_canalizador;port=3306', 'root', getenv('MYSQL_PASSWORD') ?: 'root');" 2>/dev/null; do
+until docker exec php_canalizador php -r "new PDO('mysql:host=mysql_canalizador;port=3306', 'root', getenv('MYSQL_ROOT_PASSWORD') ?: 'root');" 2>/dev/null; do
     sleep 2
 done
 green "MySQL ready"
