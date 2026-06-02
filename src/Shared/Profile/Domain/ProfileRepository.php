@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Profile\Domain;
+namespace Helmreel\Shared\Profile\Domain;
 
-use Canalizador\Shared\Profile\Domain\Exceptions\EmailAlreadyTaken;
-use Canalizador\Shared\Profile\Domain\Exceptions\ProfileNotFound;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Profile\Domain\Exceptions\EmailAlreadyTaken;
+use Helmreel\Shared\Profile\Domain\Exceptions\ProfileNotFound;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 
 interface ProfileRepository
 {

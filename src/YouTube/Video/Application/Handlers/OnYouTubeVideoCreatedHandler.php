@@ -2,16 +2,16 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Application\Handlers;
+namespace Helmreel\YouTube\Video\Application\Handlers;
 
-use Canalizador\Shared\Shared\Domain\Events\DomainEvent;
-use Canalizador\Shared\Shared\Domain\Events\DomainEventHandler;
-use Canalizador\YouTube\Video\Application\UseCases\GenerateShort\GenerateShort;
-use Canalizador\YouTube\Video\Application\UseCases\GenerateShort\GenerateShortRequest;
-use Canalizador\YouTube\Video\Domain\Events\VideoCreated;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\Shared\Shared\Domain\Events\DomainEvent;
+use Helmreel\Shared\Shared\Domain\Events\DomainEventHandler;
+use Helmreel\YouTube\Video\Application\UseCases\GenerateShort\GenerateShort;
+use Helmreel\YouTube\Video\Application\UseCases\GenerateShort\GenerateShortRequest;
+use Helmreel\YouTube\Video\Domain\Events\VideoCreated;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
 
 final readonly class OnYouTubeVideoCreatedHandler implements DomainEventHandler
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Domain\Repositories;
+namespace Helmreel\VideoProduction\Video\Domain\Repositories;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Url;
 
 interface VideoExtender
 {

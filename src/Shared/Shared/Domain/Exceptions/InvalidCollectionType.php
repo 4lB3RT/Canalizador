@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Shared\Shared\Domain\Exceptions;
+namespace Helmreel\Shared\Shared\Domain\Exceptions;
 
 use VendingMachine\Shared\Domain\Errors\Essentials\BadRequest;
 

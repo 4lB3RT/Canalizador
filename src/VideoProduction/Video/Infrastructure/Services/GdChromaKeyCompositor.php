@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Infrastructure\Services;
+namespace Helmreel\VideoProduction\Video\Infrastructure\Services;
 
 final class GdChromaKeyCompositor
 {

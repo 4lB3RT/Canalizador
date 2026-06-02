@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Profile\Domain\Exceptions;
+namespace Helmreel\Shared\Profile\Domain\Exceptions;
 
-use Canalizador\Shared\Shared\Domain\Exceptions\EntityNotFound;
+use Helmreel\Shared\Shared\Domain\Exceptions\EntityNotFound;
 
 final class ProfileNotFound extends EntityNotFound
 {

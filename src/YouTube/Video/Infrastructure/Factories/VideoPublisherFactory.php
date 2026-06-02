@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Factories;
+namespace Helmreel\YouTube\Video\Infrastructure\Factories;
 
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Domain\Factories\VideoPublisherFactory as VideoPublisherFactoryInterface;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoPublisher;
-use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YoutubeVideoPublisher;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Domain\Factories\VideoPublisherFactory as VideoPublisherFactoryInterface;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoPublisher;
+use Helmreel\YouTube\Video\Infrastructure\Repositories\YouTube\YoutubeVideoPublisher;
 
 final class VideoPublisherFactory implements VideoPublisherFactoryInterface
 {

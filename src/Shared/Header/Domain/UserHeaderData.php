@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Header\Domain;
+namespace Helmreel\Shared\Header\Domain;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 
 final readonly class UserHeaderData
 {

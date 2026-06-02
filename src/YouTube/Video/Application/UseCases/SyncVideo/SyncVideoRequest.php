@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\SyncVideo;
+namespace Helmreel\YouTube\Video\Application\UseCases\SyncVideo;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\YouTube\Video\Domain\ValueObjects\PlatformId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\YouTube\Video\Domain\ValueObjects\PlatformId;
 
 final readonly class SyncVideoRequest
 {

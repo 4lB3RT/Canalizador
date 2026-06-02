@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\SyncLastVideo;
+namespace Helmreel\YouTube\Video\Application\UseCases\SyncLastVideo;
 
 final readonly class SyncLastVideoRequest
 {

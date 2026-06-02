@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Domain\Factories;
+namespace Helmreel\VideoProduction\Video\Domain\Factories;
 
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Canalizador\VideoProduction\Script\Domain\Entities\Script;
-use Canalizador\VideoProduction\Video\Domain\Entities\Video;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
+use Helmreel\VideoProduction\Script\Domain\Entities\Script;
+use Helmreel\VideoProduction\Video\Domain\Entities\Video;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
 
 final readonly class VideoFactory
 {

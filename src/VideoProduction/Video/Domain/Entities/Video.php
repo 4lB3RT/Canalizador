@@ -2,18 +2,18 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\VideoProduction\Video\Domain\Entities;
+namespace Helmreel\VideoProduction\Video\Domain\Entities;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Canalizador\VideoProduction\Script\Domain\Entities\Script;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
+use Helmreel\VideoProduction\Script\Domain\Entities\Script;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
 
 final class Video
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Agents;
+namespace Helmreel\YouTube\Video\Infrastructure\Agents;
 
-use Canalizador\YouTube\Video\Infrastructure\Tools\AudioExtractor;
-use Canalizador\YouTube\Video\Infrastructure\Tools\AudioTranscription;
-use Canalizador\YouTube\Video\Infrastructure\Tools\VideoDownloader;
+use Helmreel\YouTube\Video\Infrastructure\Tools\AudioExtractor;
+use Helmreel\YouTube\Video\Infrastructure\Tools\AudioTranscription;
+use Helmreel\YouTube\Video\Infrastructure\Tools\VideoDownloader;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Facades\Prism;
 use Prism\Prism\Text\PendingRequest as PendingTextRequest;

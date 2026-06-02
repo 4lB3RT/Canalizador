@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Image\Domain\Entities;
+namespace Helmreel\VideoProduction\Image\Domain\Entities;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Image\Domain\ValueObjects\ImageId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\VideoProduction\Image\Domain\ValueObjects\ImageId;
 
 final class Image
 {

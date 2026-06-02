@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\HealthCheck\Application\UseCases\GetHealth;
+namespace Helmreel\Shared\HealthCheck\Application\UseCases\GetHealth;
 
-use Canalizador\Shared\HealthCheck\Domain\ServiceStatus;
+use Helmreel\Shared\HealthCheck\Domain\ServiceStatus;
 
 final readonly class GetHealthResponse
 {

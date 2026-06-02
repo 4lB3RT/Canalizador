@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Domain\Entities;
+namespace Helmreel\YouTube\Channel\Domain\Entities;
 
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use DateTimeImmutable;
 
 final readonly class ChannelGoogleToken

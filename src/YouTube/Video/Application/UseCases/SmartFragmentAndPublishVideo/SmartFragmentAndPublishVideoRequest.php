@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo;
+namespace Helmreel\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo;
 
 final readonly class SmartFragmentAndPublishVideoRequest
 {

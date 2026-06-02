@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo;
+namespace Helmreel\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Language;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\YouTube\Transcription\Domain\Collections\SentenceCollection;
-use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\EndTime;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\Sentence;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\StartTime;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\Text as TranscriptionText;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Domain\Factories\VideoPublisherFactory;
-use Canalizador\YouTube\Video\Domain\Repositories\AudioExtractor;
-use Canalizador\YouTube\Video\Domain\Repositories\SmartVideoFragmenter;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoTranscriber;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
-use Canalizador\Youtube\Video\Domain\ValueObjects\Id as TranscriptionId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\Language;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\YouTube\Transcription\Domain\Collections\SentenceCollection;
+use Helmreel\YouTube\Transcription\Domain\Entities\Transcription;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\EndTime;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\Sentence;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\StartTime;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\Text as TranscriptionText;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Domain\Factories\VideoPublisherFactory;
+use Helmreel\YouTube\Video\Domain\Repositories\AudioExtractor;
+use Helmreel\YouTube\Video\Domain\Repositories\SmartVideoFragmenter;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoRepository;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoTranscriber;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Id;
+use Helmreel\Youtube\Video\Domain\ValueObjects\Id as TranscriptionId;
 
 final readonly class SmartFragmentAndPublishVideo
 {

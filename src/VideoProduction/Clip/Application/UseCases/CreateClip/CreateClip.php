@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Application\UseCases\CreateClip;
+namespace Helmreel\VideoProduction\Clip\Application\UseCases\CreateClip;
 
-use Canalizador\Shared\Shared\Domain\Events\EventBus;
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\VideoProduction\Clip\Domain\Entities\Clip;
-use Canalizador\VideoProduction\Clip\Domain\Entities\ClipCollection;
-use Canalizador\VideoProduction\Clip\Domain\Events\AllClipsCompleted;
-use Canalizador\VideoProduction\Clip\Domain\Events\ClipCreated;
-use Canalizador\VideoProduction\Clip\Domain\Factories\ClipFactory;
-use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipRepository;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipId;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\Sequence;
-use Canalizador\VideoProduction\Video\Domain\Entities\Video;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
+use Helmreel\Shared\Shared\Domain\Events\EventBus;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\VideoProduction\Clip\Domain\Entities\Clip;
+use Helmreel\VideoProduction\Clip\Domain\Entities\ClipCollection;
+use Helmreel\VideoProduction\Clip\Domain\Events\AllClipsCompleted;
+use Helmreel\VideoProduction\Clip\Domain\Events\ClipCreated;
+use Helmreel\VideoProduction\Clip\Domain\Factories\ClipFactory;
+use Helmreel\VideoProduction\Clip\Domain\Repositories\ClipRepository;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\ClipId;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\Sequence;
+use Helmreel\VideoProduction\Video\Domain\Entities\Video;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 
 final readonly class CreateClip
 {

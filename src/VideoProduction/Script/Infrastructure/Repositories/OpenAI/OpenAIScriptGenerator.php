@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Script\Infrastructure\Repositories\OpenAI;
+namespace Helmreel\VideoProduction\Script\Infrastructure\Repositories\OpenAI;
 
-use Canalizador\YouTube\Channel\Domain\Entities\Channel;
-use Canalizador\VideoProduction\Script\Domain\Repositories\ScriptGenerator;
+use Helmreel\YouTube\Channel\Domain\Entities\Channel;
+use Helmreel\VideoProduction\Script\Domain\Repositories\ScriptGenerator;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Facades\Prism;
 

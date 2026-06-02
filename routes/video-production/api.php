@@ -3,14 +3,14 @@
 declare(strict_types = 1);
 
 use App\Http\Middleware\EnsureGoogleToken;
-use Canalizador\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers\CreateAvatarController;
-use Canalizador\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers\UpdateAvatarController;
-use Canalizador\VideoProduction\News\Infrastructure\Http\Api\Controllers\DownloadNewsController;
-use Canalizador\VideoProduction\Video\Infrastructure\Http\Api\Controllers\ApplyVoiceController;
-use Canalizador\VideoProduction\Video\Infrastructure\Http\Api\Controllers\CreateVideoController;
-use Canalizador\VideoProduction\Video\Infrastructure\Http\Api\Controllers\RetrieveVideoContentController;
-use Canalizador\VideoProduction\Voice\Infrastructure\Http\Api\Controllers\CloneVoiceController;
-use Canalizador\VideoProduction\Weather\Infrastructure\Http\Api\Controllers\GetForecastsController;
+use Helmreel\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers\CreateAvatarController;
+use Helmreel\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers\UpdateAvatarController;
+use Helmreel\VideoProduction\News\Infrastructure\Http\Api\Controllers\DownloadNewsController;
+use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers\ApplyVoiceController;
+use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers\CreateVideoController;
+use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers\RetrieveVideoContentController;
+use Helmreel\VideoProduction\Voice\Infrastructure\Http\Api\Controllers\CloneVoiceController;
+use Helmreel\VideoProduction\Weather\Infrastructure\Http\Api\Controllers\GetForecastsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['api.token'])->group(function () {

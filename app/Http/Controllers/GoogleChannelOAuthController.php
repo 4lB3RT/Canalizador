@@ -132,7 +132,7 @@ final class GoogleChannelOAuthController extends Controller
     private function renderClose(bool $success, ?string $error = null, ?string $state = null, ?string $frontendOrigin = null): Response
     {
         $payload = json_encode([
-            'type'    => 'canalizador:channel-oauth',
+            'type'    => 'helmreel:channel-oauth',
             'success' => $success,
             'state'   => $state,
             'error'   => $error,
@@ -144,7 +144,7 @@ final class GoogleChannelOAuthController extends Controller
         $html = <<<HTML
 <!doctype html>
 <html lang="es">
-  <head><meta charset="utf-8"><title>Canalizador OAuth</title></head>
+  <head><meta charset="utf-8"><title>Helmreel OAuth</title></head>
   <body>
     <script>
       (function () {

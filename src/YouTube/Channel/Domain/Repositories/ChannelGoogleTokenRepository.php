@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Domain\Repositories;
+namespace Helmreel\YouTube\Channel\Domain\Repositories;
 
-use Canalizador\YouTube\Channel\Domain\Entities\ChannelGoogleToken;
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelGoogleTokenNotFound;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Channel\Domain\Entities\ChannelGoogleToken;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelGoogleTokenNotFound;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
 
 interface ChannelGoogleTokenRepository
 {

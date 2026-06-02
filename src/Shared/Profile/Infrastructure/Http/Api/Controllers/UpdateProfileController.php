@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Profile\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\Shared\Profile\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\Shared\Profile\Application\UseCases\UpdateProfile\UpdateProfile;
-use Canalizador\Shared\Profile\Application\UseCases\UpdateProfile\UpdateProfileRequest;
-use Canalizador\Shared\Profile\Domain\Exceptions\EmailAlreadyTaken;
-use Canalizador\Shared\Profile\Domain\Exceptions\InvalidCurrentPassword;
-use Canalizador\Shared\Profile\Domain\Exceptions\ProfileNotFound;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Profile\Application\UseCases\UpdateProfile\UpdateProfile;
+use Helmreel\Shared\Profile\Application\UseCases\UpdateProfile\UpdateProfileRequest;
+use Helmreel\Shared\Profile\Domain\Exceptions\EmailAlreadyTaken;
+use Helmreel\Shared\Profile\Domain\Exceptions\InvalidCurrentPassword;
+use Helmreel\Shared\Profile\Domain\Exceptions\ProfileNotFound;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

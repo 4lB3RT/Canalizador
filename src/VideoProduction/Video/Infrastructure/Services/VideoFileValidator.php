@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Infrastructure\Services;
+namespace Helmreel\VideoProduction\Video\Infrastructure\Services;
 
-use Canalizador\VideoProduction\Video\Domain\Entities\Video;
-use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
-use Canalizador\VideoProduction\Video\Domain\Services\VideoFileValidator as VideoFileValidatorInterface;
-use Canalizador\VideoProduction\Video\Domain\Services\FileSystem;
+use Helmreel\VideoProduction\Video\Domain\Entities\Video;
+use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
+use Helmreel\VideoProduction\Video\Domain\Services\VideoFileValidator as VideoFileValidatorInterface;
+use Helmreel\VideoProduction\Video\Domain\Services\FileSystem;
 
 final readonly class VideoFileValidator implements VideoFileValidatorInterface
 {

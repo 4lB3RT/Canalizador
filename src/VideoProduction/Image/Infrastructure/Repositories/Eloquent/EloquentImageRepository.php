@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Image\Infrastructure\Repositories\Eloquent;
+namespace Helmreel\VideoProduction\Image\Infrastructure\Repositories\Eloquent;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Image\Domain\Entities\Image;
-use Canalizador\VideoProduction\Image\Domain\Entities\ImageCollection;
-use Canalizador\VideoProduction\Image\Domain\Exceptions\ImageNotFound;
-use Canalizador\VideoProduction\Image\Domain\Repositories\ImageRepository;
-use Canalizador\VideoProduction\Image\Domain\ValueObjects\ImageId;
-use Canalizador\VideoProduction\Image\Infrastructure\DAO\ImageDAO;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\VideoProduction\Image\Domain\Entities\Image;
+use Helmreel\VideoProduction\Image\Domain\Entities\ImageCollection;
+use Helmreel\VideoProduction\Image\Domain\Exceptions\ImageNotFound;
+use Helmreel\VideoProduction\Image\Domain\Repositories\ImageRepository;
+use Helmreel\VideoProduction\Image\Domain\ValueObjects\ImageId;
+use Helmreel\VideoProduction\Image\Infrastructure\DAO\ImageDAO;
 
 final class EloquentImageRepository implements ImageRepository
 {

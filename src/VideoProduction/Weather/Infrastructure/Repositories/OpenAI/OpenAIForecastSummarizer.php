@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Weather\Infrastructure\Repositories\OpenAI;
+namespace Helmreel\VideoProduction\Weather\Infrastructure\Repositories\OpenAI;
 
-use Canalizador\VideoProduction\Weather\Domain\Entities\CityForecast;
-use Canalizador\VideoProduction\Weather\Domain\Repositories\ForecastSummarizer;
+use Helmreel\VideoProduction\Weather\Domain\Entities\CityForecast;
+use Helmreel\VideoProduction\Weather\Domain\Repositories\ForecastSummarizer;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Facades\Prism;
 

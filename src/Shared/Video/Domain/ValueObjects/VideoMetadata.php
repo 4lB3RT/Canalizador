@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Video\Domain\ValueObjects;
+namespace Helmreel\Shared\Video\Domain\ValueObjects;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
 
 final readonly class VideoMetadata
 {

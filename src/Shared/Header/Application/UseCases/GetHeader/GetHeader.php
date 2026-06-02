@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Header\Application\UseCases\GetHeader;
+namespace Helmreel\Shared\Header\Application\UseCases\GetHeader;
 
-use Canalizador\Shared\Header\Domain\Exceptions\UserHeaderNotFound;
-use Canalizador\Shared\Header\Domain\UserHeaderRepository;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\Shared\Header\Domain\Exceptions\UserHeaderNotFound;
+use Helmreel\Shared\Header\Domain\UserHeaderRepository;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
 
 final readonly class GetHeader
 {

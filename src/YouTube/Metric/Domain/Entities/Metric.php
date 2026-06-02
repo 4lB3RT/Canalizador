@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Metric\Domain\Entities;
+namespace Helmreel\YouTube\Metric\Domain\Entities;
 
-use Canalizador\YouTube\Metric\Domain\ValueObjects\MetricName;
-use Canalizador\YouTube\Metric\Domain\ValueObjects\MetricType;
-use Canalizador\YouTube\Metric\Domain\ValueObjects\MetricValue;
+use Helmreel\YouTube\Metric\Domain\ValueObjects\MetricName;
+use Helmreel\YouTube\Metric\Domain\ValueObjects\MetricType;
+use Helmreel\YouTube\Metric\Domain\ValueObjects\MetricValue;
 
 final readonly class Metric
 {

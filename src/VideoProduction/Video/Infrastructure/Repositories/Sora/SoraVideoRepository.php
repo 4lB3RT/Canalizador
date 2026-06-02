@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Infrastructure\Repositories\Sora;
+namespace Helmreel\VideoProduction\Video\Infrastructure\Repositories\Sora;
 
-use Canalizador\Shared\Shared\Domain\Services\HttpClient;
-use Canalizador\Shared\Shared\Domain\Services\HttpResponseValidator;
-use Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
-use Canalizador\VideoProduction\Video\Domain\Entities\Video;
-use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoContentRetriever;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoGenerator;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\Resolution;
+use Helmreel\Shared\Shared\Domain\Services\HttpClient;
+use Helmreel\Shared\Shared\Domain\Services\HttpResponseValidator;
+use Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
+use Helmreel\VideoProduction\Video\Domain\Entities\Video;
+use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoContentRetriever;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoGenerator;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 use Illuminate\Support\Facades\File;
 
 final readonly class SoraVideoRepository implements VideoGenerator, VideoContentRetriever

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Agents;
+namespace Helmreel\VideoProduction\VideoLegacy\Infrastructure\Agents;
 
-use Canalizador\VideoProduction\VideoLegacy\Infrastructure\Tools\VideoCutter;
+use Helmreel\VideoProduction\VideoLegacy\Infrastructure\Tools\VideoCutter;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Facades\Prism;
 use Prism\Prism\Text\Response;

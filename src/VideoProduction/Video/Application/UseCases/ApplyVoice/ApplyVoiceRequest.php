@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Application\UseCases\ApplyVoice;
+namespace Helmreel\VideoProduction\Video\Application\UseCases\ApplyVoice;
 
 final readonly class ApplyVoiceRequest
 {

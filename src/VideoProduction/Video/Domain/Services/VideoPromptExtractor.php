@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Domain\Services;
+namespace Helmreel\VideoProduction\Video\Domain\Services;
 
-use Canalizador\VideoProduction\Avatar\Domain\Entities\Avatar;
-use Canalizador\VideoProduction\Script\Domain\Entities\Script;
-use Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
+use Helmreel\VideoProduction\Avatar\Domain\Entities\Avatar;
+use Helmreel\VideoProduction\Script\Domain\Entities\Script;
+use Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 
 interface VideoPromptExtractor
 {

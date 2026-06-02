@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Domain\Services;
+namespace Helmreel\VideoProduction\Clip\Domain\Services;
 
 interface VideoComposer
 {

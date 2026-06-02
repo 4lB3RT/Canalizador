@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Services\YouTube;
+namespace Helmreel\YouTube\Video\Infrastructure\Services\YouTube;
 
-use Canalizador\YouTube\Shared\Domain\Services\YouTubeServiceFactory;
+use Helmreel\YouTube\Shared\Domain\Services\YouTubeServiceFactory;
 use Google_Client;
 use Google_Service_YouTube;
 

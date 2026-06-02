@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Application\UseCases\GetChannelVideos;
+namespace Helmreel\YouTube\Channel\Application\UseCases\GetChannelVideos;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Page;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Pagination;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Total;
-use Canalizador\YouTube\Video\Domain\Entities\VideoCollection;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Page;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Pagination;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Total;
+use Helmreel\YouTube\Video\Domain\Entities\VideoCollection;
 
 final readonly class GetChannelVideosResponse
 {

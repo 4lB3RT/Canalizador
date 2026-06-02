@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\VideoProduction\VideoLegacy\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\VideoProduction\VideoLegacy\Application\UseCases\GetYoutubeVideo;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
-use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
+use Helmreel\VideoProduction\VideoLegacy\Application\UseCases\GetYoutubeVideo;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
+use Helmreel\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 

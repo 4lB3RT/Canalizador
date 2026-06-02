@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Domain\Exceptions;
+namespace Helmreel\VideoProduction\Video\Domain\Exceptions;
 
 use Exception;
 

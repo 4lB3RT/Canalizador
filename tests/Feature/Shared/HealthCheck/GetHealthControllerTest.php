@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Shared\HealthCheck;
 
-use Canalizador\Shared\HealthCheck\Application\UseCases\GetHealth\GetHealth;
-use Canalizador\Shared\HealthCheck\Application\UseCases\GetHealth\GetHealthResponse;
-use Canalizador\Shared\HealthCheck\Domain\ServiceStatus;
+use Helmreel\Shared\HealthCheck\Application\UseCases\GetHealth\GetHealth;
+use Helmreel\Shared\HealthCheck\Application\UseCases\GetHealth\GetHealthResponse;
+use Helmreel\Shared\HealthCheck\Domain\ServiceStatus;
 use Tests\TestCase;
 
 final class GetHealthControllerTest extends TestCase

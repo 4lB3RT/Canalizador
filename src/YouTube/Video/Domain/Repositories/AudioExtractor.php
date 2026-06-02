@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Domain\Repositories;
+namespace Helmreel\YouTube\Video\Domain\Repositories;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\YouTube\Video\Domain\ValueObjects\AudioPath;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\YouTube\Video\Domain\ValueObjects\AudioPath;
 
 interface AudioExtractor
 {

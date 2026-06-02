@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Domain\Events;
+namespace Helmreel\YouTube\Video\Domain\Events;
 
-use Canalizador\Shared\Shared\Domain\Events\DomainEvent;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\Events\DomainEvent;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 
 final readonly class VideoCreated implements DomainEvent
 {

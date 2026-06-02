@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Commands;
+namespace Helmreel\YouTube\Video\Infrastructure\Commands;
 
-use Canalizador\YouTube\Video\Application\UseCases\GetVideo\GetVideo;
-use Canalizador\YouTube\Video\Application\UseCases\GetVideo\GetVideoRequest;
+use Helmreel\YouTube\Video\Application\UseCases\GetVideo\GetVideo;
+use Helmreel\YouTube\Video\Application\UseCases\GetVideo\GetVideoRequest;
 use Illuminate\Console\Command;
 
 class GetVideoCommand extends Command

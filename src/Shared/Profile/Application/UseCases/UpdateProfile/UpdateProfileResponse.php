@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Profile\Application\UseCases\UpdateProfile;
+namespace Helmreel\Shared\Profile\Application\UseCases\UpdateProfile;
 
-use Canalizador\Shared\Profile\Domain\ProfileData;
+use Helmreel\Shared\Profile\Domain\ProfileData;
 
 final readonly class UpdateProfileResponse
 {

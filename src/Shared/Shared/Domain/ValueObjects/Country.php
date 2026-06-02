@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Domain\ValueObjects;
+namespace Helmreel\Shared\Shared\Domain\ValueObjects;
 
 final readonly class Country
 {

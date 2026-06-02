@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Avatar\Infrastructure\DAO;
+namespace Helmreel\VideoProduction\Avatar\Infrastructure\DAO;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Application\UseCases\UpdateChannelWithAI;
+namespace Helmreel\YouTube\Channel\Application\UseCases\UpdateChannelWithAI;
 
 final readonly class UpdateChannelWithAIRequest
 {

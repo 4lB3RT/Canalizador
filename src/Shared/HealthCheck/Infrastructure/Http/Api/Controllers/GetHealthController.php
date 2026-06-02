@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\HealthCheck\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\Shared\HealthCheck\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\Shared\HealthCheck\Application\UseCases\GetHealth\GetHealth;
-use Canalizador\Shared\HealthCheck\Domain\ServiceStatus;
+use Helmreel\Shared\HealthCheck\Application\UseCases\GetHealth\GetHealth;
+use Helmreel\Shared\HealthCheck\Domain\ServiceStatus;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 

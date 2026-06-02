@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\Feature\YouTube\Video;
 
 use App\Models\User;
-use Canalizador\YouTube\Video\Application\UseCases\SyncVideo\SyncVideo;
-use Canalizador\YouTube\Video\Application\UseCases\SyncVideo\SyncVideoRequest;
+use Helmreel\YouTube\Video\Application\UseCases\SyncVideo\SyncVideo;
+use Helmreel\YouTube\Video\Application\UseCases\SyncVideo\SyncVideoRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
 use Tests\TestCase;

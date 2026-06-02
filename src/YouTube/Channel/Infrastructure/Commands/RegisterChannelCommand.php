@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Infrastructure\Commands;
+namespace Helmreel\YouTube\Channel\Infrastructure\Commands;
 
-use Canalizador\YouTube\Channel\Application\UseCases\RegisterChannel\RegisterChannel;
-use Canalizador\YouTube\Channel\Application\UseCases\RegisterChannel\RegisterChannelRequest;
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
+use Helmreel\YouTube\Channel\Application\UseCases\RegisterChannel\RegisterChannel;
+use Helmreel\YouTube\Channel\Application\UseCases\RegisterChannel\RegisterChannelRequest;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
 use Illuminate\Console\Command;
 
 class RegisterChannelCommand extends Command

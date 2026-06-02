@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Infrastructure\Repositories\OpenAI;
+namespace Helmreel\YouTube\Channel\Infrastructure\Repositories\OpenAI;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Country;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
-use Canalizador\YouTube\Channel\Domain\Entities\Channel;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelMetadataRepository;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelBrand;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelMetadata;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Country;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
+use Helmreel\YouTube\Channel\Domain\Entities\Channel;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelMetadataRepository;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelBrand;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelMetadata;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Facades\Prism;
 

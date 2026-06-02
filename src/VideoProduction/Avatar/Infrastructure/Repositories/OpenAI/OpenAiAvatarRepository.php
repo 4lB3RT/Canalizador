@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Avatar\Infrastructure\Repositories\OpenAI;
+namespace Helmreel\VideoProduction\Avatar\Infrastructure\Repositories\OpenAI;
 
-use Canalizador\Shared\Shared\Domain\Exceptions\InvalidCollectionType;
-use Canalizador\Shared\Shared\Domain\Services\HttpClient;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\Biography;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\Category;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
-use Canalizador\VideoProduction\Image\Domain\Entities\ImageCollection;
-use Canalizador\VideoProduction\Image\Domain\Factories\ImageFactory;
-use Canalizador\VideoProduction\Image\Domain\Repositories\ImageRepository;
-use Canalizador\VideoProduction\Image\Domain\ValueObjects\ImageId;
+use Helmreel\Shared\Shared\Domain\Exceptions\InvalidCollectionType;
+use Helmreel\Shared\Shared\Domain\Services\HttpClient;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Category;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
+use Helmreel\VideoProduction\Image\Domain\Entities\ImageCollection;
+use Helmreel\VideoProduction\Image\Domain\Factories\ImageFactory;
+use Helmreel\VideoProduction\Image\Domain\Repositories\ImageRepository;
+use Helmreel\VideoProduction\Image\Domain\ValueObjects\ImageId;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Prism\Prism\Enums\Provider;

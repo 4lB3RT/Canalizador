@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Page;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Pagination;
-use Canalizador\Shared\Shared\Domain\ValueObjects\PerPage;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Search;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Video\Application\UseCases\GetVideos\GetVideos;
-use Canalizador\YouTube\Video\Application\UseCases\GetVideos\GetVideosRequest;
-use Canalizador\YouTube\Video\Domain\Entities\Video;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Page;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Pagination;
+use Helmreel\Shared\Shared\Domain\ValueObjects\PerPage;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Search;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Video\Application\UseCases\GetVideos\GetVideos;
+use Helmreel\YouTube\Video\Application\UseCases\GetVideos\GetVideosRequest;
+use Helmreel\YouTube\Video\Domain\Entities\Video;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

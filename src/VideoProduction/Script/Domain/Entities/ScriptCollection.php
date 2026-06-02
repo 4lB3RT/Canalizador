@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Script\Domain\Entities;
+namespace Helmreel\VideoProduction\Script\Domain\Entities;
 
-use Canalizador\Shared\Shared\Domain\Collection;
+use Helmreel\Shared\Shared\Domain\Collection;
 
 final class ScriptCollection extends Collection
 {

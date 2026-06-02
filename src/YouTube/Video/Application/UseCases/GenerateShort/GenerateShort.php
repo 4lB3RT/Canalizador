@@ -2,16 +2,16 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\GenerateShort;
+namespace Helmreel\YouTube\Video\Application\UseCases\GenerateShort;
 
-use Canalizador\Shared\Shared\Domain\Events\EventBus;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoFragmenter;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
-use Canalizador\YouTube\Video\Infrastructure\Builders\YouTubeVideoBuilder;
+use Helmreel\Shared\Shared\Domain\Events\EventBus;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoFragmenter;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoRepository;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Id;
+use Helmreel\YouTube\Video\Infrastructure\Builders\YouTubeVideoBuilder;
 
 final readonly class GenerateShort
 {

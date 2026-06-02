@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Domain\Entities;
+namespace Helmreel\YouTube\Channel\Domain\Entities;
 
-use Canalizador\Shared\Shared\Domain\Collection;
+use Helmreel\Shared\Shared\Domain\Collection;
 
 final class ChannelCollection extends Collection
 {

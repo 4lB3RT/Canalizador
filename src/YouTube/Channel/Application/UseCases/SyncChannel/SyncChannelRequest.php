@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Application\UseCases\SyncChannel;
+namespace Helmreel\YouTube\Channel\Application\UseCases\SyncChannel;
 
 final readonly class SyncChannelRequest
 {

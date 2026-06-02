@@ -2,12 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Shared\Infrastructure\ClientAPI;
+namespace Helmreel\YouTube\Shared\Infrastructure\ClientAPI;
 
 use App\Services\GoogleClientService;
-use Canalizador\YouTube\Channel\Domain\Entities\Channel;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Shared\Domain\Services\YouTubeServiceFactory;
+use Helmreel\YouTube\Channel\Domain\Entities\Channel;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Shared\Domain\Services\YouTubeServiceFactory;
 use DateInterval;
 use DateTimeImmutable;
 use Google\Service\Exception;

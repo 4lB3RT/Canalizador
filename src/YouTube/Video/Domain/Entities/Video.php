@@ -2,26 +2,26 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Domain\Entities;
+namespace Helmreel\YouTube\Video\Domain\Entities;
 
-use Canalizador\Shared\Shared\Domain\AggregateRoot;
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Duration;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Metric\Domain\Entities\MetricCollection;
-use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
-use Canalizador\YouTube\Video\Domain\Events\ShortCreated;
-use Canalizador\YouTube\Video\Domain\Events\VideoCreated;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
-use Canalizador\YouTube\Video\Domain\ValueObjects\PlatformId;
-use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
-use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
+use Helmreel\Shared\Shared\Domain\AggregateRoot;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Duration;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Url;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Metric\Domain\Entities\MetricCollection;
+use Helmreel\YouTube\Transcription\Domain\Entities\Transcription;
+use Helmreel\YouTube\Video\Domain\Events\ShortCreated;
+use Helmreel\YouTube\Video\Domain\Events\VideoCreated;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Category;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Id;
+use Helmreel\YouTube\Video\Domain\ValueObjects\PlatformId;
+use Helmreel\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
+use Helmreel\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
 
 final class Video extends AggregateRoot
 {

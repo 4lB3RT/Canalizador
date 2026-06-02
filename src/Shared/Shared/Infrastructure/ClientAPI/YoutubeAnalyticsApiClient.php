@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Infrastructure\ClientAPI;
+namespace Helmreel\Shared\Shared\Infrastructure\ClientAPI;
 
 use App\Services\GoogleClientService;
-use Canalizador\Shared\Shared\Domain\Services\YouTubeAnalyticsServiceFactory;
+use Helmreel\Shared\Shared\Domain\Services\YouTubeAnalyticsServiceFactory;
 
 final class YoutubeAnalyticsApiClient
 {

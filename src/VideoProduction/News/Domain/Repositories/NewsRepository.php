@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\News\Domain\Repositories;
+namespace Helmreel\VideoProduction\News\Domain\Repositories;
 
-use Canalizador\VideoProduction\News\Domain\Entities\News;
+use Helmreel\VideoProduction\News\Domain\Entities\News;
 
 interface NewsRepository
 {

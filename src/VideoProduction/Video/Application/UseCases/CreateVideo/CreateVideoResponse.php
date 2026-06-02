@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo;
+namespace Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo;
 
-use Canalizador\VideoProduction\Video\Domain\Entities\Video;
+use Helmreel\VideoProduction\Video\Domain\Entities\Video;
 
 final readonly class CreateVideoResponse
 {

@@ -2,36 +2,36 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Builders;
+namespace Helmreel\YouTube\Video\Infrastructure\Builders;
 
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Duration;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Language;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
-use Canalizador\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
-use Canalizador\Shared\Video\Domain\ValueObjects\VideoMetadata;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
-use Canalizador\YouTube\Transcription\Infrastructure\DataTransformer\TranscriptionDataTransformer;
-use Canalizador\YouTube\Video\Domain\Entities\Video;
-use Canalizador\YouTube\Video\Domain\Entities\VideoCollection;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Domain\Repositories\AudioExtractor;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoDownloader;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoTranscriber;
-use Canalizador\YouTube\Video\Domain\ValueObjects\AudioPath;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
-use Canalizador\YouTube\Video\Domain\ValueObjects\PlatformId;
-use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
-use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
-use Canalizador\YouTube\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
-use Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube\YoutubeVideoRepository;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Duration;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\Language;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Url;
+use Helmreel\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
+use Helmreel\Shared\Video\Domain\ValueObjects\VideoMetadata;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Transcription\Domain\Entities\Transcription;
+use Helmreel\YouTube\Transcription\Infrastructure\DataTransformer\TranscriptionDataTransformer;
+use Helmreel\YouTube\Video\Domain\Entities\Video;
+use Helmreel\YouTube\Video\Domain\Entities\VideoCollection;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Domain\Repositories\AudioExtractor;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoDownloader;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoTranscriber;
+use Helmreel\YouTube\Video\Domain\ValueObjects\AudioPath;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Category;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Id;
+use Helmreel\YouTube\Video\Domain\ValueObjects\PlatformId;
+use Helmreel\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
+use Helmreel\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
+use Helmreel\YouTube\Video\Infrastructure\Repositories\Eloquent\EloquentVideoRepository;
+use Helmreel\YouTube\Video\Infrastructure\Repositories\YouTube\YoutubeVideoRepository;
 
 final class YouTubeVideoBuilder
 {

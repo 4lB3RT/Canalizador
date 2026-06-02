@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\HealthCheck\Domain;
+namespace Helmreel\Shared\HealthCheck\Domain;
 
 interface HealthProbe
 {

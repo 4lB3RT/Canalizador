@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Voice\Infrastructure\Repositories\ElevenLabs;
+namespace Helmreel\VideoProduction\Voice\Infrastructure\Repositories\ElevenLabs;
 
-use Canalizador\Shared\Shared\Domain\Services\HttpClient;
-use Canalizador\Shared\Shared\Domain\Services\HttpResponseValidator;
-use Canalizador\VideoProduction\Voice\Domain\Exceptions\VoiceGenerationFailed;
-use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceGenerator;
+use Helmreel\Shared\Shared\Domain\Services\HttpClient;
+use Helmreel\Shared\Shared\Domain\Services\HttpResponseValidator;
+use Helmreel\VideoProduction\Voice\Domain\Exceptions\VoiceGenerationFailed;
+use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceGenerator;
 use Illuminate\Support\Str;
 
 final class ElevenLabsVoiceGenerator implements VoiceGenerator

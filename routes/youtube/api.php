@@ -3,20 +3,20 @@
 declare(strict_types = 1);
 
 use App\Http\Middleware\EnsureGoogleToken;
-use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\GetChannelController;
-use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\GetChannelsController;
-use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\RegisterChannelController;
-use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\SyncChannelController;
-use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelController;
-use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelWithAIController;
-use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\DownloadLatestChannelVideoController;
-use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\FragmentAndPublishVideoController;
-use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\GenerateShortController;
-use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\GetChannelVideosController;
-use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\GetVideosController;
-use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\PublishVideoController;
-use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\SmartFragmentAndPublishVideoController;
-use Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers\SyncVideoController;
+use Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers\GetChannelController;
+use Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers\GetChannelsController;
+use Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers\RegisterChannelController;
+use Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers\SyncChannelController;
+use Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelController;
+use Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers\UpdateChannelWithAIController;
+use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\DownloadLatestChannelVideoController;
+use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\FragmentAndPublishVideoController;
+use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\GenerateShortController;
+use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\GetChannelVideosController;
+use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\GetVideosController;
+use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\PublishVideoController;
+use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\SmartFragmentAndPublishVideoController;
+use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\SyncVideoController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['api.token'])->group(function () {

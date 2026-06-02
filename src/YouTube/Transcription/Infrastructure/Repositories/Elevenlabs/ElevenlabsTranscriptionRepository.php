@@ -2,18 +2,18 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Transcription\Infrastructure\Repositories\Elevenlabs;
+namespace Helmreel\YouTube\Transcription\Infrastructure\Repositories\Elevenlabs;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Language;
-use Canalizador\Video\Domain\Entities\Video;
-use Canalizador\Video\Domain\Exceptions\VideoLocalPathNotFound;
-use Canalizador\YouTube\Transcription\Domain\Collections\SentenceCollection;
-use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
-use Canalizador\YouTube\Transcription\Domain\Repositories\TranscriptionRepository;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\EndTime;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\Sentence;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\StartTime;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\Text;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\Language;
+use Helmreel\Video\Domain\Entities\Video;
+use Helmreel\Video\Domain\Exceptions\VideoLocalPathNotFound;
+use Helmreel\YouTube\Transcription\Domain\Collections\SentenceCollection;
+use Helmreel\YouTube\Transcription\Domain\Entities\Transcription;
+use Helmreel\YouTube\Transcription\Domain\Repositories\TranscriptionRepository;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\EndTime;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\Sentence;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\StartTime;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\Text;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Prism;
 use Prism\Prism\ValueObjects\Media\Audio;

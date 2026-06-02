@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Infrastructure\Events;
+namespace Helmreel\Shared\Shared\Infrastructure\Events;
 
-use Canalizador\Shared\Shared\Domain\Events\DomainEvent;
-use Canalizador\Shared\Shared\Domain\Events\DomainEventHandler;
+use Helmreel\Shared\Shared\Domain\Events\DomainEvent;
+use Helmreel\Shared\Shared\Domain\Events\DomainEventHandler;
 use Illuminate\Contracts\Container\Container;
 
 final class EventHandlerRegistry

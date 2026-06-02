@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Services;
+namespace Helmreel\YouTube\Video\Infrastructure\Services;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
-use Canalizador\YouTube\Video\Domain\Repositories\SmartVideoFragmenter;
-use Canalizador\YouTube\Video\Infrastructure\Agents\SmartVideoEditor;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
+use Helmreel\YouTube\Video\Domain\Repositories\SmartVideoFragmenter;
+use Helmreel\YouTube\Video\Infrastructure\Agents\SmartVideoEditor;
 use Prism\Prism\ValueObjects\ToolResult;
 
 final class PrismSmartVideoFragmenter implements SmartVideoFragmenter

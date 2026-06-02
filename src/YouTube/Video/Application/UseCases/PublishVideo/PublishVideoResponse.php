@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\PublishVideo;
+namespace Helmreel\YouTube\Video\Application\UseCases\PublishVideo;
 
 final readonly class PublishVideoResponse
 {

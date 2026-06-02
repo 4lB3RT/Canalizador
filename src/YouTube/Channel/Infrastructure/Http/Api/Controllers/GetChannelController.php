@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\YouTube\Channel\Application\UseCases\GetChannel\GetChannel;
-use Canalizador\YouTube\Channel\Application\UseCases\GetChannel\GetChannelRequest;
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\YouTube\Channel\Application\UseCases\GetChannel\GetChannel;
+use Helmreel\YouTube\Channel\Application\UseCases\GetChannel\GetChannelRequest;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

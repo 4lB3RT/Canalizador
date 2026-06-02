@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Script\Domain\ValueObjects;
+namespace Helmreel\VideoProduction\Script\Domain\ValueObjects;
 
 final readonly class ScriptMetadata
 {

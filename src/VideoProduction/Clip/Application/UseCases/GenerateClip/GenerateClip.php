@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Application\UseCases\GenerateClip;
+namespace Helmreel\VideoProduction\Clip\Application\UseCases\GenerateClip;
 
-use Canalizador\Shared\Shared\Domain\Events\EventBus;
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
-use Canalizador\VideoProduction\Clip\Domain\Events\ClipGenerated;
-use Canalizador\VideoProduction\Clip\Domain\Exceptions\ClipNotFound;
-use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipRepository;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipId;
-use Canalizador\VideoProduction\Video\Domain\Entities\Video;
-use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
-use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoExtender;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoGenerator;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository;
-use Canalizador\VideoProduction\Video\Domain\Services\VideoPromptExtractor;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\Resolution;
+use Helmreel\Shared\Shared\Domain\Events\EventBus;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
+use Helmreel\VideoProduction\Clip\Domain\Events\ClipGenerated;
+use Helmreel\VideoProduction\Clip\Domain\Exceptions\ClipNotFound;
+use Helmreel\VideoProduction\Clip\Domain\Repositories\ClipRepository;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\ClipId;
+use Helmreel\VideoProduction\Video\Domain\Entities\Video;
+use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
+use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoExtender;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoGenerator;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\Video\Domain\Services\VideoPromptExtractor;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 
 final readonly class GenerateClip
 {

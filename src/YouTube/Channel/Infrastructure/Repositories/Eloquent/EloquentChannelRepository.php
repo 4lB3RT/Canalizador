@@ -2,18 +2,18 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Channel\Infrastructure\Repositories\Eloquent;
+namespace Helmreel\YouTube\Channel\Infrastructure\Repositories\Eloquent;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Pagination;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Total;
-use Canalizador\YouTube\Channel\Domain\Entities\Channel;
-use Canalizador\YouTube\Channel\Domain\Entities\ChannelCollection;
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Channel\Infrastructure\DAO\ChannelDAO;
-use Canalizador\YouTube\Channel\Infrastructure\DataTransformers\ChannelDataTransformer;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Pagination;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Total;
+use Helmreel\YouTube\Channel\Domain\Entities\Channel;
+use Helmreel\YouTube\Channel\Domain\Entities\ChannelCollection;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Channel\Infrastructure\DAO\ChannelDAO;
+use Helmreel\YouTube\Channel\Infrastructure\DataTransformers\ChannelDataTransformer;
 
 final class EloquentChannelRepository implements ChannelRepository
 {

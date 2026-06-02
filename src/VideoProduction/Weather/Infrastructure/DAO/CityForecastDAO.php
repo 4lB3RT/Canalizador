@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Weather\Infrastructure\DAO;
+namespace Helmreel\VideoProduction\Weather\Infrastructure\DAO;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo;
+namespace Helmreel\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo;
 
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Domain\Repositories\ChannelVideoFinder;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoDownloader;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Domain\Repositories\ChannelVideoFinder;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoDownloader;
 
 final readonly class DownloadLatestChannelVideo
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Domain\ValueObjects;
+namespace Helmreel\VideoProduction\Clip\Domain\ValueObjects;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\StringValue;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\StringValue;
 
 final readonly class ClipId extends StringValue
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Jobs;
+namespace Helmreel\YouTube\Video\Infrastructure\Jobs;
 
-use Canalizador\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
-use Canalizador\YouTube\Video\Application\UseCases\PublishVideo\PublishVideoRequest;
+use Helmreel\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
+use Helmreel\YouTube\Video\Application\UseCases\PublishVideo\PublishVideoRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

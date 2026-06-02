@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Weather\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\VideoProduction\Weather\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\VideoProduction\Weather\Application\UseCases\GetForecasts\GetForecasts;
+use Helmreel\VideoProduction\Weather\Application\UseCases\GetForecasts\GetForecasts;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

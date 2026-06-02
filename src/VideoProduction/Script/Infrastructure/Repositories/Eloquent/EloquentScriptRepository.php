@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Script\Infrastructure\Repositories\Eloquent;
+namespace Helmreel\VideoProduction\Script\Infrastructure\Repositories\Eloquent;
 
-use Canalizador\VideoProduction\Script\Domain\Entities\Script;
-use Canalizador\VideoProduction\Script\Domain\Repositories\ScriptRepository;
-use Canalizador\VideoProduction\Script\Domain\ValueObjects\ScriptContent;
-use Canalizador\VideoProduction\Script\Domain\ValueObjects\ScriptId;
-use Canalizador\VideoProduction\Script\Infrastructure\DAO\ScriptDAO;
+use Helmreel\VideoProduction\Script\Domain\Entities\Script;
+use Helmreel\VideoProduction\Script\Domain\Repositories\ScriptRepository;
+use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptContent;
+use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptId;
+use Helmreel\VideoProduction\Script\Infrastructure\DAO\ScriptDAO;
 
 final class EloquentScriptRepository implements ScriptRepository
 {

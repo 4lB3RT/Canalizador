@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Script\Domain\Repositories;
+namespace Helmreel\VideoProduction\Script\Domain\Repositories;
 
-use Canalizador\YouTube\Channel\Domain\Entities\Channel;
+use Helmreel\YouTube\Channel\Domain\Entities\Channel;
 
 interface ScriptGenerator
 {

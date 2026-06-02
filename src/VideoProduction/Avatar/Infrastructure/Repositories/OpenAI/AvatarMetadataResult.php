@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Avatar\Infrastructure\Repositories\OpenAI;
+namespace Helmreel\VideoProduction\Avatar\Infrastructure\Repositories\OpenAI;
 
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
-use Canalizador\VideoProduction\Image\Domain\Entities\ImageCollection;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
+use Helmreel\VideoProduction\Image\Domain\Entities\ImageCollection;
 
 final readonly class AvatarMetadataResult
 {

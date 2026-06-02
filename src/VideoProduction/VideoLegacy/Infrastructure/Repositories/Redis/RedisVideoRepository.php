@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Repositories\Redis;
+namespace Helmreel\VideoProduction\VideoLegacy\Infrastructure\Repositories\Redis;
 
-use Canalizador\VideoProduction\VideoLegacy\Domain\Entities\Video;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
-use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
-use Canalizador\VideoProduction\VideoLegacy\Infrastructure\DataTransformers\VideoDataTransformer;
-use Canalizador\YouTube\Metric\Domain\Entities\MetricCollection;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Entities\Video;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
+use Helmreel\VideoProduction\VideoLegacy\Infrastructure\DataTransformers\VideoDataTransformer;
+use Helmreel\YouTube\Metric\Domain\Entities\MetricCollection;
 use Illuminate\Redis\Connections\Connection;
 
 final readonly class RedisVideoRepository implements VideoRepository

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Domain\Exceptions;
+namespace Helmreel\YouTube\Video\Domain\Exceptions;
 
 use Exception;
 

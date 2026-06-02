@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Infrastructure\Services;
+namespace Helmreel\VideoProduction\Clip\Infrastructure\Services;
 
-use Canalizador\VideoProduction\Clip\Domain\Services\VideoComposer;
+use Helmreel\VideoProduction\Clip\Domain\Services\VideoComposer;
 
 final class FfmpegVideoComposer implements VideoComposer
 {

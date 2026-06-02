@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Tools;
+namespace Helmreel\YouTube\Video\Infrastructure\Tools;
 
 use Prism\Prism\Tool;
 

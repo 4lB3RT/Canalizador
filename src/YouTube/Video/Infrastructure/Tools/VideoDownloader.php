@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Tools;
+namespace Helmreel\YouTube\Video\Infrastructure\Tools;
 
-use Canalizador\YouTube\Video\Domain\Repositories\VideoDownloader as VideoDownloaderRepository;
-use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoDownloader as VideoDownloaderRepository;
+use Helmreel\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
 use Prism\Prism\Tool;
 
 final class VideoDownloader extends Tool

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\VideoProduction\Avatar\Application\UseCases\UpdateAvatar\UpdateAvatar;
+use Helmreel\VideoProduction\Avatar\Application\UseCases\UpdateAvatar\UpdateAvatar;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

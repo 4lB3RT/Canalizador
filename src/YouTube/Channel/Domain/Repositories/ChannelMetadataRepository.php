@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Domain\Repositories;
+namespace Helmreel\YouTube\Channel\Domain\Repositories;
 
-use Canalizador\YouTube\Channel\Domain\Entities\Channel;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelMetadata;
+use Helmreel\YouTube\Channel\Domain\Entities\Channel;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelMetadata;
 
 interface ChannelMetadataRepository
 {

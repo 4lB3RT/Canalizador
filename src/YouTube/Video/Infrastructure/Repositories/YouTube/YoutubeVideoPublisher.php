@@ -2,20 +2,20 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube;
+namespace Helmreel\YouTube\Video\Infrastructure\Repositories\YouTube;
 
 use App\Services\GoogleClientService;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
-use Canalizador\YouTube\Shared\Domain\Services\YouTubeServiceFactory;
-use Canalizador\YouTube\Video\Domain\Entities\Video;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoPublisher;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
-use Canalizador\YouTube\Video\Domain\ValueObjects\PlatformId;
-use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
-use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\YouTubeVideoBuilder;
-use Canalizador\YouTube\Video\Infrastructure\Services\YouTube\YouTubeVideoUploader;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Url;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\YouTube\Shared\Domain\Services\YouTubeServiceFactory;
+use Helmreel\YouTube\Video\Domain\Entities\Video;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoPublisher;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoRepository;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Category;
+use Helmreel\YouTube\Video\Domain\ValueObjects\PlatformId;
+use Helmreel\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
+use Helmreel\YouTube\Video\Infrastructure\Services\YouTube\YouTubeVideoBuilder;
+use Helmreel\YouTube\Video\Infrastructure\Services\YouTube\YouTubeVideoUploader;
 
 final class YoutubeVideoPublisher implements VideoPublisher
 {

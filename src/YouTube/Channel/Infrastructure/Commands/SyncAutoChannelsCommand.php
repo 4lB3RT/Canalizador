@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Infrastructure\Commands;
+namespace Helmreel\YouTube\Channel\Infrastructure\Commands;
 
-use Canalizador\YouTube\Channel\Domain\Entities\Channel;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
-use Canalizador\YouTube\Video\Application\UseCases\SyncLastVideo\SyncLastVideo;
-use Canalizador\YouTube\Video\Application\UseCases\SyncLastVideo\SyncLastVideoRequest;
+use Helmreel\YouTube\Channel\Domain\Entities\Channel;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\YouTube\Video\Application\UseCases\SyncLastVideo\SyncLastVideo;
+use Helmreel\YouTube\Video\Application\UseCases\SyncLastVideo\SyncLastVideoRequest;
 use Illuminate\Console\Command;
 use Throwable;
 

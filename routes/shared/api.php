@@ -6,11 +6,11 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\GoogleChannelOAuthController;
-use Canalizador\Shared\Header\Infrastructure\Http\Api\Controllers\GetHeaderController;
-use Canalizador\Shared\HealthCheck\Infrastructure\Http\Api\Controllers\GetHealthController;
-use Canalizador\Shared\Profile\Infrastructure\Http\Api\Controllers\UpdateProfileController;
-use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\GetPendingOAuthStateController;
-use Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers\LinkChannelController;
+use Helmreel\Shared\Header\Infrastructure\Http\Api\Controllers\GetHeaderController;
+use Helmreel\Shared\HealthCheck\Infrastructure\Http\Api\Controllers\GetHealthController;
+use Helmreel\Shared\Profile\Infrastructure\Http\Api\Controllers\UpdateProfileController;
+use Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers\GetPendingOAuthStateController;
+use Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers\LinkChannelController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/health-check', GetHealthController::class);

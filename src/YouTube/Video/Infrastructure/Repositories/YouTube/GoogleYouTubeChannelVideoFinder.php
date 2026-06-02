@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube;
+namespace Helmreel\YouTube\Video\Infrastructure\Repositories\YouTube;
 
 use App\Services\GoogleClientService;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Domain\Repositories\ChannelVideoFinder;
-use Canalizador\YouTube\Shared\Domain\Services\YouTubeServiceFactory;
-use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Domain\Repositories\ChannelVideoFinder;
+use Helmreel\YouTube\Shared\Domain\Services\YouTubeServiceFactory;
+use Helmreel\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
 use Google_Service_YouTube;
 
 final class GoogleYouTubeChannelVideoFinder implements ChannelVideoFinder

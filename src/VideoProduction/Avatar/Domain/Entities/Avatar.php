@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Avatar\Domain\Entities;
+namespace Helmreel\VideoProduction\Avatar\Domain\Entities;
 
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\Biography;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\Category;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
-use Canalizador\VideoProduction\Image\Domain\Entities\ImageCollection;
-use Canalizador\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Category;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
+use Helmreel\VideoProduction\Image\Domain\Entities\ImageCollection;
+use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 
 final class Avatar
 {

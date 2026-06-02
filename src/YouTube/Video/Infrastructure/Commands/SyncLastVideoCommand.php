@@ -2,12 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Commands;
+namespace Helmreel\YouTube\Video\Infrastructure\Commands;
 
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
-use Canalizador\YouTube\Video\Application\UseCases\SyncLastVideo\SyncLastVideo;
-use Canalizador\YouTube\Video\Application\UseCases\SyncLastVideo\SyncLastVideoRequest;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
+use Helmreel\YouTube\Video\Application\UseCases\SyncLastVideo\SyncLastVideo;
+use Helmreel\YouTube\Video\Application\UseCases\SyncLastVideo\SyncLastVideoRequest;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoNotFound;
 use DateMalformedIntervalStringException;
 use DateMalformedStringException;
 use Illuminate\Console\Command;

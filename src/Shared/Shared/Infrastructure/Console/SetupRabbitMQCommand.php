@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Infrastructure\Console;
+namespace Helmreel\Shared\Shared\Infrastructure\Console;
 
-use Canalizador\Shared\Shared\Infrastructure\Events\EventHandlerRegistry;
+use Helmreel\Shared\Shared\Infrastructure\Events\EventHandlerRegistry;
 use Illuminate\Console\Command;
 use ReflectionClass;
 use VladimirYuldashev\LaravelQueueRabbitMQ\Queue\Connectors\RabbitMQConnector;

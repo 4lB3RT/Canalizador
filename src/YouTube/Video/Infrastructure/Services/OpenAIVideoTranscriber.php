@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Services;
+namespace Helmreel\YouTube\Video\Infrastructure\Services;
 
-use Canalizador\YouTube\Video\Domain\Repositories\VideoTranscriber;
-use Canalizador\YouTube\Video\Domain\ValueObjects\AudioPath;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoTranscriber;
+use Helmreel\YouTube\Video\Domain\ValueObjects\AudioPath;
 
 final class OpenAIVideoTranscriber implements VideoTranscriber
 {

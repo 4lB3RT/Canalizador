@@ -1,8 +1,8 @@
 <?php
 
-namespace Canalizador\YouTube\Transcription\Domain\ValueObjects;
+namespace Helmreel\YouTube\Transcription\Domain\ValueObjects;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\StringValue;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\StringValue;
 
 final readonly class Text extends StringValue
 {

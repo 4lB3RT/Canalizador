@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Agents;
+namespace Helmreel\VideoProduction\VideoLegacy\Infrastructure\Agents;
 
-use Canalizador\VideoProduction\VideoLegacy\Infrastructure\Tools\AudioExtractor;
-use Canalizador\VideoProduction\VideoLegacy\Infrastructure\Tools\AudioTranscription;
-use Canalizador\VideoProduction\VideoLegacy\Infrastructure\Tools\CartoonVideoGenerator;
+use Helmreel\VideoProduction\VideoLegacy\Infrastructure\Tools\AudioExtractor;
+use Helmreel\VideoProduction\VideoLegacy\Infrastructure\Tools\AudioTranscription;
+use Helmreel\VideoProduction\VideoLegacy\Infrastructure\Tools\CartoonVideoGenerator;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Facades\Prism;
 use Prism\Prism\Text\PendingRequest as PendingTextRequest;

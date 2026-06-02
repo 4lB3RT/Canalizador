@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Tools;
+namespace Helmreel\VideoProduction\VideoLegacy\Infrastructure\Tools;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Minutes;
-use Canalizador\VideoProduction\VideoLegacy\Application\UseCases\DownloadVideo;
-use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Minutes;
+use Helmreel\VideoProduction\VideoLegacy\Application\UseCases\DownloadVideo;
+use Helmreel\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
 use Prism\Prism\Tool;
 
 final class VideoDownloader extends Tool

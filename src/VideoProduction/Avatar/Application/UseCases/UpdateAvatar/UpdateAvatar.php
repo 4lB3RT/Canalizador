@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Avatar\Application\UseCases\UpdateAvatar;
+namespace Helmreel\VideoProduction\Avatar\Application\UseCases\UpdateAvatar;
 
-use Canalizador\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\Biography;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
-use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
-use Canalizador\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
+use Helmreel\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
+use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
+use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 use InvalidArgumentException;
 
 final readonly class UpdateAvatar

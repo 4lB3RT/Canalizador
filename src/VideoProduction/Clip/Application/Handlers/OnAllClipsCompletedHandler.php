@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Application\Handlers;
+namespace Helmreel\VideoProduction\Clip\Application\Handlers;
 
-use Canalizador\Shared\Shared\Domain\Events\DomainEvent;
-use Canalizador\Shared\Shared\Domain\Events\DomainEventHandler;
-use Canalizador\VideoProduction\Clip\Application\UseCases\ComposeShort\ComposeShort;
-use Canalizador\VideoProduction\Clip\Application\UseCases\ComposeShort\ComposeShortRequest;
-use Canalizador\VideoProduction\Clip\Domain\Events\AllClipsCompleted;
+use Helmreel\Shared\Shared\Domain\Events\DomainEvent;
+use Helmreel\Shared\Shared\Domain\Events\DomainEventHandler;
+use Helmreel\VideoProduction\Clip\Application\UseCases\ComposeShort\ComposeShort;
+use Helmreel\VideoProduction\Clip\Application\UseCases\ComposeShort\ComposeShortRequest;
+use Helmreel\VideoProduction\Clip\Domain\Events\AllClipsCompleted;
 
 final readonly class OnAllClipsCompletedHandler implements DomainEventHandler
 {

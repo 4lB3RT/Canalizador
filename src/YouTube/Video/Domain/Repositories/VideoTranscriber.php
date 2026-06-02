@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Domain\Repositories;
+namespace Helmreel\YouTube\Video\Domain\Repositories;
 
-use Canalizador\YouTube\Video\Domain\ValueObjects\AudioPath;
+use Helmreel\YouTube\Video\Domain\ValueObjects\AudioPath;
 
 interface VideoTranscriber
 {

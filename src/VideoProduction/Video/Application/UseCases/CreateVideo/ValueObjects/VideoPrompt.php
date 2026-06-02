@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects;
+namespace Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects;
 
-use Canalizador\VideoProduction\Avatar\Domain\Entities\Avatar;
+use Helmreel\VideoProduction\Avatar\Domain\Entities\Avatar;
 
 final readonly class VideoPrompt
 {

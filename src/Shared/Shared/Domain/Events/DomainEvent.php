@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Domain\Events;
+namespace Helmreel\Shared\Shared\Domain\Events;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 
 interface DomainEvent
 {

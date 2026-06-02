@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Domain\ValueObjects;
+namespace Helmreel\VideoProduction\Clip\Domain\ValueObjects;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerValue;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerValue;
 
 final readonly class Sequence extends IntegerValue
 {

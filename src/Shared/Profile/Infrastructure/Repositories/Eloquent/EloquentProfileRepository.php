@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Profile\Infrastructure\Repositories\Eloquent;
+namespace Helmreel\Shared\Profile\Infrastructure\Repositories\Eloquent;
 
 use App\Models\User;
-use Canalizador\Shared\Profile\Domain\Exceptions\ProfileNotFound;
-use Canalizador\Shared\Profile\Domain\ProfileData;
-use Canalizador\Shared\Profile\Domain\ProfileRepository;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Profile\Domain\Exceptions\ProfileNotFound;
+use Helmreel\Shared\Profile\Domain\ProfileData;
+use Helmreel\Shared\Profile\Domain\ProfileRepository;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 
 final class EloquentProfileRepository implements ProfileRepository
 {

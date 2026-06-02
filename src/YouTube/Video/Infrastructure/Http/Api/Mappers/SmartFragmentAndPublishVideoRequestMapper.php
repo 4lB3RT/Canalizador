@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers;
+namespace Helmreel\YouTube\Video\Infrastructure\Http\Api\Mappers;
 
-use Canalizador\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo\SmartFragmentAndPublishVideoRequest;
+use Helmreel\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo\SmartFragmentAndPublishVideoRequest;
 use Illuminate\Http\Request;
 
 final readonly class SmartFragmentAndPublishVideoRequestMapper

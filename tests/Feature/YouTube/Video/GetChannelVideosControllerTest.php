@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\Feature\YouTube\Video;
 
 use App\Models\User;
-use Canalizador\YouTube\Channel\Infrastructure\DAO\ChannelDAO;
-use Canalizador\YouTube\Video\Infrastructure\DAO\VideoDAO;
+use Helmreel\YouTube\Channel\Infrastructure\DAO\ChannelDAO;
+use Helmreel\YouTube\Video\Infrastructure\DAO\VideoDAO;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

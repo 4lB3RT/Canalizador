@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Header\Infrastructure\Repositories\Eloquent;
+namespace Helmreel\Shared\Header\Infrastructure\Repositories\Eloquent;
 
 use App\Models\User;
-use Canalizador\Shared\Header\Domain\Exceptions\UserHeaderNotFound;
-use Canalizador\Shared\Header\Domain\UserHeaderData;
-use Canalizador\Shared\Header\Domain\UserHeaderRepository;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Header\Domain\Exceptions\UserHeaderNotFound;
+use Helmreel\Shared\Header\Domain\UserHeaderData;
+use Helmreel\Shared\Header\Domain\UserHeaderRepository;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 
 final class EloquentUserHeaderRepository implements UserHeaderRepository
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Domain\Exceptions;
+namespace Helmreel\VideoProduction\VideoLegacy\Domain\Exceptions;
 
-use Canalizador\Shared\Shared\Domain\Exceptions\EntityNotFound;
+use Helmreel\Shared\Shared\Domain\Exceptions\EntityNotFound;
 
 final class VideoNotFound extends EntityNotFound
 {

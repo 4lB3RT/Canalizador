@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Agents;
+namespace Helmreel\YouTube\Video\Infrastructure\Agents;
 
-use Canalizador\YouTube\Video\Infrastructure\Tools\VideoCutter;
+use Helmreel\YouTube\Video\Infrastructure\Tools\VideoCutter;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Facades\Prism;
 use Prism\Prism\Text\Response;
