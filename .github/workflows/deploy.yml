@@ -35,7 +35,7 @@ jobs:
               --exclude='./storage/framework/views/*' \
               --exclude='./docker/dev' \
               --exclude='./.ansible' \
-              -czf /tmp/canalizador-app.tar.gz .
+              -czf /tmp/helmreel-app.tar.gz .
 
       - name: Install SSH key
         env:
@@ -49,30 +49,30 @@ jobs:
       - name: Prepare remote dirs
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} \
-            'sudo mkdir -p /opt/canalizador/{docker/prod,app} && sudo chown -R ${{ secrets.VM_USER }}:${{ secrets.VM_USER }} /opt/canalizador'
+            'sudo mkdir -p /opt/helmreel/{docker/prod,app} && sudo chown -R ${{ secrets.VM_USER }}:${{ secrets.VM_USER }} /opt/helmreel'
 
       - name: Upload compose, nginx and env
         run: |
-          scp -i ~/.ssh/id_rsa docker/prod/docker-compose.yml  ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/canalizador/docker/prod/docker-compose.yml
-          scp -i ~/.ssh/id_rsa docker/prod/nginx.conf          ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/canalizador/docker/prod/nginx.conf
-          scp -i ~/.ssh/id_rsa docker/prod/nginx.no-tls.conf   ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/canalizador/docker/prod/nginx.no-tls.conf
-          scp -i ~/.ssh/id_rsa docker/prod/opcache.ini         ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/canalizador/docker/prod/opcache.ini
-          scp -i ~/.ssh/id_rsa .env.decrypted                  ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/canalizador/docker/prod/.env
+          scp -i ~/.ssh/id_rsa docker/prod/docker-compose.yml  ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/helmreel/docker/prod/docker-compose.yml
+          scp -i ~/.ssh/id_rsa docker/prod/nginx.conf          ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/helmreel/docker/prod/nginx.conf
+          scp -i ~/.ssh/id_rsa docker/prod/nginx.no-tls.conf   ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/helmreel/docker/prod/nginx.no-tls.conf
+          scp -i ~/.ssh/id_rsa docker/prod/opcache.ini         ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/helmreel/docker/prod/opcache.ini
+          scp -i ~/.ssh/id_rsa .env.decrypted                  ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/opt/helmreel/docker/prod/.env
 
       - name: Upload application tarball
         run: |
-          scp -i ~/.ssh/id_rsa /tmp/canalizador-app.tar.gz ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/tmp/canalizador-app.tar.gz
+          scp -i ~/.ssh/id_rsa /tmp/helmreel-app.tar.gz ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/tmp/helmreel-app.tar.gz
 
       - name: Apply on VM
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} 'bash -s' <<'REMOTE'
           set -euo pipefail
-          cd /opt/canalizador
+          cd /opt/helmreel
 
           rm -rf app.new
           mkdir -p app.new
-          tar -xzf /tmp/canalizador-app.tar.gz -C app.new
-          rm /tmp/canalizador-app.tar.gz
+          tar -xzf /tmp/helmreel-app.tar.gz -C app.new
+          rm /tmp/helmreel-app.tar.gz
 
           rm -rf app.old
           if [ -d app ]; then mv app app.old; fi
@@ -91,4 +91,4 @@ jobs:
 
       - name: Cleanup local decrypted env
         if: always()
-        run: rm -f .env.decrypted /tmp/canalizador-app.tar.gz
+        run: rm -f .env.decrypted /tmp/helmreel-app.tar.gz

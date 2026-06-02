@@ -68,20 +68,20 @@ cat <<'EOF'
                            |___/
 EOF
 printf "${RESET}${DIM}  ──────────────────────────────────────────${RESET}\n"
-printf "  ${BOLD}Canalizador${RESET} ${DIM}·${RESET} dev environment setup\n"
+printf "  ${BOLD}Helmreel${RESET} ${DIM}·${RESET} dev environment setup\n"
 
 # ── 1. Stop & clean ────────────────────────────────────────────────────
 step 1 "Cleaning up"
 run "Stopping containers & removing volumes" \
     $COMPOSE down --volumes --remove-orphans --rmi local
-docker ps -a --filter "name=canalizador" -q | xargs -r docker rm -f >/dev/null 2>&1 || true
+docker ps -a --filter "name=helmreel" -q | xargs -r docker rm -f >/dev/null 2>&1 || true
 ok "Containers, volumes and images removed"
 
 # Remove orphaned networks claiming our subnet (e.g. from previous project names)
 ORPHAN_NETS=$(docker network ls --filter driver=bridge --format '{{.Name}}' | {
     while read net; do
         subnet=$(docker network inspect "$net" --format '{{range .IPAM.Config}}{{.Subnet}}{{end}}' 2>/dev/null || true)
-        if [ "$subnet" = "10.7.0.0/16" ] && [ "$net" != "canalizador_canalizador" ]; then
+        if [ "$subnet" = "10.7.0.0/16" ] && [ "$net" != "helmreel_helmreel" ]; then
             echo "$net"
         fi
     done
@@ -120,18 +120,18 @@ done
 # ── 4. Dependencies ──────────────────────────────────────────────────────
 step 4 "Installing dependencies"
 run "composer install" \
-    docker exec php_canalizador sh -c "cd /code && composer install --no-interaction"
+    docker exec php_helmreel sh -c "cd /code && composer install --no-interaction"
 
 # ── 5. Wait for services ─────────────────────────────────────────────────
 step 5 "Waiting for services"
 wait_mysql() {
-    until docker exec php_canalizador php -r \
-        "new PDO('mysql:host=mysql_canalizador;port=3306','root',getenv('MYSQL_ROOT_PASSWORD')?:'root');" 2>/dev/null; do
+    until docker exec php_helmreel php -r \
+        "new PDO('mysql:host=mysql_helmreel;port=3306','root',getenv('MYSQL_ROOT_PASSWORD')?:'root');" 2>/dev/null; do
         sleep 2
     done
 }
 wait_rabbit() {
-    until docker exec rabbitmq_canalizador rabbitmq-diagnostics -q ping 2>/dev/null; do
+    until docker exec rabbitmq_helmreel rabbitmq-diagnostics -q ping 2>/dev/null; do
         sleep 2
     done
 }
@@ -142,7 +142,7 @@ run "RabbitMQ responding to ping" wait_rabbit
 # Always overwrite the local DB with the most recent prod backup so dev mirrors
 # prod data on every run. The dev MySQL is treated as a disposable cache.
 step 6 "Restoring database"
-BACKUP_BUCKET="gs://canalizador-backups"
+BACKUP_BUCKET="gs://helmreel-backups"
 
 set -a
 # shellcheck disable=SC1091
@@ -167,12 +167,12 @@ LATEST="$(gsutil ls "$BACKUP_BUCKET/mysql-*.sql.gz" 2>/dev/null | sort | tail -1
 note "Latest dump: $(basename "$LATEST")"
 
 # Drop the dev DB first; the dump's own CREATE DATABASE + USE recreate it.
-# Dev and prod share the DB name ("canalizador"), so the dump imports as-is.
+# Dev and prod share the DB name ("helmreel"), so the dump imports as-is.
 restore_db() {
-    docker exec -i mysql_canalizador \
+    docker exec -i mysql_helmreel \
         sh -c "mysql -uroot -p\"\$MYSQL_ROOT_PASSWORD\" -e 'DROP DATABASE IF EXISTS \`${MYSQL_DATABASE}\`'" </dev/null
     gsutil -q cp "$LATEST" - | gunzip \
-        | docker exec -i mysql_canalizador sh -c "mysql -uroot -p\"\$MYSQL_ROOT_PASSWORD\""
+        | docker exec -i mysql_helmreel sh -c "mysql -uroot -p\"\$MYSQL_ROOT_PASSWORD\""
 }
 run "Importing $(basename "$LATEST") into $MYSQL_DATABASE" restore_db
 
@@ -185,12 +185,12 @@ run "Clearing runtime caches" "$COMMANDS_DIR/artisan.sh" optimize:clear
 
 # ── 8. Health checks ─────────────────────────────────────────────────────
 step 8 "Health checks"
-if docker exec php_canalizador php artisan db:monitor --databases=mysql >/dev/null 2>&1; then
+if docker exec php_helmreel php artisan db:monitor --databases=mysql >/dev/null 2>&1; then
     ok "Database connection"
 else
     fail "Database connection"
 fi
-if docker exec rabbitmq_canalizador rabbitmqctl list_queues --quiet 2>/dev/null | grep -q "video\.\|clip\."; then
+if docker exec rabbitmq_helmreel rabbitmqctl list_queues --quiet 2>/dev/null | grep -q "video\.\|clip\."; then
     ok "RabbitMQ queues"
 else
     fail "RabbitMQ queues"

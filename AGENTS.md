@@ -1,4 +1,4 @@
-# Canalizador Project Rules
+# Helmreel Project Rules
 
 ## Arquitectura y Estructura
 
@@ -17,9 +17,9 @@
 ### Naming Conventions
 
 #### Namespaces
-- Domain: `Canalizador\{Module}\Domain\{Layer}\{Name}`
-- Application: `Canalizador\{Module}\Application\{Layer}\{Name}`
-- Infrastructure: `Canalizador\{Module}\Infrastructure\{Layer}\{Name}`
+- Domain: `Helmreel\{Module}\Domain\{Layer}\{Name}`
+- Application: `Helmreel\{Module}\Application\{Layer}\{Name}`
+- Infrastructure: `Helmreel\{Module}\Infrastructure\{Layer}\{Name}`
 
 #### Clases
 - **Entidades**: Nombres en singular, sin sufijos (`Video`, `Script`)

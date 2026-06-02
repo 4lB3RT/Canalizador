@@ -1,7 +1,7 @@
 # Post Commit
 
 Crea UN SOLO post en español narrando el commit del día como storytelling personal de developer.
-El post se publica como respuesta al hilo principal de Canalizador, en **un único tweet** (≤280 caracteres).
+El post se publica como respuesta al hilo principal de Helmreel, en **un único tweet** (≤280 caracteres).
 Entre 800 y 1500 caracteres — un solo post, sin hilo.
 
 ## Instrucciones

@@ -83,7 +83,7 @@ return [
             'after_commit' => true,
             'options' => [
                 'queue' => [
-                    'exchange' => 'canalizador',
+                    'exchange' => 'helmreel',
                     'exchange_type' => 'topic',
                 ],
             ],

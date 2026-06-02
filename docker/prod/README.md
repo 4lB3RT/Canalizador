@@ -14,12 +14,12 @@ Stack que se despliega en la VM de Compute Engine. Distribuido por GitHub Action
 | `.env.prod`      | `.env` real cifrado con **Ansible Vault**. Único que va al repo.            |
 
 En la VM nunca vive un clon del repo. GitHub Actions hace `scp` de estos
-ficheros a `/opt/canalizador/docker/prod/`, descifra `.env.prod` y ejecuta
+ficheros a `/opt/helmreel/docker/prod/`, descifra `.env.prod` y ejecuta
 los comandos de deploy inline vía SSH (`docker pull`, `docker compose up`,
 `artisan migrate`, etc.).
 
 Cuando exista el SPA, el mismo workflow copiará `dist.tar.gz` a
-`/opt/canalizador/web`.
+`/opt/helmreel/web`.
 
 ## Crear `.env.prod` por primera vez
 

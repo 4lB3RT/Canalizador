@@ -1,12 +1,12 @@
-name: canalizador
+name: helmreel
 
-x-php-image: &php-image europe-west1-docker.pkg.dev/galvanic-camp-493316-i2/canalizador-images/php-base:php-8.5-v1
-x-mysql-image: &mysql-image europe-west1-docker.pkg.dev/galvanic-camp-493316-i2/canalizador-images/mysql:mysql-8.0-v1
+x-php-image: &php-image europe-west1-docker.pkg.dev/galvanic-camp-493316-i2/helmreel-images/php-base:php-8.5-v1
+x-mysql-image: &mysql-image europe-west1-docker.pkg.dev/galvanic-camp-493316-i2/helmreel-images/mysql:mysql-8.0-v1
 
 services:
   nginx:
     image: nginx:1.27-alpine
-    container_name: nginx_canalizador_prod
+    container_name: nginx_helmreel_prod
     restart: unless-stopped
     ports:
       - "80:80"
@@ -14,24 +14,24 @@ services:
     volumes:
       - ${NGINX_CONF_FILE:-./nginx.no-tls.conf}:/etc/nginx/conf.d/default.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
-      - /opt/canalizador/web:/var/www/canalizador:ro
-      - /opt/canalizador/app:/code:ro
+      - /opt/helmreel/web:/var/www/helmreel:ro
+      - /opt/helmreel/app:/code:ro
     depends_on:
       - php
     networks:
-      canalizador:
+      helmreel:
 
   php:
     image: *php-image
-    container_name: php_canalizador_prod
+    container_name: php_helmreel_prod
     restart: unless-stopped
     env_file:
       - ./.env
     volumes:
-      - /opt/canalizador/app:/code
+      - /opt/helmreel/app:/code
       - vendor:/code/vendor
-      - /opt/canalizador/data/storage:/code/storage
-      - /tmp/canalizador:/tmp/canalizador
+      - /opt/helmreel/data/storage:/code/storage
+      - /tmp/helmreel:/tmp/helmreel
       - ./opcache.ini:/usr/local/etc/php/conf.d/opcache.ini:ro
     depends_on:
       mysql:
@@ -41,19 +41,19 @@ services:
       rabbitmq:
         condition: service_healthy
     networks:
-      canalizador:
+      helmreel:
 
   worker:
     image: *php-image
-    container_name: worker_canalizador_prod
+    container_name: worker_helmreel_prod
     restart: unless-stopped
     env_file:
       - ./.env
     volumes:
-      - /opt/canalizador/app:/code
+      - /opt/helmreel/app:/code
       - vendor:/code/vendor
-      - /opt/canalizador/data/storage:/code/storage
-      - /tmp/canalizador:/tmp/canalizador
+      - /opt/helmreel/data/storage:/code/storage
+      - /tmp/helmreel:/tmp/helmreel
     depends_on:
       mysql:
         condition: service_healthy
@@ -65,56 +65,56 @@ services:
         --queue=youtube.video.created,youtube.short.created,video.created,clip.created,clip.generated,clip.completed,video.all_clips_completed
         --tries=3 --timeout=300 --sleep=3"
     networks:
-      canalizador:
+      helmreel:
 
   mysql:
     image: *mysql-image
-    container_name: mysql_canalizador_prod
+    container_name: mysql_helmreel_prod
     restart: unless-stopped
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
-      - /opt/canalizador/data/mysql:/var/lib/mysql
+      - /opt/helmreel/data/mysql:/var/lib/mysql
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root --password=$$MYSQL_ROOT_PASSWORD"]
       interval: 10s
       timeout: 5s
       retries: 10
     networks:
-      canalizador:
+      helmreel:
 
   redis:
     image: redis:7-alpine
-    container_name: redis_canalizador_prod
+    container_name: redis_helmreel_prod
     restart: unless-stopped
     command: redis-server --appendonly yes
     volumes:
-      - /opt/canalizador/data/redis:/data
+      - /opt/helmreel/data/redis:/data
     networks:
-      canalizador:
+      helmreel:
 
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
-    container_name: rabbitmq_canalizador_prod
+    container_name: rabbitmq_helmreel_prod
     restart: unless-stopped
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
     volumes:
-      - /opt/canalizador/data/rabbitmq:/var/lib/rabbitmq
+      - /opt/helmreel/data/rabbitmq:/var/lib/rabbitmq
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 10s
       timeout: 5s
       retries: 10
     networks:
-      canalizador:
+      helmreel:
 
 volumes:
   vendor:
 
 networks:
-  canalizador:
+  helmreel:
     driver: bridge

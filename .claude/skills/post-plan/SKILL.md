@@ -1,6 +1,6 @@
 # Post Plan
 
-Crea un post de planificación en español para X en el hilo de Canalizador.
+Crea un post de planificación en español para X en el hilo de Helmreel.
 El tono es **storytelling personal**: cuenta el problema como una historia vivida, presenta la solución como algo que vas a construir, y cierra con un CTA que invite a la interacción.
 
 ## Instrucciones
