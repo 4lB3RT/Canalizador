@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\GetVideo;
+namespace Helmreel\YouTube\Video\Application\UseCases\GetVideo;
 
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
-use Canalizador\YouTube\Video\Domain\ValueObjects\PlatformId;
-use Canalizador\YouTube\Video\Infrastructure\Builders\YouTubeVideoBuilder;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoRepository;
+use Helmreel\YouTube\Video\Domain\ValueObjects\PlatformId;
+use Helmreel\YouTube\Video\Infrastructure\Builders\YouTubeVideoBuilder;
 
 final readonly class GetVideo
 {

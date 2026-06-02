@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\YouTube\Channel\Application\UseCases\SyncChannel\SyncChannel;
-use Canalizador\YouTube\Channel\Application\UseCases\SyncChannel\SyncChannelRequest;
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
+use Helmreel\YouTube\Channel\Application\UseCases\SyncChannel\SyncChannel;
+use Helmreel\YouTube\Channel\Application\UseCases\SyncChannel\SyncChannelRequest;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

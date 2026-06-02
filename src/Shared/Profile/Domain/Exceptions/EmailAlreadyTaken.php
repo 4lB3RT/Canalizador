@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Profile\Domain\Exceptions;
+namespace Helmreel\Shared\Profile\Domain\Exceptions;
 
 final class EmailAlreadyTaken extends \DomainException
 {

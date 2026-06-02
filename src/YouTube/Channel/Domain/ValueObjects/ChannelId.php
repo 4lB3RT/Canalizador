@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Domain\ValueObjects;
+namespace Helmreel\YouTube\Channel\Domain\ValueObjects;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\StringValue;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\StringValue;
 
 final readonly class ChannelId extends StringValue
 {

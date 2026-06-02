@@ -1,7 +1,7 @@
 openapi: 3.0.3
 
 info:
-  title: Canalizador API
+  title: Helmreel API
   description: API for automating YouTube video optimization and content repurposing
   version: 1.0.0
   license:
@@ -9,7 +9,7 @@ info:
     url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: http://canalizador.test
+  - url: http://helmreel.test
     description: Local development
 
 security:

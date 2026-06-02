@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Infrastructure\Services;
+namespace Helmreel\VideoProduction\Video\Infrastructure\Services;
 
-use Canalizador\VideoProduction\Video\Domain\Services\FileSystem;
+use Helmreel\VideoProduction\Video\Domain\Services\FileSystem;
 use Illuminate\Support\Facades\File;
 
 final class LaravelFileSystem implements FileSystem

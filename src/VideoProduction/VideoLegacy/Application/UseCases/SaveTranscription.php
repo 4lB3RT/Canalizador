@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Application\UseCases;
+namespace Helmreel\VideoProduction\VideoLegacy\Application\UseCases;
 
-use Canalizador\VideoProduction\VideoLegacy\Domain\Exceptions\VideoLocalPathNotFound;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
-use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
-use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
-use Canalizador\YouTube\Transcription\Domain\Repositories\TranscriptionRepository;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Exceptions\VideoLocalPathNotFound;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
+use Helmreel\YouTube\Transcription\Domain\Entities\Transcription;
+use Helmreel\YouTube\Transcription\Domain\Repositories\TranscriptionRepository;
 
 final readonly class SaveTranscription
 {

@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Infrastructure\Repositories\Veo;
+namespace Helmreel\VideoProduction\Video\Infrastructure\Repositories\Veo;
 
-use Canalizador\Shared\Shared\Domain\Services\HttpClient;
-use Canalizador\Shared\Shared\Domain\Services\HttpResponseValidator;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\ImageMimeType;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
-use Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
-use Canalizador\VideoProduction\Video\Domain\Entities\Video;
-use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoContentRetriever;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoExtender;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoGenerator;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\AspectRatio;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\Resolution;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoDuration;
+use Helmreel\Shared\Shared\Domain\Services\HttpClient;
+use Helmreel\Shared\Shared\Domain\Services\HttpResponseValidator;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\ImageMimeType;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Url;
+use Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
+use Helmreel\VideoProduction\Video\Domain\Entities\Video;
+use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoContentRetriever;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoExtender;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoGenerator;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\AspectRatio;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoDuration;
 use Illuminate\Support\Facades\File;
 
 final readonly class VeoVideoRepository implements VideoGenerator, VideoContentRetriever, VideoExtender

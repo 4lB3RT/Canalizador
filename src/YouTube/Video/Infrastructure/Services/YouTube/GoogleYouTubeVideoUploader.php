@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Services\YouTube;
+namespace Helmreel\YouTube\Video\Infrastructure\Services\YouTube;
 
-use Canalizador\VideoProduction\Video\Domain\Services\FileSystem;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\VideoProduction\Video\Domain\Services\FileSystem;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
 use Google\Service\Exception;
 use Google_Client;
 use Google_Http_MediaFileUpload;

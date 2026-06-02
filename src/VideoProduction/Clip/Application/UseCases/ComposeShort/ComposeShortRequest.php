@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Application\UseCases\ComposeShort;
+namespace Helmreel\VideoProduction\Clip\Application\UseCases\ComposeShort;
 
 final readonly class ComposeShortRequest
 {

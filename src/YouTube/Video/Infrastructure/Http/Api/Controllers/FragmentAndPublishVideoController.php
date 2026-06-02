@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\YouTube\Video\Application\UseCases\FragmentAndPublishVideo\FragmentAndPublishVideo;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\FragmentAndPublishVideoRequestMapper;
+use Helmreel\YouTube\Video\Application\UseCases\FragmentAndPublishVideo\FragmentAndPublishVideo;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Infrastructure\Http\Api\Mappers\FragmentAndPublishVideoRequestMapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Application\UseCases\UpdateChannel;
+namespace Helmreel\YouTube\Channel\Application\UseCases\UpdateChannel;
 
-use Canalizador\YouTube\Channel\Domain\Entities\Channel;
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\YouTube\Channel\Domain\Entities\Channel;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
 
 final readonly class UpdateChannel
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Domain\Repositories;
+namespace Helmreel\VideoProduction\Video\Domain\Repositories;
 
-use Canalizador\VideoProduction\Script\Domain\ValueObjects\ScriptId;
-use Canalizador\VideoProduction\Video\Domain\Entities\Video;
-use Canalizador\VideoProduction\Video\Domain\Entities\VideoCollection;
-use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
+use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptId;
+use Helmreel\VideoProduction\Video\Domain\Entities\Video;
+use Helmreel\VideoProduction\Video\Domain\Entities\VideoCollection;
+use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 
 interface VideoRepository
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Domain\Repositories;
+namespace Helmreel\YouTube\Video\Domain\Repositories;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
 
 interface SmartVideoFragmenter
 {

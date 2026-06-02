@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\GetVideos;
+namespace Helmreel\YouTube\Video\Application\UseCases\GetVideos;
 
-use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoRepository;
 
 final readonly class GetVideos
 {

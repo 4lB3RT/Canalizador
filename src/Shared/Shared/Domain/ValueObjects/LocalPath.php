@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Domain\ValueObjects;
+namespace Helmreel\Shared\Shared\Domain\ValueObjects;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\StringValue;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\StringValue;
 
 final readonly class LocalPath extends StringValue
 {

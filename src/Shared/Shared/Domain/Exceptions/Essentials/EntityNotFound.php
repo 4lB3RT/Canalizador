@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Shared\Shared\Domain\Exceptions\Essentials;
+namespace Helmreel\Shared\Shared\Domain\Exceptions\Essentials;
 
 use Exception;
 

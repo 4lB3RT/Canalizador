@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Domain\Factories;
+namespace Helmreel\VideoProduction\Clip\Domain\Factories;
 
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
-use Canalizador\VideoProduction\Clip\Domain\Entities\Clip;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipId;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\Sequence;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Url;
+use Helmreel\VideoProduction\Clip\Domain\Entities\Clip;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\ClipId;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\Sequence;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 
 final readonly class ClipFactory
 {

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Repositories\YouTube;
+namespace Helmreel\YouTube\Video\Infrastructure\Repositories\YouTube;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoDownloader;
-use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoDownloader;
+use Helmreel\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
 
 final class YtDlpVideoDownloader implements VideoDownloader
 {

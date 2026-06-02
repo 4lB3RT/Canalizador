@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Repositories\Youtube;
+namespace Helmreel\VideoProduction\VideoLegacy\Infrastructure\Repositories\Youtube;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Entities\Video;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
-use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
-use Canalizador\VideoProduction\VideoLegacy\Infrastructure\DataTransformers\VideoDataTransformer;
-use Canalizador\YouTube\Metric\Domain\Entities\Metric;
-use Canalizador\YouTube\Metric\Domain\Entities\MetricCollection;
-use Canalizador\YouTube\Metric\Domain\ValueObjects\MetricName;
-use Canalizador\YouTube\Metric\Domain\ValueObjects\MetricType;
-use Canalizador\YouTube\Metric\Domain\ValueObjects\MetricValue;
-use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeAnalyticsApiClient;
-use Canalizador\YouTube\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Entities\Video;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
+use Helmreel\VideoProduction\VideoLegacy\Infrastructure\DataTransformers\VideoDataTransformer;
+use Helmreel\YouTube\Metric\Domain\Entities\Metric;
+use Helmreel\YouTube\Metric\Domain\Entities\MetricCollection;
+use Helmreel\YouTube\Metric\Domain\ValueObjects\MetricName;
+use Helmreel\YouTube\Metric\Domain\ValueObjects\MetricType;
+use Helmreel\YouTube\Metric\Domain\ValueObjects\MetricValue;
+use Helmreel\YouTube\Shared\Infrastructure\ClientAPI\YoutubeAnalyticsApiClient;
+use Helmreel\YouTube\Shared\Infrastructure\ClientAPI\YoutubeDataApiClient;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Category;
 use DateTimeImmutable;
 use Throwable;
 

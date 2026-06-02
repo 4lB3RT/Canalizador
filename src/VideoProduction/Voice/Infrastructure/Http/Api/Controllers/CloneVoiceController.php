@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Voice\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\VideoProduction\Voice\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\VideoProduction\Voice\Application\UseCases\CloneVoice\CloneVoice;
+use Helmreel\VideoProduction\Voice\Application\UseCases\CloneVoice\CloneVoice;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

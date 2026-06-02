@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Voice\Application\UseCases\CloneVoice;
+namespace Helmreel\VideoProduction\Voice\Application\UseCases\CloneVoice;
 
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Voice\Domain\Entities\Voice;
-use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceCloner;
-use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
-use Canalizador\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\VideoProduction\Voice\Domain\Entities\Voice;
+use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceCloner;
+use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
+use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 use Illuminate\Support\Str;
 
 final readonly class CloneVoice

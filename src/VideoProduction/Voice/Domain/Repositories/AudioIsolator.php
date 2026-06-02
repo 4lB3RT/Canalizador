@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Voice\Domain\Repositories;
+namespace Helmreel\VideoProduction\Voice\Domain\Repositories;
 
 interface AudioIsolator
 {

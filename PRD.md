@@ -1,7 +1,7 @@
 # Product Requirements Document (PRD)
 
 ## 1. Overview
-- **Product Name:** Canalizador Video Action Platform
+- **Product Name:** Helmreel Video Action Platform
 - **Author:** [Your Name]
 - **Date:** August 11, 2025
 - **Version:** 1.0

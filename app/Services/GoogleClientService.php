@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\User;
-use Canalizador\YouTube\Channel\Domain\Entities\ChannelGoogleToken;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelGoogleTokenRepository;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Channel\Domain\Entities\ChannelGoogleToken;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelGoogleTokenRepository;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use DateTimeImmutable;
 use Google_Client;
 use Illuminate\Support\Facades\Auth;

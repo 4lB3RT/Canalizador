@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Infrastructure\Events;
+namespace Helmreel\Shared\Shared\Infrastructure\Events;
 
-use Canalizador\Shared\Shared\Domain\Events\DomainEvent;
-use Canalizador\Shared\Shared\Domain\Events\EventBus;
+use Helmreel\Shared\Shared\Domain\Events\DomainEvent;
+use Helmreel\Shared\Shared\Domain\Events\EventBus;
 
 final readonly class LaravelQueueEventBus implements EventBus
 {

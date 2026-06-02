@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Avatar\Domain\Repositories;
+namespace Helmreel\VideoProduction\Avatar\Domain\Repositories;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\VideoProduction\Avatar\Domain\Entities\Avatar;
-use Canalizador\VideoProduction\Avatar\Domain\Exceptions\AvatarNotFound;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\VideoProduction\Avatar\Domain\Entities\Avatar;
+use Helmreel\VideoProduction\Avatar\Domain\Exceptions\AvatarNotFound;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
 
 interface AvatarRepository
 {

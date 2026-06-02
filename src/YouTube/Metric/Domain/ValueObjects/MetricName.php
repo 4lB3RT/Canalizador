@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Metric\Domain\ValueObjects;
+namespace Helmreel\YouTube\Metric\Domain\ValueObjects;
 
 use InvalidArgumentException;
 

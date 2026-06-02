@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Domain\Services;
+namespace Helmreel\Shared\Shared\Domain\Services;
 
 interface HttpResponseValidator
 {

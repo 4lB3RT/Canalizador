@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Commands;
+namespace Helmreel\YouTube\Video\Infrastructure\Commands;
 
-use Canalizador\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
-use Canalizador\YouTube\Video\Application\UseCases\PublishVideo\PublishVideoRequest;
+use Helmreel\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
+use Helmreel\YouTube\Video\Application\UseCases\PublishVideo\PublishVideoRequest;
 use Illuminate\Console\Command;
 
 class PublishVideoCommand extends Command

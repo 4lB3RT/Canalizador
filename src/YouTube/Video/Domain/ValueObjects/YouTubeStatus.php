@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Domain\ValueObjects;
+namespace Helmreel\YouTube\Video\Domain\ValueObjects;
 
 enum YouTubeStatus: string
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Domain\Exceptions;
+namespace Helmreel\YouTube\Channel\Domain\Exceptions;
 
-use Canalizador\Shared\Shared\Domain\Exceptions\EntityNotFound;
+use Helmreel\Shared\Shared\Domain\Exceptions\EntityNotFound;
 
 final class ChannelGoogleTokenNotFound extends EntityNotFound
 {

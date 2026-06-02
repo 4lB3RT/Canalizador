@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Application\UseCases\DownloadClip;
+namespace Helmreel\VideoProduction\Clip\Application\UseCases\DownloadClip;
 
 final readonly class DownloadClipRequest
 {

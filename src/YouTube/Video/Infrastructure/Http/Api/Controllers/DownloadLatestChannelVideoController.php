@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo\DownloadLatestChannelVideo;
-use Canalizador\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo\DownloadLatestChannelVideoRequest;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo\DownloadLatestChannelVideo;
+use Helmreel\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo\DownloadLatestChannelVideoRequest;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 

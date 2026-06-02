@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Tools;
+namespace Helmreel\YouTube\Video\Infrastructure\Tools;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\YouTube\Video\Domain\Repositories\AudioExtractor as AudioExtractorRepository;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\YouTube\Video\Domain\Repositories\AudioExtractor as AudioExtractorRepository;
 use Prism\Prism\Tool;
 
 final class AudioExtractor extends Tool

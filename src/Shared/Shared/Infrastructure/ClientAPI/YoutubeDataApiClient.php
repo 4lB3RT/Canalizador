@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Infrastructure\ClientAPI;
+namespace Helmreel\Shared\Shared\Infrastructure\ClientAPI;
 
 use App\Services\GoogleClientService;
-use Canalizador\VideoProduction\Video\Domain\Services\YouTubeServiceFactory;
-use Canalizador\YouTube\Channel\Domain\Entities\Channel;
+use Helmreel\VideoProduction\Video\Domain\Services\YouTubeServiceFactory;
+use Helmreel\YouTube\Channel\Domain\Entities\Channel;
 use Google\Service\Exception;
 use Google_Client;
 use Google_Service_Exception;

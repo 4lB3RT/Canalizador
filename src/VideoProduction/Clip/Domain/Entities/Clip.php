@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Domain\Entities;
+namespace Helmreel\VideoProduction\Clip\Domain\Entities;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipId;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\Sequence;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Url;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\ClipId;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\Sequence;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 
 final class Clip
 {

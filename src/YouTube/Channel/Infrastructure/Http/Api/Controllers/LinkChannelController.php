@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\YouTube\Channel\Domain\Entities\ChannelGoogleToken;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelGoogleTokenRepository;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Channel\Infrastructure\Repositories\Youtube\YoutubeChannelRepository;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\YouTube\Channel\Domain\Entities\ChannelGoogleToken;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelGoogleTokenRepository;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Channel\Infrastructure\Repositories\Youtube\YoutubeChannelRepository;
 use DateTimeImmutable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

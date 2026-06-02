@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Domain\ValueObjects;
+namespace Helmreel\Shared\Shared\Domain\ValueObjects;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerValue;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerValue;
 
 final readonly class Minutes extends IntegerValue
 {

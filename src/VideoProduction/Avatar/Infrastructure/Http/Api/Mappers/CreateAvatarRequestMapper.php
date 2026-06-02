@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Avatar\Infrastructure\Http\Api\Mappers;
+namespace Helmreel\VideoProduction\Avatar\Infrastructure\Http\Api\Mappers;
 
-use Canalizador\VideoProduction\Avatar\Application\UseCases\CreateAvatar\CreateAvatarRequest;
+use Helmreel\VideoProduction\Avatar\Application\UseCases\CreateAvatar\CreateAvatarRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 

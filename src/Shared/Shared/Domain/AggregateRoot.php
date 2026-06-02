@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Shared\Shared\Domain;
+namespace Helmreel\Shared\Shared\Domain;
 
-use Canalizador\Shared\Shared\Domain\Events\DomainEvent;
+use Helmreel\Shared\Shared\Domain\Events\DomainEvent;
 
 abstract class AggregateRoot
 {

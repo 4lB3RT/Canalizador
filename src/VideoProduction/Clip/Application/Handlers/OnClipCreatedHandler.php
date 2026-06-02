@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Application\Handlers;
+namespace Helmreel\VideoProduction\Clip\Application\Handlers;
 
-use Canalizador\Shared\Shared\Domain\Events\DomainEvent;
-use Canalizador\Shared\Shared\Domain\Events\DomainEventHandler;
-use Canalizador\VideoProduction\Clip\Application\UseCases\GenerateClip\GenerateClip;
-use Canalizador\VideoProduction\Clip\Application\UseCases\GenerateClip\GenerateClipRequest;
-use Canalizador\VideoProduction\Clip\Domain\Events\ClipCreated;
+use Helmreel\Shared\Shared\Domain\Events\DomainEvent;
+use Helmreel\Shared\Shared\Domain\Events\DomainEventHandler;
+use Helmreel\VideoProduction\Clip\Application\UseCases\GenerateClip\GenerateClip;
+use Helmreel\VideoProduction\Clip\Application\UseCases\GenerateClip\GenerateClipRequest;
+use Helmreel\VideoProduction\Clip\Domain\Events\ClipCreated;
 
 final readonly class OnClipCreatedHandler implements DomainEventHandler
 {

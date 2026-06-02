@@ -2,16 +2,16 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Transcription\Infrastructure\DataTransformer;
+namespace Helmreel\YouTube\Transcription\Infrastructure\DataTransformer;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\Language;
-use Canalizador\YouTube\Transcription\Domain\Collections\SentenceCollection;
-use Canalizador\YouTube\Transcription\Domain\Entities\Transcription;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\EndTime;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\Sentence;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\StartTime;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\Text;
-use Canalizador\Youtube\Video\Domain\ValueObjects\Id;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\Language;
+use Helmreel\YouTube\Transcription\Domain\Collections\SentenceCollection;
+use Helmreel\YouTube\Transcription\Domain\Entities\Transcription;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\EndTime;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\Sentence;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\StartTime;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\Text;
+use Helmreel\Youtube\Video\Domain\ValueObjects\Id;
 
 final class TranscriptionDataTransformer
 {

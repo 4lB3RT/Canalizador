@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Domain\ValueObjects;
+namespace Helmreel\VideoProduction\Video\Domain\ValueObjects;
 
 enum VideoCategory: string
 {

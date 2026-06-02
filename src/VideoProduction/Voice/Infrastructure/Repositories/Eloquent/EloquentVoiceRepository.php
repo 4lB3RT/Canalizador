@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Voice\Infrastructure\Repositories\Eloquent;
+namespace Helmreel\VideoProduction\Voice\Infrastructure\Repositories\Eloquent;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Voice\Domain\Entities\Voice;
-use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
-use Canalizador\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
-use Canalizador\VideoProduction\Voice\Infrastructure\DAO\VoiceDAO;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\VideoProduction\Voice\Domain\Entities\Voice;
+use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
+use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
+use Helmreel\VideoProduction\Voice\Infrastructure\DAO\VoiceDAO;
 
 final class EloquentVoiceRepository implements VoiceRepository
 {

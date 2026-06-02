@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Domain\Events;
+namespace Helmreel\Shared\Shared\Domain\Events;
 
 interface EventBus
 {

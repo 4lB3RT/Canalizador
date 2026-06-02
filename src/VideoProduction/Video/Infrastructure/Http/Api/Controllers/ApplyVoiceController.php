@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\VideoProduction\Video\Application\UseCases\ApplyVoice\ApplyVoice;
-use Canalizador\VideoProduction\Video\Application\UseCases\ApplyVoice\ApplyVoiceRequest;
+use Helmreel\VideoProduction\Video\Application\UseCases\ApplyVoice\ApplyVoice;
+use Helmreel\VideoProduction\Video\Application\UseCases\ApplyVoice\ApplyVoiceRequest;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;

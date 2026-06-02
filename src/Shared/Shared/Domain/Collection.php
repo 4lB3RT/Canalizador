@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Domain;
+namespace Helmreel\Shared\Shared\Domain;
 
 use ArrayIterator;
-use Canalizador\Shared\Shared\Domain\Exceptions\InvalidCollectionType;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\Exceptions\InvalidCollectionType;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Countable;
 use IteratorAggregate;
 

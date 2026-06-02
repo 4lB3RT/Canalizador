@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\News\Application\UseCases\DownloadNews;
+namespace Helmreel\VideoProduction\News\Application\UseCases\DownloadNews;
 
-use Canalizador\VideoProduction\News\Domain\Entities\News;
-use Canalizador\VideoProduction\News\Domain\Repositories\NewsProvider;
-use Canalizador\VideoProduction\News\Domain\Repositories\NewsRepository;
+use Helmreel\VideoProduction\News\Domain\Entities\News;
+use Helmreel\VideoProduction\News\Domain\Repositories\NewsProvider;
+use Helmreel\VideoProduction\News\Domain\Repositories\NewsRepository;
 
 final readonly class DownloadNews
 {

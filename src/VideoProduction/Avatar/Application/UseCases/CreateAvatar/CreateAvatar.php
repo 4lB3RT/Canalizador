@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Avatar\Application\UseCases\CreateAvatar;
+namespace Helmreel\VideoProduction\Avatar\Application\UseCases\CreateAvatar;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Avatar\Domain\Factories\AvatarFactory;
-use Canalizador\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\Biography;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\Category;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
-use Canalizador\VideoProduction\Avatar\Infrastructure\Repositories\OpenAI\OpenAiAvatarRepository;
-use Canalizador\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\VideoProduction\Avatar\Domain\Factories\AvatarFactory;
+use Helmreel\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Category;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
+use Helmreel\VideoProduction\Avatar\Infrastructure\Repositories\OpenAI\OpenAiAvatarRepository;
+use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 use Illuminate\Support\Facades\File;
 
 final readonly class CreateAvatar

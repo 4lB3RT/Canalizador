@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoLocalPathNotSet;
-use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Infrastructure\Http\Api\Mappers\PublishVideoRequestMapper;
+use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoLocalPathNotSet;
+use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Infrastructure\Http\Api\Mappers\PublishVideoRequestMapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

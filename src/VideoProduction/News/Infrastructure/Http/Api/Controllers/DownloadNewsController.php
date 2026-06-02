@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\News\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\VideoProduction\News\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\VideoProduction\News\Application\UseCases\DownloadNews\DownloadNews;
+use Helmreel\VideoProduction\News\Application\UseCases\DownloadNews\DownloadNews;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 

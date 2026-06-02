@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\GetVideo;
+namespace Helmreel\YouTube\Video\Application\UseCases\GetVideo;
 
 final readonly class GetVideoRequest
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\YouTube\Video\Application\UseCases\GenerateShort\GenerateShort;
-use Canalizador\YouTube\Video\Application\UseCases\GenerateShort\GenerateShortRequest;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\YouTube\Video\Application\UseCases\GenerateShort\GenerateShort;
+use Helmreel\YouTube\Video\Application\UseCases\GenerateShort\GenerateShortRequest;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoNotFound;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

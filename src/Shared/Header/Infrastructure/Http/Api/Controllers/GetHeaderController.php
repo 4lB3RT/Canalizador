@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Header\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\Shared\Header\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\Shared\Header\Application\UseCases\GetHeader\GetHeader;
-use Canalizador\Shared\Header\Application\UseCases\GetHeader\GetHeaderRequest;
-use Canalizador\Shared\Header\Domain\Exceptions\UserHeaderNotFound;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Header\Application\UseCases\GetHeader\GetHeader;
+use Helmreel\Shared\Header\Application\UseCases\GetHeader\GetHeaderRequest;
+use Helmreel\Shared\Header\Domain\Exceptions\UserHeaderNotFound;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

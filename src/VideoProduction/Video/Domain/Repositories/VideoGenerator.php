@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Domain\Repositories;
+namespace Helmreel\VideoProduction\Video\Domain\Repositories;
 
-use Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\Resolution;
+use Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 
 interface VideoGenerator
 {

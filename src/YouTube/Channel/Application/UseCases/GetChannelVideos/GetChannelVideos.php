@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Application\UseCases\GetChannelVideos;
+namespace Helmreel\YouTube\Channel\Application\UseCases\GetChannelVideos;
 
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoRepository;
 
 final readonly class GetChannelVideos
 {

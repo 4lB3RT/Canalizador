@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\GetVideos;
+namespace Helmreel\YouTube\Video\Application\UseCases\GetVideos;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Pagination;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Search;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Pagination;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Search;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Category;
 
 final readonly class GetVideosRequest
 {

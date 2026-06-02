@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Canalizador is a Laravel 12 application for automating YouTube video optimization and content repurposing. It uses AI-driven insights to generate shorts, update metadata, and process videos in bulk.
+Helmreel is a Laravel 12 application for automating YouTube video optimization and content repurposing. It uses AI-driven insights to generate shorts, update metadata, and process videos in bulk.
 
 ## Architecture
 
@@ -74,5 +74,5 @@ Key endpoints:
 ## Namespace Mapping
 
 - `App\` → `app/`
-- `Canalizador\` → `src/`
+- `Helmreel\` → `src/`
 - `Tests\` → `tests/`

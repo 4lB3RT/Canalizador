@@ -2,17 +2,17 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\PublishVideo;
+namespace Helmreel\YouTube\Video\Application\UseCases\PublishVideo;
 
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\YouTube\Video\Domain\Entities\Video;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoLocalPathNotSet;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Domain\Factories\VideoPublisherFactory;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\YouTube\Video\Domain\Entities\Video;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoLocalPathNotSet;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Domain\Factories\VideoPublisherFactory;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoRepository;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Id;
 use DateTimeImmutable;
 use DateTimeZone;
 

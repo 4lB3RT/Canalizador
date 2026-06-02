@@ -1,6 +1,6 @@
-# Canalizador
+# Helmreel
 
-**Canalizador** is a Laravel 12 application for automating YouTube content production and optimization using artificial intelligence. It programmatically generates videos, scripts, voices, and shorts through a REST API.
+**Helmreel** is a Laravel 12 application for automating YouTube content production and optimization using artificial intelligence. It programmatically generates videos, scripts, voices, and shorts through a REST API.
 
 ---
 
@@ -58,8 +58,8 @@ Each module follows the same structure: `Domain/` → `Application/` → `Infras
 ### 1. Clone the repository
 
 ```bash
-git clone <repo-url> canalizador
-cd canalizador
+git clone <repo-url> helmreel
+cd helmreel
 ```
 
 ### 2. Configure environment variables
@@ -73,7 +73,7 @@ Edit `.env` and fill in the external API credentials:
 ```dotenv
 # Database (use the docker-compose values)
 DB_HOST=10.7.0.6
-DB_DATABASE=canalizador
+DB_DATABASE=helmreel
 DB_USERNAME=root
 DB_PASSWORD=your_password
 
@@ -101,7 +101,7 @@ This script handles everything: builds images, starts containers, installs depen
 ### 4. Create a user and get the API token
 
 ```bash
-docker exec -it php_canalizador php artisan tinker
+docker exec -it php_helmreel php artisan tinker
 ```
 
 ```php
@@ -166,11 +166,11 @@ Endpoints marked with `*` additionally require Google OAuth configured.
 The `docker/commands/` directory includes wrappers to run commands inside the PHP container:
 
 ```bash
-# Equivalent to: docker exec -it php_canalizador php artisan <cmd>
+# Equivalent to: docker exec -it php_helmreel php artisan <cmd>
 bash docker/commands/artisan.sh migrate
 bash docker/commands/artisan.sh tinker
 
-# Equivalent to: docker exec -it php_canalizador composer <cmd>
+# Equivalent to: docker exec -it php_helmreel composer <cmd>
 bash docker/commands/composer.sh install
 bash docker/commands/composer.sh test
 ```

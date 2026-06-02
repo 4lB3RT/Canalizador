@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\GenerateShort;
+namespace Helmreel\YouTube\Video\Application\UseCases\GenerateShort;
 
 final readonly class GenerateShortRequest
 {

@@ -22,7 +22,7 @@ content:
                 email:
                   type: string
                   format: email
-                  example: 'albert@canalizador.dev'
+                  example: 'albert@helmreel.dev'
                 avatar_url:
                   type: string
                   format: uri

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Infrastructure\Http\Api\Mappers;
+namespace Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Mappers;
 
-use Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo\CreateVideoRequest;
+use Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo\CreateVideoRequest;
 use Illuminate\Http\Request;
 
 final readonly class CreateVideoRequestMapper

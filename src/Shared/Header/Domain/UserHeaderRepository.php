@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Header\Domain;
+namespace Helmreel\Shared\Header\Domain;
 
-use Canalizador\Shared\Header\Domain\Exceptions\UserHeaderNotFound;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Header\Domain\Exceptions\UserHeaderNotFound;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 
 interface UserHeaderRepository
 {

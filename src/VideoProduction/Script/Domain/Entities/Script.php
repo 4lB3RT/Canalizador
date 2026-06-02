@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Script\Domain\Entities;
+namespace Helmreel\VideoProduction\Script\Domain\Entities;
 
-use Canalizador\VideoProduction\Script\Domain\ValueObjects\ScriptContent;
-use Canalizador\VideoProduction\Script\Domain\ValueObjects\ScriptId;
+use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptContent;
+use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptId;
 
 final readonly class Script
 {

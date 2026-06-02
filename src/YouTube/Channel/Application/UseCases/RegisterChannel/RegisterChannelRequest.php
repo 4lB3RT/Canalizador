@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Application\UseCases\RegisterChannel;
+namespace Helmreel\YouTube\Channel\Application\UseCases\RegisterChannel;
 
 final readonly class RegisterChannelRequest
 {

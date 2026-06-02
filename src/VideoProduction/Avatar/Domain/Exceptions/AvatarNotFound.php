@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Avatar\Domain\Exceptions;
+namespace Helmreel\VideoProduction\Avatar\Domain\Exceptions;
 
 use RuntimeException;
 

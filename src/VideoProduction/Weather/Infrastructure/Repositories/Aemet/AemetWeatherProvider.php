@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Weather\Infrastructure\Repositories\Aemet;
+namespace Helmreel\VideoProduction\Weather\Infrastructure\Repositories\Aemet;
 
-use Canalizador\Shared\Shared\Domain\Services\HttpClient;
-use Canalizador\Shared\Shared\Domain\Services\HttpResponseValidator;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\VideoProduction\Weather\Domain\Entities\CityForecast;
-use Canalizador\VideoProduction\Weather\Domain\Repositories\WeatherProvider;
-use Canalizador\VideoProduction\Weather\Domain\ValueObjects\CityName;
-use Canalizador\VideoProduction\Weather\Domain\ValueObjects\MunicipalityCode;
-use Canalizador\VideoProduction\Weather\Domain\ValueObjects\Percentage;
-use Canalizador\VideoProduction\Weather\Domain\ValueObjects\SnowLevel;
-use Canalizador\VideoProduction\Weather\Domain\ValueObjects\Temperature;
-use Canalizador\VideoProduction\Weather\Domain\ValueObjects\UvIndex;
-use Canalizador\VideoProduction\Weather\Domain\ValueObjects\WeatherState;
-use Canalizador\VideoProduction\Weather\Domain\ValueObjects\WindDirection;
-use Canalizador\VideoProduction\Weather\Domain\ValueObjects\WindSpeed;
+use Helmreel\Shared\Shared\Domain\Services\HttpClient;
+use Helmreel\Shared\Shared\Domain\Services\HttpResponseValidator;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\VideoProduction\Weather\Domain\Entities\CityForecast;
+use Helmreel\VideoProduction\Weather\Domain\Repositories\WeatherProvider;
+use Helmreel\VideoProduction\Weather\Domain\ValueObjects\CityName;
+use Helmreel\VideoProduction\Weather\Domain\ValueObjects\MunicipalityCode;
+use Helmreel\VideoProduction\Weather\Domain\ValueObjects\Percentage;
+use Helmreel\VideoProduction\Weather\Domain\ValueObjects\SnowLevel;
+use Helmreel\VideoProduction\Weather\Domain\ValueObjects\Temperature;
+use Helmreel\VideoProduction\Weather\Domain\ValueObjects\UvIndex;
+use Helmreel\VideoProduction\Weather\Domain\ValueObjects\WeatherState;
+use Helmreel\VideoProduction\Weather\Domain\ValueObjects\WindDirection;
+use Helmreel\VideoProduction\Weather\Domain\ValueObjects\WindSpeed;
 
 final readonly class AemetWeatherProvider implements WeatherProvider
 {

@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Application\UseCases\CreateVideo;
+namespace Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo;
 
-use Canalizador\Shared\Shared\Domain\Events\EventBus;
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Canalizador\VideoProduction\News\Domain\Repositories\NewsRepository;
-use Canalizador\VideoProduction\Script\Domain\Repositories\ScriptRepository;
-use Canalizador\VideoProduction\Script\Domain\Services\GenerateScript;
-use Canalizador\VideoProduction\Script\Domain\ValueObjects\ScriptId;
-use Canalizador\VideoProduction\Video\Domain\Events\VideoCreated;
-use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\VideoProduction\Video\Domain\Factories\VideoFactory;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
-use Canalizador\VideoProduction\Weather\Domain\Repositories\ForecastRepository;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\Shared\Shared\Domain\Events\EventBus;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
+use Helmreel\VideoProduction\News\Domain\Repositories\NewsRepository;
+use Helmreel\VideoProduction\Script\Domain\Repositories\ScriptRepository;
+use Helmreel\VideoProduction\Script\Domain\Services\GenerateScript;
+use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptId;
+use Helmreel\VideoProduction\Video\Domain\Events\VideoCreated;
+use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\VideoProduction\Video\Domain\Factories\VideoFactory;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
+use Helmreel\VideoProduction\Weather\Domain\Repositories\ForecastRepository;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
 
 final readonly class CreateVideo
 {

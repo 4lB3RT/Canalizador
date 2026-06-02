@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Weather\Domain\Repositories;
+namespace Helmreel\VideoProduction\Weather\Domain\Repositories;
 
-use Canalizador\VideoProduction\Weather\Domain\Entities\CityForecast;
+use Helmreel\VideoProduction\Weather\Domain\Entities\CityForecast;
 
 interface WeatherProvider
 {

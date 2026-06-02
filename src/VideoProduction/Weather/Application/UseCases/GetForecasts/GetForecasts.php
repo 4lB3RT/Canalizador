@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Weather\Application\UseCases\GetForecasts;
+namespace Helmreel\VideoProduction\Weather\Application\UseCases\GetForecasts;
 
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\VideoProduction\Weather\Domain\Entities\CityForecast;
-use Canalizador\VideoProduction\Weather\Domain\Repositories\ForecastRepository;
-use Canalizador\VideoProduction\Weather\Domain\Repositories\ForecastSummarizer;
-use Canalizador\VideoProduction\Weather\Domain\Repositories\WeatherProvider;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\VideoProduction\Weather\Domain\Entities\CityForecast;
+use Helmreel\VideoProduction\Weather\Domain\Repositories\ForecastRepository;
+use Helmreel\VideoProduction\Weather\Domain\Repositories\ForecastSummarizer;
+use Helmreel\VideoProduction\Weather\Domain\Repositories\WeatherProvider;
 
 final readonly class GetForecasts
 {

@@ -21,5 +21,5 @@ Eres creador de contenido gaming y necesitas fotos profesionales para tus redes.
 
 Voy a construir un sistema donde subes tu foto y te devuelve 3 imágenes tuyas en un setup gaming: frontal, 30° izquierda y 30° derecha. Realistas y listas para usar.
 
-Pronto en Canalizador.
+Pronto en Helmreel.
 ```

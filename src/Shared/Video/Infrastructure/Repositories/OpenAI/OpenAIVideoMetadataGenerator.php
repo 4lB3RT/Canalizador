@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Video\Infrastructure\Repositories\OpenAI;
+namespace Helmreel\Shared\Video\Infrastructure\Repositories\OpenAI;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
-use Canalizador\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
-use Canalizador\Shared\Video\Domain\ValueObjects\VideoMetadata;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
+use Helmreel\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
+use Helmreel\Shared\Video\Domain\ValueObjects\VideoMetadata;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Facades\Prism;
 

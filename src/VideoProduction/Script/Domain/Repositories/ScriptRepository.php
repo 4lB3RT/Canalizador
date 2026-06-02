@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Script\Domain\Repositories;
+namespace Helmreel\VideoProduction\Script\Domain\Repositories;
 
-use Canalizador\VideoProduction\Script\Domain\Entities\Script;
-use Canalizador\VideoProduction\Script\Domain\ValueObjects\ScriptId;
+use Helmreel\VideoProduction\Script\Domain\Entities\Script;
+use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptId;
 
 interface ScriptRepository
 {

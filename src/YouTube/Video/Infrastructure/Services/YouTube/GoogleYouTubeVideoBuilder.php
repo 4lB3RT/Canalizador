@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Services\YouTube;
+namespace Helmreel\YouTube\Video\Infrastructure\Services\YouTube;
 
 use Google_Service_YouTube_Video;
 use Google_Service_YouTube_VideoSnippet;

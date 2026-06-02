@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Commands;
+namespace Helmreel\YouTube\Video\Infrastructure\Commands;
 
-use Canalizador\YouTube\Video\Infrastructure\Agents\AudioTranscriptor;
-use Canalizador\YouTube\Video\Infrastructure\Agents\CartoonVideoMaker;
+use Helmreel\YouTube\Video\Infrastructure\Agents\AudioTranscriptor;
+use Helmreel\YouTube\Video\Infrastructure\Agents\CartoonVideoMaker;
 use Illuminate\Console\Command;
 
 class VideoAgentCommand extends Command

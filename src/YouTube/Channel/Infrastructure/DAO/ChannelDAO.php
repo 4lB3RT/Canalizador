@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Infrastructure\DAO;
+namespace Helmreel\YouTube\Channel\Infrastructure\DAO;
 
 use Illuminate\Database\Eloquent\Model;
 

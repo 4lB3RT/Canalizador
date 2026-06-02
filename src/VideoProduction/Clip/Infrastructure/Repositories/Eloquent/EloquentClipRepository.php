@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Infrastructure\Repositories\Eloquent;
+namespace Helmreel\VideoProduction\Clip\Infrastructure\Repositories\Eloquent;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
-use Canalizador\VideoProduction\Clip\Domain\Entities\Clip;
-use Canalizador\VideoProduction\Clip\Domain\Entities\ClipCollection;
-use Canalizador\VideoProduction\Clip\Domain\Exceptions\ClipNotFound;
-use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipRepository;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipId;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\Sequence;
-use Canalizador\VideoProduction\Clip\Infrastructure\DAO\ClipDAO;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Url;
+use Helmreel\VideoProduction\Clip\Domain\Entities\Clip;
+use Helmreel\VideoProduction\Clip\Domain\Entities\ClipCollection;
+use Helmreel\VideoProduction\Clip\Domain\Exceptions\ClipNotFound;
+use Helmreel\VideoProduction\Clip\Domain\Repositories\ClipRepository;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\ClipId;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\Sequence;
+use Helmreel\VideoProduction\Clip\Infrastructure\DAO\ClipDAO;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 
 final class EloquentClipRepository implements ClipRepository
 {

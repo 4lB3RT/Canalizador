@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Infrastructure\Services;
+namespace Helmreel\Shared\Shared\Infrastructure\Services;
 
-use Canalizador\Shared\Shared\Domain\Services\YouTubeAnalyticsServiceFactory;
+use Helmreel\Shared\Shared\Domain\Services\YouTubeAnalyticsServiceFactory;
 use Google_Client;
 use Google_Service_YouTubeAnalytics;
 

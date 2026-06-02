@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Infrastructure\Services;
+namespace Helmreel\Shared\Shared\Infrastructure\Services;
 
-use Canalizador\Shared\Shared\Domain\Services\HttpClient;
-use Canalizador\Shared\Shared\Domain\Services\HttpResponse;
+use Helmreel\Shared\Shared\Domain\Services\HttpClient;
+use Helmreel\Shared\Shared\Domain\Services\HttpResponse;
 use Illuminate\Support\Facades\Http;
 
 final readonly class LaravelHttpClient implements HttpClient

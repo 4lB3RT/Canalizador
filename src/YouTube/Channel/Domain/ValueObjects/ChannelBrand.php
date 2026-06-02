@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Domain\ValueObjects;
+namespace Helmreel\YouTube\Channel\Domain\ValueObjects;
 
 final readonly class ChannelBrand
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\FragmentAndPublishVideo;
+namespace Helmreel\YouTube\Video\Application\UseCases\FragmentAndPublishVideo;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Domain\Factories\VideoPublisherFactory;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoFragmenter;
-use Canalizador\YouTube\Video\Domain\ValueObjects\VideoToPublish;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Domain\Factories\VideoPublisherFactory;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoFragmenter;
+use Helmreel\YouTube\Video\Domain\ValueObjects\VideoToPublish;
 
 final readonly class FragmentAndPublishVideo
 {

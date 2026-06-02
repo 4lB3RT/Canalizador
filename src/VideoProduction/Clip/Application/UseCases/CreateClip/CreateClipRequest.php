@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Application\UseCases\CreateClip;
+namespace Helmreel\VideoProduction\Clip\Application\UseCases\CreateClip;
 
 final readonly class CreateClipRequest
 {

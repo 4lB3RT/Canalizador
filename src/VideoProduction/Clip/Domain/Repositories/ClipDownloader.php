@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Domain\Repositories;
+namespace Helmreel\VideoProduction\Clip\Domain\Repositories;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\GenerationId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Url;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 
 interface ClipDownloader
 {

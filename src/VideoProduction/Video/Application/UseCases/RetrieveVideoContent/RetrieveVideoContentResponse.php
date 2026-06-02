@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Application\UseCases\RetrieveVideoContent;
+namespace Helmreel\VideoProduction\Video\Application\UseCases\RetrieveVideoContent;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
 
 final readonly class RetrieveVideoContentResponse
 {

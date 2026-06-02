@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Image\Domain\Repositories;
+namespace Helmreel\VideoProduction\Image\Domain\Repositories;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\VideoProduction\Image\Domain\Entities\Image;
-use Canalizador\VideoProduction\Image\Domain\Entities\ImageCollection;
-use Canalizador\VideoProduction\Image\Domain\Exceptions\ImageNotFound;
-use Canalizador\VideoProduction\Image\Domain\ValueObjects\ImageId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\VideoProduction\Image\Domain\Entities\Image;
+use Helmreel\VideoProduction\Image\Domain\Entities\ImageCollection;
+use Helmreel\VideoProduction\Image\Domain\Exceptions\ImageNotFound;
+use Helmreel\VideoProduction\Image\Domain\ValueObjects\ImageId;
 
 interface ImageRepository
 {

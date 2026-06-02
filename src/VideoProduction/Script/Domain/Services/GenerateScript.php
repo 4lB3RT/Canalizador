@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Script\Domain\Services;
+namespace Helmreel\VideoProduction\Script\Domain\Services;
 
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\VideoProduction\Script\Domain\Entities\Script;
-use Canalizador\VideoProduction\Script\Domain\Factories\ScriptFactory;
-use Canalizador\VideoProduction\Script\Domain\Repositories\ScriptGenerator;
-use Canalizador\VideoProduction\Script\Domain\Repositories\ScriptRepository;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\VideoProduction\Script\Domain\Entities\Script;
+use Helmreel\VideoProduction\Script\Domain\Factories\ScriptFactory;
+use Helmreel\VideoProduction\Script\Domain\Repositories\ScriptGenerator;
+use Helmreel\VideoProduction\Script\Domain\Repositories\ScriptRepository;
 
 final readonly class GenerateScript
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo;
+namespace Helmreel\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo;
 
 final readonly class DownloadLatestChannelVideoRequest
 {

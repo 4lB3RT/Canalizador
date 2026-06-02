@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Application\UseCases\GetChannels;
+namespace Helmreel\YouTube\Channel\Application\UseCases\GetChannels;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Pagination;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Pagination;
 
 final readonly class GetChannelsRequest
 {

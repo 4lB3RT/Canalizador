@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Page;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Pagination;
-use Canalizador\Shared\Shared\Domain\ValueObjects\PerPage;
-use Canalizador\YouTube\Channel\Application\UseCases\GetChannelVideos\GetChannelVideos;
-use Canalizador\YouTube\Channel\Application\UseCases\GetChannelVideos\GetChannelVideosRequest;
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Video\Domain\Entities\Video;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Page;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Pagination;
+use Helmreel\Shared\Shared\Domain\ValueObjects\PerPage;
+use Helmreel\YouTube\Channel\Application\UseCases\GetChannelVideos\GetChannelVideos;
+use Helmreel\YouTube\Channel\Application\UseCases\GetChannelVideos\GetChannelVideosRequest;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Video\Domain\Entities\Video;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

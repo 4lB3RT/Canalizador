@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Application\UseCases;
+namespace Helmreel\VideoProduction\VideoLegacy\Application\UseCases;
 
-use Canalizador\VideoProduction\VideoLegacy\Domain\Entities\Video;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
-use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Entities\Video;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
 
 final readonly class GetYoutubeVideo
 {

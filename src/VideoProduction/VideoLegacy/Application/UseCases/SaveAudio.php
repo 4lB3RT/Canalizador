@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Application\UseCases;
+namespace Helmreel\VideoProduction\VideoLegacy\Application\UseCases;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Entities\Video;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
-use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Entities\Video;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
 
 final readonly class SaveAudio
 {

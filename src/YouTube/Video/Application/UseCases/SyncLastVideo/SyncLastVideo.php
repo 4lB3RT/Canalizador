@@ -2,16 +2,16 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Application\UseCases\SyncLastVideo;
+namespace Helmreel\YouTube\Video\Application\UseCases\SyncLastVideo;
 
-use Canalizador\Shared\Shared\Domain\Events\EventBus;
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
-use Canalizador\YouTube\Video\Infrastructure\Builders\YouTubeVideoBuilder;
+use Helmreel\Shared\Shared\Domain\Events\EventBus;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoRepository;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Category;
+use Helmreel\YouTube\Video\Infrastructure\Builders\YouTubeVideoBuilder;
 use DateMalformedIntervalStringException;
 use DateMalformedStringException;
 use Throwable;

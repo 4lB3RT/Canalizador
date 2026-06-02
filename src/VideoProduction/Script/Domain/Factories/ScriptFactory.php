@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Script\Domain\Factories;
+namespace Helmreel\VideoProduction\Script\Domain\Factories;
 
-use Canalizador\VideoProduction\Script\Domain\Entities\Script;
-use Canalizador\VideoProduction\Script\Domain\ValueObjects\ScriptContent;
-use Canalizador\VideoProduction\Script\Domain\ValueObjects\ScriptId;
+use Helmreel\VideoProduction\Script\Domain\Entities\Script;
+use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptContent;
+use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptId;
 
 final readonly class ScriptFactory
 {

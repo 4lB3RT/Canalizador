@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Shared\Infrastructure\Services;
+namespace Helmreel\Shared\Shared\Infrastructure\Services;
 
-use Canalizador\Shared\Shared\Domain\Services\PasswordHasher;
+use Helmreel\Shared\Shared\Domain\Services\PasswordHasher;
 use Illuminate\Contracts\Hashing\Hasher;
 
 final readonly class LaravelPasswordHasher implements PasswordHasher

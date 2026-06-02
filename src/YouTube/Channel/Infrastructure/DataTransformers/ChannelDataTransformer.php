@@ -2,18 +2,18 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Channel\Infrastructure\DataTransformers;
+namespace Helmreel\YouTube\Channel\Infrastructure\DataTransformers;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Country;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
-use Canalizador\YouTube\Channel\Domain\Entities\Channel;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelBrand;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\PrivacyStatus;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Country;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Url;
+use Helmreel\YouTube\Channel\Domain\Entities\Channel;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelBrand;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\PrivacyStatus;
 use DateTimeImmutable;
 
 class ChannelDataTransformer

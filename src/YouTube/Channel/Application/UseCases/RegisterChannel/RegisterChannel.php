@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Application\UseCases\RegisterChannel;
+namespace Helmreel\YouTube\Channel\Application\UseCases\RegisterChannel;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
 
 final readonly class RegisterChannel
 {

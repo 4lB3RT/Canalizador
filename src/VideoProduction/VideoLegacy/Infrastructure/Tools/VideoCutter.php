@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Tools;
+namespace Helmreel\VideoProduction\VideoLegacy\Infrastructure\Tools;
 
 use Prism\Prism\Tool;
 

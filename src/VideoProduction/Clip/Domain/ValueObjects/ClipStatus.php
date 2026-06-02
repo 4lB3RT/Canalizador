@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Domain\ValueObjects;
+namespace Helmreel\VideoProduction\Clip\Domain\ValueObjects;
 
 enum ClipStatus: string
 {

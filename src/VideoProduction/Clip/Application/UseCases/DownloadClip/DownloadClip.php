@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Application\UseCases\DownloadClip;
+namespace Helmreel\VideoProduction\Clip\Application\UseCases\DownloadClip;
 
-use Canalizador\Shared\Shared\Domain\Events\EventBus;
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Clip\Domain\Events\ClipCompleted;
-use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipDownloader;
-use Canalizador\VideoProduction\Clip\Domain\Repositories\ClipRepository;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipId;
+use Helmreel\Shared\Shared\Domain\Events\EventBus;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\VideoProduction\Clip\Domain\Events\ClipCompleted;
+use Helmreel\VideoProduction\Clip\Domain\Repositories\ClipDownloader;
+use Helmreel\VideoProduction\Clip\Domain\Repositories\ClipRepository;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\ClipId;
 
 final readonly class DownloadClip
 {

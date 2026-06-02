@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Clip\Domain\Entities;
+namespace Helmreel\VideoProduction\Clip\Domain\Entities;
 
-use Canalizador\Shared\Shared\Domain\Collection;
-use Canalizador\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
+use Helmreel\Shared\Shared\Domain\Collection;
+use Helmreel\VideoProduction\Clip\Domain\ValueObjects\ClipStatus;
 
 final class ClipCollection extends Collection
 {

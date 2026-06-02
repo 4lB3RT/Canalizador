@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\Profile\Application\UseCases\UpdateProfile;
+namespace Helmreel\Shared\Profile\Application\UseCases\UpdateProfile;
 
-use Canalizador\Shared\Profile\Domain\Exceptions\EmailAlreadyTaken;
-use Canalizador\Shared\Profile\Domain\Exceptions\InvalidCurrentPassword;
-use Canalizador\Shared\Profile\Domain\Exceptions\ProfileNotFound;
-use Canalizador\Shared\Profile\Domain\ProfileRepository;
-use Canalizador\Shared\Shared\Domain\Services\PasswordHasher;
+use Helmreel\Shared\Profile\Domain\Exceptions\EmailAlreadyTaken;
+use Helmreel\Shared\Profile\Domain\Exceptions\InvalidCurrentPassword;
+use Helmreel\Shared\Profile\Domain\Exceptions\ProfileNotFound;
+use Helmreel\Shared\Profile\Domain\ProfileRepository;
+use Helmreel\Shared\Shared\Domain\Services\PasswordHasher;
 
 final readonly class UpdateProfile
 {

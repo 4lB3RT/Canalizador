@@ -2,25 +2,25 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Repositories\Eloquent;
+namespace Helmreel\YouTube\Video\Infrastructure\Repositories\Eloquent;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Pagination;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Search;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Total;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Video\Domain\Entities\Video;
-use Canalizador\YouTube\Video\Domain\Entities\VideoCollection;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoRepository;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Id;
-use Canalizador\YouTube\Video\Domain\ValueObjects\PlatformId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Pagination;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Search;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Total;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Video\Domain\Entities\Video;
+use Helmreel\YouTube\Video\Domain\Entities\VideoCollection;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoRepository;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Category;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Id;
+use Helmreel\YouTube\Video\Domain\ValueObjects\PlatformId;
 use Illuminate\Database\Eloquent\Builder;
-use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
-use Canalizador\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
-use Canalizador\YouTube\Video\Infrastructure\DAO\VideoDAO;
-use Canalizador\YouTube\Video\Infrastructure\DataTransformers\VideoDataTransformer;
+use Helmreel\YouTube\Video\Domain\ValueObjects\YouTubeStatus;
+use Helmreel\YouTube\Video\Domain\ValueObjects\YouTubeVideoId;
+use Helmreel\YouTube\Video\Infrastructure\DAO\VideoDAO;
+use Helmreel\YouTube\Video\Infrastructure\DataTransformers\VideoDataTransformer;
 
 final class EloquentVideoRepository implements VideoRepository
 {

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\DataTransformers;
+namespace Helmreel\VideoProduction\VideoLegacy\Infrastructure\DataTransformers;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Url;
-use Canalizador\Shared\Video\Domain\ValueObjects\Title;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Entities\Video;
-use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
-use Canalizador\YouTube\Metric\Domain\Entities\MetricCollection;
-use Canalizador\YouTube\Transcription\Infrastructure\DataTransformer\TranscriptionDataTransformer;
-use Canalizador\YouTube\Video\Domain\ValueObjects\Category;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Url;
+use Helmreel\Shared\Video\Domain\ValueObjects\Title;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Entities\Video;
+use Helmreel\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
+use Helmreel\YouTube\Metric\Domain\Entities\MetricCollection;
+use Helmreel\YouTube\Transcription\Infrastructure\DataTransformer\TranscriptionDataTransformer;
+use Helmreel\YouTube\Video\Domain\ValueObjects\Category;
 
 class VideoDataTransformer
 {

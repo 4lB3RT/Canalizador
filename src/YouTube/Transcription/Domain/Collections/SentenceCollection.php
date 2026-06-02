@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Transcription\Domain\Collections;
+namespace Helmreel\YouTube\Transcription\Domain\Collections;
 
-use Canalizador\Shared\Shared\Domain\Collection;
-use Canalizador\YouTube\Transcription\Domain\ValueObjects\Sentence;
+use Helmreel\Shared\Shared\Domain\Collection;
+use Helmreel\YouTube\Transcription\Domain\ValueObjects\Sentence;
 
 final class SentenceCollection extends Collection
 {

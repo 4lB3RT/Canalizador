@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Domain\Factories;
+namespace Helmreel\YouTube\Video\Domain\Factories;
 
-use Canalizador\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoPublisher;
+use Helmreel\YouTube\Video\Domain\Exceptions\YouTubeOperationFailed;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoPublisher;
 
 interface VideoPublisherFactory
 {

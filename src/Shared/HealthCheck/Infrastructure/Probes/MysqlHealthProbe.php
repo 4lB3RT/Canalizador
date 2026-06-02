@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\Shared\HealthCheck\Infrastructure\Probes;
+namespace Helmreel\Shared\HealthCheck\Infrastructure\Probes;
 
-use Canalizador\Shared\HealthCheck\Domain\HealthProbe;
-use Canalizador\Shared\HealthCheck\Domain\ServiceStatus;
+use Helmreel\Shared\HealthCheck\Domain\HealthProbe;
+use Helmreel\Shared\HealthCheck\Domain\ServiceStatus;
 use Illuminate\Database\ConnectionInterface;
 use Throwable;
 

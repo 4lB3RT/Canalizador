@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Weather\Domain\ValueObjects;
+namespace Helmreel\VideoProduction\Weather\Domain\ValueObjects;
 
 final readonly class Percentage
 {

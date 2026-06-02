@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers;
 
 use DateTimeImmutable;
 use Illuminate\Http\JsonResponse;

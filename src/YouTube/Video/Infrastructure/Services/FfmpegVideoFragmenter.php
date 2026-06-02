@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Services;
+namespace Helmreel\YouTube\Video\Infrastructure\Services;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
-use Canalizador\YouTube\Video\Domain\Repositories\VideoFragmenter;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\YouTube\Video\Domain\Exceptions\VideoFragmentationFailed;
+use Helmreel\YouTube\Video\Domain\Repositories\VideoFragmenter;
 
 final class FfmpegVideoFragmenter implements VideoFragmenter
 {

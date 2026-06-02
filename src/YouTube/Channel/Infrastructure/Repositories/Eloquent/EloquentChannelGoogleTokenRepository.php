@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Infrastructure\Repositories\Eloquent;
+namespace Helmreel\YouTube\Channel\Infrastructure\Repositories\Eloquent;
 
-use Canalizador\YouTube\Channel\Domain\Entities\ChannelGoogleToken;
-use Canalizador\YouTube\Channel\Domain\Exceptions\ChannelGoogleTokenNotFound;
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelGoogleTokenRepository;
-use Canalizador\YouTube\Channel\Domain\ValueObjects\ChannelId;
-use Canalizador\YouTube\Channel\Infrastructure\DAO\ChannelGoogleTokenDAO;
+use Helmreel\YouTube\Channel\Domain\Entities\ChannelGoogleToken;
+use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelGoogleTokenNotFound;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelGoogleTokenRepository;
+use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Channel\Infrastructure\DAO\ChannelGoogleTokenDAO;
 use DateTimeImmutable;
 
 final class EloquentChannelGoogleTokenRepository implements ChannelGoogleTokenRepository

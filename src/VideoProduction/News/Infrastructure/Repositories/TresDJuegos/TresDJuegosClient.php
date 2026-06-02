@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\News\Infrastructure\Repositories\TresDJuegos;
+namespace Helmreel\VideoProduction\News\Infrastructure\Repositories\TresDJuegos;
 
-use Canalizador\Shared\Shared\Domain\Services\HttpClient;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
-use Canalizador\VideoProduction\News\Domain\Entities\News;
-use Canalizador\VideoProduction\News\Domain\Repositories\NewsProvider;
-use Canalizador\VideoProduction\News\Domain\ValueObjects\Description;
-use Canalizador\VideoProduction\News\Domain\ValueObjects\NewsId;
-use Canalizador\VideoProduction\News\Domain\ValueObjects\PublishedAt;
-use Canalizador\VideoProduction\News\Domain\ValueObjects\Title;
+use Helmreel\Shared\Shared\Domain\Services\HttpClient;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\VideoProduction\News\Domain\Entities\News;
+use Helmreel\VideoProduction\News\Domain\Repositories\NewsProvider;
+use Helmreel\VideoProduction\News\Domain\ValueObjects\Description;
+use Helmreel\VideoProduction\News\Domain\ValueObjects\NewsId;
+use Helmreel\VideoProduction\News\Domain\ValueObjects\PublishedAt;
+use Helmreel\VideoProduction\News\Domain\ValueObjects\Title;
 
 final readonly class TresDJuegosClient implements NewsProvider
 {

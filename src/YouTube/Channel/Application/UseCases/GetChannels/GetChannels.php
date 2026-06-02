@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Application\UseCases\GetChannels;
+namespace Helmreel\YouTube\Channel\Application\UseCases\GetChannels;
 
-use Canalizador\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
 
 final readonly class GetChannels
 {

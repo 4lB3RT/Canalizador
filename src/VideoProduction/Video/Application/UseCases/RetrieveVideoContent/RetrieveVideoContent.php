@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Application\UseCases\RetrieveVideoContent;
+namespace Helmreel\VideoProduction\Video\Application\UseCases\RetrieveVideoContent;
 
-use Canalizador\Shared\Shared\Domain\Services\Clock;
-use Canalizador\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
-use Canalizador\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoContentRetriever;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoGenerationFailed;
+use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoContentRetriever;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 use Illuminate\Http\Client\ConnectionException;
 
 final readonly class RetrieveVideoContent

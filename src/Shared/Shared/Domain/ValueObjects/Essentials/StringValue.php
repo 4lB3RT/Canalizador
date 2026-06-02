@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\Shared\Shared\Domain\ValueObjects\Essentials;
+namespace Helmreel\Shared\Shared\Domain\ValueObjects\Essentials;
 
 abstract readonly class StringValue
 {

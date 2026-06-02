@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\VideoLegacy\Infrastructure\Tools;
+namespace Helmreel\VideoProduction\VideoLegacy\Infrastructure\Tools;
 
-use Canalizador\VideoProduction\VideoLegacy\Application\UseCases\SaveAudio;
-use Canalizador\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
-use Canalizador\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
+use Helmreel\VideoProduction\VideoLegacy\Application\UseCases\SaveAudio;
+use Helmreel\VideoProduction\VideoLegacy\Domain\Exceptions\VideoNotFound;
+use Helmreel\VideoProduction\VideoLegacy\Domain\ValueObjects\VideoId;
 use Prism\Prism\Tool;
 
 final class AudioExtractor extends Tool

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Shared\Header;
 
 use App\Models\User;
-use Canalizador\YouTube\Channel\Infrastructure\DAO\ChannelDAO;
+use Helmreel\YouTube\Channel\Infrastructure\DAO\ChannelDAO;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

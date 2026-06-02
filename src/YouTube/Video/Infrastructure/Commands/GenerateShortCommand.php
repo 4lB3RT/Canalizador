@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace Canalizador\YouTube\Video\Infrastructure\Commands;
+namespace Helmreel\YouTube\Video\Infrastructure\Commands;
 
-use Canalizador\YouTube\Video\Application\UseCases\GenerateShort\GenerateShort;
-use Canalizador\YouTube\Video\Application\UseCases\GenerateShort\GenerateShortRequest;
+use Helmreel\YouTube\Video\Application\UseCases\GenerateShort\GenerateShort;
+use Helmreel\YouTube\Video\Application\UseCases\GenerateShort\GenerateShortRequest;
 use Illuminate\Console\Command;
 
 class GenerateShortCommand extends Command

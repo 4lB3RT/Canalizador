@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Voice\Domain\Repositories;
+namespace Helmreel\VideoProduction\Voice\Domain\Repositories;
 
-use Canalizador\VideoProduction\Voice\Domain\Entities\Voice;
-use Canalizador\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
+use Helmreel\VideoProduction\Voice\Domain\Entities\Voice;
+use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 
 interface VoiceRepository
 {

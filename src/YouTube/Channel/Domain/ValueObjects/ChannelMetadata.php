@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\YouTube\Channel\Domain\ValueObjects;
+namespace Helmreel\YouTube\Channel\Domain\ValueObjects;
 
-use Canalizador\Shared\Shared\Domain\ValueObjects\Country;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Description;
-use Canalizador\Shared\Shared\Domain\ValueObjects\Title;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Country;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
 
 final readonly class ChannelMetadata
 {

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Canalizador\VideoProduction\Video\Application\UseCases\ApplyVoice;
+namespace Helmreel\VideoProduction\Video\Application\UseCases\ApplyVoice;
 
-use Canalizador\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
-use Canalizador\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Canalizador\VideoProduction\Clip\Domain\Services\VideoComposer;
-use Canalizador\VideoProduction\Video\Domain\Repositories\VideoRepository;
-use Canalizador\VideoProduction\Video\Domain\ValueObjects\VideoId;
-use Canalizador\VideoProduction\Voice\Domain\Repositories\AudioIsolator;
-use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceGenerator;
-use Canalizador\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
+use Helmreel\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
+use Helmreel\VideoProduction\Clip\Domain\Services\VideoComposer;
+use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
+use Helmreel\VideoProduction\Voice\Domain\Repositories\AudioIsolator;
+use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceGenerator;
+use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
 use Illuminate\Support\Facades\File;
 
 final readonly class ApplyVoice
