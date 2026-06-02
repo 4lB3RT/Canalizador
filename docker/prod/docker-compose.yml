@@ -12,7 +12,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ${NGINX_CONF_FILE:-./nginx.no-tls.conf}:/etc/nginx/conf.d/default.conf:ro
+      - ${NGINX_CONF_FILE:-./nginx.conf}:/etc/nginx/conf.d/default.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /opt/helmreel/web:/var/www/helmreel:ro
       - /opt/helmreel/app:/code:ro
