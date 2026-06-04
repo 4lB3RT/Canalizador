@@ -98,14 +98,6 @@ jobs:
           mv app.new app
 
           docker compose -f docker/prod/docker-compose.yml pull
-
-          # ⚠️⚠️ TEMPORAL — BORRA LA BASE DE DATOS. Recrea MySQL una sola vez para
-          # que inicialice la BD `helmreel` (antes era `canalizador`, vacía).
-          # REVERTIR este commit inmediatamente después de este deploy: a partir
-          # de aquí prod tiene datos y NINGÚN deploy debe borrar el volumen.
-          docker compose -f docker/prod/docker-compose.yml rm -sf mysql
-          rm -rf /opt/helmreel/data/mysql
-
           docker compose -f docker/prod/docker-compose.yml up -d --remove-orphans --force-recreate
 
           docker compose -f docker/prod/docker-compose.yml exec -T php composer install --no-dev --no-interaction --optimize-autoloader --working-dir=/code
