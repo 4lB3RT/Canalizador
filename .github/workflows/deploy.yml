@@ -63,6 +63,25 @@ jobs:
         run: |
           scp -i ~/.ssh/id_rsa /tmp/helmreel-app.tar.gz ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/tmp/helmreel-app.tar.gz
 
+      - name: Authenticate VM Docker with Artifact Registry
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: |
+          # The VM's local gcloud credential store is corrupt
+          # (gcloud "duplicate column name: regional_access_boundary"), which
+          # breaks Docker's credential helper for *.pkg.dev. Instead of relying
+          # on the VM's gcloud, mint a short-lived access token here on the
+          # runner (which has a healthy gcloud) from the service-account key and
+          # log the VM's Docker into Artifact Registry directly. This is Google's
+          # recommended approach for CI and sidesteps the broken store entirely.
+          echo "$GCP_SA_KEY" > /tmp/gcp-sa-key.json
+          gcloud auth activate-service-account --key-file=/tmp/gcp-sa-key.json
+          ACCESS_TOKEN="$(gcloud auth print-access-token)"
+          rm -f /tmp/gcp-sa-key.json
+
+          ssh -i ~/.ssh/id_rsa ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} \
+            "docker login -u oauth2accesstoken --password-stdin https://europe-west1-docker.pkg.dev" <<< "$ACCESS_TOKEN"
+
       - name: Apply on VM
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} 'bash -s' <<'REMOTE'
