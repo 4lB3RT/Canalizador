@@ -101,7 +101,24 @@ jobs:
           docker compose -f docker/prod/docker-compose.yml up -d --remove-orphans --force-recreate
 
           docker compose -f docker/prod/docker-compose.yml exec -T php composer install --no-dev --no-interaction --optimize-autoloader --working-dir=/code
-          docker compose -f docker/prod/docker-compose.yml exec -T php php /code/artisan migrate --force
+
+          # Retry migrate until MySQL is ready (a slow DB start previously left the
+          # database empty because this step ran before MySQL accepted connections).
+          migrated=false
+          for i in $(seq 1 30); do
+            if docker compose -f docker/prod/docker-compose.yml exec -T php php /code/artisan migrate --force; then
+              migrated=true
+              break
+            fi
+            echo "migrate failed (MySQL not ready?), retry $i/30"
+            sleep 5
+          done
+          # If it still failed after 30 tries, run once more unguarded so a real
+          # migration error propagates and aborts the deploy (set -e).
+          if [ "$migrated" != "true" ]; then
+            docker compose -f docker/prod/docker-compose.yml exec -T php php /code/artisan migrate --force
+          fi
+
           docker compose -f docker/prod/docker-compose.yml exec -T php php /code/artisan config:cache
           docker compose -f docker/prod/docker-compose.yml exec -T php php /code/artisan route:cache
 
