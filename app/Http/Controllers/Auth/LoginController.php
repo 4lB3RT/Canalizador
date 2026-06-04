@@ -185,9 +185,6 @@ final class LoginController
             return redirect()->intended('/')->with('success', '¡Bienvenido de nuevo!');
 
         } catch (\Throwable $e) {
-            // Catch \Throwable (not just \Exception) so fatals like TypeError or
-            // a DB driver \Error are logged and redirect cleanly, instead of a
-            // silent 500 with no trace (which is exactly what hid this bug).
             Log::error('Error processing Google OAuth callback', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
