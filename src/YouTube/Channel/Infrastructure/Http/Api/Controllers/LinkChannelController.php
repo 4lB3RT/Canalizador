@@ -15,6 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -89,8 +90,8 @@ final class LinkChannelController extends Controller
 
             $this->channelGoogleTokenRepository->save(new ChannelGoogleToken(
                 channelId:    $channelIdVO,
-                accessToken:  (string) $row->access_token,
-                refreshToken: $row->refresh_token ? (string) $row->refresh_token : null,
+                accessToken:  Crypt::decryptString((string) $row->access_token),
+                refreshToken: $row->refresh_token ? Crypt::decryptString((string) $row->refresh_token) : null,
                 expiresAt:    $expiresAt,
                 scope:        $row->scope ? (string) $row->scope : null,
                 tokenType:    $row->token_type ? (string) $row->token_type : null,

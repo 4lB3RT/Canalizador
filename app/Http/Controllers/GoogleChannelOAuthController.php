@@ -10,6 +10,7 @@ use Google_Service_YouTube;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -109,9 +110,12 @@ final class GoogleChannelOAuthController extends Controller
                 ? (new DateTimeImmutable('+' . (int) $token['expires_in'] . ' seconds'))->format('Y-m-d H:i:s')
                 : null;
 
+            $accessToken = (string) ($token['access_token'] ?? '');
+            $refreshToken = $token['refresh_token'] ?? null;
+
             DB::table('channel_oauth_states')->where('state', $state)->update([
-                'access_token'       => (string) ($token['access_token']  ?? ''),
-                'refresh_token'      => $token['refresh_token']           ?? null,
+                'access_token'       => $accessToken !== '' ? Crypt::encryptString($accessToken) : '',
+                'refresh_token'      => $refreshToken !== null ? Crypt::encryptString($refreshToken) : null,
                 'expires_at'         => $expiresAt,
                 'scope'              => $token['scope']                   ?? null,
                 'token_type'         => $token['token_type']              ?? null,
