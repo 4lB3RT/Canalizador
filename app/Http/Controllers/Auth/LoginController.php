@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -134,26 +135,12 @@ final class LoginController
                 return redirect()->route('login')->with('error', $errorMessage);
             }
 
-            $user = User::where('email', $email)->first();
-
-            if (!$user) {
-                if ($request->expectsJson()) {
-                    return response()->json([
-                        'error' => 'Usuario no encontrado',
-                        'message' => 'Por favor regístrate primero',
-                    ], 404);
-                }
-
-                return redirect()->route('register')->with('error', 'Usuario no encontrado. Por favor regístrate primero.');
-            }
-
-            $user->update([
-                'google_access_token' => $token['access_token'] ?? null,
-                'google_refresh_token' => $token['refresh_token'] ?? $user->google_refresh_token,
-                'google_expires_in' => $token['expires_in'] ?? null,
-                'google_scope' => $token['scope'] ?? null,
-                'google_token_type' => $token['token_type'] ?? null,
-            ]);
+            // Flujo unificado: si el usuario existe inicia sesión; si no, se crea (registro
+            // implícito). Esto soporta tanto el botón clásico como Google One Tap/silencioso,
+            // que llega sin session('oauth_type').
+            // TODO(human): resolver $user a partir de $email y $googleUser, persistiendo los
+            // tokens de Google. Implementa aquí la resolución y asígnala a $user.
+            $user = $this->resolveUserFromGoogle($email, $googleUser, $token);
 
             app(GoogleTokenService::class)->storeToken($user->id, $token);
 
@@ -219,12 +206,53 @@ final class LoginController
         }
     }
 
+    /**
+     * Resuelve (o crea) el usuario a partir de los datos de Google y persiste sus tokens.
+     *
+     * @param  array<string, mixed>  $token
+     */
+    private function resolveUserFromGoogle(string $email, \Google_Service_Oauth2_Userinfo $googleUser, array $token): User
+    {
+        $user = User::firstOrNew(['email' => $email]);
+
+        if (!$user->exists) {
+            $user->name = $googleUser->name ?? 'Usuario de Google';
+            $user->password = Hash::make(Str::random(32));
+        }
+
+        $user->google_access_token = $token['access_token'] ?? null;
+        // Google solo envía refresh_token en el primer consentimiento; en re-logins llega
+        // null, así que conservamos el que ya tuviera el usuario.
+        $user->google_refresh_token = $token['refresh_token'] ?? $user->google_refresh_token;
+        $user->google_expires_in = $token['expires_in'] ?? null;
+        $user->google_scope = $token['scope'] ?? null;
+        $user->google_token_type = $token['token_type'] ?? null;
+
+        $user->save();
+
+        return $user;
+    }
+
     private function buildGoogleClient(): \Google_Client
     {
+        $clientId = config('services.youtube_analytics.client_id');
+        $clientSecret = config('services.youtube_analytics.client_secret');
+        $redirectUri = config('services.youtube_analytics.redirect_uri');
+
+        if (!$clientId || !$clientSecret || !$redirectUri) {
+            Log::error('Google OAuth misconfigured', [
+                'has_client_id' => (bool) $clientId,
+                'has_client_secret' => (bool) $clientSecret,
+                'has_redirect_uri' => (bool) $redirectUri,
+            ]);
+
+            throw new \RuntimeException('Google OAuth no está configurado correctamente.');
+        }
+
         $client = new \Google_Client();
-        $client->setClientId(config('services.youtube_analytics.client_id'));
-        $client->setClientSecret(config('services.youtube_analytics.client_secret'));
-        $client->setRedirectUri(config('services.youtube_analytics.redirect_uri'));
+        $client->setClientId($clientId);
+        $client->setClientSecret($clientSecret);
+        $client->setRedirectUri($redirectUri);
 
         $client->setScopes([
             'https://www.googleapis.com/auth/userinfo.email',

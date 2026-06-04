@@ -5,7 +5,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\GoogleChannelOAuthController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -22,17 +21,10 @@ Route::get('/auth/google/register', [RegisterController::class, 'handleGoogleReg
 Route::get('/auth/google/channel/callback', [GoogleChannelOAuthController::class, 'callback'])
     ->name('auth.google.channel.callback');
 
-Route::get('/auth/google/callback', function (Request $request) {
-    $oauthType = session('oauth_type', 'register');
-
-    if ($oauthType === 'login') {
-        $controller = app(LoginController::class);
-        return $controller->handleGoogleCallback($request);
-    } else {
-        $controller = app(RegisterController::class);
-        return $controller->handleGoogleCallback($request);
-    }
-})->name('auth.google.callback');
+// Único callback para todos los flujos de Google (botón clásico y One Tap/silencioso).
+// No depende de session('oauth_type'): decide login vs registro por email dentro del método.
+Route::get('/auth/google/callback', [LoginController::class, 'handleGoogleCallback'])
+    ->name('auth.google.callback');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {

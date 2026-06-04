@@ -41,5 +41,12 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->report(function (\Throwable $e): void {
+            \Illuminate\Support\Facades\Log::error('Unhandled exception', [
+                'message' => $e->getMessage(),
+                'exception' => $e::class,
+                'url' => request()?->fullUrl(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+        });
     })->create();
