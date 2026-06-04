@@ -4,6 +4,8 @@
 .env.backup
 .env.production
 docker/prod/.env
+docker/prod/.env.plain
+*.plain
 /.ansible/
 .phpactor.json
 .phpunit.result.cache
