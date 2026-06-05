@@ -129,7 +129,7 @@ final class GoogleChannelOAuthController extends Controller
                 'error' => $e->getMessage(),
             ]);
 
-            return $this->renderClose(false, $e->getMessage());
+            return $this->renderClose(false, 'No se pudo completar la conexión con Google.');
         }
     }
 
