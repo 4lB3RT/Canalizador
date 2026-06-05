@@ -196,7 +196,8 @@ class YouTubeServiceProvider extends ServiceProvider
 
         $this->app->bind(UpdateChannel::class, function ($app) {
             return new UpdateChannel(
-                channelRepository: $app->make(ChannelRepository::class)
+                channelRepository: $app->make(ChannelRepository::class),
+                youtubeChannelRepository: $app->make(YoutubeChannelRepository::class)
             );
         });
     }

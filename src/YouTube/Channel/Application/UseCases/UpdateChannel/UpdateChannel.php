@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Helmreel\YouTube\Channel\Application\UseCases\UpdateChannel;
 
+use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
 use Helmreel\YouTube\Channel\Domain\Entities\Channel;
 use Helmreel\YouTube\Channel\Domain\Exceptions\ChannelNotFound;
 use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
+use Helmreel\YouTube\Channel\Infrastructure\Repositories\Youtube\YoutubeChannelRepository;
 
 final readonly class UpdateChannel
 {
     public function __construct(
         private ChannelRepository $channelRepository,
+        private YoutubeChannelRepository $youtubeChannelRepository,
     ) {
     }
 
@@ -34,7 +38,23 @@ final readonly class UpdateChannel
             $channel->updateAutoPublish($request->autoPublish);
         }
 
+        $metadataChanged = false;
+
+        if ($request->title !== null) {
+            $channel->updateTitle(Title::fromString($request->title));
+            $metadataChanged = true;
+        }
+
+        if ($request->description !== null) {
+            $channel->updateDescription(Description::fromString($request->description));
+            $metadataChanged = true;
+        }
+
         $this->channelRepository->save($channel);
+
+        if ($metadataChanged) {
+            $this->youtubeChannelRepository->save($channel);
+        }
 
         return $channel;
     }
