@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
             $base  = rtrim(config('app.frontend_url', env('FRONTEND_URL', 'http://localhost:5173')), '/');
             $email = urlencode($user->getEmailForPasswordReset());
 
-            return "{$base}/reset-password?token={$token}&email={$email}";
+            return "{$base}/app/reset-password?token={$token}&email={$email}";
         });
     }
 
