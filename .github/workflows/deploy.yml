@@ -106,7 +106,7 @@ jobs:
           # empty; without framework/views Laravel can't compile Blade and any
           # error page itself 500s). Idempotent.
           docker compose -f docker/prod/docker-compose.yml exec -T php sh -c \
-            'mkdir -p /code/storage/framework/views /code/storage/framework/cache/data /code/storage/framework/sessions /code/storage/logs && chmod -R 775 /code/storage && chown -R www-data:www-data /code/storage'
+            'mkdir -p /code/storage/framework/views /code/storage/framework/cache/data /code/storage/framework/sessions /code/storage/logs && chmod -R 777 /code/storage'
 
           # Retry migrate until MySQL is ready (a slow DB start previously left the
           # database empty because this step ran before MySQL accepted connections).
