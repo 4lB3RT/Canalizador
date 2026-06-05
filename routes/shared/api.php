@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/health-check', GetHealthController::class);
 
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink']);
-Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
+Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:10,1');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->middleware('throttle:5,1');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->middleware('throttle:5,1');
 
 Route::middleware(['api.token'])->group(function () {
     Route::get('/header', GetHeaderController::class);
