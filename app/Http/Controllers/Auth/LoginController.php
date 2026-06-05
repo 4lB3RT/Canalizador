@@ -193,7 +193,7 @@ final class LoginController
             if ($request->expectsJson()) {
                 return response()->json([
                     'error' => 'Error procesando la autenticación',
-                    'message' => $e->getMessage(),
+                    'message' => 'No se pudo completar la autenticación. Inténtalo de nuevo.',
                 ], 500);
             }
 
@@ -202,7 +202,7 @@ final class LoginController
                 return redirect()->away(rtrim($frontend, '/') . '/login#error=oauth_failed');
             }
 
-            return redirect()->route('login')->with('error', 'Error procesando la autenticación: ' . $e->getMessage());
+            return redirect()->route('login')->with('error', 'No se pudo completar la autenticación. Inténtalo de nuevo.');
         }
     }
 
