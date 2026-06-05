@@ -14,6 +14,8 @@ final readonly class UpdateChannelRequest
         public IntegerId $userId,
         public ?bool $autoSync = null,
         public ?bool $autoPublish = null,
+        public ?string $title = null,
+        public ?string $description = null,
     ) {
     }
 }

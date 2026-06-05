@@ -29,6 +29,8 @@ final class UpdateChannelController extends Controller
             $validated = $request->validate([
                 'auto_sync'    => ['sometimes', 'boolean'],
                 'auto_publish' => ['sometimes', 'boolean'],
+                'title'        => ['sometimes', 'string', 'max:100'],
+                'description'  => ['sometimes', 'string', 'max:5000'],
             ]);
 
             $channel = $this->updateChannel->execute(new UpdateChannelRequest(
@@ -36,6 +38,8 @@ final class UpdateChannelController extends Controller
                 userId:      new IntegerId((int) Auth::id()),
                 autoSync:    array_key_exists('auto_sync', $validated)    ? (bool) $validated['auto_sync']    : null,
                 autoPublish: array_key_exists('auto_publish', $validated) ? (bool) $validated['auto_publish'] : null,
+                title:       array_key_exists('title', $validated)       ? (string) $validated['title']       : null,
+                description: array_key_exists('description', $validated)  ? (string) $validated['description'] : null,
             ));
 
             return response()->json(['data' => $channel->toArray()], 200);

@@ -32,7 +32,6 @@ final class GoogleClientService
 
         if (empty($scopes)) {
             $scopes = [
-                'https://www.googleapis.com/auth/yt-analytics.readonly',
                 'https://www.googleapis.com/auth/youtube.upload',
                 'https://www.googleapis.com/auth/youtube',
                 'https://www.googleapis.com/auth/userinfo.email',
@@ -132,7 +131,6 @@ final class GoogleClientService
     public function buildYouTubeAnalyticsClient(?int $userId = null): Google_Client
     {
         return $this->buildClient([
-            'https://www.googleapis.com/auth/yt-analytics.readonly',
             'https://www.googleapis.com/auth/youtube',
         ], $userId);
     }
