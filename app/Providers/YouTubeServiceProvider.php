@@ -6,8 +6,6 @@ namespace App\Providers;
 
 use App\Services\GoogleClientService;
 use App\Services\GoogleTokenService;
-use Helmreel\YouTube\Channel\Domain\Repositories\ChannelGoogleTokenRepository;
-use Helmreel\YouTube\Channel\Infrastructure\Repositories\Eloquent\EloquentChannelGoogleTokenRepository;
 use Helmreel\Shared\Shared\Domain\Events\EventBus;
 use Helmreel\Shared\Shared\Domain\Services\Clock;
 use Helmreel\Shared\Shared\Infrastructure\Events\EventHandlerRegistry;
@@ -118,12 +116,9 @@ class YouTubeServiceProvider extends ServiceProvider
 
     private function registerGoogleServices(): void
     {
-        $this->app->bind(ChannelGoogleTokenRepository::class, EloquentChannelGoogleTokenRepository::class);
-
         $this->app->bind(GoogleClientService::class, function ($app) {
             return new GoogleClientService(
-                googleTokenService:           $app->make(GoogleTokenService::class),
-                channelGoogleTokenRepository: $app->make(ChannelGoogleTokenRepository::class),
+                googleTokenService: $app->make(GoogleTokenService::class),
             );
         });
 

@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\User;
-use Helmreel\YouTube\Channel\Domain\Entities\ChannelGoogleToken;
-use Helmreel\YouTube\Channel\Domain\Repositories\ChannelGoogleTokenRepository;
 use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
+use Helmreel\YouTube\Channel\Infrastructure\DAO\ChannelDAO;
 use DateTimeImmutable;
 use Google_Client;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +15,6 @@ final class GoogleClientService
 {
     public function __construct(
         private readonly GoogleTokenService $googleTokenService,
-        private readonly ChannelGoogleTokenRepository $channelGoogleTokenRepository,
     ) {
     }
 
@@ -75,7 +73,13 @@ final class GoogleClientService
 
     public function buildYouTubeClientForChannel(ChannelId $channelId): Google_Client
     {
-        $token = $this->channelGoogleTokenRepository->findByChannelId($channelId);
+        $channel = ChannelDAO::where('id', $channelId->value())->first();
+
+        if ($channel === null || !$channel->access_token) {
+            throw new \RuntimeException(
+                'Channel ' . $channelId->value() . ' has no Google token. Please link the channel.',
+            );
+        }
 
         $client = new Google_Client();
         $client->setClientId(config('services.youtube_analytics.client_id'));
@@ -87,19 +91,21 @@ final class GoogleClientService
             'https://www.googleapis.com/auth/youtube',
         ]);
 
+        $refreshToken = $channel->refresh_token ? (string) $channel->refresh_token : null;
+
         $client->setAccessToken([
-            'access_token'  => $token->accessToken,
-            'refresh_token' => $token->refreshToken,
-            'expires_in'    => $token->expiresAt
-                ? max(0, $token->expiresAt->getTimestamp() - (new DateTimeImmutable())->getTimestamp())
+            'access_token'  => (string) $channel->access_token,
+            'refresh_token' => $refreshToken,
+            'expires_in'    => $channel->token_expires_at
+                ? max(0, $channel->token_expires_at->getTimestamp() - (new DateTimeImmutable())->getTimestamp())
                 : null,
-            'scope'         => $token->scope,
-            'token_type'    => $token->tokenType ?? 'Bearer',
+            'scope'         => $channel->token_scope,
+            'token_type'    => $channel->token_type ?? 'Bearer',
         ]);
 
-        if ($client->isAccessTokenExpired() && $token->refreshToken) {
+        if ($client->isAccessTokenExpired() && $refreshToken) {
             try {
-                $client->refreshToken($token->refreshToken);
+                $client->refreshToken($refreshToken);
                 $newToken = $client->getAccessToken();
 
                 if (isset($newToken['access_token'])) {
@@ -107,14 +113,13 @@ final class GoogleClientService
                         ? (new DateTimeImmutable())->modify('+' . (int) $newToken['expires_in'] . ' seconds')
                         : null;
 
-                    $this->channelGoogleTokenRepository->save(new ChannelGoogleToken(
-                        channelId:    $channelId,
-                        accessToken:  (string) $newToken['access_token'],
-                        refreshToken: (string) ($newToken['refresh_token'] ?? $token->refreshToken),
-                        expiresAt:    $expiresAt,
-                        scope:        (string) ($newToken['scope']      ?? $token->scope),
-                        tokenType:    (string) ($newToken['token_type'] ?? $token->tokenType ?? 'Bearer'),
-                    ));
+                    $channel->update([
+                        'access_token'     => (string) $newToken['access_token'],
+                        'refresh_token'    => (string) ($newToken['refresh_token'] ?? $refreshToken),
+                        'token_expires_at' => $expiresAt,
+                        'token_scope'      => (string) ($newToken['scope']      ?? $channel->token_scope),
+                        'token_type'       => (string) ($newToken['token_type'] ?? $channel->token_type ?? 'Bearer'),
+                    ]);
                 }
             } catch (\Exception $e) {
                 throw new \RuntimeException(
