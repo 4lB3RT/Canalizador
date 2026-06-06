@@ -10,7 +10,6 @@ use Helmreel\Shared\Header\Infrastructure\Http\Api\Controllers\GetHeaderControll
 use Helmreel\Shared\HealthCheck\Infrastructure\Http\Api\Controllers\GetHealthController;
 use Helmreel\Shared\Profile\Infrastructure\Http\Api\Controllers\UpdateProfileController;
 use Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers\GetPendingOAuthStateController;
-use Helmreel\YouTube\Channel\Infrastructure\Http\Api\Controllers\LinkChannelController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/health-check', GetHealthController::class);
@@ -25,5 +24,4 @@ Route::middleware(['api.token'])->group(function () {
 
     Route::post('/youtube/channels/oauth/start', [GoogleChannelOAuthController::class, 'startApi']);
     Route::get('/youtube/channels/oauth/{state}', GetPendingOAuthStateController::class);
-    Route::post('/youtube/channels/link', LinkChannelController::class);
 });

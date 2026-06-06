@@ -32,6 +32,11 @@ class ChannelDAO extends Model
         'channel_brand',
         'auto_sync',
         'auto_publish',
+        'access_token',
+        'refresh_token',
+        'token_expires_at',
+        'token_scope',
+        'token_type',
         'created_at',
         'updated_at',
     ];
@@ -43,6 +48,9 @@ class ChannelDAO extends Model
         'video_count' => 'integer',
         'auto_sync' => 'boolean',
         'auto_publish' => 'boolean',
+        'access_token' => 'encrypted',
+        'refresh_token' => 'encrypted',
+        'token_expires_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
