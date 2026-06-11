@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Helmreel\VideoProduction\Script\Domain\Services;
 
-use Helmreel\YouTube\Channel\Domain\Repositories\ChannelRepository;
-use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
 use Helmreel\VideoProduction\Script\Domain\Entities\Script;
 use Helmreel\VideoProduction\Script\Domain\Factories\ScriptFactory;
 use Helmreel\VideoProduction\Script\Domain\Repositories\ScriptGenerator;
@@ -17,20 +15,16 @@ final readonly class GenerateScript
         private ScriptRepository $scriptRepository,
         private ScriptGenerator $scriptGenerator,
         private ScriptFactory $scriptFactory,
-        private ChannelRepository $channelRepository
     ) {
     }
 
     public function generate(
         string $scriptId,
-        string $channelId,
         string $prompt,
         int $totalClips = 5,
         int $clipDuration = 8,
     ): Script {
-        $channel = $this->channelRepository->findById(ChannelId::fromString($channelId));
-
-        $scriptContent = $this->scriptGenerator->generateGaming($prompt, $channel, $totalClips, $clipDuration);
+        $scriptContent = $this->scriptGenerator->generateGaming($prompt, $totalClips, $clipDuration);
 
         $script = $this->scriptFactory->createFromStrings(
             id: $scriptId,
@@ -44,14 +38,11 @@ final readonly class GenerateScript
 
     public function generateWeather(
         string $scriptId,
-        string $channelId,
         string $prompt,
         int $totalClips = 5,
         int $clipDuration = 8,
     ): Script {
-        $channel = $this->channelRepository->findById(ChannelId::fromString($channelId));
-
-        $scriptContent = $this->scriptGenerator->generateWeather($prompt, $channel, $totalClips, $clipDuration);
+        $scriptContent = $this->scriptGenerator->generateWeather($prompt, $totalClips, $clipDuration);
 
         $script = $this->scriptFactory->createFromStrings(
             id: $scriptId,

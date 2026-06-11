@@ -5,18 +5,21 @@ declare(strict_types=1);
 namespace Helmreel\VideoProduction\Avatar\Infrastructure\Repositories\OpenAI;
 
 use Helmreel\Shared\Shared\Domain\Exceptions\InvalidCollectionType;
+use Helmreel\Shared\Shared\Domain\Services\Clock;
 use Helmreel\Shared\Shared\Domain\Services\HttpClient;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\VideoProduction\Avatar\Domain\Entities\AvatarMedia;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarMediaType;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Category;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
-use Helmreel\VideoProduction\Image\Domain\Entities\ImageCollection;
-use Helmreel\VideoProduction\Image\Domain\Factories\ImageFactory;
-use Helmreel\VideoProduction\Image\Domain\Repositories\ImageRepository;
-use Helmreel\VideoProduction\Image\Domain\ValueObjects\ImageId;
+use Helmreel\VideoProduction\Media\Domain\Entities\Media;
+use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
+use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
+use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaType;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Prism\Prism\Enums\Provider;
@@ -33,9 +36,9 @@ final readonly class OpenAiAvatarRepository
 
     public function __construct(
         private string $apiKey,
-        private ImageFactory $imageFactory,
-        private ImageRepository $imageRepository,
-        private HttpClient $httpClient
+        private MediaRepository $mediaRepository,
+        private HttpClient $httpClient,
+        private Clock $clock,
     ) {
         if (empty($this->apiKey)) {
             throw new \RuntimeException('OpenAI API key is not configured');
@@ -52,9 +55,9 @@ final readonly class OpenAiAvatarRepository
     ): AvatarMetadataResult {
         $description = $this->generateDescription($imagePath->value(), $avatarName, $biography, $presentationStyle);
         $avatarDescription = AvatarDescription::fromString($description);
-        $images = $this->generateImages($imagePath, $avatarDescription, $avatarName, $biography, $presentationStyle, $userId, $category);
+        $media = $this->generateImages($imagePath, $avatarDescription, $avatarName, $biography, $presentationStyle, $userId, $category);
 
-        return new AvatarMetadataResult($avatarDescription, $images);
+        return new AvatarMetadataResult($avatarDescription, $media);
     }
 
     private function generateDescription(
@@ -101,7 +104,10 @@ final readonly class OpenAiAvatarRepository
         return $description;
     }
 
-    /* @throws InvalidCollectionType */
+    /**
+     * @throws InvalidCollectionType
+     * @return AvatarMedia[]
+     */
     private function generateImages(
         LocalPath $avatarImagePath,
         AvatarDescription $description,
@@ -110,7 +116,7 @@ final readonly class OpenAiAvatarRepository
         PresentationStyle $presentationStyle,
         IntegerId $userId,
         Category $category = Category::GAMING
-    ): ImageCollection {
+    ): array {
         $placeholders = [
             '{avatar_description}' => $description->value(),
             '{avatar_name}' => $avatarName->value(),
@@ -125,7 +131,7 @@ final readonly class OpenAiAvatarRepository
 
         $imagesDir = storage_path('app/images');
         $referenceImage = Image::fromLocalPath($avatarImagePath->value());
-        $generatedImages = [];
+        $generatedMedia = [];
 
         foreach ($imageConfigs as $index => $config) {
             try {
@@ -140,27 +146,29 @@ final readonly class OpenAiAvatarRepository
                     ])
                     ->generate();
 
-                $imageId = ImageId::fromString(Str::uuid()->toString());
-                $imagePath = $imagesDir . '/' . $imageId->value() . '.png';
+                $mediaId = MediaId::fromString(Str::uuid()->toString());
+                $imagePath = $imagesDir . '/' . $mediaId->value() . '.png';
 
                 $this->saveGeneratedImage($response->firstImage(), $imagePath);
                 $this->resizeImageToVideoResolution($imagePath);
 
-                $image = $this->imageFactory->create(
-                    id: $imageId,
+                $media = new Media(
+                    id: $mediaId,
                     userId: $userId,
-                    path: LocalPath::fromString($imagePath)
+                    type: MediaType::IMAGE,
+                    path: LocalPath::fromString($imagePath),
+                    createdAt: $this->clock->now(),
                 );
 
-                $this->imageRepository->save($image);
-                $generatedImages[] = $image;
+                $this->mediaRepository->save($media);
+                $generatedMedia[] = new AvatarMedia($media, AvatarMediaType::GENERATED);
             } catch (\Exception $e) {
                 \Log::error("Failed to generate image {$index} for avatar: " . $e->getMessage());
                 continue;
             }
         }
 
-        return new ImageCollection($generatedImages);
+        return $generatedMedia;
     }
 
     /** @return array<int, array{prompt: string, useReferenceImage: bool}> */

@@ -12,20 +12,15 @@ final readonly class CreateAvatarRequestMapper
 {
     public function map(Request $request): CreateAvatarRequest
     {
-        try {
-            $validated = $request->validate([
-                'avatar_id' => 'required|string|uuid',
-                'name' => 'required|string|max:100',
-                'profile_image' => 'required|image|mimes:jpeg,jpg,png|max:20480',
-                'biography' => 'nullable|string',
-                'presentation_style' => 'required|string|in:energetic,calm,professional,casual',
-                'category' => 'nullable|string|in:gaming,meteorology',
-                'voice_id' => 'nullable|string',
-            ]);
-        }catch (\Throwable $exception)
-        {
-            dd($exception);
-        }
+        $validated = $request->validate([
+            'avatar_id' => 'required|string|uuid',
+            'name' => 'required|string|max:100',
+            'profile_image' => 'required|image|mimes:jpeg,jpg,png|max:20480',
+            'biography' => 'nullable|string',
+            'presentation_style' => 'required|string|in:energetic,calm,professional,casual',
+            'category' => 'nullable|string|in:gaming,meteorology',
+            'voice_id' => 'nullable|string',
+        ]);
 
         $user = $request->user();
         if (!$user) {

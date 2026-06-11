@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Helmreel\VideoProduction\Video\Domain\Repositories;
 
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptId;
 use Helmreel\VideoProduction\Video\Domain\Entities\Video;
 use Helmreel\VideoProduction\Video\Domain\Entities\VideoCollection;
@@ -18,6 +19,11 @@ interface VideoRepository
      * @throws VideoNotFound
      */
     public function findById(VideoId $id): Video;
+
+    /**
+     * @return Video[]
+     */
+    public function findByUserId(IntegerId $userId): array;
 
     public function getByScriptId(ScriptId $scriptId): VideoCollection;
 

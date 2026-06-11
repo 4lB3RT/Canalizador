@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use Helmreel\VideoProduction\Avatar\Application\UseCases\CreateAvatar\CreateAvatar;
+use Helmreel\VideoProduction\Avatar\Application\UseCases\DeleteAvatar\DeleteAvatar;
+use Helmreel\VideoProduction\Avatar\Application\UseCases\GenerateAvatarMetadata\GenerateAvatarMetadata;
+use Helmreel\VideoProduction\Avatar\Application\UseCases\GetAvatar\GetAvatar;
+use Helmreel\VideoProduction\Avatar\Application\UseCases\GetAvatars\GetAvatars;
 use Helmreel\VideoProduction\Avatar\Domain\Factories\AvatarFactory;
 use Helmreel\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
 use Helmreel\VideoProduction\Avatar\Infrastructure\Http\Api\Mappers\CreateAvatarRequestMapper;
@@ -30,8 +34,11 @@ use Helmreel\VideoProduction\Clip\Domain\Services\VideoComposer;
 use Helmreel\VideoProduction\Clip\Infrastructure\Repositories\Eloquent\EloquentClipRepository;
 use Helmreel\VideoProduction\Clip\Infrastructure\Repositories\Veo\VeoClipDownloader;
 use Helmreel\VideoProduction\Clip\Infrastructure\Services\FfmpegVideoComposer;
+use Helmreel\VideoProduction\Image\Application\UseCases\GetImageFile\GetImageFile;
 use Helmreel\VideoProduction\Image\Domain\Factories\ImageFactory;
 use Helmreel\VideoProduction\Image\Domain\Repositories\ImageRepository;
+use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
+use Helmreel\VideoProduction\Media\Infrastructure\Repositories\Eloquent\EloquentMediaRepository;
 use Helmreel\VideoProduction\Image\Infrastructure\Repositories\Eloquent\EloquentImageRepository;
 use Helmreel\VideoProduction\News\Application\UseCases\DownloadNews\DownloadNews;
 use Helmreel\VideoProduction\News\Domain\Repositories\NewsProvider;
@@ -80,8 +87,9 @@ use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceGenerator;
 use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
 use Helmreel\VideoProduction\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsAudioIsolator;
 use Helmreel\VideoProduction\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsVoiceCloner;
+use Helmreel\VideoProduction\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsTextToSpeech;
 use Helmreel\VideoProduction\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsVoiceGenerator;
-use Helmreel\VideoProduction\Voice\Infrastructure\Repositories\Eloquent\EloquentVoiceRepository;
+use Helmreel\VideoProduction\Voice\Infrastructure\Repositories\ElevenLabs\ElevenLabsVoiceRepository;
 use Helmreel\VideoProduction\Weather\Application\UseCases\GetForecasts\GetForecasts;
 use Helmreel\VideoProduction\Weather\Domain\Repositories\ForecastSummarizer;
 use Helmreel\VideoProduction\Weather\Domain\Repositories\WeatherProvider;
@@ -123,7 +131,6 @@ class VideoProductionServiceProvider extends ServiceProvider
                 scriptRepository: $app->make(EloquentScriptRepository::class),
                 scriptGenerator: $app->make(ScriptGenerator::class),
                 scriptFactory: $app->make(ScriptFactory::class),
-                channelRepository: $app->make(YoutubeChannelRepository::class)
             );
         });
     }
@@ -261,6 +268,7 @@ class VideoProductionServiceProvider extends ServiceProvider
                 voiceRepository: $app->make(VoiceRepository::class),
                 voiceGenerator: $app->make(VoiceGenerator::class),
                 videoComposer: $app->make(VideoComposer::class),
+                mediaRepository: $app->make(MediaRepository::class),
             );
         });
 
@@ -284,7 +292,7 @@ class VideoProductionServiceProvider extends ServiceProvider
         $this->app->bind(AvatarRepository::class, function ($app) {
             return new EloquentAvatarRepository(
                 clock: $app->make(Clock::class),
-                imageRepository: $app->make(ImageRepository::class)
+                mediaRepository: $app->make(MediaRepository::class)
             );
         });
 
@@ -297,9 +305,9 @@ class VideoProductionServiceProvider extends ServiceProvider
         $this->app->bind(OpenAiAvatarRepository::class, function ($app) {
             return new OpenAiAvatarRepository(
                 apiKey: config('services.openai.key') ?? '',
-                imageFactory: $app->make(ImageFactory::class),
-                imageRepository: $app->make(ImageRepository::class),
-                httpClient: $app->make(HttpClient::class)
+                mediaRepository: $app->make(MediaRepository::class),
+                httpClient: $app->make(HttpClient::class),
+                clock: $app->make(Clock::class),
             );
         });
 
@@ -309,7 +317,34 @@ class VideoProductionServiceProvider extends ServiceProvider
             return new CreateAvatar(
                 avatarFactory: $app->make(AvatarFactory::class),
                 avatarRepository: $app->make(AvatarRepository::class),
-                openAiAvatarRepository: $app->make(OpenAiAvatarRepository::class)
+                mediaRepository: $app->make(MediaRepository::class),
+                clock: $app->make(Clock::class),
+            );
+        });
+
+        $this->app->bind(GenerateAvatarMetadata::class, function ($app) {
+            return new GenerateAvatarMetadata(
+                avatarRepository: $app->make(AvatarRepository::class),
+                openAiAvatarRepository: $app->make(OpenAiAvatarRepository::class),
+            );
+        });
+
+        $this->app->bind(GetAvatars::class, function ($app) {
+            return new GetAvatars(
+                avatarRepository: $app->make(AvatarRepository::class),
+            );
+        });
+
+        $this->app->bind(GetAvatar::class, function ($app) {
+            return new GetAvatar(
+                avatarRepository: $app->make(AvatarRepository::class),
+            );
+        });
+
+        $this->app->bind(DeleteAvatar::class, function ($app) {
+            return new DeleteAvatar(
+                avatarRepository: $app->make(AvatarRepository::class),
+                mediaRepository: $app->make(MediaRepository::class),
             );
         });
     }
@@ -325,11 +360,35 @@ class VideoProductionServiceProvider extends ServiceProvider
                 clock: $app->make(Clock::class)
             );
         });
+
+        $this->app->bind(GetImageFile::class, function ($app) {
+            return new GetImageFile(
+                imageRepository: $app->make(ImageRepository::class),
+            );
+        });
+
+        $this->app->bind(MediaRepository::class, EloquentMediaRepository::class);
     }
 
     private function registerVoiceServices(): void
     {
-        $this->app->bind(VoiceRepository::class, EloquentVoiceRepository::class);
+        $this->app->bind(ElevenLabsTextToSpeech::class, function ($app) {
+            return new ElevenLabsTextToSpeech(
+                apiKey: config('services.elevenlabs.api_key') ?? '',
+                httpClient: $app->make(HttpClient::class),
+                responseValidator: $app->make(HttpResponseValidator::class),
+                modelId: config('elevenlabs.tts_model_id'),
+                outputFormat: config('elevenlabs.output_format'),
+                timeout: config('elevenlabs.timeout'),
+            );
+        });
+
+        $this->app->bind(VoiceRepository::class, function ($app) {
+            return new ElevenLabsVoiceRepository(
+                voiceCloner: $app->make(VoiceCloner::class),
+                textToSpeech: $app->make(ElevenLabsTextToSpeech::class),
+            );
+        });
 
         $this->app->bind(VoiceGenerator::class, function ($app) {
             return new ElevenLabsVoiceGenerator(
@@ -365,7 +424,6 @@ class VideoProductionServiceProvider extends ServiceProvider
 
         $this->app->bind(CloneVoice::class, function ($app) {
             return new CloneVoice(
-                voiceCloner: $app->make(VoiceCloner::class),
                 voiceRepository: $app->make(VoiceRepository::class),
                 clock: $app->make(Clock::class),
             );

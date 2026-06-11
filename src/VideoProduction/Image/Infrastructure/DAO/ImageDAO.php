@@ -20,6 +20,7 @@ class ImageDAO extends Model
         'id',
         'user_id',
         'path',
+        'type',
         'created_at',
         'updated_at',
     ];

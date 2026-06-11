@@ -15,7 +15,6 @@ use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Category;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
-use Helmreel\VideoProduction\Image\Domain\Entities\ImageCollection;
 use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 
 final readonly class AvatarFactory
@@ -35,7 +34,7 @@ final readonly class AvatarFactory
         Category $category,
         AvatarDescription $description,
         ?DateTime $createdAt = null,
-        ?ImageCollection $images = null,
+        array $media = [],
         ?VoiceId $voiceId = null,
     ): Avatar {
         return new Avatar(
@@ -49,7 +48,7 @@ final readonly class AvatarFactory
             presentationStyle: $presentationStyle,
             category: $category,
             description: $description,
-            images: $images ?? ImageCollection::empty(),
+            media: $media,
             clock: $this->clock,
         );
     }

@@ -4,49 +4,41 @@ declare(strict_types=1);
 
 namespace Helmreel\VideoProduction\Avatar\Application\UseCases\CreateAvatar;
 
+use Helmreel\Shared\Shared\Domain\Services\Clock;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
+use Helmreel\VideoProduction\Avatar\Domain\Entities\AvatarMedia;
 use Helmreel\VideoProduction\Avatar\Domain\Factories\AvatarFactory;
 use Helmreel\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarMediaType;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Category;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
-use Helmreel\VideoProduction\Avatar\Infrastructure\Repositories\OpenAI\OpenAiAvatarRepository;
+use Helmreel\VideoProduction\Media\Domain\Entities\Media;
+use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
+use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
+use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaType;
 use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 final readonly class CreateAvatar
 {
     public function __construct(
         private AvatarFactory $avatarFactory,
         private AvatarRepository $avatarRepository,
-        private OpenAiAvatarRepository $openAiAvatarRepository,
+        private MediaRepository $mediaRepository,
+        private Clock $clock,
     ) {
     }
 
     public function execute(CreateAvatarRequest $request): CreateAvatarResponse
     {
-        $tmpImagePath = LocalPath::fromString($request->profileImagePath);
         $userId = new IntegerId($request->userId);
-
-        $avatarName = AvatarName::fromString($request->name);
-        $biography = Biography::fromString($request->biography);
-        $presentationStyle = PresentationStyle::fromString($request->presentationStyle);
         $category = Category::fromString($request->category);
-
-        $metadataResult = $this->openAiAvatarRepository->generateMetadata(
-            imagePath: $tmpImagePath,
-            avatarName: $avatarName,
-            biography: $biography,
-            presentationStyle: $presentationStyle,
-            userId: $userId,
-            category: $category
-        );
-
-        $description = $metadataResult->description();
-        $images = $metadataResult->images();
 
         $permanentDir = storage_path('app/avatars');
         if (!File::exists($permanentDir)) {
@@ -60,6 +52,15 @@ final readonly class CreateAvatar
 
         $profileImagePath = LocalPath::fromString($permanentImagePath);
 
+        $profileMedia = new Media(
+            id: MediaId::fromString(Str::uuid()->toString()),
+            userId: $userId,
+            type: MediaType::IMAGE,
+            path: $profileImagePath,
+            createdAt: $this->clock->now(),
+        );
+        $this->mediaRepository->save($profileMedia);
+
         $avatar = $this->avatarFactory->create(
             id: AvatarId::fromString($request->avatarId),
             userId: $userId,
@@ -68,8 +69,8 @@ final readonly class CreateAvatar
             biography: Biography::fromString($request->biography),
             presentationStyle: PresentationStyle::fromString($request->presentationStyle),
             category: $category,
-            description: $description,
-            images: $images,
+            description: AvatarDescription::fromString(''),
+            media: [new AvatarMedia($profileMedia, AvatarMediaType::PROFILE)],
             voiceId: $request->voiceId ? VoiceId::fromString($request->voiceId) : null,
         );
 
@@ -78,4 +79,3 @@ final readonly class CreateAvatar
         return new CreateAvatarResponse();
     }
 }
-

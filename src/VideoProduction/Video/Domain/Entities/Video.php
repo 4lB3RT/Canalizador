@@ -6,9 +6,11 @@ namespace Helmreel\VideoProduction\Video\Domain\Entities;
 
 use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
+use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
 use Helmreel\VideoProduction\Script\Domain\Entities\Script;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
@@ -19,6 +21,7 @@ final class Video
 {
     public function __construct(
         private readonly VideoId $id,
+        private readonly IntegerId $userId,
         private readonly Script $script,
         private readonly ChannelId $channelId,
         private readonly Title $title,
@@ -29,12 +32,18 @@ final class Video
         private readonly ?GenerationId $generationId = null,
         private ?LocalPath $videoLocalPath = null,
         private ?DateTime $completedAt = null,
+        private ?MediaId $mediaId = null,
     ) {
     }
 
     public function id(): VideoId
     {
         return $this->id;
+    }
+
+    public function userId(): IntegerId
+    {
+        return $this->userId;
     }
 
     public function script(): Script
@@ -72,10 +81,18 @@ final class Video
         return $this->videoLocalPath;
     }
 
-    public function markAsCompleted(LocalPath $videoLocalPath, DateTime $completedAt): void
+    public function mediaId(): ?MediaId
+    {
+        return $this->mediaId;
+    }
+
+    public function markAsCompleted(LocalPath $videoLocalPath, DateTime $completedAt, ?MediaId $mediaId = null): void
     {
         $this->videoLocalPath = $videoLocalPath;
         $this->completedAt    = $completedAt;
+        if ($mediaId !== null) {
+            $this->mediaId = $mediaId;
+        }
     }
 
     public function createdAt(): DateTime
@@ -95,19 +112,21 @@ final class Video
 
     public function toArray(): array
     {
+        $completed = $this->completedAt !== null;
+
         return [
-            'id'               => $this->id->value(),
-            'script_id'        => $this->script->id()->value(),
-            'channel_id'       => $this->channelId->value(),
-            'avatar_id'        => $this->avatarId?->value(),
-            'script'           => $this->script->toArray(),
-            'title'            => $this->title->value(),
-            'description'      => $this->description->value(),
-            'category'         => $this->category->value,
-            'generation_id'    => $this->generationId?->value(),
-            'video_local_path' => $this->videoLocalPath?->value(),
-            'created_at'       => $this->createdAt->value()->format('Y-m-d H:i:s'),
-            'completed_at'     => $this->completedAt?->value()->format('Y-m-d H:i:s'),
+            'id'            => $this->id->value(),
+            'user_id'       => $this->userId->value(),
+            'script_id'     => $this->script->id()->value(),
+            'channel_id'    => $this->channelId->value(),
+            'avatar_id'     => $this->avatarId?->value(),
+            'title'         => $this->title->value(),
+            'description'   => $this->description->value(),
+            'category'      => $this->category->value,
+            'status'        => $completed ? 'completed' : 'processing',
+            'video_url'     => $this->mediaId !== null ? '/video-production/media/' . $this->mediaId->value() : null,
+            'created_at'    => $this->createdAt->value()->format('Y-m-d H:i:s'),
+            'completed_at'  => $this->completedAt?->value()->format('Y-m-d H:i:s'),
         ];
     }
 }

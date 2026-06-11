@@ -5,18 +5,22 @@ declare(strict_types=1);
 namespace Helmreel\VideoProduction\Voice\Domain\Entities;
 
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
+use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceSettings;
 
 final class Voice
 {
     public function __construct(
         private readonly VoiceId $id,
-        private readonly string $name,
+        private readonly IntegerId $userId,
+        private string $name,
         private readonly LocalPath $sourceAudioPath,
         private readonly DateTime $createdAt,
         private readonly ?string $platformId = null,
         private readonly ?LocalPath $convertedAudioPath = null,
+        private VoiceSettings $settings = new VoiceSettings(),
     ) {
     }
 
@@ -25,9 +29,29 @@ final class Voice
         return $this->id;
     }
 
+    public function userId(): IntegerId
+    {
+        return $this->userId;
+    }
+
     public function name(): string
     {
         return $this->name;
+    }
+
+    public function settings(): VoiceSettings
+    {
+        return $this->settings;
+    }
+
+    public function updateName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function updateSettings(VoiceSettings $settings): void
+    {
+        $this->settings = $settings;
     }
 
     public function sourceAudioPath(): LocalPath
@@ -54,10 +78,10 @@ final class Voice
     {
         return [
             'id' => $this->id->value(),
+            'user_id' => $this->userId->value(),
             'name' => $this->name,
-            'source_audio_path' => $this->sourceAudioPath->value(),
-            'converted_audio_path' => $this->convertedAudioPath?->value(),
             'platform_id' => $this->platformId,
+            'settings' => $this->settings->toArray(),
             'created_at' => $this->createdAt->value()->format('Y-m-d H:i:s'),
         ];
     }

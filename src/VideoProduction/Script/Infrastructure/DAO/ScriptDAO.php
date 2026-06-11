@@ -18,11 +18,17 @@ class ScriptDAO extends Model
 
     protected $fillable = [
         'script_id',
+        'user_id',
+        'category',
+        'title',
         'content',
+        'created_at',
+        'updated_at',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public $timestamps = true;

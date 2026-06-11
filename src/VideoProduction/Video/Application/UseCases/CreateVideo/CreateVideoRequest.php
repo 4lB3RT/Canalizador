@@ -8,6 +8,7 @@ final readonly class CreateVideoRequest
 {
     public function __construct(
         public string $videoId,
+        public int $userId,
         public string $scriptId,
         public string $channelId,
         public string $category,

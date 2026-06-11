@@ -9,18 +9,20 @@ use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Helmreel\VideoProduction\Avatar\Domain\Entities\Avatar;
+use Helmreel\VideoProduction\Avatar\Domain\Entities\AvatarMedia;
 use Helmreel\VideoProduction\Avatar\Domain\Exceptions\AvatarNotFound;
 use Helmreel\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
+use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarMediaType;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Category;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
 use Helmreel\VideoProduction\Avatar\Infrastructure\DAO\AvatarDAO;
-use Helmreel\VideoProduction\Image\Domain\Entities\ImageCollection;
-use Helmreel\VideoProduction\Image\Domain\Repositories\ImageRepository;
-use Helmreel\VideoProduction\Image\Domain\ValueObjects\ImageId;
+use Helmreel\VideoProduction\Media\Domain\Exceptions\MediaNotFound;
+use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
+use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
 use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 use Illuminate\Support\Facades\DB;
 
@@ -28,7 +30,7 @@ final class EloquentAvatarRepository implements AvatarRepository
 {
     public function __construct(
         private readonly Clock $clock,
-        private readonly ImageRepository $imageRepository
+        private readonly MediaRepository $mediaRepository,
     ) {
     }
 
@@ -50,33 +52,28 @@ final class EloquentAvatarRepository implements AvatarRepository
             ]
         );
 
-        $this->syncImages($avatar);
+        $this->syncMedia($avatar);
     }
 
-    private function syncImages(Avatar $avatar): void
+    private function syncMedia(Avatar $avatar): void
     {
         $avatarId = $avatar->id()->value();
-        $imageIds = array_map(
-            fn ($image) => $image->id()->value(),
-            $avatar->images()->items()
+
+        DB::table('avatar_media')->where('avatar_id', $avatarId)->delete();
+
+        $rows = array_map(
+            fn (AvatarMedia $m) => [
+                'avatar_id' => $avatarId,
+                'media_id' => $m->media()->id()->value(),
+                'type' => $m->type()->value,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            $avatar->media(),
         );
 
-        DB::table('avatar_image')
-            ->where('avatar_id', $avatarId)
-            ->delete();
-
-        if (!empty($imageIds)) {
-            $pivotData = array_map(
-                fn ($imageId) => [
-                    'avatar_id' => $avatarId,
-                    'image_id' => $imageId,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                $imageIds
-            );
-
-            DB::table('avatar_image')->insert($pivotData);
+        if (!empty($rows)) {
+            DB::table('avatar_media')->insert($rows);
         }
     }
 
@@ -111,6 +108,7 @@ final class EloquentAvatarRepository implements AvatarRepository
 
     public function delete(AvatarId $id): void
     {
+        DB::table('avatar_media')->where('avatar_id', $id->value())->delete();
         AvatarDAO::destroy($id->value());
     }
 
@@ -124,8 +122,6 @@ final class EloquentAvatarRepository implements AvatarRepository
             ? new DateTime($model->updated_at->toDateTimeImmutable())
             : null;
 
-        $images = $this->loadImages($model->id);
-
         return new Avatar(
             id: AvatarId::fromString($model->id),
             userId: new IntegerId($model->user_id),
@@ -137,33 +133,32 @@ final class EloquentAvatarRepository implements AvatarRepository
             presentationStyle: PresentationStyle::fromString($model->presentation_style ?? 'casual'),
             category: Category::fromString($model->category ?? 'gaming'),
             description: AvatarDescription::fromString($model->description ?? ''),
-            images: $images,
+            media: $this->loadMedia($model->id),
             updatedAt: $updatedAt,
             clock: $this->clock,
         );
     }
 
-    private function loadImages(string $avatarId): ImageCollection
+    /**
+     * @return AvatarMedia[]
+     */
+    private function loadMedia(string $avatarId): array
     {
-        $pivotRecords = DB::table('avatar_image')
+        $rows = DB::table('avatar_media')
             ->where('avatar_id', $avatarId)
-            ->pluck('image_id')
-            ->toArray();
+            ->get();
 
-        if (empty($pivotRecords)) {
-            return ImageCollection::empty();
-        }
-
-        $images = [];
-        foreach ($pivotRecords as $imageId) {
+        $media = [];
+        foreach ($rows as $row) {
             try {
-                $images[] = $this->imageRepository->findById(ImageId::fromString($imageId));
-            } catch (\Exception $e) {
+                $entity = $this->mediaRepository->findById(MediaId::fromString($row->media_id));
+            } catch (MediaNotFound) {
                 continue;
             }
+
+            $media[] = new AvatarMedia($entity, AvatarMediaType::fromString($row->type));
         }
 
-        return new ImageCollection($images);
+        return $media;
     }
 }
-

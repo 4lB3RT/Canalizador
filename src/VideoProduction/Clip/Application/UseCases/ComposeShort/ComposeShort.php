@@ -9,12 +9,17 @@ use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Helmreel\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
 use Helmreel\VideoProduction\Clip\Domain\Repositories\ClipRepository;
 use Helmreel\VideoProduction\Clip\Domain\Services\VideoComposer;
+use Helmreel\VideoProduction\Media\Domain\Entities\Media;
+use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
+use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
+use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaType;
 use Helmreel\VideoProduction\Video\Domain\Entities\Video;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceGenerator;
 use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 final readonly class ComposeShort
 {
@@ -26,6 +31,7 @@ final readonly class ComposeShort
         private VoiceRepository $voiceRepository,
         private VoiceGenerator $voiceGenerator,
         private VideoComposer $videoComposer,
+        private MediaRepository $mediaRepository,
     ) {
     }
 
@@ -48,7 +54,16 @@ final readonly class ComposeShort
 
         $this->applyAvatarVoice($video, $outputPath);
 
-        $video->markAsCompleted(LocalPath::fromString($outputPath), $this->clock->now());
+        $media = new Media(
+            id: MediaId::fromString(Str::uuid()->toString()),
+            userId: $video->userId(),
+            type: MediaType::VIDEO,
+            path: LocalPath::fromString($outputPath),
+            createdAt: $this->clock->now(),
+        );
+        $this->mediaRepository->save($media);
+
+        $video->markAsCompleted(LocalPath::fromString($outputPath), $this->clock->now(), $media->id());
         $this->videoRepository->save($video);
     }
 

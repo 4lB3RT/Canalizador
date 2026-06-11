@@ -14,23 +14,25 @@ use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Category;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
-use Helmreel\VideoProduction\Image\Domain\Entities\ImageCollection;
 use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 
 final class Avatar
 {
+    /**
+     * @param AvatarMedia[] $media
+     */
     public function __construct(
         private readonly AvatarId $id,
         private readonly IntegerId $userId,
         private ?VoiceId $voiceId,
-        private readonly AvatarName $name,
-        private readonly LocalPath $profileImagePath,
+        private AvatarName $name,
+        private LocalPath $profileImagePath,
         private readonly DateTime $createdAt,
         private Biography $biography,
         private PresentationStyle $presentationStyle,
         private Category $category,
         private AvatarDescription $description,
-        private ImageCollection $images = new ImageCollection([]),
+        private array $media = [],
         private ?DateTime $updatedAt = null,
         private readonly ?Clock $clock = null,
     ) {
@@ -76,9 +78,12 @@ final class Avatar
         return $this->description;
     }
 
-    public function images(): ImageCollection
+    /**
+     * @return AvatarMedia[]
+     */
+    public function media(): array
     {
-        return $this->images;
+        return $this->media;
     }
 
     public function createdAt(): DateTime
@@ -89,6 +94,18 @@ final class Avatar
     public function updatedAt(): ?DateTime
     {
         return $this->updatedAt;
+    }
+
+    public function updateName(AvatarName $name): void
+    {
+        $this->name = $name;
+        $this->updateTimestamp();
+    }
+
+    public function updateProfileImagePath(LocalPath $profileImagePath): void
+    {
+        $this->profileImagePath = $profileImagePath;
+        $this->updateTimestamp();
     }
 
     public function updateBiography(Biography $biography): void
@@ -126,9 +143,18 @@ final class Avatar
         $this->updateTimestamp();
     }
 
-    public function updateImages(ImageCollection $images): void
+    public function clearVoiceId(): void
     {
-        $this->images = $images;
+        $this->voiceId = null;
+        $this->updateTimestamp();
+    }
+
+    /**
+     * @param AvatarMedia[] $media
+     */
+    public function updateMedia(array $media): void
+    {
+        $this->media = $media;
         $this->updateTimestamp();
     }
 
@@ -145,12 +171,11 @@ final class Avatar
             'id' => $this->id->value(),
             'user_id' => $this->userId->value(),
             'name' => $this->name->value(),
-            'profile_image_path' => $this->profileImagePath->value(),
             'biography' => $this->biography->value(),
             'presentation_style' => $this->presentationStyle->value,
             'category' => $this->category->value,
             'description' => $this->description->value(),
-            'images' => array_map(fn ($image) => $image->toArray(), $this->images->items()),
+            'images' => array_map(fn (AvatarMedia $m) => $m->toArray(), $this->media),
             'voice_id' => $this->voiceId?->value(),
             'created_at' => $this->createdAt->value()->format('Y-m-d H:i:s'),
             'updated_at' => $this->updatedAt?->value()->format('Y-m-d H:i:s'),

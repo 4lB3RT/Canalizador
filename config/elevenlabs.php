@@ -2,6 +2,7 @@
 
 return [
     'model_id'                => env('ELEVENLABS_MODEL_ID', 'eleven_multilingual_sts_v2'),
+    'tts_model_id'            => env('ELEVENLABS_TTS_MODEL_ID', 'eleven_multilingual_v2'),
     'output_format'           => env('ELEVENLABS_OUTPUT_FORMAT', 'mp3_44100_128'),
     'remove_background_noise' => (bool) env('ELEVENLABS_REMOVE_BG_NOISE', false),
     'timeout'                 => (int) env('ELEVENLABS_TIMEOUT', 60),

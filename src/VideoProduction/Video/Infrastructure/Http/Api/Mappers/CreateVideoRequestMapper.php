@@ -19,8 +19,14 @@ final readonly class CreateVideoRequestMapper
             'avatar_id' => 'nullable|string|uuid',
         ]);
 
+        $user = $request->user();
+        if (!$user) {
+            throw new \RuntimeException('User must be authenticated');
+        }
+
         return new CreateVideoRequest(
             videoId: $validated['video_id'],
+            userId: $user->id,
             scriptId: $validated['script_id'],
             channelId: $validated['channel_id'],
             category: $validated['category'],

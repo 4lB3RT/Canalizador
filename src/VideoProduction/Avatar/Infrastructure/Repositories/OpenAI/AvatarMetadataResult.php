@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Helmreel\VideoProduction\Avatar\Infrastructure\Repositories\OpenAI;
 
+use Helmreel\VideoProduction\Avatar\Domain\Entities\AvatarMedia;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarDescription;
-use Helmreel\VideoProduction\Image\Domain\Entities\ImageCollection;
 
 final readonly class AvatarMetadataResult
 {
+    /**
+     * @param AvatarMedia[] $media
+     */
     public function __construct(
         private AvatarDescription $description,
-        private ImageCollection $images
+        private array $media,
     ) {
     }
 
@@ -20,8 +23,11 @@ final readonly class AvatarMetadataResult
         return $this->description;
     }
 
-    public function images(): ImageCollection
+    /**
+     * @return AvatarMedia[]
+     */
+    public function media(): array
     {
-        return $this->images;
+        return $this->media;
     }
 }

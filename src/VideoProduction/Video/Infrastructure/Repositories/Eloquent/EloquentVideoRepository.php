@@ -6,9 +6,11 @@ namespace Helmreel\VideoProduction\Video\Infrastructure\Repositories\Eloquent;
 
 use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
+use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
 use Helmreel\VideoProduction\Script\Domain\Repositories\ScriptRepository;
 use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptId;
 use Helmreel\VideoProduction\Video\Domain\Entities\Video;
@@ -33,6 +35,7 @@ final class EloquentVideoRepository implements VideoRepository
         VideoDAO::updateOrCreate(
             ['id' => $video->id()->value()],
             [
+                'user_id' => $video->userId()->value(),
                 'script_id' => $video->script()->id()->value(),
                 'channel_id' => $video->channelId()->value(),
                 'avatar_id' => $video->avatarId()?->value(),
@@ -41,6 +44,7 @@ final class EloquentVideoRepository implements VideoRepository
                 'category' => $video->category()->value,
                 'generation_id' => $video->generationId()?->value(),
                 'video_local_path' => $video->videoLocalPath()?->value(),
+                'media_id' => $video->mediaId()?->value(),
                 'created_at' => $video->createdAt()->value(),
                 'completed_at' => $video->completedAt()?->value(),
             ]
@@ -59,6 +63,18 @@ final class EloquentVideoRepository implements VideoRepository
         }
 
         return $this->toEntity($model);
+    }
+
+    /**
+     * @return Video[]
+     */
+    public function findByUserId(IntegerId $userId): array
+    {
+        return VideoDAO::where('user_id', $userId->value())
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(fn (VideoDAO $model) => $this->toEntity($model))
+            ->all();
     }
 
     public function getByScriptId(ScriptId $scriptId): VideoCollection
@@ -89,6 +105,7 @@ final class EloquentVideoRepository implements VideoRepository
 
         return new Video(
             id: VideoId::fromString($model->id),
+            userId: new IntegerId((int) $model->user_id),
             script: $script,
             channelId: ChannelId::fromString($model->channel_id),
             title: Title::fromString($model->title),
@@ -99,6 +116,7 @@ final class EloquentVideoRepository implements VideoRepository
             generationId: $model->generation_id ? GenerationId::fromString($model->generation_id) : null,
             videoLocalPath: $model->video_local_path ? LocalPath::fromString($model->video_local_path) : null,
             completedAt: $model->completed_at ? new DateTime($model->completed_at->toDateTimeImmutable()) : null,
+            mediaId: $model->media_id ? MediaId::fromString($model->media_id) : null,
         );
     }
 }

@@ -18,6 +18,7 @@ class VideoDAO extends Model
 
     protected $fillable = [
         'id',
+        'user_id',
         'script_id',
         'channel_id',
         'avatar_id',
@@ -26,6 +27,7 @@ class VideoDAO extends Model
         'category',
         'generation_id',
         'video_local_path',
+        'media_id',
         'created_at',
         'completed_at',
     ];

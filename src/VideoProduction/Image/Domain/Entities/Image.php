@@ -8,6 +8,7 @@ use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Helmreel\VideoProduction\Image\Domain\ValueObjects\ImageId;
+use Helmreel\VideoProduction\Image\Domain\ValueObjects\ImageType;
 
 final class Image
 {
@@ -17,7 +18,13 @@ final class Image
         private readonly LocalPath $path,
         private readonly DateTime $createdAt,
         private ?DateTime $updatedAt = null,
+        private readonly ImageType $type = ImageType::GENERATED,
     ) {
+    }
+
+    public function type(): ImageType
+    {
+        return $this->type;
     }
 
     public function id(): ImageId
@@ -50,7 +57,8 @@ final class Image
         return [
             'id' => $this->id->value(),
             'user_id' => $this->userId->value(),
-            'path' => $this->path->value(),
+            'url' => '/video-production/images/' . $this->id->value(),
+            'type' => $this->type->value,
             'created_at' => $this->createdAt->value()->format('Y-m-d H:i:s'),
             'updated_at' => $this->updatedAt?->value()->format('Y-m-d H:i:s'),
         ];

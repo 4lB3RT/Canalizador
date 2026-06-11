@@ -6,6 +6,7 @@ namespace Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo;
 
 use Helmreel\Shared\Shared\Domain\Events\EventBus;
 use Helmreel\Shared\Shared\Domain\Services\Clock;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
 use Helmreel\VideoProduction\News\Domain\Repositories\NewsRepository;
@@ -53,14 +54,12 @@ final readonly class CreateVideo
                 $script = match ($category) {
                     VideoCategory::GAMING => $this->generateScript->generate(
                         scriptId: $request->scriptId,
-                        channelId: $request->channelId,
                         prompt: $this->buildPromptFromLatestNews(),
                         totalClips: (int) config('veo.total_clips', 5),
                         clipDuration: (int) config('veo.duration', 8),
                     ),
                     VideoCategory::METEOROLOGY => $this->generateScript->generateWeather(
                         scriptId: $request->scriptId,
-                        channelId: $request->channelId,
                         prompt: $this->buildPromptFromForecasts(),
                         totalClips: (int) config('veo.total_clips', 5),
                         clipDuration: (int) config('veo.duration', 8),
@@ -72,6 +71,7 @@ final readonly class CreateVideo
 
             $video = $this->videoFactory->create(
                 id: $videoId,
+                userId: new IntegerId($request->userId),
                 script: $script,
                 channelId: $channelId,
                 title: $metadata->title,

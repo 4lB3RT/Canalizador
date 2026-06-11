@@ -12,6 +12,7 @@ use Helmreel\VideoProduction\Image\Domain\Entities\ImageCollection;
 use Helmreel\VideoProduction\Image\Domain\Exceptions\ImageNotFound;
 use Helmreel\VideoProduction\Image\Domain\Repositories\ImageRepository;
 use Helmreel\VideoProduction\Image\Domain\ValueObjects\ImageId;
+use Helmreel\VideoProduction\Image\Domain\ValueObjects\ImageType;
 use Helmreel\VideoProduction\Image\Infrastructure\DAO\ImageDAO;
 
 final class EloquentImageRepository implements ImageRepository
@@ -23,6 +24,7 @@ final class EloquentImageRepository implements ImageRepository
             [
                 'user_id' => $image->userId()->value(),
                 'path' => $image->path()->value(),
+                'type' => $image->type()->value,
                 'created_at' => $image->createdAt()->value(),
                 'updated_at' => $image->updatedAt()?->value() ?? now(),
             ]
@@ -76,6 +78,7 @@ final class EloquentImageRepository implements ImageRepository
             path: LocalPath::fromString($model->path),
             createdAt: $createdAt,
             updatedAt: $updatedAt,
+            type: ImageType::fromString($model->type ?? 'generated'),
         );
     }
 }

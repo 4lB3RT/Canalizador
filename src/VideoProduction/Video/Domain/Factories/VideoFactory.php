@@ -7,6 +7,7 @@ namespace Helmreel\VideoProduction\Video\Domain\Factories;
 use Helmreel\Shared\Shared\Domain\Services\Clock;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
 use Helmreel\VideoProduction\Script\Domain\Entities\Script;
@@ -24,6 +25,7 @@ final readonly class VideoFactory
 
     public function create(
         VideoId $id,
+        IntegerId $userId,
         Script $script,
         ChannelId $channelId,
         Title $title,
@@ -34,6 +36,7 @@ final readonly class VideoFactory
     ): Video {
         return new Video(
             id: $id,
+            userId: $userId,
             script: $script,
             channelId: $channelId,
             title: $title,
