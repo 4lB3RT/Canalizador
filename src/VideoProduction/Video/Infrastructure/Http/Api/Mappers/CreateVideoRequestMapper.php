@@ -14,9 +14,9 @@ final readonly class CreateVideoRequestMapper
         $validated = $request->validate([
             'video_id' => 'required|string|uuid',
             'script_id' => 'required|string|uuid',
-            'channel_id' => 'required|string',
             'category' => 'required|string|in:gaming,meteorology',
             'avatar_id' => 'nullable|string|uuid',
+            'resolution' => 'sometimes|string|in:720p,1080p,4k',
         ]);
 
         $user = $request->user();
@@ -28,9 +28,9 @@ final readonly class CreateVideoRequestMapper
             videoId: $validated['video_id'],
             userId: $user->id,
             scriptId: $validated['script_id'],
-            channelId: $validated['channel_id'],
             category: $validated['category'],
             avatarId: $validated['avatar_id'] ?? null,
+            resolution: $validated['resolution'] ?? '720p',
         );
     }
 }

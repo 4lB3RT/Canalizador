@@ -18,10 +18,10 @@ use Helmreel\VideoProduction\Video\Domain\Entities\VideoCollection;
 use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 use Helmreel\VideoProduction\Video\Infrastructure\DAO\VideoDAO;
-use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
 
 final class EloquentVideoRepository implements VideoRepository
 {
@@ -37,11 +37,11 @@ final class EloquentVideoRepository implements VideoRepository
             [
                 'user_id' => $video->userId()->value(),
                 'script_id' => $video->script()->id()->value(),
-                'channel_id' => $video->channelId()->value(),
                 'avatar_id' => $video->avatarId()?->value(),
                 'title' => $video->title()->value(),
                 'description' => $video->description()->value(),
                 'category' => $video->category()->value,
+                'resolution' => $video->resolution()->value,
                 'generation_id' => $video->generationId()?->value(),
                 'video_local_path' => $video->videoLocalPath()?->value(),
                 'media_id' => $video->mediaId()?->value(),
@@ -107,11 +107,11 @@ final class EloquentVideoRepository implements VideoRepository
             id: VideoId::fromString($model->id),
             userId: new IntegerId((int) $model->user_id),
             script: $script,
-            channelId: ChannelId::fromString($model->channel_id),
             title: Title::fromString($model->title),
             description: Description::fromString($model->description),
             category: VideoCategory::from($model->category),
             createdAt: new DateTime($model->created_at->toDateTimeImmutable()),
+            resolution: $model->resolution ? Resolution::fromString($model->resolution) : Resolution::HD,
             avatarId: $model->avatar_id ? AvatarId::fromString($model->avatar_id) : null,
             generationId: $model->generation_id ? GenerationId::fromString($model->generation_id) : null,
             videoLocalPath: $model->video_local_path ? LocalPath::fromString($model->video_local_path) : null,

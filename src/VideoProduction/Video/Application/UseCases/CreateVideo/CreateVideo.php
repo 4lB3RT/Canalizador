@@ -17,10 +17,10 @@ use Helmreel\VideoProduction\Video\Domain\Events\VideoCreated;
 use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
 use Helmreel\VideoProduction\Video\Domain\Factories\VideoFactory;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 use Helmreel\VideoProduction\Weather\Domain\Repositories\ForecastRepository;
-use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
 
 final readonly class CreateVideo
 {
@@ -37,7 +37,7 @@ final readonly class CreateVideo
     ) {
     }
 
-    public function execute(CreateVideoRequest $request): CreateVideoResponse
+    public function execute(CreateVideoRequest $request): void
     {
         $videoId = VideoId::fromString($request->videoId);
 
@@ -45,7 +45,6 @@ final readonly class CreateVideo
             $video = $this->videoRepository->findById($videoId);
         } catch (VideoNotFound) {
             $scriptId = ScriptId::fromString($request->scriptId);
-            $channelId = ChannelId::fromString($request->channelId);
             $category = VideoCategory::from($request->category);
 
             $script = $this->scriptRepository->findById($scriptId);
@@ -73,10 +72,10 @@ final readonly class CreateVideo
                 id: $videoId,
                 userId: new IntegerId($request->userId),
                 script: $script,
-                channelId: $channelId,
                 title: $metadata->title,
                 description: $metadata->description,
                 category: $category,
+                resolution: Resolution::fromString($request->resolution),
                 avatarId: $request->avatarId ? AvatarId::fromString($request->avatarId) : null,
             );
 
@@ -86,8 +85,6 @@ final readonly class CreateVideo
         $this->eventBus->publish(
             new VideoCreated($video->id()->value(), $this->clock->now())
         );
-
-        return new CreateVideoResponse($video);
     }
 
     private function buildPromptFromLatestNews(): string

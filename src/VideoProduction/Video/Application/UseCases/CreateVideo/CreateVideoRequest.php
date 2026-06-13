@@ -10,9 +10,9 @@ final readonly class CreateVideoRequest
         public string $videoId,
         public int $userId,
         public string $scriptId,
-        public string $channelId,
         public string $category,
         public ?string $avatarId = null,
+        public string $resolution = '720p',
     ) {
     }
 }

@@ -8,6 +8,7 @@ use Helmreel\Shared\Shared\Domain\Services\HttpClient;
 use Helmreel\Shared\Shared\Domain\Services\HttpResponseValidator;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Helmreel\VideoProduction\Weather\Domain\Entities\CityForecast;
+use Helmreel\VideoProduction\Weather\Domain\Exceptions\WeatherProviderUnavailable;
 use Helmreel\VideoProduction\Weather\Domain\Repositories\WeatherProvider;
 use Helmreel\VideoProduction\Weather\Domain\ValueObjects\CityName;
 use Helmreel\VideoProduction\Weather\Domain\ValueObjects\MunicipalityCode;
@@ -35,9 +36,15 @@ final readonly class AemetWeatherProvider implements WeatherProvider
      */
     public function fetchForCity(string $municipalityCode, string $cityName): array
     {
-        $dataUrl = $this->fetchDataUrl($municipalityCode);
+        try {
+            $dataUrl = $this->fetchDataUrl($municipalityCode);
 
-        return $this->fetchForecasts($dataUrl, $municipalityCode, $cityName);
+            return $this->fetchForecasts($dataUrl, $municipalityCode, $cityName);
+        } catch (WeatherProviderUnavailable $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            throw WeatherProviderUnavailable::aemet($e);
+        }
     }
 
     private function fetchDataUrl(string $municipalityCode): string

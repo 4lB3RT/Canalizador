@@ -19,7 +19,6 @@ use Helmreel\VideoProduction\Video\Domain\Repositories\VideoGenerator;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
 use Helmreel\VideoProduction\Video\Domain\Services\VideoPromptExtractor;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
-use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 
 final readonly class GenerateClip
 {
@@ -81,6 +80,6 @@ final readonly class GenerateClip
             );
 
 
-        return $this->videoGenerator->generate($videoPrompt, Resolution::HD);
+        return $this->videoGenerator->generate($videoPrompt, $video->resolution());
     }
 }

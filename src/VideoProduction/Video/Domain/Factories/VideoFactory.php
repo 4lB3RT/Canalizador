@@ -12,9 +12,9 @@ use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
 use Helmreel\VideoProduction\Script\Domain\Entities\Script;
 use Helmreel\VideoProduction\Video\Domain\Entities\Video;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
-use Helmreel\YouTube\Channel\Domain\ValueObjects\ChannelId;
 
 final readonly class VideoFactory
 {
@@ -27,10 +27,10 @@ final readonly class VideoFactory
         VideoId $id,
         IntegerId $userId,
         Script $script,
-        ChannelId $channelId,
         Title $title,
         Description $description,
         VideoCategory $category,
+        Resolution $resolution = Resolution::HD,
         ?AvatarId $avatarId = null,
         ?DateTime $createdAt = null,
     ): Video {
@@ -38,11 +38,11 @@ final readonly class VideoFactory
             id: $id,
             userId: $userId,
             script: $script,
-            channelId: $channelId,
             title: $title,
             description: $description,
             category: $category,
             createdAt: $createdAt ?? $this->clock->now(),
+            resolution: $resolution,
             avatarId: $avatarId,
         );
     }

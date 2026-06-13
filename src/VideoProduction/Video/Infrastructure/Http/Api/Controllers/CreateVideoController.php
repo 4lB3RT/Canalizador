@@ -25,8 +25,8 @@ final class CreateVideoController extends Controller
     {
         $createVideoRequest = $this->requestMapper->map($request);
 
-        $response = $this->createVideo->execute($createVideoRequest);
+        $this->createVideo->execute($createVideoRequest);
 
-        return response()->json($response->toArray());
+        return response()->noContent();
     }
 }

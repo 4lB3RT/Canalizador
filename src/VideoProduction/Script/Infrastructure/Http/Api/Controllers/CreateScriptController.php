@@ -31,7 +31,7 @@ final class CreateScriptController extends Controller
         $validated = $request->validate([
             'script_id' => 'required|string|uuid',
             'category' => 'required|string|in:gaming,meteorology',
-            'total_clips' => 'sometimes|integer|min:1|max:6',
+            'total_clips' => 'sometimes|integer|min:1|max:8',
             'title' => 'sometimes|nullable|string|max:255',
         ]);
 
