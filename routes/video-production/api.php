@@ -19,6 +19,7 @@ use Helmreel\VideoProduction\Script\Infrastructure\Http\Api\Controllers\GetScrip
 use Helmreel\VideoProduction\Script\Infrastructure\Http\Api\Controllers\UpdateScriptController;
 use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers\ApplyVoiceController;
 use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers\CreateVideoController;
+use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers\DeleteVideoController;
 use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers\GetVideoController;
 use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers\GetVideoFileController;
 use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers\GetVideosController;
@@ -54,6 +55,7 @@ Route::middleware(['api.token'])->group(function () {
         ->middleware(EnsureGoogleToken::class);
     Route::post('/videos/{videoId}/apply-voice', ApplyVoiceController::class);
     Route::get('/videos/{videoId}', GetVideoController::class);
+    Route::delete('/videos/{videoId}', DeleteVideoController::class);
 
     Route::get('/voices', GetVoicesController::class);
     Route::post('/voice/clone', CloneVoiceController::class);

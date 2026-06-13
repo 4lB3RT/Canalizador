@@ -7,6 +7,7 @@ namespace Helmreel\VideoProduction\Video\Infrastructure\Services;
 use Helmreel\VideoProduction\Avatar\Domain\Entities\Avatar;
 use Helmreel\VideoProduction\Script\Domain\Entities\Script;
 use Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\VideoProduction\Video\Domain\Services\VideoPromptExtractor;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 
@@ -24,7 +25,7 @@ final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
 
         $videoPrompt = $scriptData['full_script'];
 
-        $technicalVideo = $this->getTechnicalVideoPrompt($category);
+        $technicalVideo = $this->getTechnicalVideoPrompt($category, $script->language());
         $referenceImagePaths = $this->getReferenceImagePaths($category);
         $firstFramePath = $this->buildFirstFrame($category);
 
@@ -44,7 +45,7 @@ final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
 
         $videoPrompt = $scriptData['full_script'];
 
-        $technicalVideo = $this->getTechnicalVideoPrompt($category);
+        $technicalVideo = $this->getTechnicalVideoPrompt($category, $script->language());
         $referenceImagePaths = $this->getReferenceImagePaths($category);
         $firstFramePath = $this->buildFirstFrame($category);
 
@@ -57,12 +58,14 @@ final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
         );
     }
 
-    private function getTechnicalVideoPrompt(VideoCategory $category): string
+    private function getTechnicalVideoPrompt(VideoCategory $category, Language $language): string
     {
-        return match ($category) {
+        $prompt = match ($category) {
             VideoCategory::GAMING => config('prompts.video.talking_head.system_prompt'),
             VideoCategory::METEOROLOGY => config('prompts.video.technical_meteorology.prompt'),
         };
+
+        return str_replace('{language}', $language->promptLabel(), $prompt);
     }
 
     /** @return string[] */

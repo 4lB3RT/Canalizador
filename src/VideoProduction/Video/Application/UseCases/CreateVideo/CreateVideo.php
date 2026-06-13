@@ -7,6 +7,7 @@ namespace Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo;
 use Helmreel\Shared\Shared\Domain\Events\EventBus;
 use Helmreel\Shared\Shared\Domain\Services\Clock;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
 use Helmreel\VideoProduction\News\Domain\Repositories\NewsRepository;
@@ -18,6 +19,7 @@ use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
 use Helmreel\VideoProduction\Video\Domain\Factories\VideoFactory;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\TotalClips;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 use Helmreel\VideoProduction\Weather\Domain\Repositories\ForecastRepository;
@@ -46,6 +48,7 @@ final readonly class CreateVideo
         } catch (VideoNotFound) {
             $scriptId = ScriptId::fromString($request->scriptId);
             $category = VideoCategory::from($request->category);
+            $language = Language::from($request->language);
 
             $script = $this->scriptRepository->findById($scriptId);
 
@@ -54,19 +57,21 @@ final readonly class CreateVideo
                     VideoCategory::GAMING => $this->generateScript->generate(
                         scriptId: $request->scriptId,
                         prompt: $this->buildPromptFromLatestNews(),
-                        totalClips: (int) config('veo.total_clips', 5),
+                        language: $language,
+                        totalClips: $request->totalClips,
                         clipDuration: (int) config('veo.duration', 8),
                     ),
                     VideoCategory::METEOROLOGY => $this->generateScript->generateWeather(
                         scriptId: $request->scriptId,
                         prompt: $this->buildPromptFromForecasts(),
-                        totalClips: (int) config('veo.total_clips', 5),
+                        language: $language,
+                        totalClips: $request->totalClips,
                         clipDuration: (int) config('veo.duration', 8),
                     ),
                 };
             }
 
-            $metadata = $this->videoMetadataGenerator->generate($script->content()->value());
+            $metadata = $this->videoMetadataGenerator->generate($script->content()->value(), $language);
 
             $video = $this->videoFactory->create(
                 id: $videoId,
@@ -76,6 +81,8 @@ final readonly class CreateVideo
                 description: $metadata->description,
                 category: $category,
                 resolution: Resolution::fromString($request->resolution),
+                totalClips: new TotalClips($request->totalClips),
+                language: $language,
                 avatarId: $request->avatarId ? AvatarId::fromString($request->avatarId) : null,
             );
 

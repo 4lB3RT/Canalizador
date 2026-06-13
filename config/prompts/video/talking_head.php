@@ -27,7 +27,7 @@ Gestos naturales y expresivos. Lenguaje corporal energético de creador de gamin
 Contacto visual directo con la cámara. Expresiones faciales acordes al tono del guion.
 
 [AUDIO]
-The presenter speaks with a clear, energetic voice in European Spanish.
+The presenter speaks with a clear, energetic voice in {language}.
 Ambient sound: quiet room with subtle ambience.
 
 [STYLE & AMBIANCE]

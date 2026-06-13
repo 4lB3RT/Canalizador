@@ -260,10 +260,10 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
         $referenceImages = [];
 
         if ($videoPrompt->host() !== null) {
-            $avatarImages = array_slice($videoPrompt->host()->images()->items(), 0, self::MAX_REFERENCE_IMAGES);
+            $avatarMedia = array_slice($videoPrompt->host()->media(), 0, self::MAX_REFERENCE_IMAGES);
 
-            foreach ($avatarImages as $avatarImage) {
-                $imagePath = $avatarImage->path()->value();
+            foreach ($avatarMedia as $media) {
+                $imagePath = $media->media()->path()->value();
 
                 if (!File::exists($imagePath)) {
                     continue;

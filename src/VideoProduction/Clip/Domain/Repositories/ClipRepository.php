@@ -20,4 +20,6 @@ interface ClipRepository
     public function findById(ClipId $id): Clip;
 
     public function findByVideoId(VideoId $videoId): ClipCollection;
+
+    public function deleteByVideoId(VideoId $videoId): void;
 }

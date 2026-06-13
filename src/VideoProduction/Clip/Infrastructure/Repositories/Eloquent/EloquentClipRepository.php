@@ -64,6 +64,11 @@ final class EloquentClipRepository implements ClipRepository
         return new ClipCollection($clips);
     }
 
+    public function deleteByVideoId(VideoId $videoId): void
+    {
+        ClipDAO::where('video_id', $videoId->value())->delete();
+    }
+
     private function toEntity(ClipDAO $model): Clip
     {
         return new Clip(

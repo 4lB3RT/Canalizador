@@ -7,6 +7,7 @@ namespace Helmreel\VideoProduction\Video\Infrastructure\Repositories\Eloquent;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
@@ -19,6 +20,7 @@ use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\TotalClips;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 use Helmreel\VideoProduction\Video\Infrastructure\DAO\VideoDAO;
@@ -42,6 +44,8 @@ final class EloquentVideoRepository implements VideoRepository
                 'description' => $video->description()->value(),
                 'category' => $video->category()->value,
                 'resolution' => $video->resolution()->value,
+                'total_clips' => $video->totalClips()->value(),
+                'language' => $video->language()->value,
                 'generation_id' => $video->generationId()?->value(),
                 'video_local_path' => $video->videoLocalPath()?->value(),
                 'media_id' => $video->mediaId()?->value(),
@@ -112,6 +116,8 @@ final class EloquentVideoRepository implements VideoRepository
             category: VideoCategory::from($model->category),
             createdAt: new DateTime($model->created_at->toDateTimeImmutable()),
             resolution: $model->resolution ? Resolution::fromString($model->resolution) : Resolution::HD,
+            totalClips: new TotalClips((int) ($model->total_clips ?? 5)),
+            language: $model->language ? Language::from($model->language) : Language::SPANISH,
             avatarId: $model->avatar_id ? AvatarId::fromString($model->avatar_id) : null,
             generationId: $model->generation_id ? GenerationId::fromString($model->generation_id) : null,
             videoLocalPath: $model->video_local_path ? LocalPath::fromString($model->video_local_path) : null,

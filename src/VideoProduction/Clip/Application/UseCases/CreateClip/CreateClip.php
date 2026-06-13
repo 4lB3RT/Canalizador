@@ -38,9 +38,10 @@ final readonly class CreateClip
         $video = $this->videoRepository->findById($videoId);
         $clips = $this->clipRepository->findByVideoId($videoId);
 
+        $totalClips = $video->totalClips()->value();
         $completedCount = $this->countCompleted($clips);
 
-        if ($completedCount >= $this->totalClips) {
+        if ($completedCount >= $totalClips) {
             $this->eventBus->publish(
                 new AllClipsCompleted($videoId->value(), $this->clock->now())
             );

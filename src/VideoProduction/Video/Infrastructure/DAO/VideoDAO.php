@@ -25,6 +25,8 @@ class VideoDAO extends Model
         'description',
         'category',
         'resolution',
+        'total_clips',
+        'language',
         'generation_id',
         'video_local_path',
         'media_id',

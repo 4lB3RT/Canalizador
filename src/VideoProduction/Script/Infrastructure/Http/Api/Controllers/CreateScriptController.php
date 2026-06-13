@@ -31,6 +31,7 @@ final class CreateScriptController extends Controller
         $validated = $request->validate([
             'script_id' => 'required|string|uuid',
             'category' => 'required|string|in:gaming,meteorology',
+            'language' => 'sometimes|string|in:es,en,fr,de,it,pt',
             'total_clips' => 'sometimes|integer|min:1|max:8',
             'title' => 'sometimes|nullable|string|max:255',
         ]);
@@ -42,6 +43,7 @@ final class CreateScriptController extends Controller
                 category: $validated['category'],
                 totalClips: (int) ($validated['total_clips'] ?? 5),
                 title: $validated['title'] ?? null,
+                language: $validated['language'] ?? 'es',
             ));
         } catch (Throwable $e) {
             return response()->json([

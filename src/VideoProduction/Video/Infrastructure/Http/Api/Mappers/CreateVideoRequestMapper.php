@@ -17,6 +17,8 @@ final readonly class CreateVideoRequestMapper
             'category' => 'required|string|in:gaming,meteorology',
             'avatar_id' => 'nullable|string|uuid',
             'resolution' => 'sometimes|string|in:720p,1080p,4k',
+            'total_clips' => 'sometimes|integer|min:1|max:8',
+            'language' => 'sometimes|string|in:es,en,fr,de,it,pt',
         ]);
 
         $user = $request->user();
@@ -31,6 +33,8 @@ final readonly class CreateVideoRequestMapper
             category: $validated['category'],
             avatarId: $validated['avatar_id'] ?? null,
             resolution: $validated['resolution'] ?? '720p',
+            totalClips: (int) ($validated['total_clips'] ?? 5),
+            language: $validated['language'] ?? 'es',
         );
     }
 }

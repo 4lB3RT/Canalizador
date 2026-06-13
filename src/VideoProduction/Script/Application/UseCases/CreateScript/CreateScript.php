@@ -6,6 +6,7 @@ namespace Helmreel\VideoProduction\Script\Application\UseCases\CreateScript;
 
 use Helmreel\Shared\Shared\Domain\Services\Clock;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\VideoProduction\News\Application\UseCases\DownloadNews\DownloadNews;
 use Helmreel\VideoProduction\News\Domain\Repositories\NewsRepository;
 use Helmreel\VideoProduction\Script\Domain\Entities\Script;
@@ -34,17 +35,20 @@ final readonly class CreateScript
     public function execute(CreateScriptRequest $request): array
     {
         $category = VideoCategory::from($request->category);
+        $language = Language::from($request->language);
         $totalClips = $request->totalClips;
         $clipDuration = (int) config('veo.duration', 8);
 
         $content = match ($category) {
             VideoCategory::GAMING => $this->scriptGenerator->generateGaming(
                 $this->buildPromptFromLatestNews(),
+                $language,
                 $totalClips,
                 $clipDuration,
             ),
             VideoCategory::METEOROLOGY => $this->scriptGenerator->generateWeather(
                 $this->buildPromptFromForecasts(),
+                $language,
                 $totalClips,
                 $clipDuration,
             ),
@@ -57,6 +61,7 @@ final readonly class CreateScript
             category: $category,
             title: $request->title ?? $this->extractTitle($content),
             createdAt: $this->clock->now(),
+            language: $language,
         );
 
         $this->scriptRepository->save($script);

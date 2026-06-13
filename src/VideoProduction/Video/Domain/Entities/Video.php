@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Helmreel\VideoProduction\Video\Domain\Entities;
 
 use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
@@ -14,6 +15,7 @@ use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
 use Helmreel\VideoProduction\Script\Domain\Entities\Script;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\TotalClips;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 
@@ -28,6 +30,8 @@ final class Video
         private readonly VideoCategory $category,
         private readonly DateTime $createdAt,
         private readonly Resolution $resolution = Resolution::HD,
+        private readonly TotalClips $totalClips = new TotalClips(5),
+        private readonly Language $language = Language::SPANISH,
         private readonly ?AvatarId $avatarId = null,
         private readonly ?GenerationId $generationId = null,
         private ?LocalPath $videoLocalPath = null,
@@ -74,6 +78,16 @@ final class Video
     public function resolution(): Resolution
     {
         return $this->resolution;
+    }
+
+    public function totalClips(): TotalClips
+    {
+        return $this->totalClips;
+    }
+
+    public function language(): Language
+    {
+        return $this->language;
     }
 
     public function videoLocalPath(): ?LocalPath
@@ -123,6 +137,8 @@ final class Video
             'description'   => $this->description->value(),
             'category'      => $this->category->value,
             'resolution'    => $this->resolution->value,
+            'total_clips'   => $this->totalClips->value(),
+            'language'      => $this->language->value,
             'status'        => $completed ? 'completed' : 'processing',
             'video_url'     => $this->mediaId !== null ? '/video-production/media/' . $this->mediaId->value() : null,
             'created_at'    => $this->createdAt->value()->format('Y-m-d H:i:s'),

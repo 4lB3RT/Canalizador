@@ -76,7 +76,7 @@ GESTOS DE BARRIDO entre ciudades — la mano sigue la dirección geográfica rea
 - Valencia → Alicante → Murcia: descenso por la costa DERECHA
 
 [AUDIO]
-The presenter speaks with a clear, professional broadcast voice in European Spanish.
+The presenter speaks with a clear, professional broadcast voice in {language}.
 Ambient sound: quiet broadcast studio with subtle room tone.
 
 [STYLE & AMBIANCE]

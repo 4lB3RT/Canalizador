@@ -6,6 +6,7 @@ namespace Helmreel\VideoProduction\Script\Domain\Entities;
 
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptContent;
 use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptId;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
@@ -20,6 +21,7 @@ final class Script
         private ?string $title = null,
         private readonly ?DateTime $createdAt = null,
         private ?DateTime $updatedAt = null,
+        private readonly Language $language = Language::SPANISH,
     ) {
     }
 
@@ -41,6 +43,11 @@ final class Script
     public function category(): ?VideoCategory
     {
         return $this->category;
+    }
+
+    public function language(): Language
+    {
+        return $this->language;
     }
 
     public function title(): ?string
@@ -79,6 +86,7 @@ final class Script
             'id'         => $this->id->value(),
             'user_id'    => $this->userId?->value(),
             'category'   => $this->category?->value,
+            'language'   => $this->language->value,
             'title'      => $this->title,
             'content'    => $this->content->value(),
             'created_at' => $this->createdAt?->value()->format('Y-m-d H:i:s'),

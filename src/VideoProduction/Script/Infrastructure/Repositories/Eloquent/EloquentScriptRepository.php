@@ -6,6 +6,7 @@ namespace Helmreel\VideoProduction\Script\Infrastructure\Repositories\Eloquent;
 
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\VideoProduction\Script\Domain\Entities\Script;
 use Helmreel\VideoProduction\Script\Domain\Repositories\ScriptRepository;
 use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptContent;
@@ -22,6 +23,7 @@ final class EloquentScriptRepository implements ScriptRepository
             [
                 'user_id' => $script->userId()?->value(),
                 'category' => $script->category()?->value,
+                'language' => $script->language()->value,
                 'title' => $script->title(),
                 'content' => $script->content()->value(),
                 'created_at' => $script->createdAt()?->value() ?? now(),
@@ -69,6 +71,7 @@ final class EloquentScriptRepository implements ScriptRepository
             title: $model->title,
             createdAt: $model->created_at ? new DateTime($model->created_at->toDateTimeImmutable()) : null,
             updatedAt: $model->updated_at ? new DateTime($model->updated_at->toDateTimeImmutable()) : null,
+            language: $model->language !== null ? Language::from($model->language) : Language::SPANISH,
         );
     }
 }

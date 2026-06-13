@@ -12,6 +12,7 @@ final readonly class CreateScriptRequest
         public string $category,
         public int $totalClips = 5,
         public ?string $title = null,
+        public string $language = 'es',
     ) {
     }
 }

@@ -20,6 +20,7 @@ class ScriptDAO extends Model
         'script_id',
         'user_id',
         'category',
+        'language',
         'title',
         'content',
         'created_at',

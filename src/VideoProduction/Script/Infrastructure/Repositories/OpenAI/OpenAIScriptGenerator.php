@@ -4,40 +4,34 @@ declare(strict_types=1);
 
 namespace Helmreel\VideoProduction\Script\Infrastructure\Repositories\OpenAI;
 
+use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\VideoProduction\Script\Domain\Repositories\ScriptGenerator;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Facades\Prism;
 
 final class OpenAIScriptGenerator implements ScriptGenerator
 {
-    public function generateGaming(string $prompt, int $totalClips = 5, int $clipDuration = 8): string
+    public function generateGaming(string $prompt, Language $language, int $totalClips = 5, int $clipDuration = 8): string
     {
-        $systemPrompt = config('prompts.script.generator_gaming.system_prompt');
-
-        $totalDuration = $clipDuration + ($totalClips - 1) * ($clipDuration - 1);
-        $totalWordsMin = (int) ceil($totalDuration * 2.5);
-        $totalWordsMax = (int) floor($totalDuration * 3.0);
-
-        $systemPrompt = str_replace(
-            ['{total_clips}', '{clip_duration}', '{total_duration}', '{total_words_min}', '{total_words_max}'],
-            [(string) $totalClips, (string) $clipDuration, (string) $totalDuration, (string) $totalWordsMin, (string) $totalWordsMax],
-            $systemPrompt
-        );
-
-        return $this->executeGeneration($systemPrompt, $prompt);
+        return $this->generateForCategory('prompts.script.generator_gaming.system_prompt', $prompt, $language, $totalClips, $clipDuration);
     }
 
-    public function generateWeather(string $prompt, int $totalClips = 5, int $clipDuration = 8): string
+    public function generateWeather(string $prompt, Language $language, int $totalClips = 5, int $clipDuration = 8): string
     {
-        $systemPrompt = config('prompts.script.generator_weather.system_prompt');
+        return $this->generateForCategory('prompts.script.generator_weather.system_prompt', $prompt, $language, $totalClips, $clipDuration);
+    }
+
+    private function generateForCategory(string $configKey, string $prompt, Language $language, int $totalClips, int $clipDuration): string
+    {
+        $systemPrompt = config($configKey);
 
         $totalDuration = $clipDuration + ($totalClips - 1) * ($clipDuration - 1);
         $totalWordsMin = (int) ceil($totalDuration * 2.5);
         $totalWordsMax = (int) floor($totalDuration * 3.0);
 
         $systemPrompt = str_replace(
-            ['{total_clips}', '{clip_duration}', '{total_duration}', '{total_words_min}', '{total_words_max}'],
-            [(string) $totalClips, (string) $clipDuration, (string) $totalDuration, (string) $totalWordsMin, (string) $totalWordsMax],
+            ['{language}', '{total_clips}', '{clip_duration}', '{total_duration}', '{total_words_min}', '{total_words_max}'],
+            [$language->promptLabel(), (string) $totalClips, (string) $clipDuration, (string) $totalDuration, (string) $totalWordsMin, (string) $totalWordsMax],
             $systemPrompt
         );
 

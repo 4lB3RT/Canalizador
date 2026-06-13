@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Helmreel\Shared\Video\Infrastructure\Repositories\OpenAI;
 
 use Helmreel\Shared\Shared\Domain\ValueObjects\Description;
+use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
 use Helmreel\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
 use Helmreel\Shared\Video\Domain\ValueObjects\VideoMetadata;
@@ -13,9 +14,13 @@ use Prism\Prism\Facades\Prism;
 
 final class OpenAIVideoMetadataGenerator implements VideoMetadataGenerator
 {
-    public function generate(string $scriptContent): VideoMetadata
+    public function generate(string $scriptContent, Language $language = Language::SPANISH): VideoMetadata
     {
-        $systemPrompt = config('prompts.video.metadata_generator.system_prompt');
+        $systemPrompt = str_replace(
+            '{language}',
+            $language->promptLabel(),
+            config('prompts.video.metadata_generator.system_prompt'),
+        );
 
         $userPrompt = "Based on the following video script, generate both an SEO-optimized title and description:\n\n" . $scriptContent . "\n\nRespond ONLY with the requested JSON, without any additional text.";
 
