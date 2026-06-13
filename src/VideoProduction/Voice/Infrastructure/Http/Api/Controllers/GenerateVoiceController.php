@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Helmreel\VideoProduction\Voice\Infrastructure\Http\Api\Controllers;
 
 use Helmreel\VideoProduction\Voice\Application\UseCases\GenerateVoice\GenerateVoice;
+use Helmreel\VideoProduction\Voice\Domain\Exceptions\VoiceBlocked;
 use Helmreel\VideoProduction\Voice\Domain\Exceptions\VoiceNotFound;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -39,6 +40,11 @@ final class GenerateVoiceController extends Controller
                 'error'   => 'Voice not found',
                 'message' => $e->getMessage(),
             ], 404);
+        } catch (VoiceBlocked $e) {
+            return response()->json([
+                'error'   => 'Voice blocked',
+                'message' => $e->getMessage(),
+            ], 422);
         }
 
         return response()->file($path, ['Content-Type' => 'audio/mpeg'])

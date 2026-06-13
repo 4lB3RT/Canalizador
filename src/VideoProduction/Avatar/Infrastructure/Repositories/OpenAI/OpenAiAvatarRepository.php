@@ -130,6 +130,10 @@ final readonly class OpenAiAvatarRepository
         };
 
         $imagesDir = storage_path('app/images');
+        if (!File::isDirectory($imagesDir)) {
+            File::makeDirectory($imagesDir, 0755, true);
+        }
+
         $referenceImage = Image::fromLocalPath($avatarImagePath->value());
         $generatedMedia = [];
 

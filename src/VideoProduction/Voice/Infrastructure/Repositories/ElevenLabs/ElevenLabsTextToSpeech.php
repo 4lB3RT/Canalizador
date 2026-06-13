@@ -6,6 +6,7 @@ namespace Helmreel\VideoProduction\Voice\Infrastructure\Repositories\ElevenLabs;
 
 use Helmreel\Shared\Shared\Domain\Services\HttpClient;
 use Helmreel\Shared\Shared\Domain\Services\HttpResponseValidator;
+use Helmreel\VideoProduction\Voice\Domain\Exceptions\VoiceBlocked;
 use Helmreel\VideoProduction\Voice\Domain\Exceptions\VoiceGenerationFailed;
 use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceSettings;
 use Illuminate\Support\Str;
@@ -53,6 +54,10 @@ final class ElevenLabsTextToSpeech
 
             $this->responseValidator->validateSuccess($response, 'ElevenLabs Text-to-Speech');
         } catch (\Throwable $e) {
+            if ($this->isBlockedVoiceError($e->getMessage())) {
+                throw VoiceBlocked::byPlatform();
+            }
+
             throw VoiceGenerationFailed::apiError($e->getMessage());
         }
 
@@ -65,5 +70,11 @@ final class ElevenLabsTextToSpeech
         file_put_contents($filePath, $response->body());
 
         return $filePath;
+    }
+
+    private function isBlockedVoiceError(string $message): bool
+    {
+        return str_contains($message, 'detected_blocked_voice')
+            || str_contains($message, 'voice_access_denied');
     }
 }
