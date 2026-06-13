@@ -6,8 +6,8 @@ namespace Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers;
 
 use Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo\CreateVideo;
 use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Mappers\CreateVideoRequestMapper;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 final class CreateVideoController extends Controller
@@ -21,7 +21,7 @@ final class CreateVideoController extends Controller
     /**
      * @throws \RuntimeException
      */
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(Request $request): Response
     {
         $createVideoRequest = $this->requestMapper->map($request);
 
