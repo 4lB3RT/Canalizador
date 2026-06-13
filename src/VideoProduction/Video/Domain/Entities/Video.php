@@ -139,6 +139,7 @@ final class Video
             'resolution'    => $this->resolution->value,
             'total_clips'   => $this->totalClips->value(),
             'language'      => $this->language->value,
+            'script'        => $this->script->toArray(),
             'status'        => $completed ? 'completed' : 'processing',
             'video_url'     => $this->mediaId !== null ? '/video-production/media/' . $this->mediaId->value() : null,
             'created_at'    => $this->createdAt->value()->format('Y-m-d H:i:s'),

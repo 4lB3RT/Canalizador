@@ -76,7 +76,8 @@ final readonly class GenerateClip
         $videoPrompt = $this->videoPromptExtractor->extractWithAvatar(
                 $video->script(),
                 $this->avatarRepository->findById($video->avatarId()),
-                $video->category()
+                $video->category(),
+                $video->language(),
             );
 
 

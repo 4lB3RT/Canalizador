@@ -70,6 +70,7 @@ use Helmreel\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
 use Helmreel\VideoProduction\Video\Domain\Services\FileSystem;
 use Helmreel\VideoProduction\Video\Domain\Services\VideoFileValidator;
+use Helmreel\VideoProduction\Video\Domain\Services\ScriptTranslator;
 use Helmreel\VideoProduction\Video\Domain\Services\VideoPromptExtractor;
 use Helmreel\VideoProduction\Video\Domain\Services\YouTubeServiceFactory;
 use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Mappers\CreateVideoRequestMapper;
@@ -77,6 +78,7 @@ use Helmreel\VideoProduction\Video\Infrastructure\Repositories\Eloquent\Eloquent
 use Helmreel\Shared\Video\Infrastructure\Repositories\OpenAI\OpenAIVideoMetadataGenerator;
 use Helmreel\VideoProduction\Video\Infrastructure\Repositories\Veo\VeoVideoRepository;
 use Helmreel\VideoProduction\Video\Infrastructure\Services\JsonVideoPromptExtractor;
+use Helmreel\VideoProduction\Video\Infrastructure\Services\OpenAIScriptTranslator;
 use Helmreel\VideoProduction\Video\Infrastructure\Services\LaravelFileSystem;
 use Helmreel\VideoProduction\Video\Infrastructure\Services\VideoFileValidator as VideoFileValidatorImpl;
 use Helmreel\VideoProduction\Video\Infrastructure\Services\YouTube\GoogleYouTubeServiceFactory;
@@ -139,6 +141,7 @@ class VideoProductionServiceProvider extends ServiceProvider
     {
         $this->app->bind(CreateVideoRequestMapper::class, CreateVideoRequestMapper::class);
         $this->app->bind(VideoPromptExtractor::class, JsonVideoPromptExtractor::class);
+        $this->app->bind(ScriptTranslator::class, OpenAIScriptTranslator::class);
         $this->app->bind(VideoMetadataGenerator::class, OpenAIVideoMetadataGenerator::class);
         $this->app->bind(FileSystem::class, LaravelFileSystem::class);
         $this->app->bind(YouTubeServiceFactory::class, GoogleYouTubeServiceFactory::class);

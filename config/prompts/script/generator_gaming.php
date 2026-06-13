@@ -16,7 +16,7 @@ Estructura JSON:
   "thinking": "string — razona sobre el tema: qué ángulo interesante tomar, cómo estructurar el arco narrativo (gancho → desarrollo → cierre), qué tono usar. Planifica ANTES de escribir.",
   "full_script": "string — {total_words_min}-{total_words_max} palabras. DEBE empezar con saludo breve y terminar con despedida casual. Prosa conversacional fluida, como si hablaras con un amigo que juega. SIN listas, SIN viñetas, SIN palabras clave separadas por comas.",
   "clip_prompts": [
-    "Clip 1 — SALUDO + introducción + contexto inicial. 300-400 palabras EN INGLÉS",
+    "Clip 1 — SALUDO + introducción + contexto inicial. 300-400 palabras EN {language}",
     "Clip 2..N-1 — desarrollo + contexto. Mismo formato y extensión.",
     "Clip N (final) — contexto + cierre + DESPEDIDA. Mismo formato y extensión."
   ]
@@ -47,7 +47,7 @@ CRÍTICO — NUNCA describir la apariencia física del presentador (pelo, cara, 
 
 IMPORTANTE: Cada clip_prompt se usa DE FORMA AISLADA para generar su clip de vídeo. Debe ser auto-contenido con suficiente contexto para entenderse sin los demás clips.
 
-Cada clip_prompt DEBE incluir (EN INGLÉS):
+Cada clip_prompt DEBE incluir (EN {language}):
 1. CONTEXT: El tema global del vídeo y qué debe representar visualmente este clip (ej: "This video is a gaming tutorial about FPS sensitivity. This clip must show the presenter revealing that most players use sensitivity settings that are too high, while the monitor displays a settings menu with DPI sliders")
 2. ACTIONS: Lo que hace el presentador (gestos, movimientos, reacciones, expresiones)
 3. SCREEN/ENVIRONMENT: Lo que se muestra en monitores, cambios de fondo, iluminación
@@ -72,10 +72,12 @@ Cuando el prompt del usuario contiene una noticia (formato "Noticia: ... Descrip
 - {total_words_min}-{total_words_max} palabras (~2,5-3,0 palabras/segundo)
 - CERO nombres o referencias a personas reales en clip_prompts (ej: CEOs, desarrolladores, streamers, jugadores profesionales). Sustituir SIEMPRE por descripciones genéricas (ej: "the company's CEO" → "a tech executive", "Ninja" → "a popular streamer"). En full_script SÍ se pueden mencionar, pero en clip_prompts NUNCA — Veo bloquea cualquier referencia a personas reales. Marcas y productos (PlayStation, Xbox, etc.) SÍ están permitidos en clip_prompts
 - Contenido genuinamente relacionado con gaming
-- clip_prompts: exactamente {total_clips} elementos, 300-400 palabras cada uno, EN INGLÉS
+- clip_prompts: exactamente {total_clips} elementos, 300-400 palabras cada uno, EN {language}
 - CERO descripciones de apariencia del presentador en clip_prompts
 
 === EJEMPLOS ===
+
+NOTA: Los siguientes ejemplos están escritos en inglés solo para ilustrar la ESTRUCTURA y el nivel de detalle de cada clip_prompt. IGNORA su idioma: debes escribir el full_script y los clip_prompts en {language}, tal como indican las reglas anteriores.
 
 Ejemplo 1 — Consejo gaming ({total_clips} clips):
 """

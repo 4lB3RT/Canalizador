@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Helmreel\VideoProduction\Video\Infrastructure\Services;
 
+use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\VideoProduction\Avatar\Domain\Entities\Avatar;
 use Helmreel\VideoProduction\Script\Domain\Entities\Script;
 use Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
-use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
+use Helmreel\VideoProduction\Video\Domain\Services\ScriptTranslator;
 use Helmreel\VideoProduction\Video\Domain\Services\VideoPromptExtractor;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 
@@ -15,17 +16,18 @@ final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
 {
     public function __construct(
         private GdChromaKeyCompositor $compositor,
+        private ScriptTranslator $scriptTranslator,
     ) {
     }
 
-    public function extractWithAvatar(Script $script, Avatar $avatar, VideoCategory $category): VideoPrompt
+    public function extractWithAvatar(Script $script, Avatar $avatar, VideoCategory $category, Language $voiceLanguage): VideoPrompt
     {
-        $content = $script->content()->value();
+        $content = $this->resolveContent($script, $voiceLanguage);
         $scriptData = json_decode($content, true);
 
         $videoPrompt = $scriptData['full_script'];
 
-        $technicalVideo = $this->getTechnicalVideoPrompt($category, $script->language());
+        $technicalVideo = $this->getTechnicalVideoPrompt($category, $voiceLanguage);
         $referenceImagePaths = $this->getReferenceImagePaths($category);
         $firstFramePath = $this->buildFirstFrame($category);
 
@@ -38,14 +40,14 @@ final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
         );
     }
 
-    public function extract(Script $script, VideoCategory $category): VideoPrompt
+    public function extract(Script $script, VideoCategory $category, Language $voiceLanguage): VideoPrompt
     {
-        $content = $script->content()->value();
+        $content = $this->resolveContent($script, $voiceLanguage);
         $scriptData = json_decode($content, true);
 
         $videoPrompt = $scriptData['full_script'];
 
-        $technicalVideo = $this->getTechnicalVideoPrompt($category, $script->language());
+        $technicalVideo = $this->getTechnicalVideoPrompt($category, $voiceLanguage);
         $referenceImagePaths = $this->getReferenceImagePaths($category);
         $firstFramePath = $this->buildFirstFrame($category);
 
@@ -56,6 +58,17 @@ final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
             referenceImagePaths: $referenceImagePaths,
             firstFramePath: $firstFramePath,
         );
+    }
+
+    private function resolveContent(Script $script, Language $voiceLanguage): string
+    {
+        $content = $script->content()->value();
+
+        if ($voiceLanguage === $script->language()) {
+            return $content;
+        }
+
+        return $this->scriptTranslator->translate($content, $voiceLanguage);
     }
 
     private function getTechnicalVideoPrompt(VideoCategory $category, Language $language): string
