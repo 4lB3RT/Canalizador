@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Helmreel\VideoProduction\Video\Domain\Repositories;
 
 use Helmreel\Shared\Shared\Domain\ValueObjects\Url;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoModel;
 
 interface VideoExtender
 {
@@ -13,5 +14,5 @@ interface VideoExtender
      *
      * @return string The operation name (generation ID) for polling
      */
-    public function extend(Url $lastVideoUri, string $clipPrompt): string;
+    public function extend(Url $lastVideoUri, string $clipPrompt, ?VideoModel $model = null): string;
 }

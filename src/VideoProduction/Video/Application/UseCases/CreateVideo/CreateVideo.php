@@ -20,6 +20,7 @@ use Helmreel\VideoProduction\Video\Domain\Factories\VideoFactory;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\TotalClips;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoModel;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 use Helmreel\VideoProduction\Weather\Domain\Repositories\ForecastRepository;
@@ -83,6 +84,7 @@ final readonly class CreateVideo
                 resolution: Resolution::fromString($request->resolution),
                 totalClips: new TotalClips($request->totalClips),
                 language: $language,
+                model: VideoModel::from($request->model),
                 avatarId: $request->avatarId ? AvatarId::fromString($request->avatarId) : null,
             );
 

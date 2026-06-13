@@ -15,6 +15,7 @@ use Helmreel\VideoProduction\Script\Domain\Entities\Script;
 use Helmreel\VideoProduction\Video\Domain\Entities\Video;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\TotalClips;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoModel;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 
@@ -35,6 +36,7 @@ final readonly class VideoFactory
         Resolution $resolution = Resolution::HD,
         TotalClips $totalClips = new TotalClips(5),
         Language $language = Language::SPANISH,
+        VideoModel $model = VideoModel::VEO_31,
         ?AvatarId $avatarId = null,
         ?DateTime $createdAt = null,
     ): Video {
@@ -49,6 +51,7 @@ final readonly class VideoFactory
             resolution: $resolution,
             totalClips: $totalClips,
             language: $language,
+            model: $model,
             avatarId: $avatarId,
         );
     }

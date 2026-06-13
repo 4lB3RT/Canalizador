@@ -21,6 +21,7 @@ use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\TotalClips;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoModel;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 use Helmreel\VideoProduction\Video\Infrastructure\DAO\VideoDAO;
@@ -44,6 +45,7 @@ final class EloquentVideoRepository implements VideoRepository
                 'description' => $video->description()->value(),
                 'category' => $video->category()->value,
                 'resolution' => $video->resolution()->value,
+                'model' => $video->model()->value,
                 'total_clips' => $video->totalClips()->value(),
                 'language' => $video->language()->value,
                 'generation_id' => $video->generationId()?->value(),
@@ -118,6 +120,7 @@ final class EloquentVideoRepository implements VideoRepository
             resolution: $model->resolution ? Resolution::fromString($model->resolution) : Resolution::HD,
             totalClips: new TotalClips((int) ($model->total_clips ?? 5)),
             language: $model->language ? Language::from($model->language) : Language::SPANISH,
+            model: $model->model ? VideoModel::from($model->model) : VideoModel::VEO_31,
             avatarId: $model->avatar_id ? AvatarId::fromString($model->avatar_id) : null,
             generationId: $model->generation_id ? GenerationId::fromString($model->generation_id) : null,
             videoLocalPath: $model->video_local_path ? LocalPath::fromString($model->video_local_path) : null,

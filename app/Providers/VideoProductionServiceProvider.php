@@ -247,6 +247,7 @@ class VideoProductionServiceProvider extends ServiceProvider
                 videoGenerator: $app->make(VideoGenerator::class),
                 videoExtender: $app->make(VideoExtender::class),
                 videoPromptExtractor: $app->make(VideoPromptExtractor::class),
+                scriptTranslator: $app->make(ScriptTranslator::class),
                 avatarRepository: $app->make(AvatarRepository::class),
                 eventBus: $app->make(EventBus::class),
                 clock: $app->make(Clock::class),

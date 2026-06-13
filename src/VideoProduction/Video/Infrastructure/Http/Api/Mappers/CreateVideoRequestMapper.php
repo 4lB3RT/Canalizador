@@ -19,6 +19,7 @@ final readonly class CreateVideoRequestMapper
             'resolution' => 'sometimes|string|in:720p,1080p,4k',
             'total_clips' => 'sometimes|integer|min:1|max:8',
             'language' => 'sometimes|string|in:es,en,fr,de,it,pt',
+            'model' => 'sometimes|string|in:veo-3.1-lite-generate-preview,veo-3.1-fast-generate-preview,veo-3.0-fast-generate-001,veo-3.1-generate-preview,veo-3.0-generate-001',
         ]);
 
         $user = $request->user();
@@ -35,6 +36,7 @@ final readonly class CreateVideoRequestMapper
             resolution: $validated['resolution'] ?? '720p',
             totalClips: (int) ($validated['total_clips'] ?? 5),
             language: $validated['language'] ?? 'es',
+            model: $validated['model'] ?? 'veo-3.1-generate-preview',
         );
     }
 }

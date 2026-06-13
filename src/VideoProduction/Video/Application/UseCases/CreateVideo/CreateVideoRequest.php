@@ -15,6 +15,7 @@ final readonly class CreateVideoRequest
         public string $resolution = '720p',
         public int $totalClips = 5,
         public string $language = 'es',
+        public string $model = 'veo-3.1-generate-preview',
     ) {
     }
 }

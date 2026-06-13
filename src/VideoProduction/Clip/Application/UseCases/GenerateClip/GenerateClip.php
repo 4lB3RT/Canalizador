@@ -17,6 +17,7 @@ use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoExtender;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoGenerator;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\Video\Domain\Services\ScriptTranslator;
 use Helmreel\VideoProduction\Video\Domain\Services\VideoPromptExtractor;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 
@@ -28,6 +29,7 @@ final readonly class GenerateClip
         private VideoGenerator $videoGenerator,
         private VideoExtender $videoExtender,
         private VideoPromptExtractor $videoPromptExtractor,
+        private ScriptTranslator $scriptTranslator,
         private AvatarRepository $avatarRepository,
         private EventBus $eventBus,
         private Clock $clock,
@@ -60,7 +62,11 @@ final readonly class GenerateClip
             $clipPrompt = $clip->script()
                 ?? 'Continue the video naturally maintaining visual continuity.';
 
-            $generationId = $this->videoExtender->extend($lastCompleted->videoUri(), $clipPrompt);
+            if ($video->language() !== $video->script()->language()) {
+                $clipPrompt = $this->scriptTranslator->translateText($clipPrompt, $video->language());
+            }
+
+            $generationId = $this->videoExtender->extend($lastCompleted->videoUri(), $clipPrompt, $video->model());
         }
 
         $clip->updateGenerationId(GenerationId::fromString($generationId));
@@ -81,6 +87,6 @@ final readonly class GenerateClip
             );
 
 
-        return $this->videoGenerator->generate($videoPrompt, $video->resolution());
+        return $this->videoGenerator->generate($videoPrompt, $video->resolution(), $video->model());
     }
 }

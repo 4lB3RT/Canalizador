@@ -18,6 +18,7 @@ use Helmreel\VideoProduction\Video\Domain\Repositories\VideoExtender;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoGenerator;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\AspectRatio;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoModel;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoDuration;
 use Illuminate\Support\Facades\File;
 
@@ -39,9 +40,9 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
     /**
      * @throws VideoGenerationFailed
      */
-    public function generate(VideoPrompt $videoPrompt, ?Resolution $resolution = null): string
+    public function generate(VideoPrompt $videoPrompt, ?Resolution $resolution = null, ?VideoModel $videoModel = null): string
     {
-        $model = config('veo.model', 'veo-3.1-generate-preview');
+        $model = $videoModel?->value ?? config('veo.model', 'veo-3.1-generate-preview');
         $url = self::API_BASE_URL . "/models/{$model}:predictLongRunning";
 
         $headers = [
@@ -138,9 +139,9 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
     /**
      * @throws VideoGenerationFailed
      */
-    public function extend(Url $lastVideoUri, string $clipPrompt): string
+    public function extend(Url $lastVideoUri, string $clipPrompt, ?VideoModel $videoModel = null): string
     {
-        $model = config('veo.model', 'veo-3.1-generate-preview');
+        $model = $videoModel?->value ?? config('veo.model', 'veo-3.1-generate-preview');
         $url = self::API_BASE_URL . "/models/{$model}:predictLongRunning";
 
         $headers = [

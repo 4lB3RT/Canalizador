@@ -51,4 +51,25 @@ final class OpenAIScriptTranslator implements ScriptTranslator
 
         return $scriptContent;
     }
+
+    public function translateText(string $text, Language $targetLanguage): string
+    {
+        $systemPrompt = sprintf(
+            'You are a professional translator for AI video generation prompts. You receive a clip prompt that mixes visual directions and the words the presenter speaks. '
+            . 'Translate ALL of it into %s, keeping the same meaning, structure and any section labels. The spoken/dialogue parts MUST end up in %s so the generated voice speaks that language. '
+            . 'Do NOT add explanations. Respond ONLY with the translated text.',
+            $targetLanguage->promptLabel(),
+            $targetLanguage->promptLabel(),
+        );
+
+        $response = Prism::text()
+            ->using(Provider::OpenAI, config('openai.model'))
+            ->withSystemPrompt($systemPrompt)
+            ->withPrompt($text)
+            ->asText();
+
+        $translated = trim($response->text);
+
+        return $translated !== '' ? $translated : $text;
+    }
 }

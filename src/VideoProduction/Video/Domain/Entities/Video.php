@@ -16,6 +16,7 @@ use Helmreel\VideoProduction\Script\Domain\Entities\Script;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\TotalClips;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoModel;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;
 
@@ -32,6 +33,7 @@ final class Video
         private readonly Resolution $resolution = Resolution::HD,
         private readonly TotalClips $totalClips = new TotalClips(5),
         private readonly Language $language = Language::SPANISH,
+        private readonly VideoModel $model = VideoModel::VEO_31,
         private readonly ?AvatarId $avatarId = null,
         private readonly ?GenerationId $generationId = null,
         private ?LocalPath $videoLocalPath = null,
@@ -90,6 +92,11 @@ final class Video
         return $this->language;
     }
 
+    public function model(): VideoModel
+    {
+        return $this->model;
+    }
+
     public function videoLocalPath(): ?LocalPath
     {
         return $this->videoLocalPath;
@@ -137,6 +144,7 @@ final class Video
             'description'   => $this->description->value(),
             'category'      => $this->category->value,
             'resolution'    => $this->resolution->value,
+            'model'         => $this->model->value,
             'total_clips'   => $this->totalClips->value(),
             'language'      => $this->language->value,
             'script'        => $this->script->toArray(),
