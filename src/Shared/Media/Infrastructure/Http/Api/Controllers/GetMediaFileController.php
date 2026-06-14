@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Helmreel\VideoProduction\Media\Infrastructure\Http\Api\Controllers;
+namespace Helmreel\Shared\Media\Infrastructure\Http\Api\Controllers;
 
-use Helmreel\VideoProduction\Media\Application\UseCases\GetMediaFile\GetMediaFile;
-use Helmreel\VideoProduction\Media\Domain\Exceptions\MediaNotFound;
+use Helmreel\Shared\Media\Application\UseCases\GetMediaFile\GetMediaFile;
+use Helmreel\Shared\Media\Domain\Exceptions\MediaNotFound;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

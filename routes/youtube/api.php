@@ -14,6 +14,7 @@ use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\FragmentAndPublis
 use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\GenerateShortController;
 use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\GetChannelVideosController;
 use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\GetVideosController;
+use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\PublishProductionVideoController;
 use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\PublishVideoController;
 use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\SmartFragmentAndPublishVideoController;
 use Helmreel\YouTube\Video\Infrastructure\Http\Api\Controllers\SyncVideoController;
@@ -34,6 +35,8 @@ Route::middleware(['api.token'])->group(function () {
     Route::post('/channels/{channelId}/download-latest', DownloadLatestChannelVideoController::class)
         ->middleware(EnsureGoogleToken::class);
     Route::post('/videos/publish', PublishVideoController::class)
+        ->middleware(EnsureGoogleToken::class);
+    Route::post('/videos/{videoId}/publish', PublishProductionVideoController::class)
         ->middleware(EnsureGoogleToken::class);
     Route::post('/videos/fragment-and-publish', FragmentAndPublishVideoController::class)
         ->middleware(EnsureGoogleToken::class);

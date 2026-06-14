@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Helmreel\VideoProduction\Avatar\Domain\Entities;
 
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarMediaType;
-use Helmreel\VideoProduction\Media\Domain\Entities\Media;
+use Helmreel\Shared\Media\Domain\Entities\Media;
 
 final readonly class AvatarMedia
 {

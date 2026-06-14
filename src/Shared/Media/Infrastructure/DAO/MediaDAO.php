@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Helmreel\VideoProduction\Media\Infrastructure\DAO;
+namespace Helmreel\Shared\Media\Infrastructure\DAO;
 
 use Illuminate\Database\Eloquent\Model;
 

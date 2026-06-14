@@ -9,6 +9,7 @@ use Helmreel\Shared\Shared\Domain\Services\Clock;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
+use Helmreel\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
 use Helmreel\VideoProduction\News\Domain\Repositories\NewsRepository;
 use Helmreel\VideoProduction\Script\Domain\Repositories\ScriptRepository;
@@ -18,6 +19,8 @@ use Helmreel\VideoProduction\Video\Domain\Events\VideoCreated;
 use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
 use Helmreel\VideoProduction\Video\Domain\Factories\VideoFactory;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\Video\Domain\Services\AvatarContextFrameGenerator;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\AspectRatio;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\TotalClips;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoModel;
@@ -37,6 +40,8 @@ final readonly class CreateVideo
         private Clock $clock,
         private NewsRepository $newsRepository,
         private ForecastRepository $forecastRepository,
+        private AvatarRepository $avatarRepository,
+        private AvatarContextFrameGenerator $avatarContextFrameGenerator,
     ) {
     }
 
@@ -85,10 +90,16 @@ final readonly class CreateVideo
                 totalClips: new TotalClips($request->totalClips),
                 language: $language,
                 model: VideoModel::from($request->model),
+                aspectRatio: AspectRatio::fromString($request->aspectRatio),
                 avatarId: $request->avatarId ? AvatarId::fromString($request->avatarId) : null,
             );
 
             $this->videoRepository->save($video);
+
+            if ($video->avatarId() !== null) {
+                $avatar = $this->avatarRepository->findById($video->avatarId());
+                $this->avatarContextFrameGenerator->frameFor($avatar, $video->category(), $video->aspectRatio());
+            }
         }
 
         $this->eventBus->publish(

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Helmreel\VideoProduction\Media\Domain\ValueObjects;
+namespace Helmreel\Shared\Media\Domain\ValueObjects;
 
 enum MediaType: string
 {

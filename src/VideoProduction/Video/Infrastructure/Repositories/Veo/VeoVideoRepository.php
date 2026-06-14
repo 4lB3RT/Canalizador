@@ -40,7 +40,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
     /**
      * @throws VideoGenerationFailed
      */
-    public function generate(VideoPrompt $videoPrompt, ?Resolution $resolution = null, ?VideoModel $videoModel = null): string
+    public function generate(VideoPrompt $videoPrompt, ?Resolution $resolution = null, ?VideoModel $videoModel = null, ?AspectRatio $aspectRatio = null): string
     {
         $model = $videoModel?->value ?? config('veo.model', 'veo-3.1-generate-preview');
         $url = self::API_BASE_URL . "/models/{$model}:predictLongRunning";
@@ -50,10 +50,11 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
             'Content-Type' => 'application/json',
         ];
 
-        $referenceImages = $this->buildReferenceImages($videoPrompt);
+        $supportsReferenceImages = $videoModel === null || $videoModel->supportsReferenceImages();
+        $referenceImages = $supportsReferenceImages ? $this->buildReferenceImages($videoPrompt) : [];
         $hasReferenceImages = !empty($referenceImages);
 
-        $aspectRatio = AspectRatio::fromString(config('veo.aspect_ratio', '16:9'));
+        $aspectRatio = $aspectRatio ?? AspectRatio::fromString(config('veo.aspect_ratio', '16:9'));
 
         $duration = $hasReferenceImages
             ? VideoDuration::forReferenceImages()
@@ -139,7 +140,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
     /**
      * @throws VideoGenerationFailed
      */
-    public function extend(Url $lastVideoUri, string $clipPrompt, ?VideoModel $videoModel = null): string
+    public function extend(Url $lastVideoUri, string $clipPrompt, ?VideoModel $videoModel = null, ?AspectRatio $aspectRatio = null): string
     {
         $model = $videoModel?->value ?? config('veo.model', 'veo-3.1-generate-preview');
         $url = self::API_BASE_URL . "/models/{$model}:predictLongRunning";
@@ -148,6 +149,8 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
             'x-goog-api-key' => $this->apiKey,
             'Content-Type' => 'application/json',
         ];
+
+        $aspectRatio = $aspectRatio ?? AspectRatio::fromString(config('veo.aspect_ratio', '16:9'));
 
         $data = [
             'instances' => [
@@ -159,7 +162,7 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
                 ],
             ],
             'parameters' => [
-                'aspectRatio' => config('veo.aspect_ratio', '9:16'),
+                'aspectRatio' => $aspectRatio->value,
                 'resolution' => Resolution::HD->value,
                 'durationSeconds' => config('veo.duration', 8),
             ],

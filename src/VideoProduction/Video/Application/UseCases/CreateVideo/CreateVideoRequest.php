@@ -16,6 +16,7 @@ final readonly class CreateVideoRequest
         public int $totalClips = 5,
         public string $language = 'es',
         public string $model = 'veo-3.1-generate-preview',
+        public string $aspectRatio = '16:9',
     ) {
     }
 }

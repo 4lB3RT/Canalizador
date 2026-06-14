@@ -10,7 +10,7 @@ use Helmreel\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers\GetAvata
 use Helmreel\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers\GetAvatarsController;
 use Helmreel\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers\UpdateAvatarController;
 use Helmreel\VideoProduction\Image\Infrastructure\Http\Api\Controllers\GetImageFileController;
-use Helmreel\VideoProduction\Media\Infrastructure\Http\Api\Controllers\GetMediaFileController;
+use Helmreel\Shared\Media\Infrastructure\Http\Api\Controllers\GetMediaFileController;
 use Helmreel\VideoProduction\News\Infrastructure\Http\Api\Controllers\DownloadNewsController;
 use Helmreel\VideoProduction\Script\Infrastructure\Http\Api\Controllers\CreateScriptController;
 use Helmreel\VideoProduction\Script\Infrastructure\Http\Api\Controllers\DeleteScriptController;

@@ -25,6 +25,7 @@ use Helmreel\YouTube\Channel\Infrastructure\Commands\RegisterChannelCommand;
 use Helmreel\YouTube\Channel\Infrastructure\Commands\SyncAutoChannelsCommand;
 use Helmreel\YouTube\Channel\Infrastructure\Repositories\Eloquent\EloquentChannelRepository;
 use Helmreel\YouTube\Channel\Infrastructure\Repositories\OpenAI\OpenAIChannelRepository;
+use Helmreel\Shared\Media\Domain\Repositories\MediaRepository;
 use Helmreel\YouTube\Channel\Infrastructure\Repositories\Youtube\YoutubeChannelRepository;
 use Helmreel\YouTube\Shared\Domain\Services\YouTubeAnalyticsServiceFactory;
 use Helmreel\YouTube\Shared\Domain\Services\YouTubeServiceFactory as YouTubeSharedServiceFactory;
@@ -38,6 +39,7 @@ use Helmreel\YouTube\Video\Application\UseCases\DownloadLatestChannelVideo\Downl
 use Helmreel\YouTube\Video\Application\UseCases\FragmentAndPublishVideo\FragmentAndPublishVideo;
 use Helmreel\YouTube\Video\Application\UseCases\GenerateShort\GenerateShort;
 use Helmreel\YouTube\Video\Application\UseCases\GetVideos\GetVideos;
+use Helmreel\YouTube\Video\Application\UseCases\PublishProductionVideo\PublishProductionVideo;
 use Helmreel\YouTube\Video\Application\UseCases\PublishVideo\PublishVideo;
 use Helmreel\YouTube\Video\Application\UseCases\SmartFragmentAndPublishVideo\SmartFragmentAndPublishVideo;
 use Helmreel\YouTube\Video\Application\UseCases\SyncLastVideo\SyncLastVideo;
@@ -233,6 +235,15 @@ class YouTubeServiceProvider extends ServiceProvider
                 internalVideoRepository: $app->make(EloquentVideoRepository::class),
                 externalVideoRepository: $app->make(YoutubeVideoRepository::class),
                 videoPublisherFactory:   $app->make(VideoPublisherFactory::class),
+                clock:                   $app->make(Clock::class),
+            );
+        });
+
+        $this->app->bind(PublishProductionVideo::class, function ($app) {
+            return new PublishProductionVideo(
+                internalVideoRepository: $app->make(EloquentVideoRepository::class),
+                videoPublisherFactory:   $app->make(VideoPublisherFactory::class),
+                mediaRepository:         $app->make(MediaRepository::class),
                 clock:                   $app->make(Clock::class),
             );
         });

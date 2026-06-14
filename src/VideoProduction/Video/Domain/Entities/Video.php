@@ -11,8 +11,9 @@ use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
+use Helmreel\Shared\Media\Domain\ValueObjects\MediaId;
 use Helmreel\VideoProduction\Script\Domain\Entities\Script;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\AspectRatio;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\TotalClips;
@@ -34,6 +35,7 @@ final class Video
         private readonly TotalClips $totalClips = new TotalClips(5),
         private readonly Language $language = Language::SPANISH,
         private readonly VideoModel $model = VideoModel::VEO_31,
+        private readonly AspectRatio $aspectRatio = AspectRatio::LANDSCAPE,
         private readonly ?AvatarId $avatarId = null,
         private readonly ?GenerationId $generationId = null,
         private ?LocalPath $videoLocalPath = null,
@@ -97,6 +99,11 @@ final class Video
         return $this->model;
     }
 
+    public function aspectRatio(): AspectRatio
+    {
+        return $this->aspectRatio;
+    }
+
     public function videoLocalPath(): ?LocalPath
     {
         return $this->videoLocalPath;
@@ -145,6 +152,7 @@ final class Video
             'category'      => $this->category->value,
             'resolution'    => $this->resolution->value,
             'model'         => $this->model->value,
+            'aspect_ratio'  => $this->aspectRatio->value,
             'total_clips'   => $this->totalClips->value(),
             'language'      => $this->language->value,
             'script'        => $this->script->toArray(),

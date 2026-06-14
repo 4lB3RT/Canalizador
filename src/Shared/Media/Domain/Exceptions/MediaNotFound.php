@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Helmreel\VideoProduction\Media\Domain\Exceptions;
+namespace Helmreel\Shared\Media\Domain\Exceptions;
 
 use RuntimeException;
 

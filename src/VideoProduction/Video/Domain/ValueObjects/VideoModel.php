@@ -27,4 +27,12 @@ enum VideoModel: string
     {
         return in_array($resolution, $this->supportedResolutions(), true);
     }
+
+    public function supportsReferenceImages(): bool
+    {
+        return match ($this) {
+            self::VEO_31, self::VEO_31_FAST => true,
+            default => false,
+        };
+    }
 }

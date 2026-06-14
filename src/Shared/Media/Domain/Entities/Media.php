@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Helmreel\VideoProduction\Media\Domain\Entities;
+namespace Helmreel\Shared\Media\Domain\Entities;
 
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
-use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaType;
+use Helmreel\Shared\Media\Domain\ValueObjects\MediaId;
+use Helmreel\Shared\Media\Domain\ValueObjects\MediaType;
 
 final class Media
 {

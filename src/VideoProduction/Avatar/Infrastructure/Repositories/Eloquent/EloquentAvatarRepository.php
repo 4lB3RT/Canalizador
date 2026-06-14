@@ -20,9 +20,9 @@ use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Category;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
 use Helmreel\VideoProduction\Avatar\Infrastructure\DAO\AvatarDAO;
-use Helmreel\VideoProduction\Media\Domain\Exceptions\MediaNotFound;
-use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
-use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
+use Helmreel\Shared\Media\Domain\Exceptions\MediaNotFound;
+use Helmreel\Shared\Media\Domain\Repositories\MediaRepository;
+use Helmreel\Shared\Media\Domain\ValueObjects\MediaId;
 use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 use Illuminate\Support\Facades\DB;
 

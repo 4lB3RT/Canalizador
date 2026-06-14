@@ -11,13 +11,14 @@ use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
+use Helmreel\Shared\Media\Domain\ValueObjects\MediaId;
 use Helmreel\VideoProduction\Script\Domain\Repositories\ScriptRepository;
 use Helmreel\VideoProduction\Script\Domain\ValueObjects\ScriptId;
 use Helmreel\VideoProduction\Video\Domain\Entities\Video;
 use Helmreel\VideoProduction\Video\Domain\Entities\VideoCollection;
 use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\AspectRatio;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\GenerationId;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\TotalClips;
@@ -46,6 +47,7 @@ final class EloquentVideoRepository implements VideoRepository
                 'category' => $video->category()->value,
                 'resolution' => $video->resolution()->value,
                 'model' => $video->model()->value,
+                'aspect_ratio' => $video->aspectRatio()->value,
                 'total_clips' => $video->totalClips()->value(),
                 'language' => $video->language()->value,
                 'generation_id' => $video->generationId()?->value(),
@@ -121,6 +123,7 @@ final class EloquentVideoRepository implements VideoRepository
             totalClips: new TotalClips((int) ($model->total_clips ?? 5)),
             language: $model->language ? Language::from($model->language) : Language::SPANISH,
             model: $model->model ? VideoModel::from($model->model) : VideoModel::VEO_31,
+            aspectRatio: $model->aspect_ratio ? AspectRatio::fromString($model->aspect_ratio) : AspectRatio::LANDSCAPE,
             avatarId: $model->avatar_id ? AvatarId::fromString($model->avatar_id) : null,
             generationId: $model->generation_id ? GenerationId::fromString($model->generation_id) : null,
             videoLocalPath: $model->video_local_path ? LocalPath::fromString($model->video_local_path) : null,

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Helmreel\VideoProduction\Media\Application\UseCases\GetMediaFile;
+namespace Helmreel\Shared\Media\Application\UseCases\GetMediaFile;
 
-use Helmreel\VideoProduction\Media\Domain\Entities\Media;
-use Helmreel\VideoProduction\Media\Domain\Exceptions\MediaNotFound;
-use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
-use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
+use Helmreel\Shared\Media\Domain\Entities\Media;
+use Helmreel\Shared\Media\Domain\Exceptions\MediaNotFound;
+use Helmreel\Shared\Media\Domain\Repositories\MediaRepository;
+use Helmreel\Shared\Media\Domain\ValueObjects\MediaId;
 
 final readonly class GetMediaFile
 {

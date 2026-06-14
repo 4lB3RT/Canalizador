@@ -37,8 +37,8 @@ use Helmreel\VideoProduction\Clip\Infrastructure\Services\FfmpegVideoComposer;
 use Helmreel\VideoProduction\Image\Application\UseCases\GetImageFile\GetImageFile;
 use Helmreel\VideoProduction\Image\Domain\Factories\ImageFactory;
 use Helmreel\VideoProduction\Image\Domain\Repositories\ImageRepository;
-use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
-use Helmreel\VideoProduction\Media\Infrastructure\Repositories\Eloquent\EloquentMediaRepository;
+use Helmreel\Shared\Media\Domain\Repositories\MediaRepository;
+use Helmreel\Shared\Media\Infrastructure\Repositories\Eloquent\EloquentMediaRepository;
 use Helmreel\VideoProduction\Image\Infrastructure\Repositories\Eloquent\EloquentImageRepository;
 use Helmreel\VideoProduction\News\Application\UseCases\DownloadNews\DownloadNews;
 use Helmreel\VideoProduction\News\Domain\Repositories\NewsProvider;
@@ -68,6 +68,7 @@ use Helmreel\VideoProduction\Video\Domain\Repositories\VideoExtender;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoGenerator;
 use Helmreel\Shared\Video\Domain\Repositories\VideoMetadataGenerator;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
+use Helmreel\VideoProduction\Video\Domain\Services\AvatarContextFrameGenerator;
 use Helmreel\VideoProduction\Video\Domain\Services\FileSystem;
 use Helmreel\VideoProduction\Video\Domain\Services\VideoFileValidator;
 use Helmreel\VideoProduction\Video\Domain\Services\ScriptTranslator;
@@ -78,6 +79,7 @@ use Helmreel\VideoProduction\Video\Infrastructure\Repositories\Eloquent\Eloquent
 use Helmreel\Shared\Video\Infrastructure\Repositories\OpenAI\OpenAIVideoMetadataGenerator;
 use Helmreel\VideoProduction\Video\Infrastructure\Repositories\Veo\VeoVideoRepository;
 use Helmreel\VideoProduction\Video\Infrastructure\Services\JsonVideoPromptExtractor;
+use Helmreel\VideoProduction\Video\Infrastructure\Services\OpenAiAvatarContextFrameGenerator;
 use Helmreel\VideoProduction\Video\Infrastructure\Services\OpenAIScriptTranslator;
 use Helmreel\VideoProduction\Video\Infrastructure\Services\LaravelFileSystem;
 use Helmreel\VideoProduction\Video\Infrastructure\Services\VideoFileValidator as VideoFileValidatorImpl;
@@ -181,6 +183,8 @@ class VideoProductionServiceProvider extends ServiceProvider
                 clock: $app->make(Clock::class),
                 newsRepository: $app->make(NewsRepository::class),
                 forecastRepository: $app->make(ForecastRepository::class),
+                avatarRepository: $app->make(AvatarRepository::class),
+                avatarContextFrameGenerator: $app->make(AvatarContextFrameGenerator::class),
             );
         });
 
@@ -308,6 +312,15 @@ class VideoProductionServiceProvider extends ServiceProvider
 
         $this->app->bind(OpenAiAvatarRepository::class, function ($app) {
             return new OpenAiAvatarRepository(
+                apiKey: config('services.openai.key') ?? '',
+                mediaRepository: $app->make(MediaRepository::class),
+                httpClient: $app->make(HttpClient::class),
+                clock: $app->make(Clock::class),
+            );
+        });
+
+        $this->app->bind(AvatarContextFrameGenerator::class, function ($app) {
+            return new OpenAiAvatarContextFrameGenerator(
                 apiKey: config('services.openai.key') ?? '',
                 mediaRepository: $app->make(MediaRepository::class),
                 httpClient: $app->make(HttpClient::class),

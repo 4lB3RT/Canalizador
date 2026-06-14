@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Helmreel\VideoProduction\Media\Infrastructure\Repositories\Eloquent;
+namespace Helmreel\Shared\Media\Infrastructure\Repositories\Eloquent;
 
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\DateTime;
 use Helmreel\Shared\Shared\Domain\ValueObjects\Essentials\IntegerId;
 use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
-use Helmreel\VideoProduction\Media\Domain\Entities\Media;
-use Helmreel\VideoProduction\Media\Domain\Exceptions\MediaNotFound;
-use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
-use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
-use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaType;
-use Helmreel\VideoProduction\Media\Infrastructure\DAO\MediaDAO;
+use Helmreel\Shared\Media\Domain\Entities\Media;
+use Helmreel\Shared\Media\Domain\Exceptions\MediaNotFound;
+use Helmreel\Shared\Media\Domain\Repositories\MediaRepository;
+use Helmreel\Shared\Media\Domain\ValueObjects\MediaId;
+use Helmreel\Shared\Media\Domain\ValueObjects\MediaType;
+use Helmreel\Shared\Media\Infrastructure\DAO\MediaDAO;
 
 final class EloquentMediaRepository implements MediaRepository
 {
