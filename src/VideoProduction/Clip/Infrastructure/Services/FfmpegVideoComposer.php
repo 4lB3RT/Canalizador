@@ -58,6 +58,45 @@ final class FfmpegVideoComposer implements VideoComposer
         $this->execute($cmd, $outputPath);
     }
 
+    public function extractLastFrame(string $videoPath, string $outputImagePath): void
+    {
+        $cmd = sprintf(
+            'ffmpeg -sseof -1 -i %s -update 1 -frames:v 1 -q:v 2 %s -y',
+            escapeshellarg($videoPath),
+            escapeshellarg($outputImagePath)
+        );
+
+        $this->execute($cmd, $outputImagePath);
+    }
+
+    public function concatenate(array $videoPaths, string $outputPath): void
+    {
+        if (count($videoPaths) === 1) {
+            copy($videoPaths[0], $outputPath);
+
+            return;
+        }
+
+        $listFile = tempnam(sys_get_temp_dir(), 'concat_') . '.txt';
+        $lines = array_map(
+            static fn (string $p) => "file '" . str_replace("'", "'\\''", $p) . "'",
+            $videoPaths,
+        );
+        file_put_contents($listFile, implode("\n", $lines) . "\n");
+
+        $cmd = sprintf(
+            'ffmpeg -f concat -safe 0 -i %s -c:v libx264 -c:a aac -vsync vfr %s -y',
+            escapeshellarg($listFile),
+            escapeshellarg($outputPath)
+        );
+
+        try {
+            $this->execute($cmd, $outputPath);
+        } finally {
+            @unlink($listFile);
+        }
+    }
+
     private function execute(string $cmd, string $expectedOutput): void
     {
         $output     = [];

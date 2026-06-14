@@ -46,6 +46,18 @@ final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
         );
     }
 
+    public function extractForChainedClip(string $clipPrompt, VideoCategory $category, Language $voiceLanguage, string $firstFramePath): VideoPrompt
+    {
+        return new VideoPrompt(
+            prompt: $clipPrompt,
+            technicalVideo: $this->getTechnicalVideoPrompt($category, $voiceLanguage),
+            host: null,
+            referenceImagePaths: $this->getReferenceImagePaths($category),
+            firstFramePath: $firstFramePath,
+            pinLastFrame: false,
+        );
+    }
+
     public function extract(Script $script, VideoCategory $category, Language $voiceLanguage): VideoPrompt
     {
         $content = $this->resolveContent($script, $voiceLanguage);

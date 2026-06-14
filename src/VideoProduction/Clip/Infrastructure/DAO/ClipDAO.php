@@ -25,6 +25,7 @@ class ClipDAO extends Model
         'status',
         'local_path',
         'video_uri',
+        'last_frame_path',
         'created_at',
         'completed_at',
     ];

@@ -14,6 +14,7 @@ final readonly class VideoPrompt
         private ?Avatar $host = null,
         private array $referenceImagePaths = [],
         private ?string $firstFramePath = null,
+        private bool $pinLastFrame = true,
     ) {
     }
 
@@ -36,6 +37,11 @@ final readonly class VideoPrompt
     public function firstFramePath(): ?string
     {
         return $this->firstFramePath;
+    }
+
+    public function pinLastFrame(): bool
+    {
+        return $this->pinLastFrame;
     }
 
     public function toPromptString(): string

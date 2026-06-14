@@ -78,7 +78,9 @@ final readonly class VeoVideoRepository implements VideoGenerator, VideoContentR
                 'mimeType' => ImageMimeType::fromFilePath($firstFramePath)->value,
             ];
             $instance['image'] = $frameData;
-            $instance['lastFrame'] = $frameData;
+            if ($videoPrompt->pinLastFrame()) {
+                $instance['lastFrame'] = $frameData;
+            }
         }
 
         $data = [

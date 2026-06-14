@@ -10,6 +10,7 @@ use Helmreel\Shared\Shared\Domain\ValueObjects\LocalPath;
 use Helmreel\VideoProduction\Clip\Domain\Events\ClipCompleted;
 use Helmreel\VideoProduction\Clip\Domain\Repositories\ClipDownloader;
 use Helmreel\VideoProduction\Clip\Domain\Repositories\ClipRepository;
+use Helmreel\VideoProduction\Clip\Domain\Services\VideoComposer;
 use Helmreel\VideoProduction\Clip\Domain\ValueObjects\ClipId;
 
 final readonly class DownloadClip
@@ -17,6 +18,7 @@ final readonly class DownloadClip
     public function __construct(
         private ClipRepository $clipRepository,
         private ClipDownloader $clipDownloader,
+        private VideoComposer $videoComposer,
         private EventBus $eventBus,
         private Clock $clock,
     ) {
@@ -33,7 +35,12 @@ final readonly class DownloadClip
         try {
             $result = $this->clipDownloader->download($clip->generationId(), $outputPath);
 
-            $clip->markAsCompleted($result['localPath'], $result['videoUri'], $this->clock->now());
+            $lastFramePath = LocalPath::fromString(
+                storage_path("app/clips/{$clip->id()->value()}_lastframe.jpg")
+            );
+            $this->videoComposer->extractLastFrame($result['localPath']->value(), $lastFramePath->value());
+
+            $clip->markAsCompleted($result['localPath'], $result['videoUri'], $this->clock->now(), $lastFramePath);
             $this->clipRepository->save($clip);
 
             $this->eventBus->publish(

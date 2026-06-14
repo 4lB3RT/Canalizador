@@ -41,7 +41,12 @@ final readonly class ComposeShort
         $video = $this->videoRepository->findById($videoId);
         $clips = $this->clipRepository->findByVideoId($videoId)->sortedBySequence();
 
-        $lastClip = $clips->last();
+        $clipPaths = [];
+        foreach ($clips as $clip) {
+            if ($clip->localPath() !== null) {
+                $clipPaths[] = $clip->localPath()->value();
+            }
+        }
 
         $outputDir = storage_path('app/videos');
         if (!File::exists($outputDir)) {
@@ -50,7 +55,7 @@ final readonly class ComposeShort
 
         $outputPath = $outputDir . "/{$videoId->value()}.mp4";
 
-        File::copy($lastClip->localPath()->value(), $outputPath);
+        $this->videoComposer->concatenate($clipPaths, $outputPath);
 
         $this->applyAvatarVoice($video, $outputPath);
 
