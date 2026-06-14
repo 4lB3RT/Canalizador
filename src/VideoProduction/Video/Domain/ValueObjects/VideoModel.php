@@ -35,4 +35,17 @@ enum VideoModel: string
             default => false,
         };
     }
+
+    public function supportsExtension(): bool
+    {
+        return match ($this) {
+            self::VEO_31, self::VEO_31_FAST => true,
+            default => false,
+        };
+    }
+
+    public function maxClips(): int
+    {
+        return $this->supportsExtension() ? TotalClips::MAX : 1;
+    }
 }

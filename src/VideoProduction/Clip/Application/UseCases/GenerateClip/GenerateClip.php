@@ -7,6 +7,8 @@ namespace Helmreel\VideoProduction\Clip\Application\UseCases\GenerateClip;
 use Helmreel\Shared\Shared\Domain\Events\EventBus;
 use Helmreel\Shared\Shared\Domain\Services\Clock;
 use Helmreel\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
+use Helmreel\VideoProduction\Clip\Domain\Entities\Clip;
+use Helmreel\VideoProduction\Clip\Domain\Entities\ClipCollection;
 use Helmreel\VideoProduction\Clip\Domain\Events\ClipGenerated;
 use Helmreel\VideoProduction\Clip\Domain\Exceptions\ClipNotFound;
 use Helmreel\VideoProduction\Clip\Domain\Repositories\ClipRepository;
@@ -51,22 +53,7 @@ final readonly class GenerateClip
         if ($clip->sequence()->value() === 1) {
             $generationId = $this->generateFirstClip($video);
         } else {
-            $lastCompleted = $clips->lastCompleted();
-
-            if ($lastCompleted === null || $lastCompleted->videoUri() === null) {
-                throw VideoGenerationFailed::apiError(
-                    'Cannot extend: no completed clip with video URI found'
-                );
-            }
-
-            $clipPrompt = $clip->script()
-                ?? 'Continue the video naturally maintaining visual continuity.';
-
-            if ($video->language() !== $video->script()->language()) {
-                $clipPrompt = $this->scriptTranslator->translateText($clipPrompt, $video->language());
-            }
-
-            $generationId = $this->videoExtender->extend($lastCompleted->videoUri(), $clipPrompt, $video->model(), $video->aspectRatio());
+            $generationId = $this->generateChainedClip($video, $clip, $clips);
         }
 
         $clip->updateGenerationId(GenerationId::fromString($generationId));
@@ -88,6 +75,33 @@ final readonly class GenerateClip
                 $video->aspectRatio(),
             );
 
+
+        return $this->videoGenerator->generate($videoPrompt, $video->resolution(), $video->model(), $video->aspectRatio());
+    }
+
+    private function generateChainedClip(Video $video, Clip $clip, ClipCollection $clips): string
+    {
+        $lastCompleted = $clips->lastCompleted();
+
+        if ($lastCompleted === null || $lastCompleted->lastFramePath() === null) {
+            throw VideoGenerationFailed::apiError(
+                'Cannot chain clip: no completed clip with a last frame found'
+            );
+        }
+
+        $clipPrompt = $clip->script()
+            ?? 'Continue the video naturally maintaining visual continuity.';
+
+        if ($video->language() !== $video->script()->language()) {
+            $clipPrompt = $this->scriptTranslator->translateText($clipPrompt, $video->language());
+        }
+
+        $videoPrompt = $this->videoPromptExtractor->extractForChainedClip(
+            $clipPrompt,
+            $video->category(),
+            $video->language(),
+            $lastCompleted->lastFramePath()->value(),
+        );
 
         return $this->videoGenerator->generate($videoPrompt, $video->resolution(), $video->model(), $video->aspectRatio());
     }

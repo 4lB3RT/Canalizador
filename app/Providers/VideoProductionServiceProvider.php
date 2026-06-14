@@ -277,6 +277,7 @@ class VideoProductionServiceProvider extends ServiceProvider
             return new DownloadClip(
                 clipRepository: $app->make(ClipRepository::class),
                 clipDownloader: $app->make(ClipDownloader::class),
+                videoComposer: $app->make(VideoComposer::class),
                 eventBus: $app->make(EventBus::class),
                 clock: $app->make(Clock::class),
             );

@@ -32,6 +32,7 @@ final class EloquentClipRepository implements ClipRepository
                 'status' => $clip->status()->value,
                 'local_path' => $clip->localPath()?->value(),
                 'video_uri' => $clip->videoUri()?->value(),
+                'last_frame_path' => $clip->lastFramePath()?->value(),
                 'created_at' => $clip->createdAt()->value(),
                 'completed_at' => $clip->completedAt()?->value(),
             ]
@@ -82,6 +83,7 @@ final class EloquentClipRepository implements ClipRepository
             localPath: $model->local_path ? LocalPath::fromString($model->local_path) : null,
             videoUri: $model->video_uri ? Url::fromString($model->video_uri) : null,
             completedAt: $model->completed_at ? new DateTime($model->completed_at->toDateTimeImmutable()) : null,
+            lastFramePath: $model->last_frame_path ? LocalPath::fromString($model->last_frame_path) : null,
         );
     }
 }

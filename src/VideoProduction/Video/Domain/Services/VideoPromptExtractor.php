@@ -16,5 +16,7 @@ interface VideoPromptExtractor
 {
     public function extractWithAvatar(Script $script, Avatar $avatar, VideoCategory $category, Language $voiceLanguage, VideoModel $model, AspectRatio $aspectRatio): VideoPrompt;
 
+    public function extractForChainedClip(string $clipPrompt, VideoCategory $category, Language $voiceLanguage, string $firstFramePath): VideoPrompt;
+
     public function extract(Script $script, VideoCategory $category, Language $voiceLanguage): VideoPrompt;
 }

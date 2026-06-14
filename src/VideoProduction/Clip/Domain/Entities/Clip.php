@@ -28,6 +28,7 @@ final class Clip
         private ?LocalPath $localPath = null,
         private ?Url $videoUri = null,
         private ?DateTime $completedAt = null,
+        private ?LocalPath $lastFramePath = null,
     ) {
     }
 
@@ -81,12 +82,18 @@ final class Clip
         return $this->completedAt;
     }
 
-    public function markAsCompleted(LocalPath $localPath, Url $videoUri, DateTime $completedAt): void
+    public function lastFramePath(): ?LocalPath
+    {
+        return $this->lastFramePath;
+    }
+
+    public function markAsCompleted(LocalPath $localPath, Url $videoUri, DateTime $completedAt, ?LocalPath $lastFramePath = null): void
     {
         $this->status = ClipStatus::COMPLETED;
         $this->localPath = $localPath;
         $this->videoUri = $videoUri;
         $this->completedAt = $completedAt;
+        $this->lastFramePath = $lastFramePath;
     }
 
     public function updateGenerationId(GenerationId $generationId): void
@@ -115,6 +122,7 @@ final class Clip
             'status' => $this->status->value,
             'local_path' => $this->localPath?->value(),
             'video_uri' => $this->videoUri?->value(),
+            'last_frame_path' => $this->lastFramePath?->value(),
             'created_at' => $this->createdAt->value()->format('Y-m-d H:i:s'),
             'completed_at' => $this->completedAt?->value()->format('Y-m-d H:i:s'),
         ];
