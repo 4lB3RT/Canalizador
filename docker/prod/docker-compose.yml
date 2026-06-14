@@ -60,7 +60,7 @@ services:
       rabbitmq:
         condition: service_healthy
     working_dir: /code
-    command: ["php", "artisan", "queue:work", "rabbitmq", "--queue=youtube.video.created,youtube.short.created,video.created,clip.created,clip.generated,clip.completed,video.all_clips_completed", "--tries=3", "--timeout=300", "--sleep=3"]
+    command: ["sh", "-c", "php artisan rabbitmq:setup; php artisan queue:work rabbitmq --queue=youtube.video.created,youtube.short.created,video.created,clip.created,clip.generated,clip.completed,video.all_clips_completed --tries=3 --timeout=300 --sleep=3"]
     networks:
       helmreel:
 
