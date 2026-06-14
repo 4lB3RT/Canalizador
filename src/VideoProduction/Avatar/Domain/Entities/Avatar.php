@@ -14,6 +14,7 @@ use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Category;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
+use Helmreel\VideoProduction\Voice\Domain\Entities\Voice;
 use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 
 final class Avatar
@@ -35,6 +36,7 @@ final class Avatar
         private array $media = [],
         private ?DateTime $updatedAt = null,
         private readonly ?Clock $clock = null,
+        private ?Voice $voice = null,
     ) {
     }
 
@@ -137,6 +139,11 @@ final class Avatar
         return $this->voiceId;
     }
 
+    public function voice(): ?Voice
+    {
+        return $this->voice;
+    }
+
     public function updateVoiceId(VoiceId $voiceId): void
     {
         $this->voiceId = $voiceId;
@@ -177,6 +184,7 @@ final class Avatar
             'description' => $this->description->value(),
             'images' => array_map(fn (AvatarMedia $m) => $m->toArray(), $this->media),
             'voice_id' => $this->voiceId?->value(),
+            'voice' => $this->voice?->toArray(),
             'created_at' => $this->createdAt->value()->format('Y-m-d H:i:s'),
             'updated_at' => $this->updatedAt?->value()->format('Y-m-d H:i:s'),
         ];

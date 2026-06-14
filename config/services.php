@@ -51,6 +51,7 @@ return [
 
     'google' => [
         'veo_api_key' => env('GOOGLE_VEO_API_KEY'),
+        'image_model' => env('GOOGLE_IMAGE_MODEL', 'gemini-2.5-flash-image'),
     ],
 
     'elevenlabs' => [

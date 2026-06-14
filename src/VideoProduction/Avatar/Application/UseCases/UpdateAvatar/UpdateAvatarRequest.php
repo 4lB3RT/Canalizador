@@ -15,6 +15,9 @@ final readonly class UpdateAvatarRequest
         public ?string $biography = null,
         public ?string $description = null,
         public ?string $voiceId = null,
+        public ?string $voicePlatformId = null,
+        public ?string $voiceCatalogName = null,
+        public ?array $voiceSettings = null,
         public bool $clearVoice = false,
         public ?string $profileImagePath = null,
     ) {

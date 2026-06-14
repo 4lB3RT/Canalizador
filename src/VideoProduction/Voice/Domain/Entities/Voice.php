@@ -14,9 +14,9 @@ final class Voice
 {
     public function __construct(
         private readonly VoiceId $id,
-        private readonly IntegerId $userId,
+        private readonly ?IntegerId $userId,
         private string $name,
-        private readonly LocalPath $sourceAudioPath,
+        private readonly ?LocalPath $sourceAudioPath,
         private readonly DateTime $createdAt,
         private readonly ?string $platformId = null,
         private readonly ?LocalPath $convertedAudioPath = null,
@@ -29,7 +29,7 @@ final class Voice
         return $this->id;
     }
 
-    public function userId(): IntegerId
+    public function userId(): ?IntegerId
     {
         return $this->userId;
     }
@@ -54,7 +54,7 @@ final class Voice
         $this->settings = $settings;
     }
 
-    public function sourceAudioPath(): LocalPath
+    public function sourceAudioPath(): ?LocalPath
     {
         return $this->sourceAudioPath;
     }
@@ -78,7 +78,7 @@ final class Voice
     {
         return [
             'id' => $this->id->value(),
-            'user_id' => $this->userId->value(),
+            'user_id' => $this->userId?->value(),
             'name' => $this->name,
             'platform_id' => $this->platformId,
             'settings' => $this->settings->toArray(),

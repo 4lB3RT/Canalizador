@@ -23,6 +23,7 @@ use Helmreel\VideoProduction\Avatar\Infrastructure\DAO\AvatarDAO;
 use Helmreel\Shared\Media\Domain\Exceptions\MediaNotFound;
 use Helmreel\Shared\Media\Domain\Repositories\MediaRepository;
 use Helmreel\Shared\Media\Domain\ValueObjects\MediaId;
+use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
 use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
 use Illuminate\Support\Facades\DB;
 
@@ -31,6 +32,7 @@ final class EloquentAvatarRepository implements AvatarRepository
     public function __construct(
         private readonly Clock $clock,
         private readonly MediaRepository $mediaRepository,
+        private readonly VoiceRepository $voiceRepository,
     ) {
     }
 
@@ -122,6 +124,10 @@ final class EloquentAvatarRepository implements AvatarRepository
             ? new DateTime($model->updated_at->toDateTimeImmutable())
             : null;
 
+        $voice = $model->voice_id
+            ? $this->voiceRepository->findById(VoiceId::fromString($model->voice_id))
+            : null;
+
         return new Avatar(
             id: AvatarId::fromString($model->id),
             userId: new IntegerId($model->user_id),
@@ -136,6 +142,7 @@ final class EloquentAvatarRepository implements AvatarRepository
             media: $this->loadMedia($model->id),
             updatedAt: $updatedAt,
             clock: $this->clock,
+            voice: $voice,
         );
     }
 

@@ -19,8 +19,10 @@ use Helmreel\Shared\Media\Domain\Entities\Media;
 use Helmreel\Shared\Media\Domain\Repositories\MediaRepository;
 use Helmreel\Shared\Media\Domain\ValueObjects\MediaId;
 use Helmreel\Shared\Media\Domain\ValueObjects\MediaType;
+use Helmreel\VideoProduction\Voice\Domain\Entities\Voice;
 use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
 use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
+use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceSettings;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -65,11 +67,28 @@ final readonly class UpdateAvatar
 
         if ($request->clearVoice) {
             $avatar->clearVoiceId();
+        } elseif ($request->voicePlatformId !== null) {
+            $voice = new Voice(
+                id: new VoiceId(Str::uuid()->toString()),
+                userId: $avatar->userId(),
+                name: $request->voiceCatalogName ?? 'Voz ElevenLabs',
+                sourceAudioPath: null,
+                createdAt: $this->clock->now(),
+                platformId: $request->voicePlatformId,
+                settings: $this->buildSettings($request->voiceSettings),
+            );
+            $this->voiceRepository->save($voice);
+            $avatar->updateVoiceId($voice->id());
         } elseif ($request->voiceId !== null) {
             $voice = $this->voiceRepository->findById(VoiceId::fromString($request->voiceId));
 
             if ($voice === null) {
                 throw new InvalidArgumentException("Voice with id '{$request->voiceId}' not found");
+            }
+
+            if ($request->voiceSettings !== null) {
+                $voice->updateSettings($this->buildSettings($request->voiceSettings));
+                $this->voiceRepository->save($voice);
             }
 
             $avatar->updateVoiceId($voice->id());
@@ -82,6 +101,21 @@ final readonly class UpdateAvatar
         $this->avatarRepository->save($avatar);
 
         return $avatar->toArray();
+    }
+
+    private function buildSettings(?array $settings): VoiceSettings
+    {
+        if ($settings === null) {
+            return new VoiceSettings();
+        }
+
+        return new VoiceSettings(
+            stability: (float) ($settings['stability'] ?? 0.5),
+            similarityBoost: (float) ($settings['similarity_boost'] ?? 0.75),
+            style: (float) ($settings['style'] ?? 0.0),
+            speed: (float) ($settings['speed'] ?? 1.0),
+            useSpeakerBoost: (bool) ($settings['use_speaker_boost'] ?? true),
+        );
     }
 
     private function replaceProfileImage(\Helmreel\VideoProduction\Avatar\Domain\Entities\Avatar $avatar, string $tmpPath): void

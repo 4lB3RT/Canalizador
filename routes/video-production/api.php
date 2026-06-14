@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 
 use App\Http\Middleware\EnsureGoogleToken;
+use Helmreel\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers\AutoCreateAvatarController;
 use Helmreel\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers\CreateAvatarController;
 use Helmreel\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers\DeleteAvatarController;
 use Helmreel\VideoProduction\Avatar\Infrastructure\Http\Api\Controllers\GenerateAvatarMetadataController;
@@ -26,7 +27,9 @@ use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers\GetVideos
 use Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Controllers\RetrieveVideoContentController;
 use Helmreel\VideoProduction\Voice\Infrastructure\Http\Api\Controllers\CloneVoiceController;
 use Helmreel\VideoProduction\Voice\Infrastructure\Http\Api\Controllers\GenerateVoiceController;
+use Helmreel\VideoProduction\Voice\Infrastructure\Http\Api\Controllers\PreviewVoiceController;
 use Helmreel\VideoProduction\Voice\Infrastructure\Http\Api\Controllers\DeleteVoiceController;
+use Helmreel\VideoProduction\Voice\Infrastructure\Http\Api\Controllers\GetVoiceCatalogController;
 use Helmreel\VideoProduction\Voice\Infrastructure\Http\Api\Controllers\GetVoicesController;
 use Helmreel\VideoProduction\Voice\Infrastructure\Http\Api\Controllers\UpdateVoiceController;
 use Helmreel\VideoProduction\Weather\Infrastructure\Http\Api\Controllers\GetForecastsController;
@@ -35,6 +38,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['api.token'])->group(function () {
     Route::get('/avatars', GetAvatarsController::class);
     Route::get('/avatars/{avatarId}', GetAvatarController::class);
+    Route::post('/avatars/auto-create', AutoCreateAvatarController::class);
     Route::post('/avatars', CreateAvatarController::class);
     Route::post('/avatars/{avatarId}/metadata', GenerateAvatarMetadataController::class);
     Route::put('/avatars/{avatarId}', UpdateAvatarController::class);
@@ -57,8 +61,10 @@ Route::middleware(['api.token'])->group(function () {
     Route::get('/videos/{videoId}', GetVideoController::class);
     Route::delete('/videos/{videoId}', DeleteVideoController::class);
 
+    Route::get('/voices/catalog', GetVoiceCatalogController::class);
     Route::get('/voices', GetVoicesController::class);
     Route::post('/voice/clone', CloneVoiceController::class);
+    Route::post('/voices/preview', PreviewVoiceController::class);
     Route::post('/voices/{voiceId}/generate', GenerateVoiceController::class);
     Route::put('/voices/{voiceId}', UpdateVoiceController::class);
     Route::delete('/voices/{voiceId}', DeleteVoiceController::class);
