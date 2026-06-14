@@ -36,6 +36,14 @@ final class UpdateAvatarController extends Controller
             'biography' => 'sometimes|nullable|string',
             'description' => 'sometimes|nullable|string',
             'voice_id' => 'sometimes|nullable|string',
+            'voice_platform_id' => 'sometimes|nullable|string',
+            'voice_catalog_name' => 'sometimes|nullable|string',
+            'voice_settings' => 'sometimes|nullable|array',
+            'voice_settings.stability' => 'nullable|numeric|between:0,1',
+            'voice_settings.similarity_boost' => 'nullable|numeric|between:0,1',
+            'voice_settings.style' => 'nullable|numeric|between:0,1',
+            'voice_settings.speed' => 'nullable|numeric|between:0.5,2',
+            'voice_settings.use_speaker_boost' => 'nullable|boolean',
             'profile_image' => 'sometimes|image|mimes:jpeg,jpg,png|max:20480',
         ]);
 
@@ -51,9 +59,10 @@ final class UpdateAvatarController extends Controller
             File::put($profileImagePath, File::get($image->getRealPath()));
         }
 
+        $platformId = $validated['voice_platform_id'] ?? null;
         $voiceProvided = $request->has('voice_id');
         $voiceValue = $validated['voice_id'] ?? null;
-        $clearVoice = $voiceProvided && ($voiceValue === null || $voiceValue === '');
+        $clearVoice = $platformId === null && $voiceProvided && ($voiceValue === null || $voiceValue === '');
 
         try {
             $result = $this->updateAvatar->execute(new UpdateAvatarRequest(
@@ -65,6 +74,9 @@ final class UpdateAvatarController extends Controller
                 biography: $validated['biography'] ?? null,
                 description: $validated['description'] ?? null,
                 voiceId: $clearVoice ? null : $voiceValue,
+                voicePlatformId: $platformId,
+                voiceCatalogName: $validated['voice_catalog_name'] ?? null,
+                voiceSettings: $validated['voice_settings'] ?? null,
                 clearVoice: $clearVoice,
                 profileImagePath: $profileImagePath,
             ));

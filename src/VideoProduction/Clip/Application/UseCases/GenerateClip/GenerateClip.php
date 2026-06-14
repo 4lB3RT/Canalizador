@@ -66,7 +66,7 @@ final readonly class GenerateClip
                 $clipPrompt = $this->scriptTranslator->translateText($clipPrompt, $video->language());
             }
 
-            $generationId = $this->videoExtender->extend($lastCompleted->videoUri(), $clipPrompt, $video->model());
+            $generationId = $this->videoExtender->extend($lastCompleted->videoUri(), $clipPrompt, $video->model(), $video->aspectRatio());
         }
 
         $clip->updateGenerationId(GenerationId::fromString($generationId));
@@ -84,9 +84,11 @@ final readonly class GenerateClip
                 $this->avatarRepository->findById($video->avatarId()),
                 $video->category(),
                 $video->language(),
+                $video->model(),
+                $video->aspectRatio(),
             );
 
 
-        return $this->videoGenerator->generate($videoPrompt, $video->resolution(), $video->model());
+        return $this->videoGenerator->generate($videoPrompt, $video->resolution(), $video->model(), $video->aspectRatio());
     }
 }

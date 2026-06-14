@@ -8,19 +8,23 @@ use Helmreel\Shared\Shared\Domain\ValueObjects\Language;
 use Helmreel\VideoProduction\Avatar\Domain\Entities\Avatar;
 use Helmreel\VideoProduction\Script\Domain\Entities\Script;
 use Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo\ValueObjects\VideoPrompt;
+use Helmreel\VideoProduction\Video\Domain\Services\AvatarContextFrameGenerator;
 use Helmreel\VideoProduction\Video\Domain\Services\ScriptTranslator;
 use Helmreel\VideoProduction\Video\Domain\Services\VideoPromptExtractor;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\AspectRatio;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoCategory;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoModel;
 
 final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
 {
     public function __construct(
         private GdChromaKeyCompositor $compositor,
         private ScriptTranslator $scriptTranslator,
+        private AvatarContextFrameGenerator $avatarContextFrameGenerator,
     ) {
     }
 
-    public function extractWithAvatar(Script $script, Avatar $avatar, VideoCategory $category, Language $voiceLanguage): VideoPrompt
+    public function extractWithAvatar(Script $script, Avatar $avatar, VideoCategory $category, Language $voiceLanguage, VideoModel $model, AspectRatio $aspectRatio): VideoPrompt
     {
         $content = $this->resolveContent($script, $voiceLanguage);
         $scriptData = json_decode($content, true);
@@ -29,7 +33,9 @@ final readonly class JsonVideoPromptExtractor implements VideoPromptExtractor
 
         $technicalVideo = $this->getTechnicalVideoPrompt($category, $voiceLanguage);
         $referenceImagePaths = $this->getReferenceImagePaths($category);
-        $firstFramePath = $this->buildFirstFrame($category);
+
+        $firstFramePath = $this->avatarContextFrameGenerator->frameFor($avatar, $category, $aspectRatio)
+            ?? $this->buildFirstFrame($category);
 
         return new VideoPrompt(
             prompt: $videoPrompt,

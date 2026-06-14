@@ -20,6 +20,14 @@ final readonly class CreateAvatarRequestMapper
             'presentation_style' => 'required|string|in:energetic,calm,professional,casual',
             'category' => 'nullable|string|in:gaming,meteorology',
             'voice_id' => 'nullable|string',
+            'voice_platform_id' => 'nullable|string',
+            'voice_catalog_name' => 'nullable|string',
+            'voice_settings' => 'nullable|array',
+            'voice_settings.stability' => 'nullable|numeric|between:0,1',
+            'voice_settings.similarity_boost' => 'nullable|numeric|between:0,1',
+            'voice_settings.style' => 'nullable|numeric|between:0,1',
+            'voice_settings.speed' => 'nullable|numeric|between:0.5,2',
+            'voice_settings.use_speaker_boost' => 'nullable|boolean',
         ]);
 
         $user = $request->user();
@@ -50,6 +58,9 @@ final readonly class CreateAvatarRequestMapper
             presentationStyle: $validated['presentation_style'],
             category: $validated['category'] ?? 'gaming',
             voiceId: $validated['voice_id'] ?? null,
+            voicePlatformId: $validated['voice_platform_id'] ?? null,
+            voiceCatalogName: $validated['voice_catalog_name'] ?? null,
+            voiceSettings: $validated['voice_settings'] ?? null,
         );
     }
 }

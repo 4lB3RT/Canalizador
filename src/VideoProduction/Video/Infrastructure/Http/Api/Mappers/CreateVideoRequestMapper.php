@@ -6,6 +6,7 @@ namespace Helmreel\VideoProduction\Video\Infrastructure\Http\Api\Mappers;
 
 use Helmreel\VideoProduction\Video\Application\UseCases\CreateVideo\CreateVideoRequest;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 final readonly class CreateVideoRequestMapper
 {
@@ -20,6 +21,7 @@ final readonly class CreateVideoRequestMapper
             'total_clips' => 'sometimes|integer|min:1|max:8',
             'language' => 'sometimes|string|in:es,en,fr,de,it,pt',
             'model' => 'sometimes|string|in:veo-3.1-lite-generate-preview,veo-3.1-fast-generate-preview,veo-3.0-fast-generate-001,veo-3.1-generate-preview,veo-3.0-generate-001',
+            'aspect_ratio' => ['sometimes', 'string', Rule::in(['16:9', '9:16'])],
         ]);
 
         $user = $request->user();
@@ -37,6 +39,7 @@ final readonly class CreateVideoRequestMapper
             totalClips: (int) ($validated['total_clips'] ?? 5),
             language: $validated['language'] ?? 'es',
             model: $validated['model'] ?? 'veo-3.1-generate-preview',
+            aspectRatio: $validated['aspect_ratio'] ?? '16:9',
         );
     }
 }

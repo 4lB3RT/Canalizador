@@ -17,11 +17,14 @@ use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Category;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
-use Helmreel\VideoProduction\Media\Domain\Entities\Media;
-use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
-use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
-use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaType;
+use Helmreel\Shared\Media\Domain\Entities\Media;
+use Helmreel\Shared\Media\Domain\Repositories\MediaRepository;
+use Helmreel\Shared\Media\Domain\ValueObjects\MediaId;
+use Helmreel\Shared\Media\Domain\ValueObjects\MediaType;
+use Helmreel\VideoProduction\Voice\Domain\Entities\Voice;
+use Helmreel\VideoProduction\Voice\Domain\Repositories\VoiceRepository;
 use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceId;
+use Helmreel\VideoProduction\Voice\Domain\ValueObjects\VoiceSettings;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -31,6 +34,7 @@ final readonly class CreateAvatar
         private AvatarFactory $avatarFactory,
         private AvatarRepository $avatarRepository,
         private MediaRepository $mediaRepository,
+        private VoiceRepository $voiceRepository,
         private Clock $clock,
     ) {
     }
@@ -71,11 +75,73 @@ final readonly class CreateAvatar
             category: $category,
             description: AvatarDescription::fromString(''),
             media: [new AvatarMedia($profileMedia, AvatarMediaType::PROFILE)],
-            voiceId: $request->voiceId ? VoiceId::fromString($request->voiceId) : null,
+            voiceId: $this->resolveVoiceId($request, $userId),
         );
 
         $this->avatarRepository->save($avatar);
 
         return new CreateAvatarResponse();
+    }
+
+    private function resolveVoiceId(CreateAvatarRequest $request, IntegerId $userId): ?VoiceId
+    {
+        if ($request->voicePlatformId !== null) {
+            return $this->persistCatalogVoice($request, $userId);
+        }
+
+        if ($request->voiceId !== null) {
+            $this->applySettingsToExistingVoice($request);
+
+            return VoiceId::fromString($request->voiceId);
+        }
+
+        return null;
+    }
+
+    private function persistCatalogVoice(CreateAvatarRequest $request, IntegerId $userId): VoiceId
+    {
+        $voice = new Voice(
+            id: new VoiceId(Str::uuid()->toString()),
+            userId: $userId,
+            name: $request->voiceCatalogName ?? 'Voz ElevenLabs',
+            sourceAudioPath: null,
+            createdAt: $this->clock->now(),
+            platformId: $request->voicePlatformId,
+            settings: $this->buildSettings($request->voiceSettings),
+        );
+
+        $this->voiceRepository->save($voice);
+
+        return $voice->id();
+    }
+
+    private function applySettingsToExistingVoice(CreateAvatarRequest $request): void
+    {
+        if ($request->voiceSettings === null) {
+            return;
+        }
+
+        $voice = $this->voiceRepository->findById(VoiceId::fromString($request->voiceId));
+        if ($voice === null) {
+            return;
+        }
+
+        $voice->updateSettings($this->buildSettings($request->voiceSettings));
+        $this->voiceRepository->save($voice);
+    }
+
+    private function buildSettings(?array $settings): VoiceSettings
+    {
+        if ($settings === null) {
+            return new VoiceSettings();
+        }
+
+        return new VoiceSettings(
+            stability: (float) ($settings['stability'] ?? 0.5),
+            similarityBoost: (float) ($settings['similarity_boost'] ?? 0.75),
+            style: (float) ($settings['style'] ?? 0.0),
+            speed: (float) ($settings['speed'] ?? 1.0),
+            useSpeakerBoost: (bool) ($settings['use_speaker_boost'] ?? true),
+        );
     }
 }

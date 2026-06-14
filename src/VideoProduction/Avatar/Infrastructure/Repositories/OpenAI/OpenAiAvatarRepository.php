@@ -16,10 +16,10 @@ use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarName;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Biography;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\Category;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\PresentationStyle;
-use Helmreel\VideoProduction\Media\Domain\Entities\Media;
-use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
-use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaId;
-use Helmreel\VideoProduction\Media\Domain\ValueObjects\MediaType;
+use Helmreel\Shared\Media\Domain\Entities\Media;
+use Helmreel\Shared\Media\Domain\Repositories\MediaRepository;
+use Helmreel\Shared\Media\Domain\ValueObjects\MediaId;
+use Helmreel\Shared\Media\Domain\ValueObjects\MediaType;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Prism\Prism\Enums\Provider;
@@ -43,6 +43,17 @@ final readonly class OpenAiAvatarRepository
         if (empty($this->apiKey)) {
             throw new \RuntimeException('OpenAI API key is not configured');
         }
+    }
+
+    public function generateAvatarDescription(
+        LocalPath $imagePath,
+        AvatarName $avatarName,
+        Biography $biography,
+        PresentationStyle $presentationStyle,
+    ): AvatarDescription {
+        return AvatarDescription::fromString(
+            $this->generateDescription($imagePath->value(), $avatarName, $biography, $presentationStyle)
+        );
     }
 
     public function generateMetadata(

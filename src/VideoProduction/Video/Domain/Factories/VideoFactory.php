@@ -13,6 +13,7 @@ use Helmreel\Shared\Shared\Domain\ValueObjects\Title;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
 use Helmreel\VideoProduction\Script\Domain\Entities\Script;
 use Helmreel\VideoProduction\Video\Domain\Entities\Video;
+use Helmreel\VideoProduction\Video\Domain\ValueObjects\AspectRatio;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\Resolution;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\TotalClips;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoModel;
@@ -37,6 +38,7 @@ final readonly class VideoFactory
         TotalClips $totalClips = new TotalClips(5),
         Language $language = Language::SPANISH,
         VideoModel $model = VideoModel::VEO_31,
+        AspectRatio $aspectRatio = AspectRatio::LANDSCAPE,
         ?AvatarId $avatarId = null,
         ?DateTime $createdAt = null,
     ): Video {
@@ -52,6 +54,7 @@ final readonly class VideoFactory
             totalClips: $totalClips,
             language: $language,
             model: $model,
+            aspectRatio: $aspectRatio,
             avatarId: $avatarId,
         );
     }

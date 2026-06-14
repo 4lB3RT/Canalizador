@@ -24,7 +24,7 @@ final readonly class GenerateVoice
     {
         $voice = $this->voiceRepository->findById(VoiceId::fromString($voiceId));
 
-        if ($voice === null || $voice->userId()->value() !== $userId) {
+        if ($voice === null || $voice->userId()?->value() !== $userId) {
             throw VoiceNotFound::withId($voiceId);
         }
 

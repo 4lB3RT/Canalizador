@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Helmreel\VideoProduction\Video\Application\UseCases\DeleteVideo;
 
 use Helmreel\VideoProduction\Clip\Domain\Repositories\ClipRepository;
-use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
+use Helmreel\Shared\Media\Domain\Repositories\MediaRepository;
 use Helmreel\VideoProduction\Video\Domain\Exceptions\VideoNotFound;
 use Helmreel\VideoProduction\Video\Domain\Repositories\VideoRepository;
 use Helmreel\VideoProduction\Video\Domain\ValueObjects\VideoId;

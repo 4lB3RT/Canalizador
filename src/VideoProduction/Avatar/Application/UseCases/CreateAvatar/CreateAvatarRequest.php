@@ -15,6 +15,9 @@ final readonly class CreateAvatarRequest
         public string $presentationStyle,
         public string $category = 'gaming',
         public ?string $voiceId = null,
+        public ?string $voicePlatformId = null,
+        public ?string $voiceCatalogName = null,
+        public ?array $voiceSettings = null,
     ) {
     }
 }

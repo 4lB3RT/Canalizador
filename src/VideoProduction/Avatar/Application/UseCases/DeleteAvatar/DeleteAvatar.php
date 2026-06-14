@@ -7,7 +7,7 @@ namespace Helmreel\VideoProduction\Avatar\Application\UseCases\DeleteAvatar;
 use Helmreel\VideoProduction\Avatar\Domain\Exceptions\AvatarNotFound;
 use Helmreel\VideoProduction\Avatar\Domain\Repositories\AvatarRepository;
 use Helmreel\VideoProduction\Avatar\Domain\ValueObjects\AvatarId;
-use Helmreel\VideoProduction\Media\Domain\Repositories\MediaRepository;
+use Helmreel\Shared\Media\Domain\Repositories\MediaRepository;
 use Illuminate\Support\Facades\File;
 
 final readonly class DeleteAvatar
